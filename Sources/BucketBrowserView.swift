@@ -1,4 +1,5 @@
 import SwiftUI
+import os.log
 
 enum SortOption: String, CaseIterable {
     case dateNewest = "Date (Newest)"
@@ -16,116 +17,189 @@ enum ViewStyle {
 
 struct BucketBrowserView: View {
     @Environment(\.scenePhase) private var scenePhase
-    @State private var s3Service: S3Service
+    let s3Service: S3Service
     @Binding var config: S3Config
     @State private var sortOption: SortOption = .dateNewest
     @State private var viewStyle: ViewStyle = .standard
     @State private var showingSortMenu = false
+    @AppStorage("s3BrowserCurrentPrefix") private var savedPrefix: String = ""
+    @AppStorage("s3CurrentBucket") private var savedBucket: String = ""
 
-    init(config: Binding<S3Config>) {
-        self._config = config
-        self._s3Service = State(initialValue: S3Service(config: config.wrappedValue))
-    }
+    private let logger = Logger(subsystem: "com.s3browser", category: "BucketBrowserView")
 
     var body: some View {
         NavigationStack {
-            Group {
-                if !isConfigured {
-                    ContentUnavailableView(
-                        "Configuration Required",
-                        systemImage: "gear",
-                        description: Text("Go to Settings to configure your S3 bucket and credentials")
-                    )
-                } else if s3Service.objects.isEmpty && !s3Service.isLoading {
-                    ContentUnavailableView(
-                        "No Files",
-                        systemImage: "doc",
-                        description: Text("No files found in bucket. Pull to refresh.")
-                    )
-                } else {
-                    List {
-                        ForEach(sortedObjects) { object in
-                            NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                                if viewStyle == .standard {
-                                    FileRow(object: object)
-                                } else {
-                                    CompactFileRow(object: object)
-                                }
+            VStack(spacing: 0) {
+                // Breadcrumb navigation
+                if isConfigured && !s3Service.currentPrefix.isEmpty {
+                    BreadcrumbView(
+                        pathComponents: s3Service.getPathComponents(),
+                        onTapIndex: { index in
+                            Task {
+                                try? await s3Service.navigateToBreadcrumb(index)
                             }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    Task {
-                                        await deleteObject(object)
-                                    }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+                        },
+                        onTapRoot: {
+                            Task {
+                                s3Service.currentPrefix = ""
+                                try? await s3Service.listObjects()
                             }
-                            .contextMenu {
-                                if object.fileType == .image || object.fileType == .text || object.fileType == .log {
-                                    Button {
+                        }
+                    )
+                }
+
+                Group {
+                    if !isConfigured {
+                        ContentUnavailableView(
+                            "Configuration Required",
+                            systemImage: "gear",
+                            description: Text("Go to Settings to configure your S3 bucket and credentials")
+                        )
+                    } else if s3Service.items.isEmpty && !s3Service.isLoading {
+                        ContentUnavailableView(
+                            "No Files",
+                            systemImage: "doc",
+                            description: Text("No files found in bucket. Pull to refresh.")
+                        )
+                    } else {
+                        List {
+                            ForEach(sortedItems) { item in
+                                switch item {
+                                case .folder(let folder):
+                                    Button(action: {
                                         Task {
-                                            await copyToClipboard(object)
+                                            try? await s3Service.navigateToFolder(folder.prefix)
+                                            savedPrefix = s3Service.currentPrefix
                                         }
-                                    } label: {
-                                        Label("Copy Content", systemImage: "doc.on.doc")
+                                    }) {
+                                        FolderRow(folder: folder)
+                                    }
+                                case .file(let object):
+                                    NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                                        if viewStyle == .standard {
+                                            FileRow(object: object)
+                                        } else {
+                                            CompactFileRow(object: object)
+                                        }
+                                    }
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        Button(role: .destructive) {
+                                            Task {
+                                                await deleteObject(object)
+                                            }
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                                    .contextMenu {
+                                        if object.fileType == .image || object.fileType == .text || object.fileType == .log {
+                                            Button {
+                                                Task {
+                                                    await copyToClipboard(object)
+                                                }
+                                            } label: {
+                                                Label("Copy Content", systemImage: "doc.on.doc")
+                                            }
+                                        }
+
+                                        Button(role: .destructive) {
+                                            Task {
+                                                await deleteObject(object)
+                                            }
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
                                     }
                                 }
-
-                                Button(role: .destructive) {
-                                    Task {
-                                        await deleteObject(object)
+                            }
+                        }
+                        .refreshable {
+                            await refreshFiles()
+                        }
+                    }
+                }
+                .navigationTitle("S3 Browser")
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        BucketPickerView(
+                            currentBucket: s3Service.currentBucket,
+                            availableBuckets: s3Service.availableBuckets,
+                            isLoading: s3Service.isLoading,
+                            onSelectBucket: { bucket in
+                                Task {
+                                    do {
+                                        try await s3Service.switchBucket(bucket)
+                                        savedBucket = bucket
+                                        savedPrefix = ""
+                                    } catch {
+                                        logger.error("Failed to switch bucket: \(error.localizedDescription)")
                                     }
+                                }
+                            }
+                        )
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Section("Sort By") {
+                                Picker("Sort", selection: $sortOption) {
+                                    ForEach(SortOption.allCases, id: \.self) { option in
+                                        Text(option.rawValue).tag(option)
+                                    }
+                                }
+                            }
+
+                            Section("View Style") {
+                                Button {
+                                    viewStyle = .standard
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label("Standard", systemImage: viewStyle == .standard ? "checkmark" : "")
+                                }
+
+                                Button {
+                                    viewStyle = .compact
+                                } label: {
+                                    Label("Compact", systemImage: viewStyle == .compact ? "checkmark" : "")
                                 }
                             }
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
                         }
-                    }
-                    .refreshable {
-                        await refreshFiles()
-                    }
-                }
-            }
-            .navigationTitle("S3 Browser")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    if s3Service.isLoading {
-                        ProgressView()
-                    }
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Section("Sort By") {
-                            Picker("Sort", selection: $sortOption) {
-                                ForEach(SortOption.allCases, id: \.self) { option in
-                                    Text(option.rawValue).tag(option)
-                                }
-                            }
-                        }
-
-                        Section("View Style") {
-                            Button {
-                                viewStyle = .standard
-                            } label: {
-                                Label("Standard", systemImage: viewStyle == .standard ? "checkmark" : "")
-                            }
-
-                            Button {
-                                viewStyle = .compact
-                            } label: {
-                                Label("Compact", systemImage: viewStyle == .compact ? "checkmark" : "")
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
                     }
                 }
             }
             .task {
                 if isConfigured {
+                    logger.info("Task started - bucket: \(config.bucketName)")
+
+                    // Fetch available buckets
+                    do {
+                        logger.debug("Fetching available buckets...")
+                        try await s3Service.fetchAvailableBuckets()
+                        logger.info("Successfully fetched \(s3Service.availableBuckets.count) buckets")
+                    } catch {
+                        logger.error("Failed to fetch buckets: \(error.localizedDescription)")
+                    }
+
+                    // Restore previous bucket if available, otherwise use configured bucket
+                    if !savedBucket.isEmpty {
+                        logger.debug("Switching to saved bucket: \(savedBucket)")
+                        do {
+                            try await s3Service.switchBucket(savedBucket)
+                            logger.debug("Successfully switched to saved bucket")
+                        } catch {
+                            logger.error("Failed to switch to saved bucket: \(error.localizedDescription)")
+                        }
+                    } else {
+                        logger.debug("Using configured bucket: \(config.bucketName)")
+                        s3Service.currentBucket = config.bucketName
+                    }
+
+                    // Restore previous location (prefix)
+                    s3Service.currentPrefix = savedPrefix
+                    logger.debug("Refreshing files...")
                     await refreshFiles()
+                    logger.info("Task completed - found \(s3Service.items.count) items")
                 }
             }
             .onChange(of: scenePhase) { _, newPhase in
@@ -137,26 +211,38 @@ struct BucketBrowserView: View {
             .onChange(of: config) { _, newConfig in
                 Task {
                     try? await s3Service.updateConfig(newConfig)
+                    savedPrefix = ""
+                    savedBucket = ""
+                    s3Service.currentPrefix = ""
+                    s3Service.currentBucket = newConfig.bucketName
+
+                    // Fetch buckets again with new credentials
+                    do {
+                        try await s3Service.fetchAvailableBuckets()
+                    } catch {
+                        logger.error("Failed to fetch buckets: \(error.localizedDescription)")
+                    }
+
                     await refreshFiles()
                 }
             }
         }
     }
 
-    private var sortedObjects: [S3Object] {
+    private var sortedItems: [S3Item] {
         switch sortOption {
         case .dateNewest:
-            return s3Service.objects.sorted { $0.lastModified > $1.lastModified }
+            return s3Service.items.sorted { $0.sortDate > $1.sortDate }
         case .dateOldest:
-            return s3Service.objects.sorted { $0.lastModified < $1.lastModified }
+            return s3Service.items.sorted { $0.sortDate < $1.sortDate }
         case .nameAZ:
-            return s3Service.objects.sorted { $0.fileName.localizedCaseInsensitiveCompare($1.fileName) == .orderedAscending }
+            return s3Service.items.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
         case .nameZA:
-            return s3Service.objects.sorted { $0.fileName.localizedCaseInsensitiveCompare($1.fileName) == .orderedDescending }
+            return s3Service.items.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedDescending }
         case .sizeDescending:
-            return s3Service.objects.sorted { $0.size > $1.size }
+            return s3Service.items.sorted { $0.sortSize > $1.sortSize }
         case .sizeAscending:
-            return s3Service.objects.sorted { $0.size < $1.size }
+            return s3Service.items.sorted { $0.sortSize < $1.sortSize }
         }
     }
 
@@ -165,11 +251,16 @@ struct BucketBrowserView: View {
     }
 
     private func refreshFiles() async {
-        guard !s3Service.isLoading else { return }
+        guard !s3Service.isLoading else {
+            logger.debug("Already loading, skipping refresh")
+            return
+        }
         do {
+            logger.debug("Listing objects for bucket: \(s3Service.currentBucket), prefix: \(s3Service.currentPrefix.isEmpty ? "(root)" : s3Service.currentPrefix)")
             try await s3Service.listObjects()
+            logger.info("Successfully listed \(s3Service.items.count) items")
         } catch {
-            print("[BucketBrowserView:143] Failed to list objects: \(error)")
+            logger.error("Failed to list objects: \(error.localizedDescription)")
         }
     }
 
@@ -178,7 +269,7 @@ struct BucketBrowserView: View {
             try await s3Service.deleteObject(key: object.key)
             await refreshFiles()
         } catch {
-            print("[BucketBrowserView:152] Failed to delete object: \(error)")
+            logger.error("Failed to delete object: \(error.localizedDescription)")
         }
     }
 
@@ -220,7 +311,7 @@ struct BucketBrowserView: View {
                 }
             }
         } catch {
-            print("[BucketBrowserView:175] Failed to copy content: \(error)")
+            logger.error("Failed to copy content: \(error.localizedDescription)")
         }
     }
 }
@@ -325,6 +416,39 @@ struct CompactFileRow: View {
     }
 }
 
+struct FolderRow: View {
+    let folder: S3Folder
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "folder.fill")
+                .font(.title3)
+                .foregroundStyle(.blue)
+                .frame(width: 50, height: 50)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(folder.folderName)
+                    .font(.headline)
+                    .lineLimit(2)
+
+                Text("Folder")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+    }
+}
+
 #Preview {
-    BucketBrowserView(config: .constant(S3Config.default))
+    BucketBrowserView(
+        s3Service: S3Service(config: S3Config.default),
+        config: .constant(S3Config.default)
+    )
 }
