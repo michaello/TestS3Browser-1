@@ -36,6 +36,66 @@ struct S3Object: Identifiable {
     }
 }
 
+/// Represents an S3 folder (prefix)
+struct S3Folder: Identifiable {
+    let prefix: String
+
+    var id: String { prefix }
+
+    var folderName: String {
+        // Remove trailing slash and get last path component
+        let cleanPrefix = prefix.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        return URL(string: cleanPrefix)?.lastPathComponent ?? cleanPrefix
+    }
+}
+
+/// Represents either a folder or a file in S3
+enum S3Item: Identifiable {
+    case folder(S3Folder)
+    case file(S3Object)
+
+    var id: String {
+        switch self {
+        case .folder(let folder):
+            return folder.id
+        case .file(let object):
+            return object.id
+        }
+    }
+
+    var isFolder: Bool {
+        if case .folder = self { return true }
+        return false
+    }
+
+    var displayName: String {
+        switch self {
+        case .folder(let folder):
+            return folder.folderName
+        case .file(let object):
+            return object.fileName
+        }
+    }
+
+    var sortDate: Date {
+        switch self {
+        case .folder:
+            return Date.distantPast
+        case .file(let object):
+            return object.lastModified
+        }
+    }
+
+    var sortSize: Int64 {
+        switch self {
+        case .folder:
+            return 0
+        case .file(let object):
+            return object.size
+        }
+    }
+}
+
 enum FileType {
     case log
     case image
