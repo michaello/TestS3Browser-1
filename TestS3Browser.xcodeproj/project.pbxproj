@@ -7,25 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AWS001 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = AWS002 /* AWSS3 */; };
 		C9E4CFC9D22680A5808C62FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24ED4752FA29DA7EE939D095 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		24ED4752FA29DA7EE939D095 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TestS3Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestS3Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		E3E699961EF69C32C17755B8 /* Sources */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
+		E3E699961EF69C32C17755B8 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FRAMEWORKS001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AWS001 /* AWSS3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1B6F855B55D3751CA7AF7FE9 /* Products */ = {
@@ -41,7 +45,6 @@
 			children = (
 				24ED4752FA29DA7EE939D095 /* Assets.xcassets */,
 			);
-			name = Resources;
 			path = Resources;
 			sourceTree = "<group>";
 		};
@@ -62,6 +65,7 @@
 			buildConfigurationList = 9BEC4AAFE818F78A41B7A64C /* Build configuration list for PBXNativeTarget "TestS3Browser" */;
 			buildPhases = (
 				38804DF3C3B3EE3959C21ADE /* Sources */,
+				FRAMEWORKS001 /* Frameworks */,
 				196EDBED6D9DD9357F1197C1 /* Resources */,
 			);
 			buildRules = (
@@ -73,6 +77,7 @@
 			);
 			name = TestS3Browser;
 			packageProductDependencies = (
+				AWS002 /* AWSS3 */,
 			);
 			productName = TestS3Browser;
 			productReference = 6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */;
@@ -103,7 +108,9 @@
 			);
 			mainGroup = 727F86258123CA79BC8B6D8E;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 70;
+			packageReferences = (
+				AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -317,6 +324,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AWS002 /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSS3;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CFA6A1EE4DCD4AC3A8C45B8B /* Project object */;
 }

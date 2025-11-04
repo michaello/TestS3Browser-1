@@ -1,29 +1,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Binding var config: S3Config
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-                .accessibilityIdentifier("globeImage")
-            
-            Text("Hello, SwiftUI!")
-                .font(.largeTitle)
-                .padding()
-                .accessibilityIdentifier("welcomeText")
-            
-            Button("Get Started") {
-                // Action
-            }
-            .buttonStyle(.borderedProminent)
-            .accessibilityIdentifier("getStartedButton")
+        TabView {
+            BucketBrowserView(config: $config)
+                .tabItem {
+                    Label("Files", systemImage: "folder")
+                }
+
+            SettingsView(config: $config)
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
         }
-        .padding()
-        .accessibilityIdentifier("mainView")
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(config: .constant(S3Config.default))
 }
