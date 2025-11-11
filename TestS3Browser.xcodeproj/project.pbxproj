@@ -278,7 +278,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -298,7 +299,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
