@@ -19,13 +19,114 @@ struct BucketBrowserView: View {
     @Environment(\.scenePhase) private var scenePhase
     let s3Service: S3Service
     @Binding var config: S3Config
-    @State private var sortOption: SortOption = .dateNewest
-    @State private var viewStyle: ViewStyle = .standard
-    @State private var showingSortMenu = false
     @AppStorage("s3BrowserCurrentPrefix") private var savedPrefix: String = ""
     @AppStorage("s3CurrentBucket") private var savedBucket: String = ""
+    @AppStorage("s3BrowserSortOption") private var sortOption: String = SortOption.dateNewest.rawValue
+    @AppStorage("s3BrowserViewStyle") private var viewStyleRaw: String = "standard"
+    @AppStorage("s3BrowserFileTypeFilter") private var fileTypeFilterRaw: Int = FileTypeFilter.all.rawValue
+    @State private var showingSortMenu = false
 
     private let logger = Logger(subsystem: "com.s3browser", category: "BucketBrowserView")
+
+    private var viewStyle: ViewStyle {
+        get { viewStyleRaw == "compact" ? .compact : .standard }
+        set { viewStyleRaw = newValue == .compact ? "compact" : "standard" }
+    }
+
+    private var fileTypeFilter: FileTypeFilter {
+        get { FileTypeFilter(rawValue: fileTypeFilterRaw) }
+        set { fileTypeFilterRaw = newValue.rawValue }
+    }
+
+    private var filterMenuContent: some View {
+        Section("Filter by Type") {
+            Toggle("Images", isOn: Binding(
+                get: { fileTypeFilter.contains(.image) },
+                set: { isOn in
+                    var updated = fileTypeFilter
+                    if isOn {
+                        updated.insert(.image)
+                    } else {
+                        updated.remove(.image)
+                    }
+                    fileTypeFilterRaw = updated.rawValue
+                }
+            ))
+
+            Toggle("Text", isOn: Binding(
+                get: { fileTypeFilter.contains(.text) },
+                set: { isOn in
+                    var updated = fileTypeFilter
+                    if isOn {
+                        updated.insert(.text)
+                    } else {
+                        updated.remove(.text)
+                    }
+                    fileTypeFilterRaw = updated.rawValue
+                }
+            ))
+
+            Toggle("Logs", isOn: Binding(
+                get: { fileTypeFilter.contains(.log) },
+                set: { isOn in
+                    var updated = fileTypeFilter
+                    if isOn {
+                        updated.insert(.log)
+                    } else {
+                        updated.remove(.log)
+                    }
+                    fileTypeFilterRaw = updated.rawValue
+                }
+            ))
+
+            Toggle("Other", isOn: Binding(
+                get: { fileTypeFilter.contains(.unknown) },
+                set: { isOn in
+                    var updated = fileTypeFilter
+                    if isOn {
+                        updated.insert(.unknown)
+                    } else {
+                        updated.remove(.unknown)
+                    }
+                    fileTypeFilterRaw = updated.rawValue
+                }
+            ))
+
+            Divider()
+
+            Button {
+                fileTypeFilterRaw = FileTypeFilter.all.rawValue
+            } label: {
+                Label("Show All", systemImage: "")
+            }
+        }
+    }
+
+    private var sortMenuContent: some View {
+        Section("Sort By") {
+            Picker("Sort", selection: $sortOption) {
+                ForEach(SortOption.allCases, id: \.self) { option in
+                    Text(option.rawValue).tag(option.rawValue)
+                }
+            }
+        }
+    }
+
+    private var viewStyleMenuContent: some View {
+        Section("View Style") {
+            Button {
+                viewStyleRaw = "standard"
+            } label: {
+                Label("Standard", systemImage: viewStyle == .standard ? "checkmark" : "")
+            }
+
+            Button {
+                viewStyleRaw = "compact"
+            } label: {
+                Label("Compact", systemImage: viewStyle == .compact ? "checkmark" : "")
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -141,27 +242,9 @@ struct BucketBrowserView: View {
 
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
-                            Section("Sort By") {
-                                Picker("Sort", selection: $sortOption) {
-                                    ForEach(SortOption.allCases, id: \.self) { option in
-                                        Text(option.rawValue).tag(option)
-                                    }
-                                }
-                            }
-
-                            Section("View Style") {
-                                Button {
-                                    viewStyle = .standard
-                                } label: {
-                                    Label("Standard", systemImage: viewStyle == .standard ? "checkmark" : "")
-                                }
-
-                                Button {
-                                    viewStyle = .compact
-                                } label: {
-                                    Label("Compact", systemImage: viewStyle == .compact ? "checkmark" : "")
-                                }
-                            }
+                            filterMenuContent
+                            sortMenuContent
+                            viewStyleMenuContent
                         } label: {
                             Image(systemName: "line.3.horizontal.decrease.circle")
                         }
@@ -230,19 +313,30 @@ struct BucketBrowserView: View {
     }
 
     private var sortedItems: [S3Item] {
-        switch sortOption {
+        let filtered = s3Service.items.filter { item in
+            switch item {
+            case .folder:
+                return true // Always show folders
+            case .file(let object):
+                return fileTypeFilter.matches(object.fileType)
+            }
+        }
+
+        guard let option = SortOption(rawValue: sortOption) else { return filtered }
+
+        switch option {
         case .dateNewest:
-            return s3Service.items.sorted { $0.sortDate > $1.sortDate }
+            return filtered.sorted { $0.sortDate > $1.sortDate }
         case .dateOldest:
-            return s3Service.items.sorted { $0.sortDate < $1.sortDate }
+            return filtered.sorted { $0.sortDate < $1.sortDate }
         case .nameAZ:
-            return s3Service.items.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+            return filtered.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
         case .nameZA:
-            return s3Service.items.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedDescending }
+            return filtered.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedDescending }
         case .sizeDescending:
-            return s3Service.items.sorted { $0.sortSize > $1.sortSize }
+            return filtered.sorted { $0.sortSize > $1.sortSize }
         case .sizeAscending:
-            return s3Service.items.sorted { $0.sortSize < $1.sortSize }
+            return filtered.sorted { $0.sortSize < $1.sortSize }
         }
     }
 
