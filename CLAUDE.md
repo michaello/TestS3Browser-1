@@ -495,7 +495,87 @@ Keep in mind that @Observable doesn’t apply to structs.
 7. Model structure:
 - Assume all fields are optional and cannot be guaranteed by API
 8. Project structure
-- Any new folders and files should be put into Sources folder inside the project. For instance, I have a project FooProject as top folder. It will have Sources. So if you want to make FooServiceActor.swift, you will make a folder Services, put FooServiceActor.swift, and this folder will be inside Sources. So it will be ./Sources/Services/FooServiceActor.swift 
+- Any new folders and files should be put into Sources folder inside the project. For instance, I have a project FooProject as top folder. It will have Sources. So if you want to make FooServiceActor.swift, you will make a folder Services, put FooServiceActor.swift, and this folder will be inside Sources. So it will be ./Sources/Services/FooServiceActor.swift
+
+## 9. Exporting as Mac Catalyst App
+
+To create a separate Mac app from an existing iOS iPad app using Mac Catalyst:
+
+### Step 1: Enable Mac Catalyst Support in Xcode Project
+
+Modify `TestS3Browser.xcodeproj/project.pbxproj` to add Mac Catalyst support:
+
+```bash
+# Add SUPPORTS_MACCATALYST = YES and update TARGETED_DEVICE_FAMILY to "1,2,6"
+# (1=iPhone, 2=iPad, 6=Mac)
+sed -i '' 's/TARGETED_DEVICE_FAMILY = "1,2";/SUPPORTS_MACCATALYST = YES;\n\t\t\tTARGETED_DEVICE_FAMILY = "1,2,6";/g' YourProject.xcodeproj/project.pbxproj
+```
+
+Verify changes applied:
+```bash
+grep "SUPPORTS_MACCATALYST" YourProject.xcodeproj/project.pbxproj
+```
+
+### Step 2: Create ExportOptions.plist
+
+Create `ExportOptions.plist` in project root:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>mac-application</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+</dict>
+</plist>
+```
+
+### Step 3: Archive for macOS
+
+```bash
+xcodebuild -scheme YourSchemeName \
+  -destination generic/platform=macOS \
+  -archivePath /tmp/YourApp-Mac.xcarchive \
+  -configuration Release \
+  archive
+```
+
+### Step 4: Export Archive
+
+```bash
+xcodebuild -exportArchive \
+  -archivePath /tmp/YourApp-Mac.xcarchive \
+  -exportOptionsPlist ./ExportOptions.plist \
+  -exportPath /tmp/YourApp-MacExport
+```
+
+Result is `YourApp.app` in `/tmp/YourApp-MacExport`. This is a universal binary (x86_64 + arm64).
+
+### Step 5: Verify and Deploy
+
+```bash
+# Verify it's a Mac app binary
+file /tmp/YourApp-MacExport/YourApp.app/Contents/MacOS/YourApp
+
+# Launch the app
+open /tmp/YourApp-MacExport/YourApp.app
+
+# Copy to project root for reference
+cp -r /tmp/YourApp-MacExport/YourApp.app ./YourApp-Mac.app
+```
+
+### Notes
+
+- Do not use `variant=Mac Catalyst` in destination; it is not valid. Use `generic/platform=macOS` instead.
+- Export method must be `mac-application` for Mac apps.
+- The resulting app is a universal binary compatible with both Intel (x86_64) and Apple Silicon (arm64) Macs.
+- Automatic code signing handles signing for development/testing.
+- For distribution outside App Store, use `developer-id` method with Developer ID certificate.
 
 ### Claude Instructions:
 Respond in formal, neutral, information-focused language. Strictly avoid all of the following:
