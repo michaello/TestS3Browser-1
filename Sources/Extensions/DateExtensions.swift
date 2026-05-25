@@ -34,9 +34,19 @@ extension Date {
     }
 
     /// Formats the date as a compact relative string
-    /// - Returns: Short relative format like "Today 2:30 PM", "Yesterday 10:45 AM", or full date
+    /// Sub-hour times are shown as "Xs ago" or "Xm ago". Older times show day + clock.
     func relativeFormattedCompact() -> String {
+        let now = Date()
+        let seconds = now.timeIntervalSince(self)
         let calendar = Calendar.current
+
+        if seconds < 60 {
+            return "\(max(0, Int(seconds)))s ago"
+        }
+
+        if seconds < 3600 {
+            return "\(Int(seconds / 60))m ago"
+        }
 
         // Same day - show "Today HH:MM"
         if calendar.isDateInToday(self) {
@@ -50,5 +60,10 @@ extension Date {
 
         // Older than yesterday - show full date with time
         return self.formatted(date: .abbreviated, time: .shortened)
+    }
+
+    /// True if the date is within the last 2 minutes
+    var isRecent: Bool {
+        Date().timeIntervalSince(self) < 120
     }
 }

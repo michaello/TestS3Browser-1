@@ -7,6 +7,12 @@ struct BucketPickerView: View {
     let isLoading: Bool
     let onSelectBucket: (String) -> Void
 
+    /// Debounced loading state - only shows spinner after delay to prevent flicker
+    @State private var showSpinner = false
+    @State private var spinnerTask: Task<Void, Never>?
+
+    private let spinnerDelay: UInt64 = 300_000_000 // 300ms
+
     var body: some View {
         Menu {
             ForEach(availableBuckets, id: \.self) { bucket in
@@ -25,7 +31,7 @@ struct BucketPickerView: View {
             }
         } label: {
             HStack(spacing: 4) {
-                if isLoading {
+                if showSpinner {
                     ProgressView()
                         .scaleEffect(0.8)
                 } else {
@@ -36,6 +42,23 @@ struct BucketPickerView: View {
                     .font(.caption)
             }
             .frame(maxWidth: 150)
+        }
+        .onChange(of: isLoading) { _, loading in
+            if loading {
+                // Start debounce timer - only show spinner after delay
+                spinnerTask?.cancel()
+                spinnerTask = Task {
+                    try? await Task.sleep(nanoseconds: spinnerDelay)
+                    if !Task.isCancelled {
+                        showSpinner = true
+                    }
+                }
+            } else {
+                // Loading finished - immediately hide spinner
+                spinnerTask?.cancel()
+                spinnerTask = nil
+                showSpinner = false
+            }
         }
     }
 }
