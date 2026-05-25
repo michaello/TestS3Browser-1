@@ -10,6 +10,7 @@ struct FileDetailView: View {
     @State private var isLoading = false
     @State private var error: String?
     @State private var downloadedBytes: Int64 = 0
+    @State private var showingDetails = false
 
     enum FileContent {
         case text(String)
@@ -19,41 +20,109 @@ struct FileDetailView: View {
     }
 
     var body: some View {
+        Group {
+            if object.fileType == .html {
+                htmlPrimaryView
+            } else {
+                standardDetailView
+            }
+        }
+    }
+
+    /// For reports/.html the rendered page IS the screen - fill it edge to edge and
+    /// put the metadata behind a "..." menu in the nav bar.
+    private var htmlPrimaryView: some View {
+        Group {
+            if isLoading {
+                downloadProgressView
+            } else if let error {
+                errorView(error)
+            } else if case .html(let html) = fileContent {
+                HTMLWebView(html: html)
+                    .ignoresSafeArea(edges: .bottom)
+            } else {
+                downloadProgressView
+            }
+        }
+        .navigationTitle(object.fileName)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button {
+                        showingDetails = true
+                    } label: {
+                        Label("File Details", systemImage: "info.circle")
+                    }
+                    if let url = service.getPublicURL(for: object.key) {
+                        Link(destination: url) {
+                            Label("Open in Browser", systemImage: "safari")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showingDetails) {
+            NavigationStack {
+                ScrollView { metadataCard.padding() }
+                    .navigationTitle("File Details")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") { showingDetails = false }
+                        }
+                    }
+            }
+            .presentationDetents([.medium])
+        }
+        .task { await loadFile() }
+    }
+
+    private var metadataCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("File Details")
+                .font(.headline)
+
+            MetadataRow(label: "Name", value: object.fileName)
+            MetadataRow(label: "Size", value: object.formattedSize)
+            MetadataRow(label: "Modified", value: object.lastModified.relativeFormatted())
+
+            if let url = service.getPublicURL(for: object.key) {
+                Link("Open in Browser", destination: url)
+                    .font(.caption)
+            }
+        }
+        .padding()
+        .background(.gray.opacity(0.1))
+        .cornerRadius(12)
+    }
+
+    private func errorView(_ message: String) -> some View {
+        VStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundStyle(.orange)
+            Text(message)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+    }
+
+    private var standardDetailView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // metadata section
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("File Details")
-                        .font(.headline)
-
-                    MetadataRow(label: "Name", value: object.fileName)
-                    MetadataRow(label: "Size", value: object.formattedSize)
-                    MetadataRow(label: "Modified", value: object.lastModified.relativeFormatted())
-
-                    if let url = service.getPublicURL(for: object.key) {
-                        Link("Open in Browser", destination: url)
-                            .font(.caption)
-                    }
-                }
-                .padding()
-                .background(.gray.opacity(0.1))
-                .cornerRadius(12)
+                metadataCard
 
                 // content display
                 if isLoading {
                     downloadProgressView
                 } else if let error = error {
-                    VStack(spacing: 8) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.largeTitle)
-                            .foregroundStyle(.orange)
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                    errorView(error)
                 } else if let content = fileContent {
                     switch content {
                     case .text(let text):
