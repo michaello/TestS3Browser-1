@@ -294,13 +294,26 @@ final class S3Service {
             throw S3ServiceError.clientNotInitialized
         }
 
+        isLoading = true
+        error = nil
+
+        // Fast path: if the current bucket stores reports under a date-sorted
+        // reports/ prefix, list only the newest day instead of scanning every
+        // bucket. A few cheap delimiter listings vs paginating ~thousands of keys.
+        loadingStatus = "Loading recent reports..."
+        if let dated = (try? await fetchRecentFromDatePrefix(bucket: currentBucket, limit: limit)) ?? nil,
+           !dated.isEmpty {
+            recentFiles = dated
+            loadingStatus = "Showing \(recentFiles.count) most recent in \(currentBucket)"
+            isLoading = false
+            return
+        }
+
         // Fetch bucket list if not already loaded
         if availableBuckets.isEmpty {
             try await fetchAvailableBuckets()
         }
 
-        isLoading = true
-        error = nil
         loadingStatus = "Scanning \(availableBuckets.count) buckets..."
 
         do {
@@ -368,6 +381,57 @@ final class S3Service {
             isLoading = false
             throw error
         }
+    }
+
+    /// Lists the immediate sub-prefixes under a prefix using a delimiter listing.
+    /// Returns just the folder names (no trailing slash), sorted ascending. This is
+    /// one cheap call - it does not paginate through every object.
+    private func listSubPrefixes(bucket: String, prefix: String) async throws -> [String] {
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let input = ListObjectsV2Input(bucket: bucket, delimiter: "/", prefix: prefix)
+        let output = try await client.listObjectsV2(input: input)
+        let prefixes = output.commonPrefixes ?? []
+        return prefixes.compactMap { $0.prefix }
+            .map { $0.hasSuffix("/") ? String($0.dropLast()) : $0 }   // strip trailing slash
+            .map { String($0.dropFirst(prefix.count)) }                // keep only the leaf name
+            .sorted()
+    }
+
+    /// Fast recent-files path for buckets that store reports under a date-sorted
+    /// prefix (reports/YYYY/MM/DD/HHMMSS-report.html). Walks to the newest day with a
+    /// few delimiter listings and lists only that day, instead of paginating the whole
+    /// bucket. Falls back to nil if the layout is not present so the caller can use the
+    /// general scan.
+    func fetchRecentFromDatePrefix(bucket: String, rootPrefix: String = "reports/", limit: Int = 50) async throws -> [S3Object]? {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        // Walk reports/ -> newest year -> newest month -> newest day.
+        let years = try await listSubPrefixes(bucket: bucket, prefix: rootPrefix)
+        guard let year = years.last else { return nil }   // no date layout here
+        let months = try await listSubPrefixes(bucket: bucket, prefix: "\(rootPrefix)\(year)/")
+        guard let month = months.last else { return nil }
+        let days = try await listSubPrefixes(bucket: bucket, prefix: "\(rootPrefix)\(year)/\(month)/")
+        guard let day = days.last else { return nil }
+
+        // List only the newest day's files (a small set).
+        let dayPrefix = "\(rootPrefix)\(year)/\(month)/\(day)/"
+        let input = ListObjectsV2Input(bucket: bucket, prefix: dayPrefix)
+        let output = try await client.listObjectsV2(input: input)
+        var files: [S3Object] = []
+        for item in output.contents ?? [] {
+            guard let key = item.key, !key.hasSuffix("/") else { continue }
+            files.append(S3Object(
+                key: key,
+                size: Int64(item.size ?? 0),
+                lastModified: item.lastModified ?? Date(),
+                etag: item.eTag,
+                bucket: bucket
+            ))
+        }
+        // Keys are HHMMSS-prefixed so lexicographic descending == newest first.
+        let sorted = files.sorted { $0.key > $1.key }
+        return Array(sorted.prefix(limit))
     }
 
     /// Downloads an object, optionally from a specific bucket.
