@@ -9,11 +9,40 @@
 /* Begin PBXBuildFile section */
 		AWS001 /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = AWS002 /* AWSS3 */; };
 		C9E4CFC9D22680A5808C62FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24ED4752FA29DA7EE939D095 /* Assets.xcassets */; };
+		SHARE001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARE002 /* ShareViewController.swift */; };
+		SHARE031 /* DumpShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = SHARE004 /* DumpShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		SHARE010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CFA6A1EE4DCD4AC3A8C45B8B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = SHARE020;
+			remoteInfo = DumpShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		SHARE030 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				SHARE031 /* DumpShareExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		24ED4752FA29DA7EE939D095 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestS3Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		SHARE002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		SHARE003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		SHARE004 /* DumpShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DumpShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -29,6 +58,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		SHARE040 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -36,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */,
+				SHARE004 /* DumpShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,8 +90,18 @@
 			children = (
 				E3E699961EF69C32C17755B8 /* Sources */,
 				6A92C00D8517B6AE8D422BAA /* Resources */,
+				SHARE005 /* ShareExtension */,
 				1B6F855B55D3751CA7AF7FE9 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		SHARE005 /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				SHARE002 /* ShareViewController.swift */,
+				SHARE003 /* Info.plist */,
+			);
+			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -67,10 +114,12 @@
 				38804DF3C3B3EE3959C21ADE /* Sources */,
 				FRAMEWORKS001 /* Frameworks */,
 				196EDBED6D9DD9357F1197C1 /* Resources */,
+				SHARE030 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				SHARE011 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E3E699961EF69C32C17755B8 /* Sources */,
@@ -83,6 +132,23 @@
 			productReference = 6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */;
 			productType = "com.apple.product-type.application";
 		};
+		SHARE020 /* DumpShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = SHARE050 /* Build configuration list for PBXNativeTarget "DumpShareExtension" */;
+			buildPhases = (
+				SHARE041 /* Sources */,
+				SHARE040 /* Frameworks */,
+				SHARE042 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DumpShareExtension;
+			productName = DumpShareExtension;
+			productReference = SHARE004 /* DumpShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -93,7 +159,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					1C31259EB670C58E6A633F17 = {
-						DevelopmentTeam = U7F9A739R2;
+						ProvisioningStyle = Automatic;
+					};
+					SHARE020 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -115,6 +183,7 @@
 			projectRoot = "";
 			targets = (
 				1C31259EB670C58E6A633F17 /* TestS3Browser */,
+				SHARE020 /* DumpShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -128,6 +197,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		SHARE042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -138,7 +214,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		SHARE041 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				SHARE001 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		SHARE011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = SHARE020 /* DumpShareExtension */;
+			targetProxy = SHARE010 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		72122FD9D452FD11780335C4 /* Debug */ = {
@@ -267,9 +359,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestS3Browser.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = U7F9A739R2;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -288,9 +381,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestS3Browser.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = U7F9A739R2;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -301,6 +395,64 @@
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = YES;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Release;
+		};
+		SHARE051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/DumpShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dump to S3";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser.DumpShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		SHARE052 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/DumpShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dump to S3";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser.DumpShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -321,6 +473,15 @@
 			buildConfigurations = (
 				72122FD9D452FD11780335C4 /* Debug */,
 				724A901A3DAA50E6442FD029 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		SHARE050 /* Build configuration list for PBXNativeTarget "DumpShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				SHARE051 /* Debug */,
+				SHARE052 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
