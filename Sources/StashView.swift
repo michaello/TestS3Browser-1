@@ -7,11 +7,18 @@ import os.log
 struct StashView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "StashView")
     let s3Service: S3Service
+    private let bucket = "phone-stash"
+    /// Separate seen-tracking namespace so the Recent tab's all-buckets scan (which
+    /// marks phone-stash keys seen under the plain bucket name) cannot clobber the
+    /// Stash tab's "new until tapped" state.
+    private let seenKey = "phone-stash:stash"
 
     @State private var reports: [S3Object] = []
     @State private var isLoading = false
     @State private var error: String?
     @State private var navigationPath = NavigationPath()
+    /// Keys of reports we have not seen or tapped yet - emphasized in the list.
+    @State private var newKeys: Set<String> = []
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -33,9 +40,13 @@ struct StashView: View {
                     }
                 } else {
                     List(reports) { report in
-                        NavigationLink(value: report) {
-                            StashRow(report: report)
+                        Button {
+                            markSeen(report)
+                            navigationPath.append(report)
+                        } label: {
+                            StashRow(report: report, isNew: newKeys.contains(report.key))
                         }
+                        .buttonStyle(.plain)
                     }
                     .listStyle(.plain)
                 }
@@ -64,8 +75,25 @@ struct StashView: View {
         isLoading = true
         error = nil
         do {
-            let fetched = try await s3Service.fetchStashReports()
-            await MainActor.run { reports = fetched }
+            let fetched = try await s3Service.fetchStashReports(bucket: bucket)
+
+            // Flag reports we have not seen before. Only flag when we have a prior
+            // seen record, so the very first visit does not light up everything.
+            let keys = fetched.map { $0.key }
+            var unseen: Set<String> = []
+            if await SeenPhotosTracker.shared.hasSeenPhotos(for: seenKey) {
+                unseen = Set(await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: seenKey))
+            } else if !keys.isEmpty {
+                // First visit: record them as seen so they are not all "new" next time.
+                await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: seenKey)
+            }
+
+            await MainActor.run {
+                reports = fetched
+                // Keep emphasis on anything still unseen, plus anything already
+                // flagged new in this session that the user has not tapped yet.
+                newKeys = unseen.union(newKeys).intersection(Set(keys))
+            }
             // Prefetch so tapping a report opens instantly.
             s3Service.prefetchObjects(fetched)
         } catch {
@@ -74,32 +102,65 @@ struct StashView: View {
         }
         await MainActor.run { isLoading = false }
     }
+
+    /// A report stops being "new" once tapped. Persist that so it stays seen across
+    /// launches, and drop the in-list emphasis immediately.
+    private func markSeen(_ report: S3Object) {
+        guard newKeys.contains(report.key) else { return }
+        newKeys.remove(report.key)
+        Task {
+            // Additive - keep the rest of the bucket's seen record intact.
+            await SeenPhotosTracker.shared.addSeen(photoKeys: [report.key], bucket: seenKey)
+        }
+    }
 }
 
 private struct StashRow: View {
     let report: S3Object
-
-    /// reports/2026/05/25/171239-report.html -> "May 25, 2026 - 17:12:39"
-    private var displayDate: String {
-        report.lastModified.formatted(date: .abbreviated, time: .shortened)
-    }
+    let isNew: Bool
 
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "doc.richtext")
                 .font(.title2)
-                .foregroundStyle(.teal)
+                .foregroundStyle(isNew ? .teal : .secondary)
                 .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(report.fileName)
-                    .font(.subheadline)
-                    .lineLimit(1)
-                Text("\(displayDate) - \(report.formattedSize)")
+                HStack(spacing: 6) {
+                    Text(report.fileName)
+                        .font(.subheadline)
+                        .fontWeight(isNew ? .semibold : .regular)
+                        .lineLimit(1)
+
+                    if isNew {
+                        Text("NEW")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(.teal))
+                    }
+                }
+                Text("\(report.lastModified.relativeFormattedCompact()) - \(report.formattedSize)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            Spacer()
+
+            // Unseen reports get a filled accent dot, seen ones the usual chevron.
+            if isNew {
+                Circle()
+                    .fill(.teal)
+                    .frame(width: 8, height: 8)
+            }
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 4)
+        .contentShape(Rectangle())
     }
 }

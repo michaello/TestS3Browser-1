@@ -30,6 +30,15 @@ actor SeenPhotosTracker {
         logger.debug("Marked \(photoKeys.count) photos as seen for bucket: \(bucket)")
     }
 
+    /// Adds keys to the seen set without replacing the existing ones. Use this when
+    /// marking a single item seen (e.g. tapped) so the rest of the bucket's seen
+    /// record is kept.
+    func addSeen(photoKeys: [String], bucket: String) {
+        seenPhotos[bucket, default: []].formUnion(photoKeys)
+        saveToDisk()
+        logger.debug("Added \(photoKeys.count) seen photos for bucket: \(bucket)")
+    }
+
     /// Finds new photos that haven't been seen before
     /// - Parameters:
     ///   - currentPhotos: Current array of S3 object keys
