@@ -5,7 +5,7 @@ import os.log
 enum AppTab: String, CaseIterable {
     case browse
     case recent
-    case uploads
+    case stash
     case upload
     case settings
 
@@ -13,7 +13,7 @@ enum AppTab: String, CaseIterable {
         switch self {
         case .browse: return "Browse"
         case .recent: return "Recent"
-        case .uploads: return "Uploads"
+        case .stash: return "Stash"
         case .upload: return "Upload"
         case .settings: return "Settings"
         }
@@ -23,7 +23,7 @@ enum AppTab: String, CaseIterable {
         switch self {
         case .browse: return "folder"
         case .recent: return "clock"
-        case .uploads: return "tray.and.arrow.up"
+        case .stash: return "doc.richtext"
         case .upload: return "square.and.arrow.up"
         case .settings: return "gear"
         }
@@ -68,10 +68,10 @@ struct ContentView: View {
                         BucketBrowserView(s3Service: s3Service, config: $config)
                     case .recent:
                         RecentFilesView(config: config, s3Service: s3Service)
-                    case .uploads:
-                        DumpFilesView(s3Service: s3Service)
+                    case .stash:
+                        StashView(s3Service: s3Service)
                     case .upload:
-                        DropUploadView(s3Service: s3Service)
+                        DumpFilesView(s3Service: s3Service)
                     case .settings:
                         SettingsView(config: $config)
                     }

@@ -9,6 +9,7 @@ struct DumpFilesView: View {
     @State private var isLoading = false
     @State private var hasLoadedOnce = false
     @State private var loadError: String?
+    @State private var showingUpload = false
     @AppStorage("s3DumpViewMode") private var viewModeRaw: String = "grid"
 
     enum ViewMode {
@@ -28,8 +29,13 @@ struct DumpFilesView: View {
     var body: some View {
         NavigationStack {
             contentView
-                .navigationTitle("Uploads")
+                .navigationTitle("Upload")
                 .toolbar { toolbarContent }
+                .sheet(isPresented: $showingUpload, onDismiss: {
+                    Task { await refreshDumpFiles() }
+                }) {
+                    DropUploadView(s3Service: s3Service)
+                }
         }
         .task { await initialLoad() }
     }
@@ -130,6 +136,12 @@ struct DumpFilesView: View {
                     Task { await refreshDumpFiles() }
                 } label: {
                     Image(systemName: "arrow.clockwise")
+                }
+
+                Button {
+                    showingUpload = true
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
         }
