@@ -4,6 +4,7 @@ import AWSSDKIdentity
 import SmithyIdentity
 import Smithy
 import os.log
+import CommonCrypto
 
 @Observable
 final class S3Service {
@@ -14,6 +15,9 @@ final class S3Service {
     private(set) var availableBuckets: [String] = []
     private(set) var recentFiles: [S3Object] = []
 
+    /// Status message during loading operations (e.g. "Fetching files..." or "Found 42 files")
+    private(set) var loadingStatus: String = ""
+
     /// Current folder prefix being browsed. Empty string for bucket root.
     var currentPrefix: String = ""
 
@@ -22,6 +26,10 @@ final class S3Service {
 
     private var client: S3Client?
     private var config: S3Config
+
+    /// Prefetch cache for file data downloaded in the background
+    private var prefetchedData: [String: Data] = [:]
+    private var prefetchTask: Task<Void, Never>?
 
     init(config: S3Config) {
         self.config = config
@@ -99,16 +107,17 @@ final class S3Service {
 
         isLoading = true
         error = nil
+        loadingStatus = "Fetching files..."
 
         do {
-            let prefix = config.prefix.isEmpty ? currentPrefix : (config.prefix + currentPrefix)
+            // Use currentPrefix directly for browsing - config.prefix is only used as initial default
             let input = ListObjectsV2Input(
                 bucket: currentBucket,
                 delimiter: "/",
-                prefix: prefix.isEmpty ? nil : prefix
+                prefix: currentPrefix.isEmpty ? nil : currentPrefix
             )
 
-            self.logger.debug("Calling listObjectsV2 - bucket: \(self.currentBucket), prefix: \(prefix.isEmpty ? "(root)" : prefix)")
+            self.logger.debug("Calling listObjectsV2 - bucket: \(self.currentBucket), prefix: \(self.currentPrefix.isEmpty ? "(root)" : self.currentPrefix)")
             let output = try await client.listObjectsV2(input: input)
             self.logger.debug("Got response from S3")
 
@@ -130,6 +139,7 @@ final class S3Service {
 
             // Parse files from contents
             if let contents = output.contents {
+                loadingStatus = "Processing \(contents.count) items..."
                 for item in contents {
                     guard let key = item.key else { continue }
                     // Skip items that are just folder markers
@@ -147,10 +157,12 @@ final class S3Service {
             }
             self.logger.debug("Found \(fileCount) files, total items: \(s3Items.count)")
 
+            loadingStatus = "Loaded \(fileCount) files, \(folderCount) folders"
             items = s3Items
             isLoading = false
         } catch {
             self.error = error.localizedDescription
+            loadingStatus = ""
             isLoading = false
             throw error
         }
@@ -202,6 +214,7 @@ final class S3Service {
         currentBucket = bucketName
         currentPrefix = ""
         items = []
+        recentFiles = []
         try await listObjects()
     }
 
@@ -218,10 +231,12 @@ final class S3Service {
 
         isLoading = true
         error = nil
+        loadingStatus = "Scanning bucket..."
 
         do {
             var allFiles: [S3Object] = []
             var continuationToken: String? = nil
+            var pageCount = 0
 
             // Recursively fetch all objects without delimiter to get all files
             repeat {
@@ -231,6 +246,7 @@ final class S3Service {
                 )
 
                 let output = try await client.listObjectsV2(input: input)
+                pageCount += 1
 
                 if let contents = output.contents {
                     for item in contents {
@@ -248,6 +264,8 @@ final class S3Service {
                     }
                 }
 
+                loadingStatus = "Found \(allFiles.count) files\(continuationToken != nil ? ", scanning..." : "")"
+
                 // Check for pagination
                 continuationToken = output.nextContinuationToken
             } while continuationToken != nil
@@ -255,21 +273,120 @@ final class S3Service {
             // Sort by date descending and take top N
             let sorted = allFiles.sorted { $0.lastModified > $1.lastModified }
             recentFiles = Array(sorted.prefix(limit))
+            loadingStatus = "Showing \(recentFiles.count) most recent of \(allFiles.count) files"
             isLoading = false
         } catch {
             self.error = error.localizedDescription
+            loadingStatus = ""
             isLoading = false
             throw error
         }
     }
 
-    func downloadObject(key: String) async throws -> Data {
+    /// Fetches the most recent files from ALL available buckets concurrently
+    /// - Parameter limit: Maximum number of files to return per bucket (default 10)
+    func fetchRecentFilesFromAllBuckets(limit: Int = 10) async throws {
+        if client == nil {
+            try await initializeClient()
+        }
+
+        guard let client = client else {
+            throw S3ServiceError.clientNotInitialized
+        }
+
+        // Fetch bucket list if not already loaded
+        if availableBuckets.isEmpty {
+            try await fetchAvailableBuckets()
+        }
+
+        isLoading = true
+        error = nil
+        loadingStatus = "Scanning \(availableBuckets.count) buckets..."
+
+        do {
+            var allFiles: [S3Object] = []
+
+            // Scan all buckets concurrently; per-bucket errors are skipped so one
+            // inaccessible/wrong-region bucket doesn't abort the entire fetch
+            await withTaskGroup(of: [S3Object].self) { group in
+                for bucketName in availableBuckets {
+                    group.addTask {
+                        var bucketFiles: [S3Object] = []
+                        var continuationToken: String? = nil
+
+                        do {
+                            repeat {
+                                let input = ListObjectsV2Input(
+                                    bucket: bucketName,
+                                    continuationToken: continuationToken
+                                )
+
+                                let output = try await client.listObjectsV2(input: input)
+
+                                if let contents = output.contents {
+                                    for item in contents {
+                                        guard let key = item.key else { continue }
+                                        if key.hasSuffix("/") { continue }
+
+                                        let object = S3Object(
+                                            key: key,
+                                            size: Int64(item.size ?? 0),
+                                            lastModified: item.lastModified ?? Date(),
+                                            etag: item.eTag,
+                                            bucket: bucketName
+                                        )
+                                        bucketFiles.append(object)
+                                    }
+                                }
+
+                                continuationToken = output.nextContinuationToken
+                            } while continuationToken != nil
+                        } catch {
+                            // Skip buckets that are inaccessible or in a different region
+                        }
+
+                        return bucketFiles
+                    }
+                }
+
+                for await bucketFiles in group {
+                    // Cap each bucket's contribution to `limit` most recent files
+                    // so a single high-frequency bucket can't crowd out others
+                    let capped = bucketFiles.sorted { $0.lastModified > $1.lastModified }.prefix(limit)
+                    allFiles.append(contentsOf: capped)
+                }
+            }
+
+            // Sort combined capped results by date descending and take top N
+            let sorted = allFiles.sorted { $0.lastModified > $1.lastModified }
+            recentFiles = Array(sorted.prefix(limit))
+            loadingStatus = "Showing \(recentFiles.count) most recent across \(availableBuckets.count) buckets"
+            isLoading = false
+        } catch {
+            self.error = error.localizedDescription
+            loadingStatus = ""
+            isLoading = false
+            throw error
+        }
+    }
+
+    /// Downloads an object, optionally from a specific bucket.
+    /// Returns prefetched data if available, otherwise downloads from S3.
+    func downloadObject(key: String, bucket: String? = nil) async throws -> Data {
+        // Check prefetch cache first
+        let cacheKey = "\(bucket ?? currentBucket)/\(key)"
+        if let cached = prefetchedData[cacheKey] {
+            prefetchedData.removeValue(forKey: cacheKey)
+            logger.debug("Serving prefetched data for \(key) (\(cached.count) bytes)")
+            return cached
+        }
+
         guard let client = client else {
             throw S3ServiceError.clientNotInitialized
         }
 
         let input = GetObjectInput(
-            bucket: currentBucket,
+            bucket: bucket ?? currentBucket,
             key: key
         )
 
@@ -283,12 +400,115 @@ final class S3Service {
         return data ?? Data()
     }
 
+    /// Prefetches file data for a list of objects in the background.
+    /// Skips images that are already in the image cache.
+    func prefetchObjects(_ objects: [S3Object]) {
+        prefetchTask?.cancel()
+        prefetchTask = Task {
+            for object in objects {
+                guard !Task.isCancelled else { break }
+                let cacheKey = "\(object.bucket ?? currentBucket)/\(object.key)"
+
+                // Skip if already prefetched
+                if prefetchedData[cacheKey] != nil { continue }
+
+                // Skip images that are already cached
+                if object.fileType == .image {
+                    if await ImageCacheActor.shared.getFullImage(for: object.key) != nil { continue }
+                }
+
+                do {
+                    let data = try await downloadObject(key: object.key, bucket: object.bucket)
+                    guard !Task.isCancelled else { break }
+                    prefetchedData[cacheKey] = data
+                    logger.debug("Prefetched \(object.key) (\(data.count) bytes)")
+                } catch {
+                    logger.debug("Prefetch failed for \(object.key): \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
     func getPublicURL(for key: String) -> URL? {
         let host = config.region == "us-east-1"
             ? "\(currentBucket).s3.amazonaws.com"
             : "\(currentBucket).s3.\(config.region).amazonaws.com"
 
         return URL(string: "https://\(host)/\(key)")
+    }
+
+    /// Generates a presigned URL for an S3 object that expires after a given duration.
+    /// Anyone with the link can access the file until expiration.
+    /// - Parameters:
+    ///   - key: The S3 object key
+    ///   - bucket: Optional bucket (defaults to currentBucket)
+    ///   - expiresIn: Seconds until the URL expires (default 7 days, max 7 days)
+    /// - Returns: A presigned URL string
+    func generatePresignedURL(for key: String, bucket: String? = nil, expiresIn: Int = 86400) -> String? {
+        let bucketName = bucket ?? currentBucket
+        let region = config.region
+        let host = region == "us-east-1"
+            ? "\(bucketName).s3.amazonaws.com"
+            : "\(bucketName).s3.\(region).amazonaws.com"
+
+        let now = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+
+        dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
+        let amzDate = dateFormatter.string(from: now)
+
+        dateFormatter.dateFormat = "yyyyMMdd"
+        let dateStamp = dateFormatter.string(from: now)
+
+        let credentialScope = "\(dateStamp)/\(region)/s3/aws4_request"
+        let credential = "\(config.accessKey)/\(credentialScope)"
+
+        // URL-encode the key components individually
+        let encodedKey = key.split(separator: "/").map { component in
+            component.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? String(component)
+        }.joined(separator: "/")
+
+        let signedHeaders = "host"
+        // AWS Sig V4 requires / to be encoded as %2F in query parameters
+        var awsQueryAllowed = CharacterSet.urlQueryAllowed
+        awsQueryAllowed.remove("/")
+        let encodedCredential = credential.addingPercentEncoding(withAllowedCharacters: awsQueryAllowed) ?? credential
+        let queryParams = [
+            "X-Amz-Algorithm=AWS4-HMAC-SHA256",
+            "X-Amz-Credential=\(encodedCredential)",
+            "X-Amz-Date=\(amzDate)",
+            "X-Amz-Expires=\(expiresIn)",
+            "X-Amz-SignedHeaders=\(signedHeaders)",
+        ].joined(separator: "&")
+
+        let canonicalRequest = [
+            "GET",
+            "/\(encodedKey)",
+            queryParams,
+            "host:\(host)",
+            "",
+            signedHeaders,
+            "UNSIGNED-PAYLOAD"
+        ].joined(separator: "\n")
+
+        let stringToSign = [
+            "AWS4-HMAC-SHA256",
+            amzDate,
+            credentialScope,
+            S3PresignHelper.sha256Hex(canonicalRequest.data(using: .utf8)!)
+        ].joined(separator: "\n")
+
+        let kDate = S3PresignHelper.hmacSHA256(key: "AWS4\(config.secretKey)".data(using: .utf8)!, data: dateStamp.data(using: .utf8)!)
+        let kRegion = S3PresignHelper.hmacSHA256(key: kDate, data: region.data(using: .utf8)!)
+        let kService = S3PresignHelper.hmacSHA256(key: kRegion, data: "s3".data(using: .utf8)!)
+        let kSigning = S3PresignHelper.hmacSHA256(key: kService, data: "aws4_request".data(using: .utf8)!)
+
+        let signature = S3PresignHelper.hmacSHA256(key: kSigning, data: stringToSign.data(using: .utf8)!)
+            .map { String(format: "%02x", $0) }.joined()
+
+        return "https://\(host)/\(encodedKey)?\(queryParams)&X-Amz-Signature=\(signature)"
     }
 
     /// Deletes an object from the S3 bucket
@@ -321,6 +541,113 @@ final class S3Service {
             throw error
         }
     }
+
+    /// Uploads data to S3 bucket
+    /// - Parameters:
+    ///   - data: The data to upload
+    ///   - key: The S3 object key (path)
+    ///   - contentType: MIME type of the content
+    /// - Returns: The key of the uploaded object
+    @discardableResult
+    func uploadObject(data: Data, key: String, contentType: String = "application/octet-stream") async throws -> String {
+        if client == nil {
+            try await initializeClient()
+        }
+
+        guard let client = client else {
+            throw S3ServiceError.clientNotInitialized
+        }
+
+        let input = PutObjectInput(
+            body: .data(data),
+            bucket: currentBucket,
+            contentType: contentType,
+            key: key
+        )
+
+        logger.info("Uploading to \(self.currentBucket)/\(key) (\(data.count) bytes)")
+        _ = try await client.putObject(input: input)
+        logger.info("Upload complete: \(key)")
+
+        return key
+    }
+
+    /// Fetches all files from the dump/ prefix, sorted by most recent first
+    /// - Returns: Array of S3Object from the dump/ folder
+    func fetchDumpFiles() async throws -> [S3Object] {
+        if client == nil {
+            try await initializeClient()
+        }
+
+        guard let client = client else {
+            throw S3ServiceError.clientNotInitialized
+        }
+
+        var allFiles: [S3Object] = []
+        var continuationToken: String? = nil
+
+        repeat {
+            let input = ListObjectsV2Input(
+                bucket: currentBucket,
+                continuationToken: continuationToken,
+                prefix: "dump/"
+            )
+
+            let output = try await client.listObjectsV2(input: input)
+
+            if let contents = output.contents {
+                for item in contents {
+                    guard let key = item.key else { continue }
+                    if key.hasSuffix("/") { continue }
+
+                    let object = S3Object(
+                        key: key,
+                        size: Int64(item.size ?? 0),
+                        lastModified: item.lastModified ?? Date(),
+                        etag: item.eTag
+                    )
+                    allFiles.append(object)
+                }
+            }
+
+            continuationToken = output.nextContinuationToken
+        } while continuationToken != nil
+
+        return allFiles.sorted { $0.lastModified > $1.lastModified }
+    }
+
+    /// Uploads an image to the dump folder with timestamp
+    /// - Parameter imageData: JPEG or PNG image data
+    /// - Returns: The full S3 key of the uploaded image
+    func uploadToDump(imageData: Data) async throws -> String {
+        let timestamp = ISO8601DateFormatter().string(from: Date())
+            .replacingOccurrences(of: ":", with: "-")
+        let filename = "dump/\(timestamp).jpg"
+
+        return try await uploadObject(
+            data: imageData,
+            key: filename,
+            contentType: "image/jpeg"
+        )
+    }
+
+    /// Uploads media (image or video) to the dump folder with timestamp
+    /// - Parameters:
+    ///   - data: The file data
+    ///   - fileExtension: File extension (e.g. "jpg", "mp4", "mov")
+    ///   - contentType: MIME type of the content
+    /// - Returns: The full S3 key of the uploaded file
+    func uploadToDump(data: Data, fileExtension: String, contentType: String) async throws -> String {
+        let timestamp = ISO8601DateFormatter().string(from: Date())
+            .replacingOccurrences(of: ":", with: "-")
+        let filename = "dump/\(timestamp).\(fileExtension)"
+
+        return try await uploadObject(
+            data: data,
+            key: filename,
+            contentType: contentType
+        )
+    }
 }
 
 enum S3ServiceError: LocalizedError {
@@ -334,6 +661,30 @@ enum S3ServiceError: LocalizedError {
         case .noDataReturned:
             return "No data returned from S3"
         }
+    }
+}
+
+/// Crypto helpers for AWS Signature V4 presigned URLs
+enum S3PresignHelper {
+    static func sha256Hex(_ data: Data) -> String {
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { buffer in
+            _ = CC_SHA256(buffer.baseAddress, CC_LONG(data.count), &hash)
+        }
+        return hash.map { String(format: "%02x", $0) }.joined()
+    }
+
+    static func hmacSHA256(key: Data, data: Data) -> Data {
+        var hmac = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        key.withUnsafeBytes { keyBuffer in
+            data.withUnsafeBytes { dataBuffer in
+                CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256),
+                       keyBuffer.baseAddress, key.count,
+                       dataBuffer.baseAddress, data.count,
+                       &hmac)
+            }
+        }
+        return Data(hmac)
     }
 }
 

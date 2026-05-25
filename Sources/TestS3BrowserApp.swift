@@ -18,15 +18,19 @@ struct TestS3BrowserApp: App {
     }
 
     private func loadConfig() {
-        guard !configData.isEmpty else { return }
-        if let decoded = try? JSONDecoder().decode(S3Config.self, from: configData) {
+        if !configData.isEmpty,
+           let decoded = try? JSONDecoder().decode(S3Config.self, from: configData) {
             config = decoded
         }
+        // Always sync current config to App Group for share extension
+        SharedConfig.saveConfig(config)
     }
 
     private func saveConfig(_ config: S3Config) {
         if let encoded = try? JSONEncoder().encode(config) {
             configData = encoded
         }
+        // Also save to shared storage for share extension access
+        SharedConfig.saveConfig(config)
     }
 }
