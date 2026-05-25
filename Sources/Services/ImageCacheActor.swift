@@ -1,11 +1,15 @@
 import UIKit
 import Foundation
+import os.log
 
 /// Global actor responsible for caching image thumbnails and full images
 /// Maintains separate caches for thumbnails and full-size images to optimize memory usage
+/// Thumbnails are persisted to disk for faster loading across app launches
 @globalActor
 actor ImageCacheActor {
     static let shared = ImageCacheActor()
+
+    private let logger = Logger(subsystem: "com.s3browser", category: "ImageCacheActor")
 
     // MARK: - Cache Storage
 
@@ -26,17 +30,48 @@ actor ImageCacheActor {
     /// Maximum number of full images to keep in memory
     private let maxFullImageCacheSize = 20
 
+    /// Directory for persistent thumbnail storage
+    private let thumbnailCacheDirectory: URL
+
+    /// Maximum number of thumbnails to keep on disk
+    private let maxDiskThumbnailCount = 500
+
+    // MARK: - Initialization
+
+    init() {
+        // Set up cache directory
+        let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        thumbnailCacheDirectory = cacheDir.appendingPathComponent("thumbnails", isDirectory: true)
+
+        // Create directory if needed
+        try? FileManager.default.createDirectory(at: thumbnailCacheDirectory, withIntermediateDirectories: true)
+    }
+
     // MARK: - Thumbnail Operations
 
-    /// Retrieves a cached thumbnail or creates one from full image if available
+    /// Retrieves a cached thumbnail from memory or disk
     /// - Parameter key: S3 object key
     /// - Returns: Cached thumbnail if available, nil otherwise
     func getThumbnail(for key: String) -> UIImage? {
-        updateAccessOrder(for: key)
-        return thumbnailCache[key]
+        // Check memory cache first
+        if let memCached = thumbnailCache[key] {
+            updateAccessOrder(for: key)
+            return memCached
+        }
+
+        // Check disk cache
+        if let diskCached = loadThumbnailFromDisk(for: key) {
+            // Promote to memory cache
+            thumbnailCache[key] = diskCached
+            updateAccessOrder(for: key)
+            evictOldThumbnailsIfNeeded()
+            return diskCached
+        }
+
+        return nil
     }
 
-    /// Caches a thumbnail image
+    /// Caches a thumbnail image to both memory and disk
     /// - Parameters:
     ///   - image: The thumbnail image to cache
     ///   - key: S3 object key
@@ -44,6 +79,9 @@ actor ImageCacheActor {
         thumbnailCache[key] = image
         updateAccessOrder(for: key)
         evictOldThumbnailsIfNeeded()
+
+        // Persist to disk asynchronously
+        saveThumbnailToDisk(image, for: key)
     }
 
     /// Generates and caches a thumbnail from full image data
@@ -136,19 +174,24 @@ actor ImageCacheActor {
         }
     }
 
-    /// Clears all cached images
+    /// Clears all cached images (memory and disk)
     func clearCache() {
         thumbnailCache.removeAll()
         fullImageCache.removeAll()
         accessOrder.removeAll()
+        clearDiskCache()
     }
 
-    /// Removes cached images for a specific key
+    /// Removes cached images for a specific key (memory and disk)
     /// - Parameter key: S3 object key to remove from cache
     func removeCachedImages(for key: String) {
         thumbnailCache.removeValue(forKey: key)
         fullImageCache.removeValue(forKey: key)
         accessOrder.removeAll { $0 == key }
+
+        // Remove from disk
+        let fileURL = thumbnailFileURL(for: key)
+        try? FileManager.default.removeItem(at: fileURL)
     }
 
     // MARK: - Image Processing
@@ -169,6 +212,125 @@ actor ImageCacheActor {
         let renderer = UIGraphicsImageRenderer(size: newSize)
         return renderer.image { _ in
             image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+    }
+
+    // MARK: - Disk Persistence
+
+    /// Generates a safe filename from an S3 key
+    /// - Parameter key: S3 object key
+    /// - Returns: Safe filename for disk storage
+    private func diskFilename(for key: String) -> String {
+        // Use SHA256-like hash approach: base64 encode the key and replace unsafe characters
+        let data = Data(key.utf8)
+        let base64 = data.base64EncodedString()
+        let safe = base64
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "=", with: "")
+        return safe + ".jpg"
+    }
+
+    /// Returns the file URL for a thumbnail on disk
+    /// - Parameter key: S3 object key
+    /// - Returns: URL to the thumbnail file
+    private func thumbnailFileURL(for key: String) -> URL {
+        thumbnailCacheDirectory.appendingPathComponent(diskFilename(for: key))
+    }
+
+    /// Saves a thumbnail to disk
+    /// - Parameters:
+    ///   - image: The thumbnail image
+    ///   - key: S3 object key
+    private func saveThumbnailToDisk(_ image: UIImage, for key: String) {
+        let fileURL = thumbnailFileURL(for: key)
+
+        // Skip if already exists
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return
+        }
+
+        guard let data = image.jpegData(compressionQuality: 0.7) else {
+            logger.error("Failed to convert thumbnail to JPEG for key: \(key)")
+            return
+        }
+
+        do {
+            try data.write(to: fileURL, options: .atomic)
+            cleanupOldDiskThumbnailsIfNeeded()
+        } catch {
+            logger.error("Failed to save thumbnail to disk for key \(key): \(error.localizedDescription)")
+        }
+    }
+
+    /// Loads a thumbnail from disk
+    /// - Parameter key: S3 object key
+    /// - Returns: Loaded thumbnail or nil if not found
+    private func loadThumbnailFromDisk(for key: String) -> UIImage? {
+        let fileURL = thumbnailFileURL(for: key)
+
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            return nil
+        }
+
+        guard let data = try? Data(contentsOf: fileURL) else {
+            logger.error("Failed to read thumbnail data from disk for key: \(key)")
+            return nil
+        }
+
+        // Update access time by touching the file
+        try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: fileURL.path)
+
+        return UIImage(data: data)
+    }
+
+    /// Removes excess thumbnails from disk using LRU (based on modification date)
+    private func cleanupOldDiskThumbnailsIfNeeded() {
+        do {
+            let fileURLs = try FileManager.default.contentsOfDirectory(
+                at: thumbnailCacheDirectory,
+                includingPropertiesForKeys: [.contentModificationDateKey],
+                options: .skipsHiddenFiles
+            )
+
+            guard fileURLs.count > maxDiskThumbnailCount else { return }
+
+            // Sort by modification date (oldest first)
+            let sortedFiles = fileURLs.compactMap { url -> (URL, Date)? in
+                guard let date = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate else {
+                    return nil
+                }
+                return (url, date)
+            }.sorted { $0.1 < $1.1 }
+
+            // Delete oldest files until we're under the limit
+            let filesToDelete = sortedFiles.prefix(fileURLs.count - maxDiskThumbnailCount)
+            for (url, _) in filesToDelete {
+                try? FileManager.default.removeItem(at: url)
+            }
+
+            logger.debug("Cleaned up \(filesToDelete.count) old thumbnails from disk")
+        } catch {
+            logger.error("Failed to cleanup disk thumbnails: \(error.localizedDescription)")
+        }
+    }
+
+    /// Clears all cached thumbnails from disk
+    func clearDiskCache() {
+        do {
+            let fileURLs = try FileManager.default.contentsOfDirectory(
+                at: thumbnailCacheDirectory,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles
+            )
+
+            for url in fileURLs {
+                try? FileManager.default.removeItem(at: url)
+            }
+
+            logger.debug("Cleared \(fileURLs.count) thumbnails from disk cache")
+        } catch {
+            logger.error("Failed to clear disk cache: \(error.localizedDescription)")
         }
     }
 }

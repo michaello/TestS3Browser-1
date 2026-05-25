@@ -4,10 +4,19 @@ struct SettingsView: View {
     @Binding var config: S3Config
     @State private var isTesting = false
     @State private var testStatus = ""
+    @AppStorage("autoPreviewNewPhotos") private var autoPreviewNewPhotos = false
 
     var body: some View {
         NavigationStack {
             Form {
+                Section("Behavior") {
+                    Toggle("Auto-preview new photos", isOn: $autoPreviewNewPhotos)
+
+                    Text("Automatically open new photos when returning to the app")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("S3 Bucket") {
                     TextField("Bucket Name", text: $config.bucketName)
                         .textInputAutocapitalization(.never)
