@@ -8,8 +8,10 @@ struct FileTypeFilter: OptionSet {
     static let image = FileTypeFilter(rawValue: 1 << 1)
     static let text = FileTypeFilter(rawValue: 1 << 2)
     static let unknown = FileTypeFilter(rawValue: 1 << 3)
+    static let video = FileTypeFilter(rawValue: 1 << 4)
+    static let html = FileTypeFilter(rawValue: 1 << 5)
 
-    static let all: FileTypeFilter = [.log, .image, .text, .unknown]
+    static let all: FileTypeFilter = [.log, .image, .text, .unknown, .video, .html]
     static let none: FileTypeFilter = []
 
     /// Check if a file type matches the filter
@@ -17,7 +19,9 @@ struct FileTypeFilter: OptionSet {
         switch fileType {
         case .log: return contains(.log)
         case .image: return contains(.image)
+        case .video: return contains(.video)
         case .text: return contains(.text)
+        case .html: return contains(.html)
         case .unknown: return contains(.unknown)
         }
     }
@@ -27,7 +31,9 @@ struct FileTypeFilter: OptionSet {
         switch fileType {
         case .log: return "Logs"
         case .image: return "Images"
+        case .video: return "Videos"
         case .text: return "Text"
+        case .html: return "Reports"
         case .unknown: return "Other"
         }
     }

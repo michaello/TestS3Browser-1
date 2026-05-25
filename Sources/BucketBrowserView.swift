@@ -79,6 +79,19 @@ struct BucketBrowserView: View {
                 }
             ))
 
+            Toggle("Videos", isOn: Binding(
+                get: { fileTypeFilter.contains(.video) },
+                set: { isOn in
+                    var updated = fileTypeFilter
+                    if isOn {
+                        updated.insert(.video)
+                    } else {
+                        updated.remove(.video)
+                    }
+                    fileTypeFilterRaw = updated.rawValue
+                }
+            ))
+
             Toggle("Other", isOn: Binding(
                 get: { fileTypeFilter.contains(.unknown) },
                 set: { isOn in
@@ -156,12 +169,26 @@ struct BucketBrowserView: View {
                             systemImage: "gear",
                             description: Text("Go to Settings to configure your S3 bucket and credentials")
                         )
-                    } else if s3Service.items.isEmpty && !s3Service.isLoading {
-                        ContentUnavailableView(
-                            "No Files",
-                            systemImage: "doc",
-                            description: Text("No files found in bucket. Pull to refresh.")
-                        )
+                    } else if s3Service.isLoading {
+                        VStack(spacing: 8) {
+                            ProgressView()
+                            Text(s3Service.loadingStatus.isEmpty ? "Loading..." : s3Service.loadingStatus)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if s3Service.items.isEmpty {
+                        ScrollView {
+                            ContentUnavailableView(
+                                "No Files",
+                                systemImage: "doc",
+                                description: Text("No files found in \(s3Service.currentBucket). Pull to refresh.")
+                            )
+                            .frame(maxWidth: .infinity, minHeight: 300)
+                        }
+                        .refreshable {
+                            await refreshFiles()
+                        }
                     } else {
                         List {
                             ForEach(sortedItems) { item in
@@ -200,6 +227,12 @@ struct BucketBrowserView: View {
                                                 }
                                             } label: {
                                                 Label("Copy Content", systemImage: "doc.on.doc")
+                                            }
+                                        }
+
+                                        if object.fileType == .video, let url = s3Service.getPublicURL(for: object.key) {
+                                            ShareLink(item: url) {
+                                                Label("Share Link", systemImage: "square.and.arrow.up")
                                             }
                                         }
 
@@ -243,6 +276,7 @@ struct BucketBrowserView: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             filterMenuContent
+                                .menuActionDismissBehavior(.disabled)
                             sortMenuContent
                             viewStyleMenuContent
                         } label: {
@@ -370,7 +404,7 @@ struct BucketBrowserView: View {
     private func copyToClipboard(_ object: S3Object) async {
         do {
             switch object.fileType {
-            case .text, .log:
+            case .text, .log, .html:
                 let data = try await s3Service.downloadObject(key: object.key)
                 if let text = String(data: data, encoding: .utf8) {
                     await MainActor.run {
@@ -396,6 +430,13 @@ struct BucketBrowserView: View {
                         }
                     }
                 }
+            case .video:
+                // Copy public URL for videos
+                if let url = s3Service.getPublicURL(for: object.key) {
+                    await MainActor.run {
+                        UIPasteboard.general.string = url.absoluteString
+                    }
+                }
             case .unknown:
                 let data = try await s3Service.downloadObject(key: object.key)
                 if let text = String(data: data, encoding: .utf8) {
@@ -416,22 +457,33 @@ struct FileRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            if let thumbnail = thumbnail {
-                Image(uiImage: thumbnail)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
-                    )
-            } else {
-                Image(systemName: object.fileType.icon)
-                    .font(.title3)
-                    .foregroundStyle(iconColor)
-                    .frame(width: 50, height: 50)
+            ZStack {
+                if let thumbnail = thumbnail {
+                    Image(uiImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
+                        )
+                } else {
+                    Image(systemName: object.fileType.icon)
+                        .font(.title3)
+                        .foregroundStyle(iconColor)
+                        .frame(width: 50, height: 50)
+                }
+
+                // Video play badge
+                if object.fileType == .video {
+                    Image(systemName: "play.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.5), radius: 2)
+                }
             }
+            .frame(width: 50, height: 50)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(object.fileName)
@@ -459,7 +511,9 @@ struct FileRow: View {
         switch object.fileType {
         case .log: return .blue
         case .image: return .purple
+        case .video: return .orange
         case .text: return .green
+        case .html: return .teal
         case .unknown: return .gray
         }
     }
@@ -504,7 +558,9 @@ struct CompactFileRow: View {
         switch object.fileType {
         case .log: return .blue
         case .image: return .purple
+        case .video: return .orange
         case .text: return .green
+        case .html: return .teal
         case .unknown: return .gray
         }
     }

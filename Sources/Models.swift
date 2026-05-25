@@ -1,12 +1,19 @@
 import Foundation
 
-struct S3Object: Identifiable {
+struct S3Object: Identifiable, Hashable {
     let key: String
     let size: Int64
     let lastModified: Date
     let etag: String?
+    /// The bucket this object belongs to (optional for backward compatibility)
+    var bucket: String?
 
-    var id: String { key }
+    var id: String {
+        if let bucket = bucket {
+            return "\(bucket)/\(key)"
+        }
+        return key
+    }
 
     var fileName: String {
         URL(string: key)?.lastPathComponent ?? key
@@ -19,8 +26,12 @@ struct S3Object: Identifiable {
             return .log
         case "png", "jpg", "jpeg", "gif", "heic":
             return .image
+        case "mp4", "mov", "avi", "m4v":
+            return .video
         case "json", "xml":
             return .text
+        case "html", "htm":
+            return .html
         default:
             return .unknown
         }
@@ -99,15 +110,30 @@ enum S3Item: Identifiable {
 enum FileType {
     case log
     case image
+    case video
     case text
+    case html
     case unknown
 
     var icon: String {
         switch self {
         case .log: return "doc.text"
         case .image: return "photo"
+        case .video: return "film"
         case .text: return "doc.plaintext"
+        case .html: return "doc.richtext"
         case .unknown: return "doc"
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .log: return "Log File"
+        case .image: return "Image"
+        case .video: return "Video"
+        case .text: return "Text File"
+        case .html: return "Report"
+        case .unknown: return "File"
         }
     }
 }
@@ -120,10 +146,10 @@ struct S3Config: Codable, Equatable {
     var prefix: String
 
     static let `default` = S3Config(
-        bucketName: "clarityvoice",
+        bucketName: "hairforceone-pro",
         region: "ap-southeast-1",
         accessKey: "REDACTED_KEY",
         secretKey: "REDACTED_SECRET",
-        prefix: ""
+        prefix: "previews/"
     )
 }
