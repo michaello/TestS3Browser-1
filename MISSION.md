@@ -871,3 +871,20 @@ Commit: `807d2e1` feat: add upload queue with retry support
   bucket name changes in the form.
 
 Commit: `6e9a666` feat: add bucket policy viewer to settings
+
+## Phase 45 - Lifecycle Rules viewer in SettingsView (DONE)
+
+- `Models.swift`: added `LifecycleTransitionDisplay` (`days`, `storageClass`) and
+  `LifecycleRuleDisplay` (`id`, `status`, `expirationDays`, `transitions`, `isEnabled`).
+- `S3Service+Stats.swift`: added `fetchLifecycleRules(bucket:) async -> [LifecycleRuleDisplay]`.
+  Calls `GetBucketLifecycleConfigurationInput(bucket:)`, maps each `LifecycleRule` to a
+  `LifecycleRuleDisplay`. Returns empty array on `NoSuchLifecycleConfiguration`, `AccessDenied`,
+  or any other error.
+- `SettingsView`: added `lifecycleRules`, `isLifecycleLoading`, `lifecycleLoaded` state.
+  New "Lifecycle Rules" `Section` between "Bucket Policy" and "Storage & Cache": shows a
+  spinner while loading, "No lifecycle rules configured" when empty, or one `DisclosureGroup`
+  per rule showing ID + enabled/disabled status badge in the label, and expiration days plus
+  transition rows inside. A "Refresh" button and `.task(id: config.bucketName)` auto-reload
+  on bucket name change.
+
+Commit: `9b936a9` feat: add bucket lifecycle rules viewer to settings
