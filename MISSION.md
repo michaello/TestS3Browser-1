@@ -679,3 +679,42 @@ Commit: `c345f18` feat: add new folder creation to browser views
   `BucketSwitcherOverlay` and fetched once per open via `withTaskGroup` using a single-page listing.
 
 Commit: `c69c866` feat: add multi-bucket quick-switcher overlay
+
+## Phase 34 - Copy as Data URL for image objects in FileDetailView (DONE)
+
+- `FileDetailView`: added `@State private var isCopyingDataURL = false` and `@State private var datURLCopyDone = false`.
+- Computed var `isImageObject: Bool` checks the key extension against jpg/jpeg/png/gif/webp (case-insensitive).
+- When `isImageObject` is true, a "Copy as Data URL" button appears in the `ImageContentView` action row.
+  Tapping it downloads the object bytes (or reuses already-loaded `UIImage` png data), base64-encodes them,
+  assembles `data:image/<ext>;base64,<data>`, and places that on `UIPasteboard.general`.
+- A `ProgressView` spinner replaces the button while the download is in progress.
+- A brief "Copied!" confirmation text appears for 1.5 seconds after success.
+- The download uses `service.downloadObject` directly; if the image is already loaded in `fileContent`
+  it reuses the PNG data to avoid a second network call.
+
+Commit: `89cfbcf` feat: add copy-as-data-url for image objects
+
+## Phase 35 - Object expiry date from lifecycle rules in FileDetailView (DONE)
+
+- `S3ObjectMetadata`: added `expirationDate: String?` field.
+- `S3Service.headObject`: reads the `x-amz-expiration` response header value and stores it in
+  `expirationDate`. Parses the `expiry-date="..."` portion from the header and converts it to a
+  human-readable date string.
+- `FileDetailView.metadataCard`: added an "Expires" row showing the parsed date or "No expiry"
+  after the ETag row.
+
+Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same commit as Phase 34)
+
+## Phase 36 - Local download cache with Open-in action in FileDetailView (DONE)
+
+- `FileDetailView`: added `@State private var isDownloadingToCache = false` and
+  `@State private var cachedFileURL: URL?`.
+- `cacheDirectory`: computed as `FileManager.default.temporaryDirectory/s3cache/<sanitized-key>`.
+- A "Save to Cache / Open in..." button appears in the toolbar for all file types.
+- On tap: if `cachedFileURL` already points to an existing file, goes straight to presenting
+  `UIActivityViewController`. Otherwise downloads via `service.downloadObject`, writes to
+  `cacheDirectory`, then presents the share sheet.
+- A `ProgressView` spinner replaces the button while downloading.
+- Deduplicates re-download by checking `FileManager.default.fileExists(atPath:)` on the cache path.
+
+Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same commit as Phase 34)
