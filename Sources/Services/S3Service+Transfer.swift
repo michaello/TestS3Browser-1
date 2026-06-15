@@ -202,6 +202,27 @@ extension S3Service {
         logger.info("Copied \(src)/\(key) -> \(dst)/\(destKey)")
     }
 
+    /// Creates a virtual folder by PUTting a zero-byte object at `prefix + name + "/"`.
+    /// - Parameters:
+    ///   - name: Folder name without slashes. The trailing slash is appended automatically.
+    ///   - prefix: Parent prefix. Empty string creates at the bucket root.
+    ///   - bucket: Target bucket (defaults to `currentBucket`).
+    func createFolder(named name: String, prefix: String = "", bucket: String? = nil) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let target = bucket ?? currentBucket
+        let key = prefix.isEmpty ? "\(name)/" : "\(prefix)\(name)/"
+        let input = PutObjectInput(
+            body: .data(Data()),
+            bucket: target,
+            contentLength: 0,
+            contentType: "application/x-directory",
+            key: key
+        )
+        _ = try await client.putObject(input: input)
+        logger.info("Created folder \(target)/\(key)")
+    }
+
     /// Lists one page of folders and files directly under a prefix.
     /// Does not touch the service's observable state (items, isLoading, currentPrefix),
     /// so it is safe to call from PrefixBrowserView alongside BucketBrowserView.

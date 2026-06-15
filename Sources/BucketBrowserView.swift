@@ -50,6 +50,12 @@ struct BucketBrowserView: View {
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
 
+    // New folder state
+    @State private var showNewFolderAlert = false
+    @State private var newFolderName = ""
+    @State private var showNewFolderError = false
+    @State private var newFolderErrorMessage = ""
+
     // Selection state
     @State private var isSelecting = false
     @State private var selectedKeys: Set<String> = []
@@ -353,6 +359,13 @@ struct BucketBrowserView: View {
                                     } label: {
                                         Label("File", systemImage: "doc")
                                     }
+                                    Divider()
+                                    Button {
+                                        newFolderName = ""
+                                        showNewFolderAlert = true
+                                    } label: {
+                                        Label("New Folder", systemImage: "folder.badge.plus")
+                                    }
                                 } label: {
                                     Image(systemName: "plus")
                                 }
@@ -467,15 +480,37 @@ struct BucketBrowserView: View {
                 Text(moveCopyErrorMessage)
             }
             .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
-            .confirmationDialog(
-                "Delete \(selectedKeys.count) file\(selectedKeys.count == 1 ? "" : "s")?",
-                isPresented: $showBulkDeleteConfirm,
-                titleVisibility: .visible
-            ) {
-                Button("Delete \(selectedKeys.count) File\(selectedKeys.count == 1 ? "" : "s")", role: .destructive) {
+            .confirmationDialog(bulkDeleteTitle, isPresented: $showBulkDeleteConfirm, titleVisibility: .visible) {
+                Button(bulkDeleteButtonLabel, role: .destructive) {
                     Task { await bulkDelete() }
                 }
                 Button("Cancel", role: .cancel) {}
+            }
+            .alert("New Folder", isPresented: $showNewFolderAlert) {
+                TextField("Folder name", text: $newFolderName)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                Button("Create") {
+                    let name = newFolderName.trimmingCharacters(in: .whitespaces)
+                    guard !name.isEmpty, !name.contains("/") else { return }
+                    Task {
+                        do {
+                            try await s3Service.createFolder(named: name, prefix: s3Service.currentPrefix)
+                            await refreshFiles()
+                        } catch {
+                            newFolderErrorMessage = error.localizedDescription
+                            showNewFolderError = true
+                        }
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Enter a name for the new folder.")
+            }
+            .alert("Create Failed", isPresented: $showNewFolderError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(newFolderErrorMessage)
             }
             .searchable(text: $searchText, prompt: searchPrompt)
             .safeAreaInset(edge: .bottom) {
@@ -852,6 +887,16 @@ struct BucketBrowserView: View {
 
     private var isConfigured: Bool {
         !config.bucketName.isEmpty && !config.accessKey.isEmpty && !config.secretKey.isEmpty
+    }
+
+    private var bulkDeleteTitle: String {
+        let n = selectedKeys.count
+        return "Delete \(n) file\(n == 1 ? "" : "s")?"
+    }
+
+    private var bulkDeleteButtonLabel: String {
+        let n = selectedKeys.count
+        return "Delete \(n) File\(n == 1 ? "" : "s")"
     }
 
     private var searchPrompt: String {

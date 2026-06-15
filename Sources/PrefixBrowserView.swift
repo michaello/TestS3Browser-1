@@ -45,6 +45,12 @@ struct PrefixBrowserView: View {
     @State private var showMoveCopyError = false
     @State private var moveCopyErrorMessage = ""
 
+    // New folder state
+    @State private var showNewFolderAlert = false
+    @State private var newFolderName = ""
+    @State private var showNewFolderError = false
+    @State private var newFolderErrorMessage = ""
+
     // Upload state
     @State private var showUploadMenu = false
     @State private var showFilePicker = false
@@ -316,6 +322,32 @@ struct PrefixBrowserView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
+        .alert("New Folder", isPresented: $showNewFolderAlert) {
+            TextField("Folder name", text: $newFolderName)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+            Button("Create") {
+                let name = newFolderName.trimmingCharacters(in: .whitespaces)
+                guard !name.isEmpty, !name.contains("/") else { return }
+                Task {
+                    do {
+                        try await s3Service.createFolder(named: name, prefix: prefix, bucket: bucket)
+                        await load()
+                    } catch {
+                        newFolderErrorMessage = error.localizedDescription
+                        showNewFolderError = true
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Enter a name for the new folder.")
+        }
+        .alert("Create Failed", isPresented: $showNewFolderError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(newFolderErrorMessage)
+        }
         .task { await load() }
     }
 
@@ -506,6 +538,13 @@ struct PrefixBrowserView: View {
                 showFilePicker = true
             } label: {
                 Label("File", systemImage: "doc")
+            }
+            Divider()
+            Button {
+                newFolderName = ""
+                showNewFolderAlert = true
+            } label: {
+                Label("New Folder", systemImage: "folder.badge.plus")
             }
         } label: {
             Image(systemName: "plus")

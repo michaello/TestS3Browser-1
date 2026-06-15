@@ -645,3 +645,18 @@ Commit: `31f48d5` feat: batch select and bulk delete in PrefixBrowserView
 - The modifier is gated on `isConfigured` so it is a no-op before credentials are set.
 
 Commit: `cdfc2ab` feat: add drag-and-drop upload to BucketBrowserView
+
+## Phase 32 - New Folder creation in BucketBrowserView and PrefixBrowserView (DONE)
+
+- Added `func createFolder(named:) async throws` to `S3Service` (in `S3Service+Transfer.swift`):
+  PUTs a zero-byte object at `currentPrefix + name + "/"` with `content-type: application/x-directory`
+  so S3 treats it as a virtual folder.
+- `BucketBrowserView`: "New Folder" item added to the existing `+` upload `Menu`. Drives a new
+  `.alert("New Folder")` with a `TextField` for the name. On confirm calls `s3Service.createFolder`
+  then `refreshFiles()`. Name is validated (non-empty, no `/`) before the call; an error alert
+  surfaces any service failure.
+- `PrefixBrowserView`: same "New Folder" menu item added to the existing `+` `Menu` upload button,
+  same alert + validation flow, calls `s3Service.createFolder` then `load()`.
+- Both views show a "Create Failed" alert on error.
+
+Commit: `<hash>` feat: add new folder creation to browser views
