@@ -209,6 +209,21 @@ struct S3ObjectACL {
     let grants: [ACLGrant]
 }
 
+struct LifecycleTransitionDisplay: Identifiable {
+    var id: String { "\(days ?? -1)-\(storageClass)" }
+    let days: Int?
+    let storageClass: String
+}
+
+struct LifecycleRuleDisplay: Identifiable {
+    let id: String
+    let status: String
+    let expirationDays: Int?
+    let transitions: [LifecycleTransitionDisplay]
+
+    var isEnabled: Bool { status.lowercased() == "enabled" }
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String

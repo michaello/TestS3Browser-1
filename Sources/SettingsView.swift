@@ -13,6 +13,9 @@ struct SettingsView: View {
     @State private var confirmClearTags = false
     @State private var policyJSON: String? = nil
     @State private var isPolicyLoading = false
+    @State private var lifecycleRules: [LifecycleRuleDisplay] = []
+    @State private var isLifecycleLoading = false
+    @State private var lifecycleLoaded = false
 
     var body: some View {
         NavigationStack {
@@ -105,6 +108,52 @@ struct SettingsView: View {
                     .disabled(isPolicyLoading || !isConfigValid)
                 }
 
+                Section("Lifecycle Rules") {
+                    if isLifecycleLoading {
+                        HStack {
+                            ProgressView()
+                            Text("Loading rules...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if lifecycleLoaded && lifecycleRules.isEmpty {
+                        Text("No lifecycle rules configured")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(lifecycleRules) { rule in
+                            DisclosureGroup {
+                                if let days = rule.expirationDays {
+                                    LabeledContent("Expiration", value: "\(days) day\(days == 1 ? "" : "s")")
+                                }
+                                ForEach(rule.transitions) { t in
+                                    LabeledContent(
+                                        "Transition\(t.days.map { " after \($0)d" } ?? "")",
+                                        value: t.storageClass
+                                    )
+                                }
+                                if rule.expirationDays == nil && rule.transitions.isEmpty {
+                                    Text("No expiration or transitions")
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                }
+                            } label: {
+                                HStack {
+                                    Text(rule.id)
+                                        .lineLimit(1)
+                                    Spacer()
+                                    Text(rule.status)
+                                        .font(.caption)
+                                        .foregroundStyle(rule.isEnabled ? .green : .secondary)
+                                }
+                            }
+                        }
+                    }
+
+                    Button("Refresh") {
+                        Task { await loadLifecycleRules() }
+                    }
+                    .disabled(isLifecycleLoading || !isConfigValid)
+                }
+
                 Section("Storage & Cache") {
                     HStack {
                         Label("Image Cache", systemImage: "photo.on.rectangle")
@@ -140,6 +189,7 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .task { await loadCacheSize() }
             .task(id: config.bucketName) { await loadBucketPolicy() }
+            .task(id: config.bucketName) { await loadLifecycleRules() }
             .confirmationDialog("Clear image cache?", isPresented: $confirmClearCache, titleVisibility: .visible) {
                 Button("Clear Cache", role: .destructive) {
                     Task {
@@ -164,6 +214,17 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             }
         }
+    }
+
+    private func loadLifecycleRules() async {
+        guard isConfigValid else { return }
+        isLifecycleLoading = true
+        lifecycleLoaded = false
+        lifecycleRules = []
+        let service = S3Service(config: config)
+        lifecycleRules = await service.fetchLifecycleRules(bucket: config.bucketName)
+        lifecycleLoaded = true
+        isLifecycleLoading = false
     }
 
     private func loadBucketPolicy() async {

@@ -65,6 +65,33 @@ extension S3Service {
         }
     }
 
+    /// Fetches lifecycle rules for the given bucket.
+    /// Returns an empty array when no rules are configured or access is denied.
+    func fetchLifecycleRules(bucket: String) async -> [LifecycleRuleDisplay] {
+        if client == nil { try? await initializeClient() }
+        guard let client else { return [] }
+        do {
+            let input = GetBucketLifecycleConfigurationInput(bucket: bucket)
+            let output = try await client.getBucketLifecycleConfiguration(input: input)
+            return (output.rules ?? []).map { rule in
+                let expirationDays: Int? = rule.expiration?.days
+                let transitions: [LifecycleTransitionDisplay] = (rule.transitions ?? []).compactMap { t in
+                    guard let sc = t.storageClass else { return nil }
+                    return LifecycleTransitionDisplay(days: t.days, storageClass: sc.rawValue)
+                }
+                return LifecycleRuleDisplay(
+                    id: rule.id ?? "(no id)",
+                    status: rule.status?.rawValue ?? "Unknown",
+                    expirationDays: expirationDays,
+                    transitions: transitions
+                )
+            }
+        } catch {
+            // NoSuchLifecycleConfiguration and AccessDenied both mean "no readable rules"
+            return []
+        }
+    }
+
     /// Returns a quick object count for a single bucket using one list page (max 1000 keys).
     /// - Returns: `(count, truncated)` where `truncated` is true when the bucket has more than 1000 objects.
     func quickObjectCount(bucket: String) async -> (count: Int, truncated: Bool) {
