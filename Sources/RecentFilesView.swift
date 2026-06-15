@@ -29,6 +29,12 @@ struct RecentFilesView: View {
     @State private var renameText = ""
     @State private var showRenameError = false
     @State private var renameErrorMessage = ""
+    /// Bulk-selection state.
+    @State private var isSelecting = false
+    @State private var selectedIDs: Set<String> = []
+    @State private var showBulkDeleteConfirm = false
+    @State private var showBulkDeleteError = false
+    @State private var bulkDeleteErrorMessage = ""
 
     enum ViewMode {
         case list
@@ -131,6 +137,21 @@ struct RecentFilesView: View {
             Text(renameErrorMessage)
         }
         .confirmationDialog(
+            "Delete \(selectedIDs.count) file\(selectedIDs.count == 1 ? "" : "s")?",
+            isPresented: $showBulkDeleteConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                Task { await bulkDeleteSelected() }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("Some Deletes Failed", isPresented: $showBulkDeleteError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(bulkDeleteErrorMessage)
+        }
+        .confirmationDialog(
             "Clear all recent files?",
             isPresented: $showClearAllConfirm,
             titleVisibility: .visible
@@ -198,17 +219,31 @@ struct RecentFilesView: View {
     private var listView: some View {
         List {
             ForEach(filteredRecentFiles) { file in
-                NavigationLink(destination: destinationView(for: file)) {
-                    RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
-                }
-                .contextMenu { deleteContextMenu(for: file) }
-                .swipeActions(edge: .leading) {
+                if isSelecting {
                     Button {
-                        copyURL(for: file)
+                        toggleSelection(file)
                     } label: {
-                        Label("Copy URL", systemImage: "link")
+                        HStack(spacing: 12) {
+                            Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(selectedIDs.contains(file.id) ? .blue : .secondary)
+                                .font(.title3)
+                            RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
+                        }
                     }
-                    .tint(.blue)
+                    .buttonStyle(.plain)
+                } else {
+                    NavigationLink(destination: destinationView(for: file)) {
+                        RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
+                    }
+                    .contextMenu { deleteContextMenu(for: file) }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            copyURL(for: file)
+                        } label: {
+                            Label("Copy URL", systemImage: "link")
+                        }
+                        .tint(.blue)
+                    }
                 }
             }
         }
@@ -219,15 +254,73 @@ struct RecentFilesView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: gridCardSize), spacing: 12)], spacing: 12) {
                 ForEach(filteredRecentFiles) { file in
-                    NavigationLink(destination: destinationView(for: file)) {
-                        RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key))
+                    if isSelecting {
+                        Button {
+                            toggleSelection(file)
+                        } label: {
+                            ZStack(alignment: .topTrailing) {
+                                RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key))
+                                    .opacity(selectedIDs.contains(file.id) ? 0.75 : 1.0)
+                                Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle.fill")
+                                    .foregroundStyle(selectedIDs.contains(file.id) ? .blue : Color(.systemBackground).opacity(0.8))
+                                    .font(.title3)
+                                    .padding(6)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        NavigationLink(destination: destinationView(for: file)) {
+                            RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key))
+                        }
+                        .contextMenu { deleteContextMenu(for: file) }
                     }
-                    .contextMenu { deleteContextMenu(for: file) }
                 }
             }
             .padding()
         }
         .refreshable { await refreshRecentFiles() }
+    }
+
+    private func toggleSelection(_ file: S3Object) {
+        if selectedIDs.contains(file.id) {
+            selectedIDs.remove(file.id)
+        } else {
+            selectedIDs.insert(file.id)
+        }
+    }
+
+    private func bulkDeleteSelected() async {
+        let toDelete = filteredRecentFiles.filter { selectedIDs.contains($0.id) }
+        var failures: [String] = []
+
+        await withTaskGroup(of: String?.self) { group in
+            for file in toDelete {
+                group.addTask {
+                    do {
+                        try await self.s3Service.deleteObject(key: file.key, bucket: file.bucket)
+                        return nil
+                    } catch {
+                        return error.localizedDescription
+                    }
+                }
+            }
+            for await errorMessage in group {
+                if let msg = errorMessage { failures.append(msg) }
+            }
+        }
+
+        await MainActor.run {
+            selectedIDs.removeAll()
+            isSelecting = false
+        }
+        await refreshRecentFiles()
+
+        if !failures.isEmpty {
+            await MainActor.run {
+                bulkDeleteErrorMessage = failures.joined(separator: "\n")
+                showBulkDeleteError = true
+            }
+        }
     }
 
     /// Copies a 1-day presigned URL for the file to the pasteboard, showing a toast for
@@ -287,6 +380,13 @@ struct RecentFilesView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button(isSelecting ? "Done" : "Edit") {
+                isSelecting.toggle()
+                if !isSelecting { selectedIDs.removeAll() }
+            }
+            .disabled(s3Service.recentFiles.isEmpty)
+        }
         ToolbarItem(placement: .topBarTrailing) {
             trailingToolbarContent
         }
@@ -294,23 +394,33 @@ struct RecentFilesView: View {
 
     private var trailingToolbarContent: some View {
         HStack(spacing: 12) {
-            if viewMode == .grid {
-                Slider(value: $gridCardSize, in: 60...160, step: 10)
-                    .frame(width: 80)
-            }
+            if isSelecting {
+                Button {
+                    showBulkDeleteConfirm = true
+                } label: {
+                    Text("Delete (\(selectedIDs.count))")
+                        .foregroundStyle(selectedIDs.isEmpty ? Color.secondary : Color.red)
+                }
+                .disabled(selectedIDs.isEmpty)
+            } else {
+                if viewMode == .grid {
+                    Slider(value: $gridCardSize, in: 60...160, step: 10)
+                        .frame(width: 80)
+                }
 
-            filterMenu
+                filterMenu
 
-            Button {
-                showClearAllConfirm = true
-            } label: {
-                Image(systemName: "trash")
-            }
+                Button {
+                    showClearAllConfirm = true
+                } label: {
+                    Image(systemName: "trash")
+                }
 
-            Button {
-                viewModeRaw = viewMode == .list ? "grid" : "list"
-            } label: {
-                Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
+                Button {
+                    viewModeRaw = viewMode == .list ? "grid" : "list"
+                } label: {
+                    Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
+                }
             }
         }
     }
