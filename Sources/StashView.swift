@@ -131,11 +131,13 @@ struct StashView: View {
         do {
             try await s3Service.deleteObject(key: report.key, bucket: bucket)
             logger.info("Deleted report: \(report.key)")
-            reports.removeAll { $0.key == report.key }
+            await MainActor.run { reports.removeAll { $0.key == report.key } }
         } catch {
             logger.error("Failed to delete report \(report.key): \(error.localizedDescription)")
-            deleteErrorMessage = "Could not delete \(report.fileName): \(error.localizedDescription)"
-            showDeleteError = true
+            await MainActor.run {
+                deleteErrorMessage = "Could not delete \(report.fileName): \(error.localizedDescription)"
+                showDeleteError = true
+            }
         }
     }
 }
