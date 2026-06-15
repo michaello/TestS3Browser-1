@@ -486,4 +486,4 @@ Commit: `d66ba4f` feat: add grid view mode to BucketBrowserView
 - Export errors surface in a "Export Failed" alert. Temp files are written with the
   object's original filename so the Files app shows the correct name.
 
-Commit: `<hash>` feat: add Save to Files export to FileDetailView
+Commit: `0ca1d3e` feat: add Save to Files export to FileDetailView
