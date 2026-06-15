@@ -42,6 +42,12 @@ struct BucketBrowserView: View {
     @State private var renameText = ""
     @State private var showRenameError = false
     @State private var renameErrorMessage = ""
+    @State private var moveCopyTarget: S3Object? = nil
+    @State private var moveCopyMode: PrefixPickerSheet.Mode = .copy
+    @State private var showMoveCopyError = false
+    @State private var moveCopyErrorMessage = ""
+    @State private var showDeleteError = false
+    @State private var deleteErrorMessage = ""
 
     enum UploadResult {
         case success(String)
@@ -372,6 +378,22 @@ struct BucketBrowserView: View {
             } message: {
                 Text(renameErrorMessage)
             }
+            .sheet(item: $moveCopyTarget) { object in
+                PrefixPickerSheet(
+                    s3Service: s3Service,
+                    sourceBucket: s3Service.currentBucket,
+                    sourceObject: object,
+                    mode: moveCopyMode
+                ) { destPrefix in
+                    await performMoveCopy(object: object, destPrefix: destPrefix)
+                }
+            }
+            .alert("Operation Failed", isPresented: $showMoveCopyError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(moveCopyErrorMessage)
+            }
+            .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
             .searchable(
                 text: $searchText,
                 prompt: s3Service.currentPrefix.isEmpty
@@ -542,6 +564,20 @@ struct BucketBrowserView: View {
             }
 
             Button {
+                moveCopyMode = .move
+                moveCopyTarget = object
+            } label: {
+                Label("Move to…", systemImage: "arrow.forward.circle")
+            }
+
+            Button {
+                moveCopyMode = .copy
+                moveCopyTarget = object
+            } label: {
+                Label("Copy to…", systemImage: "doc.on.doc")
+            }
+
+            Button {
                 renameText = object.fileName
                 renameTarget = object
             } label: {
@@ -677,6 +713,35 @@ struct BucketBrowserView: View {
             await refreshFiles()
         } catch {
             logger.error("Failed to delete object: \(error.localizedDescription)")
+            await MainActor.run {
+                deleteErrorMessage = "Could not delete \(object.fileName): \(error.localizedDescription)"
+                showDeleteError = true
+            }
+        }
+    }
+
+    private func performMoveCopy(object: S3Object, destPrefix: String) async {
+        let filename = object.fileName
+        let destKey = destPrefix.isEmpty ? filename : "\(destPrefix)\(filename)"
+        let bucket = s3Service.currentBucket
+        do {
+            try await s3Service.copyObject(
+                key: object.key,
+                to: destKey,
+                sourceBucket: bucket,
+                destBucket: bucket
+            )
+            if moveCopyMode == .move {
+                try await s3Service.deleteObject(key: object.key, bucket: bucket)
+            }
+            logger.info("\(moveCopyMode == .move ? "Moved" : "Copied") \(object.key) -> \(destKey)")
+            await refreshFiles()
+        } catch {
+            logger.error("Move/copy failed for \(object.key): \(error.localizedDescription)")
+            await MainActor.run {
+                moveCopyErrorMessage = error.localizedDescription
+                showMoveCopyError = true
+            }
         }
     }
 

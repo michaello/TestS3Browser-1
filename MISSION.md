@@ -540,3 +540,17 @@ Commit: `28b2a85` feat: add file rename to BucketBrowserView
   from the `@Observable` singletons so they update immediately.
 
 Commit: `cbce369` feat: add cache management section to SettingsView
+
+## Phase 26 - Move/copy and delete error feedback in BucketBrowserView (DONE)
+
+- Added move/copy to `BucketBrowserView` file context menus using the existing
+  `PrefixPickerSheet`. Added state `moveCopyTarget: S3Object?`, `moveCopyMode`,
+  `showMoveCopyError`, `moveCopyErrorMessage`. "Move to…" and "Copy to…" items added
+  to `fileContextMenuItems(for:)`. A `.sheet(item: $moveCopyTarget)` presents
+  `PrefixPickerSheet`; on confirm `performMoveCopy(object:destPrefix:)` calls
+  `s3Service.copyObject` then optionally `deleteObject`, then `refreshFiles()`.
+- Added delete error feedback: `showDeleteError` / `deleteErrorMessage` state added;
+  `deleteObject(_:)` now surfaces failures in a "Delete Failed" alert via
+  `.deleteErrorAlert(isPresented:message:)` (the shared modifier from Phase 3).
+
+Commit: `<hash>` feat: add move/copy and delete error alert to BucketBrowserView
