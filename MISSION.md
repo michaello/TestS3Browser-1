@@ -503,4 +503,4 @@ Commit: `0ca1d3e` feat: add Save to Files export to FileDetailView
   On success the listing reloads automatically via `refreshFiles()`.
 - `.photosPicker` and `.fileImporter` modifiers added to `NavigationStack`.
 
-Commit: `<hash>` feat: add upload to BucketBrowserView
+Commit: `7a87094` feat: add upload to BucketBrowserView
