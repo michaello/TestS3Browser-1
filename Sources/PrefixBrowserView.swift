@@ -39,6 +39,12 @@ struct PrefixBrowserView: View {
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
 
+    // Rename state
+    @State private var renameTarget: S3Object? = nil
+    @State private var renameText = ""
+    @State private var showRenameError = false
+    @State private var renameErrorMessage = ""
+
     // Move/copy state
     @State private var moveCopyTarget: S3Object? = nil
     @State private var moveCopyMode: PrefixPickerSheet.Mode = .copy
@@ -63,6 +69,13 @@ struct PrefixBrowserView: View {
     enum UploadResult {
         case success(String)
         case failure(String)
+    }
+
+    private var bulkDeleteTitle: String {
+        "Delete \(selectedKeys.count) file\(selectedKeys.count == 1 ? "" : "s")?"
+    }
+    private var bulkDeleteButtonLabel: String {
+        "Delete \(selectedKeys.count) File\(selectedKeys.count == 1 ? "" : "s")"
     }
 
     private var displayedItems: [S3Item] {
@@ -129,74 +142,7 @@ struct PrefixBrowserView: View {
             } else {
                 List {
                     ForEach(displayedItems) { item in
-                        switch item {
-                        case .folder(let folder):
-                            if isSelecting {
-                                FolderRow(folder: folder)
-                            } else {
-                                NavigationLink {
-                                    PrefixBrowserView(
-                                        s3Service: s3Service,
-                                        prefix: folder.prefix,
-                                        bucket: bucket,
-                                        title: folder.folderName
-                                    )
-                                } label: {
-                                    FolderRow(folder: folder)
-                                }
-                            }
-                        case .file(let object):
-                            if isSelecting {
-                                Button {
-                                    if selectedKeys.contains(object.key) {
-                                        selectedKeys.remove(object.key)
-                                    } else {
-                                        selectedKeys.insert(object.key)
-                                    }
-                                } label: {
-                                    HStack {
-                                        Image(systemName: selectedKeys.contains(object.key)
-                                              ? "checkmark.circle.fill" : "circle")
-                                            .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
-                                        FileRow(object: object)
-                                    }
-                                }
-                                .buttonStyle(.plain)
-                            } else {
-                                NavigationLink {
-                                    FileDetailView(object: object, service: s3Service)
-                                } label: {
-                                    FileRow(object: object)
-                                }
-                                .contextMenu {
-                                    Button {
-                                        moveCopyMode = .move
-                                        moveCopyTarget = object
-                                    } label: {
-                                        Label("Move to…", systemImage: "arrow.forward.circle")
-                                    }
-                                    Button {
-                                        moveCopyMode = .copy
-                                        moveCopyTarget = object
-                                    } label: {
-                                        Label("Copy to…", systemImage: "doc.on.doc")
-                                    }
-                                    Divider()
-                                    Button(role: .destructive) {
-                                        Task { await deleteItem(.file(object)) }
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        Task { await deleteItem(.file(object)) }
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                            }
-                        }
+                        listRow(for: item)
                     }
 
                     if let _ = nextToken {
@@ -313,11 +259,11 @@ struct PrefixBrowserView: View {
             Text(moveCopyErrorMessage)
         }
         .confirmationDialog(
-            "Delete \(selectedKeys.count) file\(selectedKeys.count == 1 ? "" : "s")?",
+            bulkDeleteTitle,
             isPresented: $showBulkDeleteConfirm,
             titleVisibility: .visible
         ) {
-            Button("Delete \(selectedKeys.count) File\(selectedKeys.count == 1 ? "" : "s")", role: .destructive) {
+            Button(bulkDeleteButtonLabel, role: .destructive) {
                 Task { await bulkDelete() }
             }
             Button("Cancel", role: .cancel) {}
@@ -347,6 +293,28 @@ struct PrefixBrowserView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(newFolderErrorMessage)
+        }
+        .alert("Rename File", isPresented: .init(
+            get: { renameTarget != nil },
+            set: { if !$0 { renameTarget = nil } }
+        )) {
+            TextField("New filename", text: $renameText)
+                .autocorrectionDisabled()
+            Button("Rename") {
+                guard let file = renameTarget else { return }
+                let newName = renameText.trimmingCharacters(in: .whitespaces)
+                guard !newName.isEmpty else { renameTarget = nil; return }
+                let newKey = prefix + newName
+                Task { await renameFile(file, to: newKey) }
+            }
+            Button("Cancel", role: .cancel) { renameTarget = nil }
+        } message: {
+            if let file = renameTarget { Text(file.fileName) }
+        }
+        .alert("Rename Failed", isPresented: $showRenameError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(renameErrorMessage)
         }
         .task { await load() }
     }
@@ -414,7 +382,116 @@ struct PrefixBrowserView: View {
         }
     }
 
+    // MARK: - List row
+
+    @ViewBuilder
+    private func listRow(for item: S3Item) -> some View {
+        switch item {
+        case .folder(let folder):
+            if isSelecting {
+                FolderRow(folder: folder)
+            } else {
+                NavigationLink {
+                    PrefixBrowserView(
+                        s3Service: s3Service,
+                        prefix: folder.prefix,
+                        bucket: bucket,
+                        title: folder.folderName
+                    )
+                } label: {
+                    FolderRow(folder: folder)
+                }
+            }
+        case .file(let object):
+            if isSelecting {
+                Button {
+                    if selectedKeys.contains(object.key) {
+                        selectedKeys.remove(object.key)
+                    } else {
+                        selectedKeys.insert(object.key)
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: selectedKeys.contains(object.key)
+                              ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
+                        FileRow(object: object)
+                    }
+                }
+                .buttonStyle(.plain)
+            } else {
+                fileListRow(for: object)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func fileListRow(for object: S3Object) -> some View {
+        NavigationLink {
+            FileDetailView(object: object, service: s3Service)
+        } label: {
+            FileRow(object: object)
+        }
+        .contextMenu {
+            Button {
+                moveCopyMode = .move
+                moveCopyTarget = object
+            } label: {
+                Label("Move to…", systemImage: "arrow.forward.circle")
+            }
+            Button {
+                moveCopyMode = .copy
+                moveCopyTarget = object
+            } label: {
+                Label("Copy to…", systemImage: "doc.on.doc")
+            }
+            Button {
+                renameText = object.fileName
+                renameTarget = object
+            } label: {
+                Label("Rename…", systemImage: "pencil")
+            }
+            Divider()
+            Button(role: .destructive) {
+                Task { await deleteItem(.file(object)) }
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .swipeActions(edge: .leading) {
+            Button {
+                renameText = object.fileName
+                renameTarget = object
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+            .tint(.orange)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                Task { await deleteItem(.file(object)) }
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+
     // MARK: - Delete
+
+    private func renameFile(_ file: S3Object, to newKey: String) async {
+        renameTarget = nil
+        do {
+            try await s3Service.renameObject(key: file.key, to: newKey, bucket: bucket)
+            logger.info("Renamed \(file.key) -> \(newKey)")
+            await load()
+        } catch {
+            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
+            await MainActor.run {
+                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
+                showRenameError = true
+            }
+        }
+    }
 
     private func deleteItem(_ item: S3Item) async {
         guard case .file(let object) = item else { return }
