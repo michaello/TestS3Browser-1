@@ -37,4 +37,9 @@ final class TagStore {
     func tag(forKey key: String) -> String? {
         tags[key]
     }
+
+    func clearAll() {
+        tags.removeAll()
+        UserDefaults.standard.set(tags, forKey: defaultsKey)
+    }
 }

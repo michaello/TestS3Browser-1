@@ -29,6 +29,11 @@ final class StarStore {
         starredKeys.contains(key)
     }
 
+    func clearAll() {
+        starredKeys.removeAll()
+        persist()
+    }
+
     private func persist() {
         UserDefaults.standard.set(Array(starredKeys), forKey: udKey)
     }

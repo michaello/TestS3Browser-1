@@ -520,3 +520,23 @@ Commit: `7a87094` feat: add upload to BucketBrowserView
   alert via `showRenameError` / `renameErrorMessage`.
 
 Commit: `28b2a85` feat: add file rename to BucketBrowserView
+
+## Phase 25 - Cache management and data reset in SettingsView (DONE)
+
+- Added `diskCacheSize() -> Int64` to `ImageCacheActor`: sums `fileSize` attributes of
+  all files under `thumbnailCacheDirectory`, returns total bytes.
+- Added `clearAll()` to `StarStore`: removes all starred keys from `starredKeys` and
+  persists the empty set.
+- Added `TagStore.clearAll()`: removes all tags from the dict and persists.
+- `SettingsView` gained a "Storage & Cache" `Form` section showing:
+  - "Image Cache" row: disk size formatted as KB/MB, with a "Clear" button that calls
+    `ImageCacheActor.shared.clearCache()` and refreshes the size display.
+  - "Stars" row: count of starred files, with a "Clear" button calling
+    `StarStore.shared.clearAll()`.
+  - "Tags" row: count of tagged files, with a "Clear" button calling
+    `TagStore.shared.clearAll()`.
+  Each clear button is guarded by a `.confirmationDialog` to prevent accidental taps.
+  Cache size is loaded on `.task` and refreshed after each clear. All counts read live
+  from the `@Observable` singletons so they update immediately.
+
+Commit: `<hash>` feat: add cache management section to SettingsView

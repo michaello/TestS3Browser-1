@@ -315,6 +315,19 @@ actor ImageCacheActor {
         }
     }
 
+    /// Returns total bytes used by the on-disk thumbnail cache.
+    func diskCacheSize() -> Int64 {
+        guard let urls = try? FileManager.default.contentsOfDirectory(
+            at: thumbnailCacheDirectory,
+            includingPropertiesForKeys: [.fileSizeKey],
+            options: .skipsHiddenFiles
+        ) else { return 0 }
+        return urls.reduce(Int64(0)) { total, url in
+            let size = (try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize).flatMap { Int64($0) } ?? 0
+            return total + size
+        }
+    }
+
     /// Clears all cached thumbnails from disk
     func clearDiskCache() {
         do {
