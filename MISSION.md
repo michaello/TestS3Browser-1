@@ -590,3 +590,21 @@ Commit: `f308b81` feat: add search and sort to PrefixBrowserView
   "Load more" row at the bottom just like the list.
 
 Commit: `04aaa6a` feat: add grid view to PrefixBrowserView
+
+## Phase 29 - Batch select and bulk delete in BucketBrowserView (DONE)
+
+- Added `@State private var isSelecting = false` and `@State private var selectedKeys: Set<String> = []`
+  to `BucketBrowserView`.
+- "Select" toolbar button (`.topBarLeading`) enters selection mode. "Cancel" exits and clears selection.
+- In list mode: file rows show a leading circle / filled-checkmark based on selection state. Tapping a row
+  toggles its key in `selectedKeys` rather than navigating; `NavigationLink` is omitted while `isSelecting`.
+- In grid mode: selected cells show a checkmark overlay in the top-leading corner.
+- A "Delete (N)" `Button(role: .destructive)` appears in the toolbar (`.topBarTrailing`) only when
+  `isSelecting && !selectedKeys.isEmpty`. Tapping it shows a `.confirmationDialog` listing the count.
+  On confirm, `bulkDelete()` calls `s3Service.deleteObject` concurrently with `withThrowingTaskGroup`,
+  removes successfully-deleted keys from `items`, and shows a partial-failure summary if some failed.
+- "Select All" / "Deselect All" toolbar button added to leading toolbar while in selection mode.
+- `isSelecting` is automatically reset to false after bulk delete completes.
+- Folder rows are excluded from selection; only file rows are selectable.
+
+Commit: `<hash>` feat: batch select and bulk delete in BucketBrowserView

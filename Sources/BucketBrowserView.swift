@@ -49,6 +49,12 @@ struct BucketBrowserView: View {
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
 
+    // Selection state
+    @State private var isSelecting = false
+    @State private var selectedKeys: Set<String> = []
+    @State private var showBulkDeleteConfirm = false
+    @State private var isBulkDeleting = false
+
     enum UploadResult {
         case success(String)
         case failure(String)
@@ -246,53 +252,88 @@ struct BucketBrowserView: View {
                 .navigationTitle("S3 Browser")
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        BucketPickerView(
-                            currentBucket: s3Service.currentBucket,
-                            availableBuckets: s3Service.availableBuckets,
-                            isLoading: s3Service.isLoading,
-                            onSelectBucket: { bucket in
-                                Task {
-                                    do {
-                                        try await s3Service.switchBucket(bucket)
-                                        savedBucket = bucket
-                                        savedPrefix = ""
-                                    } catch {
-                                        logger.error("Failed to switch bucket: \(error.localizedDescription)")
+                        if isSelecting {
+                            HStack(spacing: 12) {
+                                Button("Cancel") {
+                                    isSelecting = false
+                                    selectedKeys.removeAll()
+                                }
+                                if selectedKeys.count == sortedItems.filter({ !$0.isFolder }).count {
+                                    Button("Deselect All") { selectedKeys.removeAll() }
+                                } else {
+                                    Button("Select All") {
+                                        selectedKeys = Set(sortedItems.compactMap { item -> String? in
+                                            if case .file(let o) = item { return o.key }
+                                            return nil
+                                        })
                                     }
                                 }
                             }
-                        )
+                        } else {
+                            BucketPickerView(
+                                currentBucket: s3Service.currentBucket,
+                                availableBuckets: s3Service.availableBuckets,
+                                isLoading: s3Service.isLoading,
+                                onSelectBucket: { bucket in
+                                    Task {
+                                        do {
+                                            try await s3Service.switchBucket(bucket)
+                                            savedBucket = bucket
+                                            savedPrefix = ""
+                                        } catch {
+                                            logger.error("Failed to switch bucket: \(error.localizedDescription)")
+                                        }
+                                    }
+                                }
+                            )
+                        }
                     }
 
                     ToolbarItem(placement: .topBarTrailing) {
-                        HStack(spacing: 12) {
-                            if viewStyle == .grid {
-                                Slider(value: $gridCardSize, in: 60...160, step: 10)
-                                    .frame(width: 80)
-                            }
-                            Menu {
-                                filterMenuContent
-                                    .menuActionDismissBehavior(.disabled)
-                                sortMenuContent
-                                viewStyleMenuContent
-                            } label: {
-                                Image(systemName: "line.3.horizontal.decrease.circle")
-                            }
-                            Menu {
-                                Button {
-                                    showPhotoPicker = true
-                                } label: {
-                                    Label("Photo or Video", systemImage: "photo")
+                        if isSelecting {
+                            HStack(spacing: 12) {
+                                if !selectedKeys.isEmpty {
+                                    Button(role: .destructive) {
+                                        showBulkDeleteConfirm = true
+                                    } label: {
+                                        Label("Delete (\(selectedKeys.count))", systemImage: "trash")
+                                    }
+                                    .disabled(isBulkDeleting)
                                 }
-                                Button {
-                                    showFilePicker = true
-                                } label: {
-                                    Label("File", systemImage: "doc")
-                                }
-                            } label: {
-                                Image(systemName: "plus")
                             }
-                            .disabled(!isConfigured || isUploading)
+                        } else {
+                            HStack(spacing: 12) {
+                                if isConfigured && !s3Service.items.isEmpty {
+                                    Button("Select") { isSelecting = true }
+                                }
+                                if viewStyle == .grid {
+                                    Slider(value: $gridCardSize, in: 60...160, step: 10)
+                                        .frame(width: 80)
+                                }
+                                Menu {
+                                    filterMenuContent
+                                        .menuActionDismissBehavior(.disabled)
+                                    sortMenuContent
+                                    viewStyleMenuContent
+                                } label: {
+                                    Image(systemName: "line.3.horizontal.decrease.circle")
+                                }
+                                Menu {
+                                    Button {
+                                        showPhotoPicker = true
+                                    } label: {
+                                        Label("Photo or Video", systemImage: "photo")
+                                    }
+                                    Button {
+                                        showFilePicker = true
+                                    } label: {
+                                        Label("File", systemImage: "doc")
+                                    }
+                                } label: {
+                                    Image(systemName: "plus")
+                                }
+                                .disabled(!isConfigured || isUploading)
+                            }
                         }
                     }
                 }
@@ -355,6 +396,14 @@ struct BucketBrowserView: View {
                     await refreshFiles()
                 }
             }
+            .onChange(of: s3Service.currentPrefix) { _, _ in
+                isSelecting = false
+                selectedKeys.removeAll()
+            }
+            .onChange(of: s3Service.currentBucket) { _, _ in
+                isSelecting = false
+                selectedKeys.removeAll()
+            }
             .alert("Rename File", isPresented: .init(
                 get: { renameTarget != nil },
                 set: { if !$0 { renameTarget = nil } }
@@ -394,12 +443,17 @@ struct BucketBrowserView: View {
                 Text(moveCopyErrorMessage)
             }
             .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
-            .searchable(
-                text: $searchText,
-                prompt: s3Service.currentPrefix.isEmpty
-                    ? "Search in \(s3Service.currentBucket)"
-                    : "Search in \(s3Service.currentPrefix.split(separator: "/").last.map(String.init) ?? s3Service.currentPrefix)"
-            )
+            .confirmationDialog(
+                "Delete \(selectedKeys.count) file\(selectedKeys.count == 1 ? "" : "s")?",
+                isPresented: $showBulkDeleteConfirm,
+                titleVisibility: .visible
+            ) {
+                Button("Delete \(selectedKeys.count) File\(selectedKeys.count == 1 ? "" : "s")", role: .destructive) {
+                    Task { await bulkDelete() }
+                }
+                Button("Cancel", role: .cancel) {}
+            }
+            .searchable(text: $searchText, prompt: searchPrompt)
             .safeAreaInset(edge: .bottom) {
                 if isUploading || uploadResult != nil {
                     uploadStatusBar
@@ -598,6 +652,7 @@ struct BucketBrowserView: View {
                 switch item {
                 case .folder(let folder):
                     Button(action: {
+                        guard !isSelecting else { return }
                         Task {
                             searchText = ""
                             try? await s3Service.navigateToFolder(folder.prefix)
@@ -607,21 +662,43 @@ struct BucketBrowserView: View {
                         FolderRow(folder: folder)
                     }
                 case .file(let object):
-                    NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                        if viewStyle == .standard {
-                            FileRow(object: object)
-                        } else {
-                            CompactFileRow(object: object)
-                        }
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            Task { await deleteObject(object) }
+                    if isSelecting {
+                        Button {
+                            if selectedKeys.contains(object.key) {
+                                selectedKeys.remove(object.key)
+                            } else {
+                                selectedKeys.insert(object.key)
+                            }
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            HStack {
+                                Image(systemName: selectedKeys.contains(object.key)
+                                      ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
+                                if viewStyle == .standard {
+                                    FileRow(object: object)
+                                } else {
+                                    CompactFileRow(object: object)
+                                }
+                            }
                         }
+                        .buttonStyle(.plain)
+                    } else {
+                        NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                            if viewStyle == .standard {
+                                FileRow(object: object)
+                            } else {
+                                CompactFileRow(object: object)
+                            }
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                Task { await deleteObject(object) }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                        .contextMenu { fileContextMenuItems(for: object) }
                     }
-                    .contextMenu { fileContextMenuItems(for: object) }
                 }
             }
         }
@@ -635,6 +712,7 @@ struct BucketBrowserView: View {
                     switch item {
                     case .folder(let folder):
                         Button {
+                            guard !isSelecting else { return }
                             Task {
                                 searchText = ""
                                 try? await s3Service.navigateToFolder(folder.prefix)
@@ -645,10 +723,31 @@ struct BucketBrowserView: View {
                         }
                         .buttonStyle(.plain)
                     case .file(let object):
-                        NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                            BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                        if isSelecting {
+                            Button {
+                                if selectedKeys.contains(object.key) {
+                                    selectedKeys.remove(object.key)
+                                } else {
+                                    selectedKeys.insert(object.key)
+                                }
+                            } label: {
+                                ZStack(alignment: .topLeading) {
+                                    BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                                    Image(systemName: selectedKeys.contains(object.key)
+                                          ? "checkmark.circle.fill" : "circle")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .white)
+                                        .shadow(color: .black.opacity(0.4), radius: 2)
+                                        .padding(4)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                                BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                            }
+                            .contextMenu { fileContextMenuItems(for: object) }
                         }
-                        .contextMenu { fileContextMenuItems(for: object) }
                     }
                 }
             }
@@ -693,6 +792,14 @@ struct BucketBrowserView: View {
         !config.bucketName.isEmpty && !config.accessKey.isEmpty && !config.secretKey.isEmpty
     }
 
+    private var searchPrompt: String {
+        if s3Service.currentPrefix.isEmpty {
+            return "Search in \(s3Service.currentBucket)"
+        }
+        let last = s3Service.currentPrefix.split(separator: "/").last.map(String.init)
+        return "Search in \(last ?? s3Service.currentPrefix)"
+    }
+
     private func refreshFiles() async {
         guard !s3Service.isLoading else {
             logger.debug("Already loading, skipping refresh")
@@ -718,6 +825,41 @@ struct BucketBrowserView: View {
                 showDeleteError = true
             }
         }
+    }
+
+    private func bulkDelete() async {
+        let keys = selectedKeys
+        let bucket = s3Service.currentBucket
+        isBulkDeleting = true
+        var failedKeys: [String] = []
+        await withTaskGroup(of: (String, Error?).self) { group in
+            for key in keys {
+                group.addTask {
+                    do {
+                        try await self.s3Service.deleteObject(key: key, bucket: bucket)
+                        return (key, nil)
+                    } catch {
+                        return (key, error)
+                    }
+                }
+            }
+            for await (key, error) in group {
+                if let error {
+                    logger.error("Bulk delete failed for \(key): \(error.localizedDescription)")
+                    failedKeys.append(key)
+                }
+            }
+        }
+        await MainActor.run {
+            isBulkDeleting = false
+            isSelecting = false
+            selectedKeys.removeAll()
+            if !failedKeys.isEmpty {
+                deleteErrorMessage = "Could not delete \(failedKeys.count) file\(failedKeys.count == 1 ? "" : "s")."
+                showDeleteError = true
+            }
+        }
+        await refreshFiles()
     }
 
     private func performMoveCopy(object: S3Object, destPrefix: String) async {
