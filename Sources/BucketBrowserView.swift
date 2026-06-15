@@ -1,6 +1,8 @@
 import SwiftUI
 import os.log
 
+private let starStore = StarStore.shared
+
 enum SortOption: String, CaseIterable {
     case dateNewest = "Date (Newest)"
     case dateOldest = "Date (Oldest)"
@@ -240,6 +242,12 @@ struct BucketBrowserView: View {
                                             }
                                         }
 
+                                        Button {
+                                            starStore.toggle(object.key)
+                                        } label: {
+                                            Label(starStore.isStarred(object.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(object.key) ? "star.slash" : "star")
+                                        }
+
                                         Button(role: .destructive) {
                                             Task {
                                                 await deleteObject(object)
@@ -471,30 +479,40 @@ struct FileRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            ZStack {
-                if let thumbnail = thumbnail {
-                    Image(uiImage: thumbnail)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 50, height: 50)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
-                        )
-                } else {
-                    Image(systemName: object.fileType.icon)
-                        .font(.title3)
-                        .foregroundStyle(iconColor)
-                        .frame(width: 50, height: 50)
+            ZStack(alignment: .bottomTrailing) {
+                ZStack {
+                    if let thumbnail = thumbnail {
+                        Image(uiImage: thumbnail)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
+                            )
+                    } else {
+                        Image(systemName: object.fileType.icon)
+                            .font(.title3)
+                            .foregroundStyle(iconColor)
+                            .frame(width: 50, height: 50)
+                    }
+
+                    // Video play badge
+                    if object.fileType == .video {
+                        Image(systemName: "play.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.5), radius: 2)
+                    }
                 }
 
-                // Video play badge
-                if object.fileType == .video {
-                    Image(systemName: "play.circle.fill")
-                        .font(.title3)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.5), radius: 2)
+                if starStore.isStarred(object.key) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.yellow)
+                        .padding(2)
+                        .background(Color.black.opacity(0.35), in: Circle())
                 }
             }
             .frame(width: 50, height: 50)

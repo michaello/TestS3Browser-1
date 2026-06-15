@@ -431,3 +431,19 @@ Commit: `b877c7a` feat: add bucket usage stats tab
   `Button` action) so each level starts with a clean search bar.
 
 Commit: `91c2a9b` feat: add in-prefix search to BucketBrowserView
+
+## Phase 20 - Starred / favorited files (DONE)
+
+- Added `Sources/StarStore.swift`: `@Observable` singleton backed by `UserDefaults.standard`
+  key `"s3StarredKeys"` holding a `Set<String>` of S3 object keys. Exposes `toggle(_:)`,
+  `isStarred(_:)`, and `starredKeys` (the full set). Persists on every mutation.
+- `RecentFilesView`: each row and grid-card context menu gained a "Star" / "Unstar" item
+  (star icon, bound to `StarStore.shared`). A "Starred" filter option added to the existing
+  type/tag filter chain — when active, `filteredRecentFiles` only shows objects whose key is
+  in `StarStore.shared.starredKeys`. A star chip in the filter bar (alongside the tag chips)
+  toggles the starred filter on/off.
+- `BucketBrowserView` file rows gained a "Star" / "Unstar" context-menu item so files can be
+  starred while browsing. `FileRow` shows a small star badge (yellow fill) when the file is
+  starred, using `StarStore.shared.isStarred(object.key)`.
+
+Commit: `<hash>` feat: add starred/favorited files

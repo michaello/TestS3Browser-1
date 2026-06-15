@@ -10,6 +10,8 @@ struct RecentFilesView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFilesView")
     @Environment(\.scenePhase) private var scenePhase
     @State private var tagStore = TagStore.shared
+    @State private var starStore = StarStore.shared
+    @State private var showOnlyStarred = false
     let config: S3Config
     let s3Service: S3Service
     @AppStorage("s3RecentViewMode") private var viewModeRaw: String = "list"
@@ -81,12 +83,15 @@ struct RecentFilesView: View {
         } else {
             tagFiltered = typeFiltered
         }
+        let starFiltered: [S3Object] = showOnlyStarred
+            ? tagFiltered.filter { starStore.isStarred($0.key) }
+            : tagFiltered
         let searchFiltered: [S3Object]
         if searchText.isEmpty {
-            searchFiltered = tagFiltered
+            searchFiltered = starFiltered
         } else {
             let lower = searchText.lowercased()
-            searchFiltered = tagFiltered.filter { $0.key.lowercased().contains(lower) }
+            searchFiltered = starFiltered.filter { $0.key.lowercased().contains(lower) }
         }
         switch sortOrder {
         case .newestFirst: return searchFiltered.sorted { ($0.lastModified ?? .distantPast) > ($1.lastModified ?? .distantPast) }
@@ -438,6 +443,12 @@ struct RecentFilesView: View {
             Label(tagStore.tag(forKey: file.key) != nil ? "Edit Tag" : "Set Tag", systemImage: "tag")
         }
 
+        Button {
+            starStore.toggle(file.key)
+        } label: {
+            Label(starStore.isStarred(file.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(file.key) ? "star.slash" : "star")
+        }
+
         Divider()
 
         Button(role: .destructive) {
@@ -514,14 +525,18 @@ struct RecentFilesView: View {
         }
     }
 
-    /// Horizontally scrolling tag-filter bar. Hidden when there are no tags in use.
+    /// Horizontally scrolling tag/star filter bar. Hidden when there are no tags and no starred files.
     @ViewBuilder
     private var tagFilterBar: some View {
         let tags = tagStore.allTags
-        if !tags.isEmpty {
+        let hasStarred = !starStore.starredKeys.isEmpty
+        if !tags.isEmpty || hasStarred {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     tagFilterChip(label: "All", value: nil)
+                    if hasStarred {
+                        starredChip
+                    }
                     ForEach(tags, id: \.self) { tag in
                         tagFilterChip(label: tag, value: tag)
                     }
@@ -533,10 +548,31 @@ struct RecentFilesView: View {
         }
     }
 
+    private var starredChip: some View {
+        Button {
+            showOnlyStarred.toggle()
+            if showOnlyStarred { tagFilter = nil }
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: showOnlyStarred ? "star.fill" : "star")
+                    .font(.caption)
+                Text("Starred")
+                    .font(.subheadline)
+                    .fontWeight(showOnlyStarred ? .semibold : .regular)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(showOnlyStarred ? Color.yellow.opacity(0.85) : Color(.secondarySystemFill), in: Capsule())
+            .foregroundStyle(showOnlyStarred ? Color.black : Color.primary)
+        }
+        .buttonStyle(.plain)
+    }
+
     private func tagFilterChip(label: String, value: String?) -> some View {
-        let isActive = tagFilter == value
+        let isActive = tagFilter == value && !showOnlyStarred
         return Button {
             tagFilter = isActive ? nil : value
+            showOnlyStarred = false
         } label: {
             Text(label)
                 .font(.subheadline)
