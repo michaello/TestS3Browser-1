@@ -25,6 +25,7 @@ struct BucketBrowserView: View {
     @AppStorage("s3BrowserViewStyle") private var viewStyleRaw: String = "standard"
     @AppStorage("s3BrowserFileTypeFilter") private var fileTypeFilterRaw: Int = FileTypeFilter.all.rawValue
     @State private var showingSortMenu = false
+    @State private var searchText = ""
 
     private let logger = Logger(subsystem: "com.s3browser", category: "BucketBrowserView")
 
@@ -189,6 +190,8 @@ struct BucketBrowserView: View {
                         .refreshable {
                             await refreshFiles()
                         }
+                    } else if !searchText.isEmpty && sortedItems.isEmpty {
+                        ContentUnavailableView.search(text: searchText)
                     } else {
                         List {
                             ForEach(sortedItems) { item in
@@ -196,6 +199,7 @@ struct BucketBrowserView: View {
                                 case .folder(let folder):
                                     Button(action: {
                                         Task {
+                                            searchText = ""
                                             try? await s3Service.navigateToFolder(folder.prefix)
                                             savedPrefix = s3Service.currentPrefix
                                         }
@@ -343,16 +347,26 @@ struct BucketBrowserView: View {
                     await refreshFiles()
                 }
             }
+            .searchable(
+                text: $searchText,
+                prompt: s3Service.currentPrefix.isEmpty
+                    ? "Search in \(s3Service.currentBucket)"
+                    : "Search in \(s3Service.currentPrefix.split(separator: "/").last.map(String.init) ?? s3Service.currentPrefix)"
+            )
         }
     }
 
     private var sortedItems: [S3Item] {
+        let query = searchText.trimmingCharacters(in: .whitespaces)
         let filtered = s3Service.items.filter { item in
             switch item {
-            case .folder:
-                return true // Always show folders
+            case .folder(let folder):
+                if query.isEmpty { return true }
+                return folder.folderName.localizedCaseInsensitiveContains(query)
             case .file(let object):
-                return fileTypeFilter.matches(object.fileType)
+                if !fileTypeFilter.matches(object.fileType) { return false }
+                if query.isEmpty { return true }
+                return object.fileName.localizedCaseInsensitiveContains(query)
             }
         }
 
