@@ -184,3 +184,16 @@ Commit: `0b32e2f` recent-files: persist upload history across cold launches
 - Confirmed in `Metadata.appintents/extract.actionsdata` alongside all five intents.
 
 Commit: `3e1b4d6` intents: add SearchFileIntent Siri shortcut
+
+## Phase 6 - In-app search bar in RecentFilesView (DONE)
+
+- Added `@State private var searchText` to `RecentFilesView`.
+- `filteredRecentFiles` now applies a case-insensitive key substring filter after the
+  existing type filter when `searchText` is non-empty.
+- `.searchable(text: $searchText, prompt: "Search files")` added to the `NavigationStack`
+  so iOS renders the standard pull-down search bar.
+- Empty-results state uses `ContentUnavailableView.search(text:)` (system search empty
+  state) when the search query is active, and the existing "No Matching Files" view when
+  only the type filter is active.
+
+Commit: `ui: add in-app search bar to RecentFilesView`

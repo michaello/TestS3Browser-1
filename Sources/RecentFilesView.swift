@@ -23,6 +23,7 @@ struct RecentFilesView: View {
     @State private var showClearAllConfirm = false
     /// Keys of files that are new since the last time the screen was visited
     @State private var newFileKeys: Set<String> = []
+    @State private var searchText = ""
 
     enum ViewMode {
         case list
@@ -40,8 +41,12 @@ struct RecentFilesView: View {
     }
 
     private var filteredRecentFiles: [S3Object] {
-        guard fileTypeFilter != .all else { return s3Service.recentFiles }
-        return s3Service.recentFiles.filter { fileTypeFilter.matches($0.fileType) }
+        let typeFiltered = fileTypeFilter == .all
+            ? s3Service.recentFiles
+            : s3Service.recentFiles.filter { fileTypeFilter.matches($0.fileType) }
+        guard !searchText.isEmpty else { return typeFiltered }
+        let lower = searchText.lowercased()
+        return typeFiltered.filter { $0.key.lowercased().contains(lower) }
     }
 
     /// Returns only image files from the filtered list for gallery navigation
@@ -84,6 +89,7 @@ struct RecentFilesView: View {
                 autoPreviewCover(for: photo)
             }
             .toolbar { toolbarContent }
+            .searchable(text: $searchText, prompt: "Search files")
         }
         .task { await initialLoad() }
         .onChange(of: scenePhase) { _, newPhase in
@@ -136,11 +142,15 @@ struct RecentFilesView: View {
             }
             .refreshable { await refreshRecentFiles() }
         } else if filteredRecentFiles.isEmpty {
-            ContentUnavailableView(
-                "No Matching Files",
-                systemImage: "doc",
-                description: Text("No files match the selected filter")
-            )
+            if !searchText.isEmpty {
+                ContentUnavailableView.search(text: searchText)
+            } else {
+                ContentUnavailableView(
+                    "No Matching Files",
+                    systemImage: "doc",
+                    description: Text("No files match the selected filter")
+                )
+            }
         } else {
             filesView
         }
