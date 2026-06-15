@@ -19,6 +19,9 @@ struct StashView: View {
     @State private var navigationPath = NavigationPath()
     /// Keys of reports we have not seen or tapped yet - emphasized in the list.
     @State private var newKeys: Set<String> = []
+    /// Drives the delete-failure alert. Set when deleteReport catches a thrown error.
+    @State private var showDeleteError = false
+    @State private var deleteErrorMessage = ""
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -47,6 +50,13 @@ struct StashView: View {
                             StashRow(report: report, isNew: newKeys.contains(report.key))
                         }
                         .buttonStyle(.plain)
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                Task { await deleteReport(report) }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
                     }
                     .listStyle(.plain)
                 }
@@ -67,6 +77,13 @@ struct StashView: View {
             .refreshable { await load() }
             .task {
                 if reports.isEmpty { await load() }
+            }
+            .alert(isPresented: $showDeleteError) {
+                Alert(
+                    title: Text("Delete Failed"),
+                    message: Text(deleteErrorMessage),
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
     }
@@ -111,6 +128,20 @@ struct StashView: View {
         Task {
             // Additive - keep the rest of the bucket's seen record intact.
             await SeenPhotosTracker.shared.addSeen(photoKeys: [report.key], bucket: seenKey)
+        }
+    }
+
+    /// Deletes a report from the phone-stash bucket and removes it from the list.
+    /// On failure, surfaces the error in the delete-failure alert.
+    private func deleteReport(_ report: S3Object) async {
+        do {
+            try await s3Service.deleteObject(key: report.key, bucket: bucket)
+            logger.info("Deleted report: \(report.key)")
+            reports.removeAll { $0.key == report.key }
+        } catch {
+            logger.error("Failed to delete report \(report.key): \(error.localizedDescription)")
+            deleteErrorMessage = "Could not delete \(report.fileName): \(error.localizedDescription)"
+            showDeleteError = true
         }
     }
 }
