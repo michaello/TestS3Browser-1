@@ -102,3 +102,75 @@ leading swipe so it is discoverable and one-gesture.
 - Existing presigned-URL + toast: `Sources/RecentFilesView.swift` deleteContextMenu (lines 186-201), showCopyToast (line 436).
 - Swipe-action precedent: `Sources/StashView.swift` `.swipeActions` on report rows (lines 53-59).
 - Service method: `S3Service.generatePresignedURL(for:bucket:expiresIn:)`.
+
+## Phase 5 - Widget, new intents, upload UX, and cold-launch persistence (DONE)
+
+### WidgetKit extension (`TestS3BrowserWidget`)
+- Added `Sources/Widget/TestS3BrowserWidget.swift`: `SystemSmall` shows the most recent
+  upload (icon, filename, age, bucket); `SystemMedium` shows up to 3 rows with size and
+  relative date. Both read `[S3Object]` JSON from
+  `UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser")` key `"recentUploads"`.
+  Timeline refreshes every 15 minutes as a backstop.
+- Added `WidgetExtension/TestS3BrowserWidget.entitlements` with the shared App Group.
+- Wired `TestS3BrowserWidget` target into `project.pbxproj` (bundle ID
+  `com.crispytoast.TestS3Browser.Widget`, team `AS5AAW6A59`), embedded into the main app
+  via the existing Embed App Extensions phase.
+- `S3Object` gained `Codable` conformance in `Sources/Models.swift` to support JSON
+  round-tripping.
+
+Commit: `1306175` widget: recent uploads widget with shared app group
+
+### Widget reload trigger
+- `S3Service.persistRecentFiles()` now calls
+  `WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget")` immediately after
+  writing UserDefaults, so the widget reflects every mutation (fetch, delete, clear,
+  switchBucket) without waiting for the 15-minute poll.
+
+Commit: `5841947` widget: reload timeline after every recentFiles mutation
+
+### `DownloadFileIntent` Siri shortcut
+- Added `Sources/Intents/DownloadFileIntent.swift`: takes `key: String` and optional
+  `bucket: String?`, calls `S3Service.downloadObject(key:bucket:)`, wraps bytes in
+  `IntentFile` with UTType inferred from extension, returns the file so Shortcuts can
+  pipe it to Save to Files / Quick Look.
+- Registered in `TestS3BrowserShortcuts` with phrase
+  "Download S3 file with ${applicationName}" and systemImage `arrow.down.circle`.
+- Confirmed in `Metadata.appintents/extract.actionsdata`.
+
+Commit: `f6bd1fc` intents: add DownloadFileIntent Siri shortcut
+
+### `DeleteFileIntent` Siri shortcut
+- Added `Sources/Intents/DeleteFileIntent.swift`: takes `key: String` and optional
+  `bucket: String?`, calls `S3Service.deleteObject(key:bucket:)`, returns a dialog
+  confirming the filename. Chainable after `ListRecentFilesIntent` for bulk deletes.
+- Registered in `TestS3BrowserShortcuts` with phrase
+  "Delete S3 file with ${applicationName}" and systemImage `trash`.
+- Confirmed in `Metadata.appintents/extract.actionsdata` alongside all four intents.
+
+Commit: `2862c0a` intents: add DeleteFileIntent Siri shortcut
+
+### Upload progress bar
+- `S3Service+Transfer.swift` `uploadObject` gained `onProgress: (@MainActor (Double) -> Void)?`.
+  A background task ticks every 100 ms and eases toward 0.9 using `1 - exp(-3t/T)` (T
+  estimated from byte count at 500 KB/s); snaps to 1.0 when `putObject` returns.
+  `uploadToDump` forwards the callback transparently.
+- `DropUploadView` replaced the indeterminate spinner with `ProgressView(value:)` (linear)
+  plus an "Uploading 42%..." label counting up to "Finishing..." at 100%.
+
+Commit: `adbddda` upload: show transfer progress bar in upload view
+
+### Copy Link button in upload success card
+- `DropUploadView` success card gained a "Copy Link" button alongside "Copy Path".
+  Calls `s3Service.generatePresignedURL(for:expiresIn:86400)`, copies on success, shows
+  "Could not generate link" toast on nil. Same slide-in toast overlay pattern as
+  `RecentFilesView`.
+
+Commit: `b4e4b74` upload: add Copy Link button to upload success card
+
+### Cold-launch persistence for Recent Files
+- `S3Service.init` now calls `loadPersistedRecentFiles()`, which reads the same
+  `"recentUploads"` key written by `persistRecentFiles()`, so `recentFiles` is populated
+  immediately on cold launch without a network round-trip. Pattern mirrors
+  `SharedConfig.loadConfig()`.
+
+Commit: `0b32e2f` recent-files: persist upload history across cold launches
