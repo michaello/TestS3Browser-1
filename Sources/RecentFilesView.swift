@@ -19,6 +19,8 @@ struct RecentFilesView: View {
     /// Drives the delete-failure alert. Set when deleteFile catches a thrown error.
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
+    /// Drives the Clear All confirmation prompt before emptying the recent files list.
+    @State private var showClearAllConfirm = false
     /// Keys of files that are new since the last time the screen was visited
     @State private var newFileKeys: Set<String> = []
 
@@ -97,6 +99,19 @@ struct RecentFilesView: View {
                 message: Text(deleteErrorMessage),
                 dismissButton: .default(Text("OK"))
             )
+        }
+        .confirmationDialog(
+            "Clear all recent files?",
+            isPresented: $showClearAllConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Clear All", role: .destructive) {
+                Task {
+                    await MainActor.run { s3Service.clearRecentFiles() }
+                    await refreshRecentFiles()
+                }
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 
@@ -230,10 +245,7 @@ struct RecentFilesView: View {
             filterMenu
 
             Button {
-                Task {
-                    await MainActor.run { s3Service.clearRecentFiles() }
-                    await refreshRecentFiles()
-                }
+                showClearAllConfirm = true
             } label: {
                 Image(systemName: "trash")
             }
