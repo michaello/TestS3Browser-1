@@ -211,4 +211,4 @@ Commit: `3ff1b1f` ui: add in-app search bar to RecentFilesView
   the delete-error alert pattern.
 - Both list and grid rows get the rename item via the shared `deleteContextMenu` builder.
 
-Commit: `feat: add file rename to RecentFilesView`
+Commit: `e67ceb4` feat: add file rename to RecentFilesView
