@@ -589,4 +589,4 @@ Commit: `f308b81` feat: add search and sort to PrefixBrowserView
 - The grid supports pull-to-refresh via `.refreshable { await load() }` and shows the
   "Load more" row at the bottom just like the list.
 
-Commit: `<hash>` feat: add grid view to PrefixBrowserView
+Commit: `04aaa6a` feat: add grid view to PrefixBrowserView
