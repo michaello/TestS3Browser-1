@@ -41,6 +41,7 @@ struct BucketBrowserView: View {
     @State private var isDragTargeted = false
     @State private var renameTarget: S3Object? = nil
     @State private var renameText = ""
+    @State private var showRenameAlert = false
     @State private var showRenameError = false
     @State private var renameErrorMessage = ""
     @State private var moveCopyTarget: S3Object? = nil
@@ -61,6 +62,15 @@ struct BucketBrowserView: View {
     @State private var selectedKeys: Set<String> = []
     @State private var showBulkDeleteConfirm = false
     @State private var isBulkDeleting = false
+
+    // Batch download state
+    @State private var isBatchDownloading = false
+    @State private var batchDownloadProgress = 0
+    @State private var batchDownloadTotal = 0
+    @State private var batchDownloadURLs: [URL]? = nil
+    @State private var showBatchDownloadShare = false
+    @State private var batchDownloadError: String? = nil
+    @State private var showBatchDownloadError = false
 
     enum UploadResult {
         case success(String)
@@ -202,339 +212,266 @@ struct BucketBrowserView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // Breadcrumb navigation
-                if isConfigured && !s3Service.currentPrefix.isEmpty {
-                    BreadcrumbView(
-                        pathComponents: s3Service.getPathComponents(),
-                        onTapIndex: { index in
-                            Task {
-                                try? await s3Service.navigateToBreadcrumb(index)
-                            }
-                        },
-                        onTapRoot: {
-                            Task {
-                                s3Service.currentPrefix = ""
-                                try? await s3Service.listObjects()
-                            }
-                        }
-                    )
-                }
-
-                Group {
-                    if !isConfigured {
-                        ContentUnavailableView(
-                            "Configuration Required",
-                            systemImage: "gear",
-                            description: Text("Go to Settings to configure your S3 bucket and credentials")
-                        )
-                    } else if s3Service.isLoading {
-                        VStack(spacing: 8) {
-                            ProgressView()
-                            Text(s3Service.loadingStatus.isEmpty ? "Loading..." : s3Service.loadingStatus)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else if s3Service.items.isEmpty {
-                        ScrollView {
-                            ContentUnavailableView(
-                                "No Files",
-                                systemImage: "doc",
-                                description: Text("No files found in \(s3Service.currentBucket). Pull to refresh.")
-                            )
-                            .frame(maxWidth: .infinity, minHeight: 300)
-                        }
-                        .refreshable {
-                            await refreshFiles()
-                        }
-                    } else if !searchText.isEmpty && sortedItems.isEmpty {
-                        ContentUnavailableView.search(text: searchText)
-                    } else if viewStyle == .grid {
-                        gridContent
-                    } else {
-                        listContent
+            navigationContent
+        }
+        .alert("Rename File", isPresented: $showRenameAlert) {
+            TextField("New filename", text: $renameText).autocorrectionDisabled()
+            Button("Rename") {
+                guard let file = renameTarget else { return }
+                let newName = renameText.trimmingCharacters(in: .whitespaces)
+                guard !newName.isEmpty else { renameTarget = nil; showRenameAlert = false; return }
+                let dir = (file.key as NSString).deletingLastPathComponent
+                let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
+                Task { await renameFile(file, to: newKey) }
+            }
+            Button("Cancel", role: .cancel) { renameTarget = nil; showRenameAlert = false }
+        } message: {
+            if let file = renameTarget { Text(file.fileName) }
+        }
+        .alert("Rename Failed", isPresented: $showRenameError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(renameErrorMessage) }
+        .sheet(item: $moveCopyTarget) { object in
+            PrefixPickerSheet(
+                s3Service: s3Service,
+                sourceBucket: s3Service.currentBucket,
+                sourceObject: object,
+                mode: moveCopyMode
+            ) { destPrefix in
+                await performMoveCopy(object: object, destPrefix: destPrefix)
+            }
+        }
+        .alert("Operation Failed", isPresented: $showMoveCopyError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(moveCopyErrorMessage) }
+        .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
+        .confirmationDialog(bulkDeleteTitle, isPresented: $showBulkDeleteConfirm, titleVisibility: .visible) {
+            Button(bulkDeleteButtonLabel, role: .destructive) { Task { await bulkDelete() } }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("New Folder", isPresented: $showNewFolderAlert) {
+            TextField("Folder name", text: $newFolderName)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+            Button("Create") {
+                let name = newFolderName.trimmingCharacters(in: .whitespaces)
+                guard !name.isEmpty, !name.contains("/") else { return }
+                Task {
+                    do {
+                        try await s3Service.createFolder(named: name, prefix: s3Service.currentPrefix)
+                        await refreshFiles()
+                    } catch {
+                        newFolderErrorMessage = error.localizedDescription
+                        showNewFolderError = true
                     }
                 }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: { Text("Enter a name for the new folder.") }
+        .alert("Create Failed", isPresented: $showNewFolderError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(newFolderErrorMessage) }
+        .sheet(isPresented: $showBatchDownloadShare, onDismiss: onBatchDownloadShareDismiss) {
+            batchDownloadShareContent
+        }
+        .alert("Download Failed", isPresented: $showBatchDownloadError) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(batchDownloadError ?? "") }
+    }
+
+    private var navigationContent: some View {
+        VStack(spacing: 0) {
+            breadcrumbBar
+            mainContent
                 .onDrop(of: [.fileURL, .data], isTargeted: isConfigured ? $isDragTargeted : .constant(false)) { providers in
                     guard isConfigured else { return false }
                     Task { await handleDrop(providers: providers) }
                     return true
                 }
-                .overlay {
-                    if isDragTargeted {
-                        RoundedRectangle(cornerRadius: 12)
-                            .strokeBorder(Color.accentColor, lineWidth: 3)
-                            .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
-                            .overlay {
-                                VStack(spacing: 8) {
-                                    Image(systemName: "arrow.down.doc")
-                                        .font(.system(size: 36))
-                                    Text("Drop to upload")
-                                        .font(.headline)
-                                }
-                                .foregroundStyle(Color.accentColor)
-                            }
-                            .padding(8)
-                            .allowsHitTesting(false)
-                    }
-                }
+                .overlay { dragOverlay }
                 .navigationTitle("S3 Browser")
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        if isSelecting {
-                            HStack(spacing: 12) {
-                                Button("Cancel") {
-                                    isSelecting = false
-                                    selectedKeys.removeAll()
-                                }
-                                if selectedKeys.count == sortedItems.filter({ !$0.isFolder }).count {
-                                    Button("Deselect All") { selectedKeys.removeAll() }
-                                } else {
-                                    Button("Select All") {
-                                        selectedKeys = Set(sortedItems.compactMap { item -> String? in
-                                            if case .file(let o) = item { return o.key }
-                                            return nil
-                                        })
-                                    }
-                                }
-                            }
-                        } else {
-                            BucketPickerView(
-                                currentBucket: s3Service.currentBucket,
-                                availableBuckets: s3Service.availableBuckets,
-                                isLoading: s3Service.isLoading,
-                                onSelectBucket: { bucket in
-                                    Task {
-                                        do {
-                                            try await s3Service.switchBucket(bucket)
-                                            savedBucket = bucket
-                                            savedPrefix = ""
-                                        } catch {
-                                            logger.error("Failed to switch bucket: \(error.localizedDescription)")
-                                        }
-                                    }
-                                }
-                            )
-                        }
-                    }
+                    ToolbarItem(placement: .topBarLeading) { leadingToolbar }
+                    ToolbarItem(placement: .topBarTrailing) { trailingToolbar }
+                }
+        }
+        .task { await initialLoad() }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active, isConfigured else { return }
+            Task { await refreshFiles() }
+        }
+        .onChange(of: config) { _, newConfig in
+            Task {
+                try? await s3Service.updateConfig(newConfig)
+                savedPrefix = ""
+                savedBucket = ""
+                s3Service.currentPrefix = ""
+                s3Service.currentBucket = newConfig.bucketName
+                do { try await s3Service.fetchAvailableBuckets() } catch {
+                    logger.error("Failed to fetch buckets: \(error.localizedDescription)")
+                }
+                await refreshFiles()
+            }
+        }
+        .onChange(of: s3Service.currentPrefix) { _, _ in
+            isSelecting = false
+            selectedKeys.removeAll()
+        }
+        .onChange(of: s3Service.currentBucket) { _, _ in
+            isSelecting = false
+            selectedKeys.removeAll()
+        }
+        .onChange(of: selectedPhoto) { _, item in
+            guard let item else { return }
+            Task { await handlePhotoPickerItem(item) }
+        }
+        .searchable(text: $searchText, prompt: searchPrompt)
+        .safeAreaInset(edge: .bottom) { bottomStatusBar }
+        .photosPicker(
+            isPresented: $showPhotoPicker,
+            selection: $selectedPhoto,
+            matching: .any(of: [.images, .videos]),
+            photoLibrary: .shared()
+        )
+        .fileImporter(
+            isPresented: $showFilePicker,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: false
+        ) { result in
+            Task { await handleFileImport(result) }
+        }
+    }
 
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if isSelecting {
-                            HStack(spacing: 12) {
-                                if !selectedKeys.isEmpty {
-                                    Button(role: .destructive) {
-                                        showBulkDeleteConfirm = true
-                                    } label: {
-                                        Label("Delete (\(selectedKeys.count))", systemImage: "trash")
-                                    }
-                                    .disabled(isBulkDeleting)
-                                }
-                            }
-                        } else {
-                            HStack(spacing: 12) {
-                                if isConfigured && !s3Service.items.isEmpty {
-                                    Button("Select") { isSelecting = true }
-                                }
-                                if viewStyle == .grid {
-                                    Slider(value: $gridCardSize, in: 60...160, step: 10)
-                                        .frame(width: 80)
-                                }
-                                Menu {
-                                    filterMenuContent
-                                        .menuActionDismissBehavior(.disabled)
-                                    sortMenuContent
-                                    viewStyleMenuContent
-                                } label: {
-                                    Image(systemName: "line.3.horizontal.decrease.circle")
-                                }
-                                Menu {
-                                    Button {
-                                        showPhotoPicker = true
-                                    } label: {
-                                        Label("Photo or Video", systemImage: "photo")
-                                    }
-                                    Button {
-                                        showFilePicker = true
-                                    } label: {
-                                        Label("File", systemImage: "doc")
-                                    }
-                                    Divider()
-                                    Button {
-                                        newFolderName = ""
-                                        showNewFolderAlert = true
-                                    } label: {
-                                        Label("New Folder", systemImage: "folder.badge.plus")
-                                    }
-                                } label: {
-                                    Image(systemName: "plus")
-                                }
-                                .disabled(!isConfigured || isUploading)
-                            }
-                        }
+    @ViewBuilder
+    private var breadcrumbBar: some View {
+        if isConfigured && !s3Service.currentPrefix.isEmpty {
+            BreadcrumbView(
+                pathComponents: s3Service.getPathComponents(),
+                onTapIndex: { index in Task { try? await s3Service.navigateToBreadcrumb(index) } },
+                onTapRoot: {
+                    Task {
+                        s3Service.currentPrefix = ""
+                        try? await s3Service.listObjects()
                     }
                 }
-            }
-            .task {
-                if isConfigured {
-                    logger.info("Task started - bucket: \(config.bucketName)")
+            )
+        }
+    }
 
-                    // Fetch available buckets
-                    do {
-                        logger.debug("Fetching available buckets...")
-                        try await s3Service.fetchAvailableBuckets()
-                        logger.info("Successfully fetched \(s3Service.availableBuckets.count) buckets")
-                    } catch {
-                        logger.error("Failed to fetch buckets: \(error.localizedDescription)")
+    @ViewBuilder
+    private var dragOverlay: some View {
+        if isDragTargeted {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(Color.accentColor, lineWidth: 3)
+                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                .overlay {
+                    VStack(spacing: 8) {
+                        Image(systemName: "arrow.down.doc").font(.system(size: 36))
+                        Text("Drop to upload").font(.headline)
                     }
+                    .foregroundStyle(Color.accentColor)
+                }
+                .padding(8)
+                .allowsHitTesting(false)
+        }
+    }
 
-                    // Restore previous bucket if available, otherwise use configured bucket
-                    if !savedBucket.isEmpty {
-                        logger.debug("Switching to saved bucket: \(savedBucket)")
-                        do {
-                            try await s3Service.switchBucket(savedBucket)
-                            logger.debug("Successfully switched to saved bucket")
-                        } catch {
-                            logger.error("Failed to switch to saved bucket: \(error.localizedDescription)")
-                        }
-                    } else {
-                        logger.debug("Using configured bucket: \(config.bucketName)")
-                        s3Service.currentBucket = config.bucketName
+    @ViewBuilder
+    private var leadingToolbar: some View {
+        if isSelecting {
+            HStack(spacing: 12) {
+                Button("Cancel") {
+                    isSelecting = false
+                    selectedKeys.removeAll()
+                }
+                let fileCount = sortedItems.filter { !$0.isFolder }.count
+                if selectedKeys.count == fileCount {
+                    Button("Deselect All") { selectedKeys.removeAll() }
+                } else {
+                    Button("Select All") {
+                        selectedKeys = Set(sortedItems.compactMap { item -> String? in
+                            if case .file(let o) = item { return o.key }
+                            return nil
+                        })
                     }
-
-                    // Restore previous location (prefix)
-                    s3Service.currentPrefix = savedPrefix
-                    logger.debug("Refreshing files...")
-                    await refreshFiles()
-                    logger.info("Task completed - found \(s3Service.items.count) items")
                 }
             }
-            .onChange(of: scenePhase) { _, newPhase in
-                guard newPhase == .active, isConfigured else { return }
-                Task {
-                    await refreshFiles()
-                }
-            }
-            .onChange(of: config) { _, newConfig in
-                Task {
-                    try? await s3Service.updateConfig(newConfig)
-                    savedPrefix = ""
-                    savedBucket = ""
-                    s3Service.currentPrefix = ""
-                    s3Service.currentBucket = newConfig.bucketName
-
-                    // Fetch buckets again with new credentials
-                    do {
-                        try await s3Service.fetchAvailableBuckets()
-                    } catch {
-                        logger.error("Failed to fetch buckets: \(error.localizedDescription)")
-                    }
-
-                    await refreshFiles()
-                }
-            }
-            .onChange(of: s3Service.currentPrefix) { _, _ in
-                isSelecting = false
-                selectedKeys.removeAll()
-            }
-            .onChange(of: s3Service.currentBucket) { _, _ in
-                isSelecting = false
-                selectedKeys.removeAll()
-            }
-            .alert("Rename File", isPresented: .init(
-                get: { renameTarget != nil },
-                set: { if !$0 { renameTarget = nil } }
-            )) {
-                TextField("New filename", text: $renameText)
-                    .autocorrectionDisabled()
-                Button("Rename") {
-                    guard let file = renameTarget else { return }
-                    let newName = renameText.trimmingCharacters(in: .whitespaces)
-                    guard !newName.isEmpty else { renameTarget = nil; return }
-                    let dir = (file.key as NSString).deletingLastPathComponent
-                    let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
-                    Task { await renameFile(file, to: newKey) }
-                }
-                Button("Cancel", role: .cancel) { renameTarget = nil }
-            } message: {
-                if let file = renameTarget { Text(file.fileName) }
-            }
-            .alert("Rename Failed", isPresented: $showRenameError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(renameErrorMessage)
-            }
-            .sheet(item: $moveCopyTarget) { object in
-                PrefixPickerSheet(
-                    s3Service: s3Service,
-                    sourceBucket: s3Service.currentBucket,
-                    sourceObject: object,
-                    mode: moveCopyMode
-                ) { destPrefix in
-                    await performMoveCopy(object: object, destPrefix: destPrefix)
-                }
-            }
-            .alert("Operation Failed", isPresented: $showMoveCopyError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(moveCopyErrorMessage)
-            }
-            .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
-            .confirmationDialog(bulkDeleteTitle, isPresented: $showBulkDeleteConfirm, titleVisibility: .visible) {
-                Button(bulkDeleteButtonLabel, role: .destructive) {
-                    Task { await bulkDelete() }
-                }
-                Button("Cancel", role: .cancel) {}
-            }
-            .alert("New Folder", isPresented: $showNewFolderAlert) {
-                TextField("Folder name", text: $newFolderName)
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
-                Button("Create") {
-                    let name = newFolderName.trimmingCharacters(in: .whitespaces)
-                    guard !name.isEmpty, !name.contains("/") else { return }
+        } else {
+            BucketPickerView(
+                currentBucket: s3Service.currentBucket,
+                availableBuckets: s3Service.availableBuckets,
+                isLoading: s3Service.isLoading,
+                onSelectBucket: { bucket in
                     Task {
                         do {
-                            try await s3Service.createFolder(named: name, prefix: s3Service.currentPrefix)
-                            await refreshFiles()
+                            try await s3Service.switchBucket(bucket)
+                            savedBucket = bucket
+                            savedPrefix = ""
                         } catch {
-                            newFolderErrorMessage = error.localizedDescription
-                            showNewFolderError = true
+                            logger.error("Failed to switch bucket: \(error.localizedDescription)")
                         }
                     }
                 }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Enter a name for the new folder.")
-            }
-            .alert("Create Failed", isPresented: $showNewFolderError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(newFolderErrorMessage)
-            }
-            .searchable(text: $searchText, prompt: searchPrompt)
-            .safeAreaInset(edge: .bottom) {
-                if isUploading || uploadResult != nil {
-                    uploadStatusBar
-                }
-            }
-            .photosPicker(
-                isPresented: $showPhotoPicker,
-                selection: $selectedPhoto,
-                matching: .any(of: [.images, .videos]),
-                photoLibrary: .shared()
             )
-            .fileImporter(
-                isPresented: $showFilePicker,
-                allowedContentTypes: [.item],
-                allowsMultipleSelection: false
-            ) { result in
-                Task { await handleFileImport(result) }
+        }
+    }
+
+    @ViewBuilder
+    private var trailingToolbar: some View {
+        if isSelecting {
+            selectingTrailingToolbar
+        } else {
+            browsingTrailingToolbar
+        }
+    }
+
+    @ViewBuilder
+    private var selectingTrailingToolbar: some View {
+        if !selectedKeys.isEmpty {
+            HStack(spacing: 12) {
+                Button {
+                    Task { await batchDownload() }
+                } label: {
+                    Label("Download (\(selectedKeys.count))", systemImage: "arrow.down.to.line")
+                }
+                .disabled(isBatchDownloading || isBulkDeleting)
+                Button(role: .destructive) {
+                    showBulkDeleteConfirm = true
+                } label: {
+                    Label("Delete (\(selectedKeys.count))", systemImage: "trash")
+                }
+                .disabled(isBulkDeleting || isBatchDownloading)
             }
-            .onChange(of: selectedPhoto) { _, item in
-                guard let item else { return }
-                Task { await handlePhotoPickerItem(item) }
+        }
+    }
+
+    private var browsingTrailingToolbar: some View {
+        HStack(spacing: 12) {
+            if isConfigured && !s3Service.items.isEmpty {
+                Button("Select") { isSelecting = true }
             }
+            if viewStyle == .grid {
+                Slider(value: $gridCardSize, in: 60...160, step: 10).frame(width: 80)
+            }
+            Menu {
+                filterMenuContent.menuActionDismissBehavior(.disabled)
+                sortMenuContent
+                viewStyleMenuContent
+            } label: {
+                Image(systemName: "line.3.horizontal.decrease.circle")
+            }
+            Menu {
+                Button { showPhotoPicker = true } label: { Label("Photo or Video", systemImage: "photo") }
+                Button { showFilePicker = true } label: { Label("File", systemImage: "doc") }
+                Divider()
+                Button {
+                    newFolderName = ""
+                    showNewFolderAlert = true
+                } label: { Label("New Folder", systemImage: "folder.badge.plus") }
+            } label: {
+                Image(systemName: "plus")
+            }
+            .disabled(!isConfigured || isUploading)
         }
     }
 
@@ -580,6 +517,103 @@ struct BucketBrowserView: View {
                 }
             }
             .background(Color(.secondarySystemBackground))
+        }
+    }
+
+    // MARK: - Bottom status bars
+
+    @ViewBuilder
+    private var bottomStatusBar: some View {
+        if isBatchDownloading {
+            batchDownloadStatusBar
+        } else if isUploading || uploadResult != nil {
+            uploadStatusBar
+        }
+    }
+
+    @ViewBuilder
+    private var batchDownloadShareContent: some View {
+        if let urls = batchDownloadURLs {
+            MultiFileActivityView(urls: urls)
+        }
+    }
+
+    private func onBatchDownloadShareDismiss() {
+        batchDownloadURLs = nil
+        isSelecting = false
+        selectedKeys.removeAll()
+    }
+
+    private var batchDownloadStatusBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            VStack(spacing: 6) {
+                ProgressView(value: batchDownloadTotal > 0 ? Double(batchDownloadProgress) / Double(batchDownloadTotal) : 0)
+                    .progressViewStyle(.linear)
+                Text("Downloading \(batchDownloadProgress) / \(batchDownloadTotal)...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background(Color(.secondarySystemBackground))
+        }
+    }
+
+    // MARK: - Batch download
+
+    private func batchDownload() async {
+        let keys = Array(selectedKeys)
+        let bucket = s3Service.currentBucket
+        await MainActor.run {
+            isBatchDownloading = true
+            batchDownloadProgress = 0
+            batchDownloadTotal = keys.count
+        }
+
+        let cacheDir = FileManager.default.temporaryDirectory.appendingPathComponent("s3cache")
+        try? FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
+
+        var downloadedURLs: [URL] = []
+        var failedCount = 0
+
+        await withTaskGroup(of: (URL?, String).self) { group in
+            for key in keys {
+                group.addTask {
+                    do {
+                        let data = try await self.s3Service.downloadObject(key: key, bucket: bucket)
+                        let sanitized = key.replacingOccurrences(of: "/", with: "_")
+                        let dest = cacheDir.appendingPathComponent(sanitized)
+                        try data.write(to: dest)
+                        return (dest, key)
+                    } catch {
+                        self.logger.error("Batch download failed for \(key): \(error.localizedDescription)")
+                        return (nil, key)
+                    }
+                }
+            }
+            for await (url, _) in group {
+                await MainActor.run { batchDownloadProgress += 1 }
+                if let url {
+                    downloadedURLs.append(url)
+                } else {
+                    failedCount += 1
+                }
+            }
+        }
+
+        await MainActor.run {
+            isBatchDownloading = false
+            if downloadedURLs.isEmpty {
+                batchDownloadError = "All \(failedCount) file\(failedCount == 1 ? "" : "s") failed to download."
+                showBatchDownloadError = true
+            } else {
+                batchDownloadURLs = downloadedURLs
+                showBatchDownloadShare = true
+                if failedCount > 0 {
+                    logger.error("Batch download: \(failedCount) file(s) failed, \(downloadedURLs.count) succeeded")
+                }
+            }
         }
     }
 
@@ -731,6 +765,7 @@ struct BucketBrowserView: View {
             Button {
                 renameText = object.fileName
                 renameTarget = object
+                showRenameAlert = true
             } label: {
                 Label("Rename…", systemImage: "pencil")
             }
@@ -740,6 +775,41 @@ struct BucketBrowserView: View {
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+        }
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
+        if !isConfigured {
+            ContentUnavailableView(
+                "Configuration Required",
+                systemImage: "gear",
+                description: Text("Go to Settings to configure your S3 bucket and credentials")
+            )
+        } else if s3Service.isLoading {
+            VStack(spacing: 8) {
+                ProgressView()
+                Text(s3Service.loadingStatus.isEmpty ? "Loading..." : s3Service.loadingStatus)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if s3Service.items.isEmpty {
+            ScrollView {
+                ContentUnavailableView(
+                    "No Files",
+                    systemImage: "doc",
+                    description: Text("No files found in \(s3Service.currentBucket). Pull to refresh.")
+                )
+                .frame(maxWidth: .infinity, minHeight: 300)
+            }
+            .refreshable { await refreshFiles() }
+        } else if !searchText.isEmpty && sortedItems.isEmpty {
+            ContentUnavailableView.search(text: searchText)
+        } else if viewStyle == .grid {
+            gridContent
+        } else {
+            listContent
         }
     }
 
@@ -905,6 +975,29 @@ struct BucketBrowserView: View {
         }
         let last = s3Service.currentPrefix.split(separator: "/").last.map(String.init)
         return "Search in \(last ?? s3Service.currentPrefix)"
+    }
+
+    private func initialLoad() async {
+        guard isConfigured else { return }
+        logger.info("Task started - bucket: \(config.bucketName)")
+        do {
+            try await s3Service.fetchAvailableBuckets()
+            logger.info("Successfully fetched \(s3Service.availableBuckets.count) buckets")
+        } catch {
+            logger.error("Failed to fetch buckets: \(error.localizedDescription)")
+        }
+        if !savedBucket.isEmpty {
+            do {
+                try await s3Service.switchBucket(savedBucket)
+            } catch {
+                logger.error("Failed to switch to saved bucket: \(error.localizedDescription)")
+            }
+        } else {
+            s3Service.currentBucket = config.bucketName
+        }
+        s3Service.currentPrefix = savedPrefix
+        await refreshFiles()
+        logger.info("Task completed - found \(s3Service.items.count) items")
     }
 
     private func refreshFiles() async {

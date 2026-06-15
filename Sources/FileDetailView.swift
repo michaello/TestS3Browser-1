@@ -1363,3 +1363,19 @@ struct ActivityView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
+
+/// Wraps UIActivityViewController for sharing multiple files at once.
+struct MultiFileActivityView: UIViewControllerRepresentable {
+    let urls: [URL]
+    var onDismiss: (() -> Void)? = nil
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let vc = UIActivityViewController(activityItems: urls, applicationActivities: nil)
+        vc.completionWithItemsHandler = { _, _, _, _ in
+            onDismiss?()
+        }
+        return vc
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
