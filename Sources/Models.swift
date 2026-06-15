@@ -148,6 +148,8 @@ struct S3ObjectMetadata {
     let cacheControl: String?
     let contentEncoding: String?
     let versionId: String?
+    /// Expiration date parsed from the x-amz-expiration header, or nil if none is set.
+    let expirationDate: String?
     /// User-defined metadata keys (x-amz-meta-* headers), with the "x-amz-meta-" prefix stripped.
     let userMetadata: [String: String]
 }

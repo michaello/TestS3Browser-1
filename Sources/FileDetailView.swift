@@ -17,12 +17,21 @@ struct FileDetailView: View {
     @State private var isExporting = false
     @State private var showExportError = false
     @State private var exportErrorMessage = ""
+    @State private var isCopyingDataURL = false
+    @State private var dataURLCopyDone = false
+    @State private var isDownloadingToCache = false
+    @State private var cachedFileURL: URL? = nil
 
     enum FileContent {
         case text(String)
         case image(UIImage)
         case video(URL)
         case html(String)
+    }
+
+    private var isImageObject: Bool {
+        let ext = (object.key as NSString).pathExtension.lowercased()
+        return ["jpg", "jpeg", "png", "gif", "webp"].contains(ext)
     }
 
     var body: some View {
@@ -40,6 +49,13 @@ struct FileDetailView: View {
             if let url = exportURL {
                 ActivityView(url: url) {
                     exportURL = nil
+                }
+            }
+        }
+        .sheet(isPresented: Binding(get: { cachedFileURL != nil }, set: { if !$0 { cachedFileURL = nil } })) {
+            if let url = cachedFileURL {
+                ActivityView(url: url) {
+                    cachedFileURL = nil
                 }
             }
         }
@@ -75,6 +91,12 @@ struct FileDetailView: View {
                     } label: {
                         Label("Share Link…", systemImage: "square.and.arrow.up")
                     }
+                    Button {
+                        Task { await openFromCache() }
+                    } label: {
+                        Label("Open in…", systemImage: "arrow.down.circle")
+                    }
+                    .disabled(isDownloadingToCache)
                     Button {
                         Task { await prepareExport() }
                     } label: {
@@ -144,6 +166,11 @@ struct FileDetailView: View {
                 if let etag = meta.etag {
                     MetadataRow(label: "ETag", value: etag)
                 }
+                if let exp = meta.expirationDate {
+                    MetadataRow(label: "Expires", value: exp)
+                } else {
+                    MetadataRow(label: "Expires", value: "No expiry")
+                }
                 if !meta.userMetadata.isEmpty {
                     Divider()
                     Text("Custom Metadata")
@@ -203,6 +230,9 @@ struct FileDetailView: View {
                         TextContentView(text: text)
                     case .image(let image):
                         ImageContentView(image: image)
+                        if isImageObject {
+                            copyAsDataURLButton(image: image)
+                        }
                     case .video(let url):
                         VideoContentView(url: url, fileName: object.fileName, fileSize: object.formattedSize)
                     case .html(let html):
@@ -217,6 +247,17 @@ struct FileDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 16) {
+                    if isDownloadingToCache {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                    } else {
+                        Button {
+                            Task { await openFromCache() }
+                        } label: {
+                            Image(systemName: "arrow.down.circle")
+                        }
+                    }
+
                     Button {
                         Task { await prepareExport() }
                     } label: {
@@ -275,6 +316,68 @@ struct FileDetailView: View {
         return String(format: "%.1f MB", mb)
     }
 
+    @ViewBuilder
+    private func copyAsDataURLButton(image: UIImage) -> some View {
+        HStack {
+            if isCopyingDataURL {
+                ProgressView()
+                    .padding(.leading, 4)
+                Text("Encoding…")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if dataURLCopyDone {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                Text("Copied!")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Button {
+                    Task { await copyAsDataURL(image: image) }
+                } label: {
+                    Label("Copy as Data URL", systemImage: "doc.on.clipboard")
+                        .font(.caption)
+                }
+                .buttonStyle(.bordered)
+            }
+            Spacer()
+        }
+        .animation(.easeInOut(duration: 0.2), value: isCopyingDataURL)
+        .animation(.easeInOut(duration: 0.2), value: dataURLCopyDone)
+    }
+
+    private func copyAsDataURL(image: UIImage) async {
+        isCopyingDataURL = true
+        defer { isCopyingDataURL = false }
+
+        let ext = (object.key as NSString).pathExtension.lowercased()
+        let mimeType: String
+        switch ext {
+        case "jpg", "jpeg": mimeType = "image/jpeg"
+        case "png":         mimeType = "image/png"
+        case "gif":         mimeType = "image/gif"
+        case "webp":        mimeType = "image/webp"
+        default:            mimeType = "image/png"
+        }
+
+        let data: Data
+        if ext == "png" {
+            data = image.pngData() ?? Data()
+        } else {
+            data = image.jpegData(compressionQuality: 1.0) ?? Data()
+        }
+
+        let b64 = data.base64EncodedString()
+        let dataURL = "data:\(mimeType);base64,\(b64)"
+        await MainActor.run {
+            UIPasteboard.general.string = dataURL
+            dataURLCopyDone = true
+        }
+
+        try? await Task.sleep(nanoseconds: 1_500_000_000)
+        await MainActor.run { dataURLCopyDone = false }
+    }
+
     private func prepareExport() async {
         isExporting = true
         defer { isExporting = false }
@@ -309,6 +412,33 @@ struct FileDetailView: View {
                 showExportError = true
             }
         }
+    }
+
+    private var cacheFileURL: URL {
+        let sanitized = object.key.replacingOccurrences(of: "/", with: "_")
+        return FileManager.default.temporaryDirectory
+            .appendingPathComponent("s3cache")
+            .appendingPathComponent(sanitized)
+    }
+
+    private func openFromCache() async {
+        isDownloadingToCache = true
+        defer { isDownloadingToCache = false }
+
+        let dest = cacheFileURL
+        if !FileManager.default.fileExists(atPath: dest.path) {
+            do {
+                try FileManager.default.createDirectory(
+                    at: dest.deletingLastPathComponent(),
+                    withIntermediateDirectories: true
+                )
+                let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
+                try data.write(to: dest)
+            } catch {
+                return
+            }
+        }
+        await MainActor.run { cachedFileURL = dest }
     }
 
     private func loadMetadata() async {

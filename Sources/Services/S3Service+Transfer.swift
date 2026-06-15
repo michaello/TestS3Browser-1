@@ -294,8 +294,28 @@ extension S3Service {
             cacheControl: output.cacheControl,
             contentEncoding: output.contentEncoding,
             versionId: output.versionId,
+            expirationDate: parseExpirationDate(output.expiration),
             userMetadata: output.metadata ?? [:]
         )
+    }
+
+    /// Parses the `x-amz-expiration` header value into a human-readable date string.
+    /// The header looks like: `expiry-date="Thu, 01 Jan 2026 00:00:00 GMT", rule-id="..."`.
+    /// Returns nil when the header is absent or the date cannot be parsed.
+    private func parseExpirationDate(_ header: String?) -> String? {
+        guard let header else { return nil }
+        // Extract the value inside expiry-date="..."
+        guard let start = header.range(of: "expiry-date=\""),
+              let end = header[start.upperBound...].range(of: "\"") else { return nil }
+        let rawDate = String(header[start.upperBound..<end.lowerBound])
+        let parser = DateFormatter()
+        parser.locale = Locale(identifier: "en_US_POSIX")
+        parser.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+        guard let date = parser.date(from: rawDate) else { return rawDate }
+        let display = DateFormatter()
+        display.dateStyle = .medium
+        display.timeStyle = .none
+        return display.string(from: date)
     }
 
     /// Uploads an image to the dump folder with timestamp
