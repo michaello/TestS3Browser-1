@@ -21,6 +21,10 @@ struct PrefixBrowserView: View {
     @State private var nextToken: String? = nil
     @State private var errorMessage: String? = nil
 
+    // Delete state
+    @State private var showDeleteError = false
+    @State private var deleteErrorMessage = ""
+
     // Upload state
     @State private var showUploadMenu = false
     @State private var showFilePicker = false
@@ -72,6 +76,13 @@ struct PrefixBrowserView: View {
                                 FileDetailView(object: object, service: s3Service)
                             } label: {
                                 FileRow(object: object)
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    Task { await deleteItem(.file(object)) }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
                     }
@@ -125,7 +136,28 @@ struct PrefixBrowserView: View {
             guard let item else { return }
             Task { await handlePhotoPickerItem(item) }
         }
+        .alert("Delete Failed", isPresented: $showDeleteError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(deleteErrorMessage)
+        }
         .task { await load() }
+    }
+
+    // MARK: - Delete
+
+    private func deleteItem(_ item: S3Item) async {
+        guard case .file(let object) = item else { return }
+        do {
+            try await s3Service.deleteObject(key: object.key, bucket: bucket)
+            items.removeAll { $0.id == item.id }
+        } catch {
+            logger.error("Delete failed for \(object.key): \(error.localizedDescription)")
+            await MainActor.run {
+                deleteErrorMessage = "Could not delete \(object.fileName): \(error.localizedDescription)"
+                showDeleteError = true
+            }
+        }
     }
 
     // MARK: - Upload entry point
