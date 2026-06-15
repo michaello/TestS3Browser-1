@@ -104,5 +104,13 @@ struct TestS3BrowserShortcuts: AppShortcutsProvider {
             shortTitle: "Download S3 File",
             systemImageName: "arrow.down.circle"
         )
+        AppShortcut(
+            intent: DeleteFileIntent(),
+            phrases: [
+                "Delete S3 file with \(.applicationName)"
+            ],
+            shortTitle: "Delete S3 File",
+            systemImageName: "trash"
+        )
     }
 }
