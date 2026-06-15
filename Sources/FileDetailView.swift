@@ -13,6 +13,10 @@ struct FileDetailView: View {
     @State private var showingDetails = false
     @State private var showingShareSheet = false
     @State private var objectMetadata: S3ObjectMetadata? = nil
+    @State private var exportURL: URL? = nil
+    @State private var isExporting = false
+    @State private var showExportError = false
+    @State private var exportErrorMessage = ""
 
     enum FileContent {
         case text(String)
@@ -31,6 +35,18 @@ struct FileDetailView: View {
         }
         .sheet(isPresented: $showingShareSheet) {
             SharePresignedURLSheet(object: object, s3Service: service)
+        }
+        .sheet(isPresented: Binding(get: { exportURL != nil }, set: { if !$0 { exportURL = nil } })) {
+            if let url = exportURL {
+                ActivityView(url: url) {
+                    exportURL = nil
+                }
+            }
+        }
+        .alert("Export Failed", isPresented: $showExportError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(exportErrorMessage)
         }
     }
 
@@ -59,6 +75,12 @@ struct FileDetailView: View {
                     } label: {
                         Label("Share Link…", systemImage: "square.and.arrow.up")
                     }
+                    Button {
+                        Task { await prepareExport() }
+                    } label: {
+                        Label("Save to Files…", systemImage: "arrow.down.doc")
+                    }
+                    .disabled(isExporting)
                     Button {
                         showingDetails = true
                     } label: {
@@ -194,10 +216,19 @@ struct FileDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showingShareSheet = true
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
+                HStack(spacing: 16) {
+                    Button {
+                        Task { await prepareExport() }
+                    } label: {
+                        Image(systemName: "arrow.down.doc")
+                    }
+                    .disabled(isExporting)
+
+                    Button {
+                        showingShareSheet = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
                 }
             }
         }
@@ -242,6 +273,42 @@ struct FileDetailView: View {
         }
         let mb = kb / 1024.0
         return String(format: "%.1f MB", mb)
+    }
+
+    private func prepareExport() async {
+        isExporting = true
+        defer { isExporting = false }
+
+        do {
+            let data: Data
+            switch fileContent {
+            case .text(let text):
+                data = Data(text.utf8)
+            case .image(let image):
+                data = image.pngData() ?? Data()
+            case .video(let url):
+                data = try Data(contentsOf: url)
+            case .html(let html):
+                data = Data(html.utf8)
+            case nil:
+                data = try await service.downloadObject(key: object.key, bucket: object.bucket)
+            }
+
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString)
+                .appendingPathComponent(object.fileName)
+            try FileManager.default.createDirectory(
+                at: tempURL.deletingLastPathComponent(),
+                withIntermediateDirectories: true
+            )
+            try data.write(to: tempURL)
+            await MainActor.run { exportURL = tempURL }
+        } catch {
+            await MainActor.run {
+                exportErrorMessage = error.localizedDescription
+                showExportError = true
+            }
+        }
     }
 
     private func loadMetadata() async {
@@ -827,4 +894,20 @@ struct MetadataRow: View {
                 .lineLimit(2)
         }
     }
+}
+
+/// Wraps UIActivityViewController so the user can save a file to Files, AirDrop it, etc.
+struct ActivityView: UIViewControllerRepresentable {
+    let url: URL
+    var onDismiss: (() -> Void)? = nil
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        vc.completionWithItemsHandler = { _, _, _, _ in
+            onDismiss?()
+        }
+        return vc
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

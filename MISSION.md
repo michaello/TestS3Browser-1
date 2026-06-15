@@ -468,3 +468,22 @@ Commit: `5e1a488` feat: add starred/favorited files
   `.contextMenu` on the `NavigationLink` / `Button`.
 
 Commit: `d66ba4f` feat: add grid view mode to BucketBrowserView
+
+## Phase 22 - Save to Files export from FileDetailView (DONE)
+
+- Added `@State private var exportURL: URL?` and `@State private var isExporting: Bool`
+  to `FileDetailView`. When the user taps "Save to Files…", `prepareExport()` writes the
+  file bytes to a uniquely-named temp file (`FileManager.default.temporaryDirectory /
+  UUID-filename`) and sets `exportURL`, which drives a `.fileExporter` modifier that
+  presents the system document picker so the user can choose any Files location.
+- For file types where content is already loaded (`fileContent`), bytes are produced
+  locally (text UTF-8, image PNG, video temp-file URL, HTML UTF-8) with no extra network
+  call. For unknown types the raw bytes are downloaded fresh.
+- The "Save to Files…" action (icon `arrow.down.doc`) appears:
+  - In the `standardDetailView` trailing toolbar as a second button next to "Share Link".
+  - In the `htmlPrimaryView` "…" menu alongside the existing "Share Link…" and
+    "File Details" items.
+- Export errors surface in a "Export Failed" alert. Temp files are written with the
+  object's original filename so the Files app shows the correct name.
+
+Commit: `<hash>` feat: add Save to Files export to FileDetailView
