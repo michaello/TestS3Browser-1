@@ -571,4 +571,4 @@ Commit: `0302368` feat: add move/copy and delete error alert to BucketBrowserVie
   existing upload `+` button. Active sort shows a checkmark.
 - `searchText` is not cleared on load so it persists while the user browses the same level.
 
-Commit: `<hash>` feat: add search and sort to PrefixBrowserView
+Commit: `f308b81` feat: add search and sort to PrefixBrowserView
