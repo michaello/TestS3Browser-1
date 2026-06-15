@@ -626,4 +626,4 @@ Commit: `9bcff10` feat: batch select and bulk delete in BucketBrowserView
 - Selection cleared on each `load()` call so navigating back and refreshing starts fresh.
 - `viewStyleToggle` and `sortMenuButton` hidden during selection to reduce toolbar crowding.
 
-Commit: `<hash>` feat: batch select and bulk delete in PrefixBrowserView
+Commit: `31f48d5` feat: batch select and bulk delete in PrefixBrowserView
