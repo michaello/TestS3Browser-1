@@ -24,6 +24,11 @@ struct RecentFilesView: View {
     /// Keys of files that are new since the last time the screen was visited
     @State private var newFileKeys: Set<String> = []
     @State private var searchText = ""
+    /// The file currently being renamed; drives the rename alert.
+    @State private var renameTarget: S3Object?
+    @State private var renameText = ""
+    @State private var showRenameError = false
+    @State private var renameErrorMessage = ""
 
     enum ViewMode {
         case list
@@ -100,6 +105,31 @@ struct RecentFilesView: View {
             Task { await handleConfigChange(newConfig) }
         }
         .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
+        .alert("Rename File", isPresented: .init(
+            get: { renameTarget != nil },
+            set: { if !$0 { renameTarget = nil } }
+        )) {
+            TextField("New filename", text: $renameText)
+                .autocorrectionDisabled()
+            Button("Rename") {
+                guard let file = renameTarget else { return }
+                let newName = renameText.trimmingCharacters(in: .whitespaces)
+                guard !newName.isEmpty else { renameTarget = nil; return }
+                let dir = (file.key as NSString).deletingLastPathComponent
+                let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
+                Task { await renameFile(file, to: newKey) }
+            }
+            Button("Cancel", role: .cancel) { renameTarget = nil }
+        } message: {
+            if let file = renameTarget {
+                Text(file.fileName)
+            }
+        }
+        .alert("Rename Failed", isPresented: $showRenameError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(renameErrorMessage)
+        }
         .confirmationDialog(
             "Clear all recent files?",
             isPresented: $showClearAllConfirm,
@@ -225,6 +255,13 @@ struct RecentFilesView: View {
             showCopyToast("Path copied")
         } label: {
             Label("Copy Path", systemImage: "doc.on.doc")
+        }
+
+        Button {
+            renameText = file.fileName
+            renameTarget = file
+        } label: {
+            Label("Rename", systemImage: "pencil")
         }
 
         Divider()
@@ -464,6 +501,20 @@ struct RecentFilesView: View {
         Task {
             try? await Task.sleep(nanoseconds: 1_500_000_000)
             await MainActor.run { copyToast = nil }
+        }
+    }
+
+    private func renameFile(_ file: S3Object, to newKey: String) async {
+        renameTarget = nil
+        do {
+            try await s3Service.renameObject(key: file.key, to: newKey, bucket: file.bucket)
+            logger.info("Renamed \(file.key) -> \(newKey)")
+        } catch {
+            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
+            await MainActor.run {
+                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
+                showRenameError = true
+            }
         }
     }
 

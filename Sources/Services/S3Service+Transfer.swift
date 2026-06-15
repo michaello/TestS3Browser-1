@@ -132,6 +132,49 @@ extension S3Service {
         return key
     }
 
+    /// Renames an S3 object by copying it to the new key then deleting the original.
+    /// S3 has no native rename, so this is a copy-then-delete. Both steps must succeed;
+    /// if the delete fails the copy is left in place and the error is re-thrown.
+    /// - Parameters:
+    ///   - key: Existing object key
+    ///   - newKey: Destination key (must be in the same bucket)
+    ///   - bucket: Bucket containing the object (defaults to currentBucket)
+    func renameObject(key: String, to newKey: String, bucket: String? = nil) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let targetBucket = bucket ?? currentBucket
+        let copySource = "\(targetBucket)/\(key)"
+
+        let copyInput = CopyObjectInput(
+            bucket: targetBucket,
+            copySource: copySource,
+            key: newKey
+        )
+        _ = try await client.copyObject(input: copyInput)
+
+        let deleteInput = DeleteObjectInput(bucket: targetBucket, key: key)
+        _ = try await client.deleteObject(input: deleteInput)
+
+        // Update the in-memory list so the UI reflects the new key without a reload.
+        await MainActor.run {
+            if let idx = recentFiles.firstIndex(where: { $0.key == key && ($0.bucket ?? currentBucket) == targetBucket }) {
+                var updated = recentFiles[idx]
+                updated = S3Object(
+                    key: newKey,
+                    size: updated.size,
+                    lastModified: updated.lastModified,
+                    etag: updated.etag,
+                    bucket: updated.bucket
+                )
+                recentFiles[idx] = updated
+                persistRecentFiles()
+            }
+        }
+
+        logger.info("Renamed \(key) -> \(newKey) in \(targetBucket)")
+    }
+
     /// Uploads an image to the dump folder with timestamp
     /// - Parameters:
     ///   - imageData: JPEG or PNG image data

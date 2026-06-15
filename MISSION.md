@@ -196,4 +196,19 @@ Commit: `3e1b4d6` intents: add SearchFileIntent Siri shortcut
   state) when the search query is active, and the existing "No Matching Files" view when
   only the type filter is active.
 
-Commit: `ui: add in-app search bar to RecentFilesView`
+Commit: `3ff1b1f` ui: add in-app search bar to RecentFilesView
+
+## Phase 7 - File rename in RecentFilesView (DONE)
+
+- Added `S3Service+Transfer.renameObject(key:to:bucket:)`: copies the object to the new
+  key via `CopyObjectInput`, deletes the original via `DeleteObjectInput`, then patches
+  the in-memory `recentFiles` array and calls `persistRecentFiles()` so the UI updates
+  without a network reload. S3 has no native rename; copy-then-delete is the only option.
+- `RecentFilesView` context menu gained a "Rename" item (pencil icon) that populates a
+  `TextField` alert pre-filled with the current filename. On confirm the new filename is
+  joined back onto the original key's directory prefix so the object stays in its folder.
+- Rename failure shows a separate "Rename Failed" alert with the error message, matching
+  the delete-error alert pattern.
+- Both list and grid rows get the rename item via the shared `deleteContextMenu` builder.
+
+Commit: `feat: add file rename to RecentFilesView`
