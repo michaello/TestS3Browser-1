@@ -245,3 +245,15 @@ Commit: `8014888` feat: add bulk multi-select delete to RecentFilesView
   tapping again (or tapping "All") clears it. The bar is hidden when no tags are in use.
 
 Commit: `2864ecf` feat: add file tagging to RecentFilesView
+
+## Phase 10 - Sort controls in RecentFilesView (DONE)
+
+- Added `SortOrder` enum (nested in `RecentFilesView`) with five cases:
+  `newestFirst`, `oldestFirst`, `nameAZ`, `nameZA`, `bucket`.
+- `@State private var sortOrder: SortOrder = .newestFirst` — in-memory only, not persisted.
+- `filteredRecentFiles` applies the sort as a final step after type, tag, and search filters.
+  Nil `lastModified` dates sort as `.distantPast`; bucket sort falls back to empty string.
+- Sort menu button (`arrow.up.arrow.down` icon) added to the trailing toolbar (left of the
+  filter menu) via a new `sortMenu` computed var. Active option shows a checkmark.
+
+Commit: `1c1b25a` feat: add sort controls to RecentFilesView
