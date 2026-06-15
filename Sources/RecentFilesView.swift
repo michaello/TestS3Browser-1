@@ -525,64 +525,57 @@ struct RecentFilesView: View {
         }
     }
 
-    /// Horizontally scrolling tag/star filter bar. Hidden when there are no tags and no starred files.
+    /// Tag filter bar: a Picker for tag selection plus a Starred toggle.
+    /// Hidden when there are no tags and no starred files.
     @ViewBuilder
     private var tagFilterBar: some View {
         let tags = tagStore.allTags
         let hasStarred = !starStore.starredKeys.isEmpty
         if !tags.isEmpty || hasStarred {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    tagFilterChip(label: "All", value: nil)
-                    if hasStarred {
-                        starredChip
+            HStack(spacing: 12) {
+                if !tags.isEmpty {
+                    Picker("Tag", selection: $tagFilter) {
+                        Text("All tags").tag(String?.none)
+                        ForEach(tags, id: \.self) { tag in
+                            HStack {
+                                TagChip(tag: tag)
+                                Text(tag)
+                            }
+                            .tag(Optional(tag))
+                        }
                     }
-                    ForEach(tags, id: \.self) { tag in
-                        tagFilterChip(label: tag, value: tag)
+                    .pickerStyle(.menu)
+                    .onChange(of: tagFilter) { _, _ in
+                        if tagFilter != nil { showOnlyStarred = false }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+
+                if hasStarred {
+                    Button {
+                        showOnlyStarred.toggle()
+                        if showOnlyStarred { tagFilter = nil }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: showOnlyStarred ? "star.fill" : "star")
+                                .font(.caption)
+                            Text("Starred")
+                                .font(.subheadline)
+                                .fontWeight(showOnlyStarred ? .semibold : .regular)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(showOnlyStarred ? Color.yellow.opacity(0.85) : Color(.secondarySystemFill), in: Capsule())
+                        .foregroundStyle(showOnlyStarred ? Color.black : Color.primary)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                Spacer()
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
             .background(.bar)
         }
-    }
-
-    private var starredChip: some View {
-        Button {
-            showOnlyStarred.toggle()
-            if showOnlyStarred { tagFilter = nil }
-        } label: {
-            HStack(spacing: 4) {
-                Image(systemName: showOnlyStarred ? "star.fill" : "star")
-                    .font(.caption)
-                Text("Starred")
-                    .font(.subheadline)
-                    .fontWeight(showOnlyStarred ? .semibold : .regular)
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(showOnlyStarred ? Color.yellow.opacity(0.85) : Color(.secondarySystemFill), in: Capsule())
-            .foregroundStyle(showOnlyStarred ? Color.black : Color.primary)
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func tagFilterChip(label: String, value: String?) -> some View {
-        let isActive = tagFilter == value && !showOnlyStarred
-        return Button {
-            tagFilter = isActive ? nil : value
-            showOnlyStarred = false
-        } label: {
-            Text(label)
-                .font(.subheadline)
-                .fontWeight(isActive ? .semibold : .regular)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isActive ? Color.accentColor : Color(.secondarySystemFill), in: Capsule())
-                .foregroundStyle(isActive ? Color.white : Color.primary)
-        }
-        .buttonStyle(.plain)
     }
 
     private var sortMenu: some View {
