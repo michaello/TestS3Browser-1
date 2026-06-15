@@ -829,3 +829,30 @@ Commit: `a58f009` feat: add batch download to Files app in BucketBrowserView
   `AccessControlListNotSupported`; this is caught and shown as "ACLs disabled on this bucket".
 
 Commit: `0865900` feat: add object ACL viewer to FileDetailView
+
+## Phase 43 - Upload queue with retry support (DONE)
+
+- `Sources/UploadQueueManager.swift`: `@globalActor UploadQueueActor` owns a shared
+  `UploadQueueManager` (`@Observable final class`). Each pending upload is an `UploadItem`
+  (`Identifiable`, `@Observable`) with `id: UUID`, `filename: String`, `key: String`,
+  `bucket: String`, `contentType: String`, `data: Data`, `state: UploadItemState`
+  (`.pending`, `.uploading(progress: Double)`, `.done`, `.failed(String)`), and
+  `retryCount: Int`. `UploadQueueManager` exposes `items: [UploadItem]`, `pendingCount: Int`,
+  `failedCount: Int`, and `activeCount: Int`. `enqueue(_:)` appends an item and immediately
+  calls `processNext()`. `processNext()` finds the first `.pending` item, sets it to
+  `.uploading(0)`, calls `s3Service.uploadObject(data:key:contentType:onProgress:)`, then
+  marks `.done` or `.failed`. After each item completes, calls `processNext()` again (serial
+  queue). `retry(id:)` resets a `.failed` item to `.pending` and calls `processNext()`.
+  `removeCompleted()` drops all `.done` items.
+- `Sources/UploadQueueSheet.swift`: SwiftUI sheet view showing the queue. A `List` of
+  `UploadItem` rows: filename, key truncated to last component, state badge (pending gray,
+  uploading spinner + %, done green checkmark, failed red x with error message). Failed rows
+  get a "Retry" button. A "Clear Done" toolbar button calls `removeCompleted()`. Empty state
+  shows `ContentUnavailableView`. The existing upload flows in `BucketBrowserView` and
+  `PrefixBrowserView` continue to work unchanged.
+- `ContentView.swift`: added `@State private var showUploadQueue = false`. A toolbar overlay
+  button (bell or tray icon) visible when the queue has pending or active items shows a badge
+  with `pendingCount + activeCount`. Tapping opens `UploadQueueSheet` as a `.sheet`. The
+  queue manager instance is passed as an `@Environment` value so child views can enqueue.
+
+Commit: `807d2e1` feat: add upload queue with retry support
