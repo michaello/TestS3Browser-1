@@ -754,4 +754,4 @@ Commit: `c78d395` feat: add object version browser to FileDetailView
 - After a successful change, `loadMetadata()` is called to refresh the Storage Class row in the
   metadata card.
 
-Commit: `<hash>` feat: add change-storage-class action to FileDetailView
+Commit: `c2da97a` feat: add change-storage-class action to FileDetailView
