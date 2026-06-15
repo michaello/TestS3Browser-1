@@ -28,6 +28,8 @@ struct RecentFilesView: View {
     /// Keys of files that are new since the last time the screen was visited
     @State private var newFileKeys: Set<String> = []
     @State private var searchText = ""
+    /// The file whose presigned-URL share sheet is open.
+    @State private var shareTarget: S3Object? = nil
     /// The file currently being renamed; drives the rename alert.
     @State private var renameTarget: S3Object?
     @State private var renameText = ""
@@ -155,6 +157,9 @@ struct RecentFilesView: View {
         }
         .onChange(of: config) { _, newConfig in
             Task { await handleConfigChange(newConfig) }
+        }
+        .sheet(item: $shareTarget) { file in
+            SharePresignedURLSheet(object: file, s3Service: s3Service)
         }
         .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
         .alert("Rename File", isPresented: .init(
@@ -307,9 +312,9 @@ struct RecentFilesView: View {
                     .contextMenu { deleteContextMenu(for: file) }
                     .swipeActions(edge: .leading) {
                         Button {
-                            copyURL(for: file)
+                            shareTarget = file
                         } label: {
-                            Label("Copy URL", systemImage: "link")
+                            Label("Share Link", systemImage: "square.and.arrow.up")
                         }
                         .tint(.blue)
                     }
@@ -407,9 +412,9 @@ struct RecentFilesView: View {
     @ViewBuilder
     private func deleteContextMenu(for file: S3Object) -> some View {
         Button {
-            copyURL(for: file)
+            shareTarget = file
         } label: {
-            Label("Copy Link (1 day)", systemImage: "link")
+            Label("Share Link…", systemImage: "square.and.arrow.up")
         }
 
         Button {

@@ -11,6 +11,7 @@ struct FileDetailView: View {
     @State private var error: String?
     @State private var downloadedBytes: Int64 = 0
     @State private var showingDetails = false
+    @State private var showingShareSheet = false
 
     enum FileContent {
         case text(String)
@@ -26,6 +27,9 @@ struct FileDetailView: View {
             } else {
                 standardDetailView
             }
+        }
+        .sheet(isPresented: $showingShareSheet) {
+            SharePresignedURLSheet(object: object, s3Service: service)
         }
     }
 
@@ -49,6 +53,11 @@ struct FileDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
+                    Button {
+                        showingShareSheet = true
+                    } label: {
+                        Label("Share Link…", systemImage: "square.and.arrow.up")
+                    }
                     Button {
                         showingDetails = true
                     } label: {
@@ -140,6 +149,15 @@ struct FileDetailView: View {
         }
         .navigationTitle(object.fileName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showingShareSheet = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
         .task {
             await loadFile()
         }
