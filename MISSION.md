@@ -738,4 +738,4 @@ Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same c
   ID, "LATEST" badge, relative date, size, and a "Restore" button (hidden on the latest). Tapping
   "Restore" fires a `confirmationDialog` before calling `restoreVersion`, then refreshes the list.
 
-Commit: `<hash>` feat: add object version browser to FileDetailView
+Commit: `c78d395` feat: add object version browser to FileDetailView
