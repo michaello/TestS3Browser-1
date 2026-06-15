@@ -292,3 +292,17 @@ Commit: `dda02e3` feat: add folder/prefix navigation to RecentFilesView
 - On success, the listing reloads automatically so the new file appears immediately.
 
 Commit: `52baa67` feat: add file upload to folder browser
+
+## Phase 13 - Pagination in prefix browser (DONE)
+
+- `S3Service.listPrefix(_:bucket:continuationToken:)` in `S3Service+Transfer.swift` gained
+  a `continuationToken` parameter (nil = first page) and now returns `(items: [S3Item],
+  nextToken: String?)` instead of `[S3Item]`. A non-nil `nextToken` means more pages exist.
+- `PrefixBrowserView` gained `@State private var nextToken: String?` and `isLoadingMore`.
+  `load()` resets both and fetches page 1. When `nextToken` is non-nil, a "Load more"
+  button row appears at the bottom of the List; tapping it calls `loadMore()`, which appends
+  the next page and updates `nextToken`. A `ProgressView` spinner replaces the button while
+  the page request is in flight.
+- Pull-to-refresh still calls `load()`, which resets pagination from the beginning.
+
+Commit: `3c67c1c` feat: add pagination to prefix browser
