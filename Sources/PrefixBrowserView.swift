@@ -25,6 +25,12 @@ struct PrefixBrowserView: View {
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
 
+    // Move/copy state
+    @State private var moveCopyTarget: S3Object? = nil
+    @State private var moveCopyMode: PrefixPickerSheet.Mode = .copy
+    @State private var showMoveCopyError = false
+    @State private var moveCopyErrorMessage = ""
+
     // Upload state
     @State private var showUploadMenu = false
     @State private var showFilePicker = false
@@ -76,6 +82,26 @@ struct PrefixBrowserView: View {
                                 FileDetailView(object: object, service: s3Service)
                             } label: {
                                 FileRow(object: object)
+                            }
+                            .contextMenu {
+                                Button {
+                                    moveCopyMode = .move
+                                    moveCopyTarget = object
+                                } label: {
+                                    Label("Move to…", systemImage: "arrow.forward.circle")
+                                }
+                                Button {
+                                    moveCopyMode = .copy
+                                    moveCopyTarget = object
+                                } label: {
+                                    Label("Copy to…", systemImage: "doc.on.doc")
+                                }
+                                Divider()
+                                Button(role: .destructive) {
+                                    Task { await deleteItem(.file(object)) }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
@@ -141,6 +167,21 @@ struct PrefixBrowserView: View {
         } message: {
             Text(deleteErrorMessage)
         }
+        .sheet(item: $moveCopyTarget) { object in
+            PrefixPickerSheet(
+                s3Service: s3Service,
+                sourceBucket: bucket,
+                sourceObject: object,
+                mode: moveCopyMode
+            ) { destPrefix in
+                await performMoveCopy(object: object, destPrefix: destPrefix)
+            }
+        }
+        .alert("Operation Failed", isPresented: $showMoveCopyError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(moveCopyErrorMessage)
+        }
         .task { await load() }
     }
 
@@ -156,6 +197,33 @@ struct PrefixBrowserView: View {
             await MainActor.run {
                 deleteErrorMessage = "Could not delete \(object.fileName): \(error.localizedDescription)"
                 showDeleteError = true
+            }
+        }
+    }
+
+    // MARK: - Move / Copy
+
+    private func performMoveCopy(object: S3Object, destPrefix: String) async {
+        let filename = object.fileName
+        let destKey = destPrefix.isEmpty ? filename : "\(destPrefix)\(filename)"
+        do {
+            try await s3Service.copyObject(
+                key: object.key,
+                to: destKey,
+                sourceBucket: bucket,
+                destBucket: bucket
+            )
+            if moveCopyMode == .move {
+                try await s3Service.deleteObject(key: object.key, bucket: bucket)
+                items.removeAll { $0.id == S3Item.file(object).id }
+            }
+            logger.info("\(moveCopyMode == .move ? "Moved" : "Copied") \(object.key) -> \(destKey)")
+            if moveCopyMode == .copy { await load() }
+        } catch {
+            logger.error("Move/copy failed for \(object.key): \(error.localizedDescription)")
+            await MainActor.run {
+                moveCopyErrorMessage = error.localizedDescription
+                showMoveCopyError = true
             }
         }
     }

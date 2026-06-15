@@ -175,6 +175,33 @@ extension S3Service {
         logger.info("Renamed \(key) -> \(newKey) in \(targetBucket)")
     }
 
+    /// Copies an object to a new key, optionally in a different bucket.
+    /// The source is not deleted; use this for Copy. For Move, call this then deleteObject.
+    /// - Parameters:
+    ///   - key: Source object key
+    ///   - destKey: Destination key
+    ///   - sourceBucket: Bucket containing the source object (defaults to currentBucket)
+    ///   - destBucket: Bucket for the destination (defaults to sourceBucket)
+    func copyObject(
+        key: String,
+        to destKey: String,
+        sourceBucket: String? = nil,
+        destBucket: String? = nil
+    ) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let src = sourceBucket ?? currentBucket
+        let dst = destBucket ?? src
+        let copyInput = CopyObjectInput(
+            bucket: dst,
+            copySource: "\(src)/\(key)",
+            key: destKey
+        )
+        _ = try await client.copyObject(input: copyInput)
+        logger.info("Copied \(src)/\(key) -> \(dst)/\(destKey)")
+    }
+
     /// Lists one page of folders and files directly under a prefix.
     /// Does not touch the service's observable state (items, isLoading, currentPrefix),
     /// so it is safe to call from PrefixBrowserView alongside BucketBrowserView.
