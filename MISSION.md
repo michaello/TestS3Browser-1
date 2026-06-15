@@ -539,4 +539,4 @@ Commit: `28b2a85` feat: add file rename to BucketBrowserView
   Cache size is loaded on `.task` and refreshed after each clear. All counts read live
   from the `@Observable` singletons so they update immediately.
 
-Commit: `<hash>` feat: add cache management section to SettingsView
+Commit: `cbce369` feat: add cache management section to SettingsView
