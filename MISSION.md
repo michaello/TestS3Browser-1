@@ -519,4 +519,4 @@ Commit: `7a87094` feat: add upload to BucketBrowserView
   calls `refreshFiles()` to update the listing. Failure surfaces in a "Rename Failed"
   alert via `showRenameError` / `renameErrorMessage`.
 
-Commit: `<hash>` feat: add file rename to BucketBrowserView
+Commit: `28b2a85` feat: add file rename to BucketBrowserView
