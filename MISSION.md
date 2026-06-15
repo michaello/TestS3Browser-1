@@ -771,3 +771,18 @@ Commit: `c2da97a` feat: add change-storage-class action to FileDetailView
 - Error surfaced via `.alert("Tag Save Failed")`.
 
 Commit: `3d7ca24` feat: add S3 object tag editor to FileDetailView
+
+## Phase 40 - Rename file in PrefixBrowserView (DONE)
+
+- `PrefixBrowserView`: added `renameTarget: S3Object?`, `renameText: String`, `showRenameError: Bool`,
+  `renameErrorMessage: String` state vars.
+- Leading swipe action (`edge: .leading`) on each file row shows a "Rename" button (pencil icon,
+  orange tint). Tapping pre-fills `renameText` with `object.fileName` and sets `renameTarget`.
+- "Rename" entry added to the existing file context menu alongside Move/Copy/Delete.
+- `.alert("Rename File")` presents a `TextField` pre-filled with the current name; on confirm,
+  builds the new key by replacing the filename within the current prefix and calls
+  `s3Service.renameObject(key:to:bucket:)`, then reloads. On failure, shows a second
+  `.alert("Rename Failed")`.
+- `renameFile(_:to:)` async func: calls `s3Service.renameObject`, then `await load()` to refresh.
+
+Commit: `9ba0504` feat: add rename to PrefixBrowserView file rows
