@@ -70,20 +70,50 @@ extension S3Service {
         }
     }
 
-    /// Uploads data to S3 bucket
+    /// Uploads data to S3 bucket.
     /// - Parameters:
     ///   - data: The data to upload
     ///   - key: The S3 object key (path)
     ///   - contentType: MIME type of the content
+    ///   - onProgress: Called on the MainActor with a fraction (0…1) while the upload runs.
+    ///     Progress is estimated by time: it ramps to 0.9 over the expected duration, then
+    ///     snaps to 1.0 when the SDK call returns. The AWS SDK does not expose a byte-level
+    ///     progress hook for PutObject, so time-based estimation is the only option.
     /// - Returns: The key of the uploaded object
     @discardableResult
-    func uploadObject(data: Data, key: String, contentType: String = "application/octet-stream") async throws -> String {
+    func uploadObject(
+        data: Data,
+        key: String,
+        contentType: String = "application/octet-stream",
+        onProgress: (@MainActor (Double) -> Void)? = nil
+    ) async throws -> String {
         if client == nil {
             try await initializeClient()
         }
 
         guard let client = client else {
             throw S3ServiceError.clientNotInitialized
+        }
+
+        logger.info("Uploading to \(self.currentBucket)/\(key) (\(data.count) bytes)")
+
+        // Estimate upload duration: assume ~500 KB/s on a slow connection, min 1 s.
+        let estimatedSeconds = max(1.0, Double(data.count) / 512_000.0)
+        let tickInterval: TimeInterval = 0.1
+        let maxFraction = 0.9
+
+        let progressTask: Task<Void, Never>? = onProgress.map { callback in
+            Task {
+                var elapsed = 0.0
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: UInt64(tickInterval * 1_000_000_000))
+                    elapsed += tickInterval
+                    // Ease toward maxFraction asymptotically so the bar never stalls at 1.0
+                    // before the upload actually finishes.
+                    let fraction = maxFraction * (1 - exp(-3 * elapsed / estimatedSeconds))
+                    await callback(min(fraction, maxFraction))
+                }
+            }
         }
 
         let input = PutObjectInput(
@@ -93,17 +123,24 @@ extension S3Service {
             key: key
         )
 
-        logger.info("Uploading to \(self.currentBucket)/\(key) (\(data.count) bytes)")
         _ = try await client.putObject(input: input)
-        logger.info("Upload complete: \(key)")
 
+        progressTask?.cancel()
+        if let onProgress { await onProgress(1.0) }
+
+        logger.info("Upload complete: \(key)")
         return key
     }
 
     /// Uploads an image to the dump folder with timestamp
-    /// - Parameter imageData: JPEG or PNG image data
+    /// - Parameters:
+    ///   - imageData: JPEG or PNG image data
+    ///   - onProgress: Optional progress callback forwarded to uploadObject.
     /// - Returns: The full S3 key of the uploaded image
-    func uploadToDump(imageData: Data) async throws -> String {
+    func uploadToDump(
+        imageData: Data,
+        onProgress: (@MainActor (Double) -> Void)? = nil
+    ) async throws -> String {
         let timestamp = ISO8601DateFormatter().string(from: Date())
             .replacingOccurrences(of: ":", with: "-")
         let filename = "dump/\(timestamp).jpg"
@@ -111,7 +148,8 @@ extension S3Service {
         return try await uploadObject(
             data: imageData,
             key: filename,
-            contentType: "image/jpeg"
+            contentType: "image/jpeg",
+            onProgress: onProgress
         )
     }
 }

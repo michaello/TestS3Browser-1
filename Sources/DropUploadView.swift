@@ -9,6 +9,7 @@ struct DropUploadView: View {
 
     @State private var selectedItem: PhotosPickerItem?
     @State private var isUploading = false
+    @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult?
     @State private var isDropTargeted = false
 
@@ -44,9 +45,12 @@ struct DropUploadView: View {
 
                 // Upload status
                 if isUploading {
-                    HStack {
-                        ProgressView()
-                        Text("Uploading...")
+                    VStack(spacing: 6) {
+                        ProgressView(value: uploadProgress)
+                            .progressViewStyle(.linear)
+                            .padding(.horizontal)
+                        Text(uploadProgress < 1 ? "Uploading \(Int(uploadProgress * 100))%..." : "Finishing...")
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -179,6 +183,7 @@ struct DropUploadView: View {
     private func uploadImageData(_ data: Data) async {
         await MainActor.run {
             isUploading = true
+            uploadProgress = 0
             uploadResult = nil
         }
 
@@ -191,7 +196,9 @@ struct DropUploadView: View {
                 jpegData = data
             }
 
-            let key = try await s3Service.uploadToDump(imageData: jpegData)
+            let key = try await s3Service.uploadToDump(imageData: jpegData) { fraction in
+                self.uploadProgress = fraction
+            }
             logger.info("Uploaded to \(key)")
 
             await MainActor.run {
