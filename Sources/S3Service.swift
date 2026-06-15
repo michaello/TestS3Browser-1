@@ -41,6 +41,18 @@ final class S3Service {
     init(config: S3Config) {
         self.config = config
         self.currentBucket = config.bucketName
+        self.recentFiles = Self.loadPersistedRecentFiles()
+    }
+
+    /// Loads the last-saved recentFiles from the shared App Group UserDefaults so
+    /// Recent Files is populated on cold launch without a network round-trip.
+    private static func loadPersistedRecentFiles() -> [S3Object] {
+        guard
+            let defaults = UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser"),
+            let data = defaults.data(forKey: "recentUploads"),
+            let files = try? JSONDecoder().decode([S3Object].self, from: data)
+        else { return [] }
+        return files
     }
 
     func updateConfig(_ config: S3Config) async throws {
