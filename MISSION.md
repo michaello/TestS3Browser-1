@@ -446,4 +446,4 @@ Commit: `91c2a9b` feat: add in-prefix search to BucketBrowserView
   starred while browsing. `FileRow` shows a small star badge (yellow fill) when the file is
   starred, using `StarStore.shared.isStarred(object.key)`.
 
-Commit: `<hash>` feat: add starred/favorited files
+Commit: `5e1a488` feat: add starred/favorited files
