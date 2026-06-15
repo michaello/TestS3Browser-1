@@ -38,6 +38,8 @@
 		C9E4CFC9D22680A5808C62FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24ED4752FA29DA7EE939D095 /* Assets.xcassets */; };
 		SHARE001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = SHARE002 /* ShareViewController.swift */; };
 		SHARE031 /* DumpShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = SHARE004 /* DumpShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		WGT031 /* TestS3BrowserWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = WGT004 /* TestS3BrowserWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		WGT001 /* TestS3BrowserWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = WGT002 /* TestS3BrowserWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = SHARE020;
 			remoteInfo = DumpShareExtension;
+		};
+		WGT010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CFA6A1EE4DCD4AC3A8C45B8B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = WGT020;
+			remoteInfo = TestS3BrowserWidget;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -58,6 +67,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				SHARE031 /* DumpShareExtension.appex in Embed App Extensions */,
+				WGT031 /* TestS3BrowserWidget.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,6 +107,9 @@
 		SHARE002 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		SHARE003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		SHARE004 /* DumpShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DumpShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		WGT002 /* TestS3BrowserWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestS3BrowserWidget.swift; sourceTree = "<group>"; };
+		WGT004 /* TestS3BrowserWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TestS3BrowserWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		WGT005 /* TestS3BrowserWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestS3BrowserWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +122,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		SHARE040 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WGT040 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -141,6 +161,7 @@
 				96A30B6B9FCF4774B4E3D31D /* Extensions */,
 				D08A2360C4CD4B1BB6B1A78D /* Intents */,
 				9683B59837154A2F93BB5B7E /* Services */,
+				WGT007 /* Widget */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -176,13 +197,30 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		WGT007 /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				WGT002 /* TestS3BrowserWidget.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
 		1B6F855B55D3751CA7AF7FE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */,
 				SHARE004 /* DumpShareExtension.appex */,
+				WGT004 /* TestS3BrowserWidget.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		WGT006 /* WidgetExtension */ = {
+			isa = PBXGroup;
+			children = (
+				WGT005 /* TestS3BrowserWidget.entitlements */,
+			);
+			path = WidgetExtension;
 			sourceTree = "<group>";
 		};
 		6A92C00D8517B6AE8D422BAA /* Resources */ = {
@@ -199,6 +237,7 @@
 				F730FE2DE85746E6AF0EC6A0 /* Sources */,
 				6A92C00D8517B6AE8D422BAA /* Resources */,
 				SHARE005 /* ShareExtension */,
+				WGT006 /* WidgetExtension */,
 				1B6F855B55D3751CA7AF7FE9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -228,6 +267,7 @@
 			);
 			dependencies = (
 				SHARE011 /* PBXTargetDependency */,
+				WGT011 /* PBXTargetDependency */,
 			);
 			name = TestS3Browser;
 			packageProductDependencies = (
@@ -254,6 +294,23 @@
 			productReference = SHARE004 /* DumpShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		WGT020 /* TestS3BrowserWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = WGT050 /* Build configuration list for PBXNativeTarget "TestS3BrowserWidget" */;
+			buildPhases = (
+				WGT041 /* Sources */,
+				WGT040 /* Frameworks */,
+				WGT042 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestS3BrowserWidget;
+			productName = TestS3BrowserWidget;
+			productReference = WGT004 /* TestS3BrowserWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -267,6 +324,9 @@
 						ProvisioningStyle = Automatic;
 					};
 					SHARE020 = {
+						ProvisioningStyle = Automatic;
+					};
+					WGT020 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -289,6 +349,7 @@
 			targets = (
 				1C31259EB670C58E6A633F17 /* TestS3Browser */,
 				SHARE020 /* DumpShareExtension */,
+				WGT020 /* TestS3BrowserWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -303,6 +364,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		SHARE042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WGT042 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -354,6 +422,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		WGT041 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				WGT001 /* TestS3BrowserWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -361,6 +437,11 @@
 			isa = PBXTargetDependency;
 			target = SHARE020 /* DumpShareExtension */;
 			targetProxy = SHARE010 /* PBXContainerItemProxy */;
+		};
+		WGT011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = WGT020 /* TestS3BrowserWidget */;
+			targetProxy = WGT010 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -588,6 +669,62 @@
 			};
 			name = Release;
 		};
+		WGT051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/TestS3BrowserWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Recent Uploads";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		WGT052 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/TestS3BrowserWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AS5AAW6A59;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Recent Uploads";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.crispytoast.TestS3Browser.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -614,6 +751,15 @@
 			buildConfigurations = (
 				SHARE051 /* Debug */,
 				SHARE052 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		WGT050 /* Build configuration list for PBXNativeTarget "TestS3BrowserWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				WGT051 /* Debug */,
+				WGT052 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -1,6 +1,6 @@
 import Foundation
 
-struct S3Object: Identifiable, Hashable {
+struct S3Object: Identifiable, Hashable, Codable {
     let key: String
     let size: Int64
     let lastModified: Date

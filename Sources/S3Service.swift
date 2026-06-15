@@ -221,6 +221,7 @@ final class S3Service {
         currentPrefix = ""
         items = []
         recentFiles = []
+        persistRecentFiles()
         try await listObjects()
     }
 
@@ -229,6 +230,14 @@ final class S3Service {
     @MainActor
     func clearRecentFiles() {
         recentFiles.removeAll()
+        persistRecentFiles()
+    }
+
+    /// Writes the current recentFiles array to the shared App Group UserDefaults so the
+    /// widget can read it without an S3 round-trip.
+    func persistRecentFiles() {
+        guard let data = try? JSONEncoder().encode(recentFiles) else { return }
+        UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser")?.set(data, forKey: "recentUploads")
     }
 
     /// Deletes an object from S3
@@ -264,6 +273,7 @@ final class S3Service {
                 recentFiles.removeAll { object in
                     object.key == key && (object.bucket ?? currentBucket) == targetBucket
                 }
+                persistRecentFiles()
             }
         } catch {
             self.logger.error("Failed to delete object '\(key)' from '\(targetBucket)': \(error.localizedDescription)")

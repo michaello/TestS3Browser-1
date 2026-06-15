@@ -59,6 +59,7 @@ extension S3Service {
             // Sort by date descending and take top N
             let sorted = allFiles.sorted { $0.lastModified > $1.lastModified }
             recentFiles = Array(sorted.prefix(limit))
+            persistRecentFiles()
             loadingStatus = "Showing \(recentFiles.count) most recent of \(allFiles.count) files"
             isLoading = false
         } catch {
@@ -148,6 +149,7 @@ extension S3Service {
         // Sort combined capped results by date descending and take top N
         let sorted = allFiles.sorted { $0.lastModified > $1.lastModified }
         recentFiles = Array(sorted.prefix(limit))
+        persistRecentFiles()
         loadingStatus = "Showing \(recentFiles.count) most recent across \(availableBuckets.count) buckets"
         isLoading = false
     }
