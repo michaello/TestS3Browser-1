@@ -644,4 +644,4 @@ Commit: `31f48d5` feat: batch select and bulk delete in PrefixBrowserView
 - Multiple dropped files are processed concurrently via `withTaskGroup`.
 - The modifier is gated on `isConfigured` so it is a no-op before credentials are set.
 
-Commit: `<hash>` feat: add drag-and-drop upload to BucketBrowserView
+Commit: `cdfc2ab` feat: add drag-and-drop upload to BucketBrowserView
