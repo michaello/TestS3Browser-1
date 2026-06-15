@@ -828,4 +828,4 @@ Commit: `a58f009` feat: add batch download to Files app in BucketBrowserView
   spinner. If the bucket has ACLs disabled (Object Ownership enforced) the API returns
   `AccessControlListNotSupported`; this is caught and shown as "ACLs disabled on this bucket".
 
-Commit: `<hash>` feat: add object ACL viewer to FileDetailView
+Commit: `0865900` feat: add object ACL viewer to FileDetailView
