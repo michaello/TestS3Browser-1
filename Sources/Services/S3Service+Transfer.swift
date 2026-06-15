@@ -175,20 +175,28 @@ extension S3Service {
         logger.info("Renamed \(key) -> \(newKey) in \(targetBucket)")
     }
 
-    /// Lists folders and files directly under a prefix without touching the service's
-    /// observable state (items, isLoading, currentPrefix). Safe to call from a
-    /// PrefixBrowserView that manages its own local state in parallel with BucketBrowserView.
+    /// Lists one page of folders and files directly under a prefix.
+    /// Does not touch the service's observable state (items, isLoading, currentPrefix),
+    /// so it is safe to call from PrefixBrowserView alongside BucketBrowserView.
     /// - Parameters:
-    ///   - prefix: The S3 key prefix to list under. Empty string lists the bucket root.
+    ///   - prefix: S3 key prefix to list under. Empty string lists the bucket root.
     ///   - bucket: Bucket to list (defaults to currentBucket).
-    /// - Returns: Array of S3Item (folders first, then files), sorted by display name.
-    func listPrefix(_ prefix: String, bucket: String? = nil) async throws -> [S3Item] {
+    ///   - continuationToken: Opaque token from a prior call's `nextToken` to fetch the
+    ///     next page. Pass nil to start from the beginning.
+    /// - Returns: A tuple of the page's items and an optional token for the next page.
+    ///   When `nextToken` is nil the listing is complete.
+    func listPrefix(
+        _ prefix: String,
+        bucket: String? = nil,
+        continuationToken: String? = nil
+    ) async throws -> (items: [S3Item], nextToken: String?) {
         if client == nil { try await initializeClient() }
         guard let client = client else { throw S3ServiceError.clientNotInitialized }
 
         let targetBucket = bucket ?? currentBucket
         let input = ListObjectsV2Input(
             bucket: targetBucket,
+            continuationToken: continuationToken,
             delimiter: "/",
             prefix: prefix.isEmpty ? nil : prefix
         )
@@ -214,7 +222,7 @@ extension S3Service {
                 )))
             }
         }
-        return items
+        return (items, output.nextContinuationToken)
     }
 
     /// Uploads an image to the dump folder with timestamp

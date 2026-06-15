@@ -17,6 +17,8 @@ struct PrefixBrowserView: View {
 
     @State private var items: [S3Item] = []
     @State private var isLoading = false
+    @State private var isLoadingMore = false
+    @State private var nextToken: String? = nil
     @State private var errorMessage: String? = nil
 
     // Upload state
@@ -72,6 +74,23 @@ struct PrefixBrowserView: View {
                                 FileRow(object: object)
                             }
                         }
+                    }
+
+                    if let _ = nextToken {
+                        HStack {
+                            Spacer()
+                            if isLoadingMore {
+                                ProgressView()
+                            } else {
+                                Button("Load more") {
+                                    Task { await loadMore() }
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                        .padding(.vertical, 8)
                     }
                 }
                 .refreshable { await load() }
@@ -253,14 +272,29 @@ struct PrefixBrowserView: View {
     private func load() async {
         isLoading = true
         errorMessage = nil
+        nextToken = nil
         do {
-            let loaded = try await s3Service.listPrefix(prefix, bucket: bucket)
-            items = loaded
+            let page = try await s3Service.listPrefix(prefix, bucket: bucket, continuationToken: nil)
+            items = page.items
+            nextToken = page.nextToken
         } catch {
             logger.error("listPrefix(\(prefix)) failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    private func loadMore() async {
+        guard let token = nextToken, !isLoadingMore else { return }
+        isLoadingMore = true
+        do {
+            let page = try await s3Service.listPrefix(prefix, bucket: bucket, continuationToken: token)
+            items.append(contentsOf: page.items)
+            nextToken = page.nextToken
+        } catch {
+            logger.error("listPrefix(\(prefix)) page failed: \(error.localizedDescription)")
+        }
+        isLoadingMore = false
     }
 }
 
