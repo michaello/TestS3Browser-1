@@ -660,3 +660,22 @@ Commit: `cdfc2ab` feat: add drag-and-drop upload to BucketBrowserView
 - Both views show a "Create Failed" alert on error.
 
 Commit: `c345f18` feat: add new folder creation to browser views
+
+## Phase 33 - Multi-bucket quick-switcher overlay (DONE)
+
+- Added `BucketSwitcherOverlay` view (new file `Sources/BucketSwitcherOverlay.swift`): a bottom
+  sheet-style overlay that slides up from the bottom over the `ContentView` `ZStack`. Lists all
+  `availableBuckets` from `s3Service`. For each bucket shows the bucket name, a checkmark on the
+  active bucket, and a cached object count fetched lazily on first open via a lightweight
+  `ListObjectsV2` with `maxKeys: 1000` (reports exact count or "1000+" if truncated). Tapping a
+  row calls `s3Service.switchBucket`, animates the selection, dismisses the sheet, and switches
+  the tab to `.browse`.
+- `ContentView`: added `@State private var showBucketSwitcher = false`. A pill-shaped
+  `cylinder.split.1x2` button floats above the custom tab bar (inside the `ZStack`, pinned to
+  `.bottom` with padding) and is only visible when `s3Service.availableBuckets.count > 1`.
+  The overlay is presented via a conditional in the `ZStack` with a `.transition(.move(edge: .bottom)
+  .combined(with: .opacity))` animation.
+- Object counts are stored in `@State private var bucketCounts: [String: Int]` inside
+  `BucketSwitcherOverlay` and fetched once per open via `withTaskGroup` using a single-page listing.
+
+Commit: `c69c866` feat: add multi-bucket quick-switcher overlay
