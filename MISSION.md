@@ -447,3 +447,24 @@ Commit: `91c2a9b` feat: add in-prefix search to BucketBrowserView
   starred, using `StarStore.shared.isStarred(object.key)`.
 
 Commit: `5e1a488` feat: add starred/favorited files
+
+## Phase 21 - Grid view mode for BucketBrowserView (DONE)
+
+- Added a third `ViewStyle` case `.grid` to `BucketBrowserView` alongside the existing
+  `.standard` and `.compact` list styles.
+- `@AppStorage("s3BrowserGridCardSize")` persists the card size (60-160 pt, default 100).
+- When `.grid` is active the `List` is replaced with a `ScrollView` + `LazyVGrid`
+  (`GridItem(.adaptive(minimum: cardSize))`). Each cell is a `BrowserGridItem` view:
+  image files show a thumbnail (loaded from `ImageCacheActor` cache or downloaded);
+  video files show the thumbnail with a play-circle badge; folders show a filled folder
+  icon. All cells show the display name and — for files — formatted size below.
+  Starred files show the yellow star badge (bottom-trailing corner) via `StarStore.shared`.
+- The view-style menu in the trailing toolbar now has three options: Standard, Compact,
+  Grid. When Grid is active a `Slider` for card size appears in the toolbar (same pattern
+  as `RecentFilesView`).
+- Pull-to-refresh works in grid mode via `refreshable` on the outer `ScrollView`.
+- Swipe-to-delete and the file context menu (Star/Unstar, Copy Content, Share Link,
+  Delete) are preserved; in grid mode they are attached to the `BrowserGridItem` via
+  `.contextMenu` on the `NavigationLink` / `Button`.
+
+Commit: `<hash>` feat: add grid view mode to BucketBrowserView

@@ -15,6 +15,7 @@ enum SortOption: String, CaseIterable {
 enum ViewStyle {
     case standard
     case compact
+    case grid
 }
 
 struct BucketBrowserView: View {
@@ -26,14 +27,27 @@ struct BucketBrowserView: View {
     @AppStorage("s3BrowserSortOption") private var sortOption: String = SortOption.dateNewest.rawValue
     @AppStorage("s3BrowserViewStyle") private var viewStyleRaw: String = "standard"
     @AppStorage("s3BrowserFileTypeFilter") private var fileTypeFilterRaw: Int = FileTypeFilter.all.rawValue
+    @AppStorage("s3BrowserGridCardSize") private var gridCardSize: Double = 100
     @State private var showingSortMenu = false
     @State private var searchText = ""
 
     private let logger = Logger(subsystem: "com.s3browser", category: "BucketBrowserView")
 
     private var viewStyle: ViewStyle {
-        get { viewStyleRaw == "compact" ? .compact : .standard }
-        set { viewStyleRaw = newValue == .compact ? "compact" : "standard" }
+        get {
+            switch viewStyleRaw {
+            case "compact": return .compact
+            case "grid": return .grid
+            default: return .standard
+            }
+        }
+        set {
+            switch newValue {
+            case .compact: viewStyleRaw = "compact"
+            case .grid: viewStyleRaw = "grid"
+            case .standard: viewStyleRaw = "standard"
+            }
+        }
     }
 
     private var fileTypeFilter: FileTypeFilter {
@@ -141,6 +155,12 @@ struct BucketBrowserView: View {
             } label: {
                 Label("Compact", systemImage: viewStyle == .compact ? "checkmark" : "")
             }
+
+            Button {
+                viewStyleRaw = "grid"
+            } label: {
+                Label("Grid", systemImage: viewStyle == .grid ? "checkmark" : "")
+            }
         }
     }
 
@@ -194,74 +214,10 @@ struct BucketBrowserView: View {
                         }
                     } else if !searchText.isEmpty && sortedItems.isEmpty {
                         ContentUnavailableView.search(text: searchText)
+                    } else if viewStyle == .grid {
+                        gridContent
                     } else {
-                        List {
-                            ForEach(sortedItems) { item in
-                                switch item {
-                                case .folder(let folder):
-                                    Button(action: {
-                                        Task {
-                                            searchText = ""
-                                            try? await s3Service.navigateToFolder(folder.prefix)
-                                            savedPrefix = s3Service.currentPrefix
-                                        }
-                                    }) {
-                                        FolderRow(folder: folder)
-                                    }
-                                case .file(let object):
-                                    NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                                        if viewStyle == .standard {
-                                            FileRow(object: object)
-                                        } else {
-                                            CompactFileRow(object: object)
-                                        }
-                                    }
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                        Button(role: .destructive) {
-                                            Task {
-                                                await deleteObject(object)
-                                            }
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
-                                    .contextMenu {
-                                        if object.fileType == .image || object.fileType == .text || object.fileType == .log {
-                                            Button {
-                                                Task {
-                                                    await copyToClipboard(object)
-                                                }
-                                            } label: {
-                                                Label("Copy Content", systemImage: "doc.on.doc")
-                                            }
-                                        }
-
-                                        if object.fileType == .video, let url = s3Service.getPublicURL(for: object.key) {
-                                            ShareLink(item: url) {
-                                                Label("Share Link", systemImage: "square.and.arrow.up")
-                                            }
-                                        }
-
-                                        Button {
-                                            starStore.toggle(object.key)
-                                        } label: {
-                                            Label(starStore.isStarred(object.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(object.key) ? "star.slash" : "star")
-                                        }
-
-                                        Button(role: .destructive) {
-                                            Task {
-                                                await deleteObject(object)
-                                            }
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        .refreshable {
-                            await refreshFiles()
-                        }
+                        listContent
                     }
                 }
                 .navigationTitle("S3 Browser")
@@ -286,13 +242,19 @@ struct BucketBrowserView: View {
                     }
 
                     ToolbarItem(placement: .topBarTrailing) {
-                        Menu {
-                            filterMenuContent
-                                .menuActionDismissBehavior(.disabled)
-                            sortMenuContent
-                            viewStyleMenuContent
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
+                        HStack(spacing: 12) {
+                            if viewStyle == .grid {
+                                Slider(value: $gridCardSize, in: 60...160, step: 10)
+                                    .frame(width: 80)
+                            }
+                            Menu {
+                                filterMenuContent
+                                    .menuActionDismissBehavior(.disabled)
+                                sortMenuContent
+                                viewStyleMenuContent
+                            } label: {
+                                Image(systemName: "line.3.horizontal.decrease.circle")
+                            }
                         }
                     }
                 }
@@ -362,6 +324,101 @@ struct BucketBrowserView: View {
                     : "Search in \(s3Service.currentPrefix.split(separator: "/").last.map(String.init) ?? s3Service.currentPrefix)"
             )
         }
+    }
+
+    private func fileContextMenuItems(for object: S3Object) -> some View {
+        Group {
+            if object.fileType == .image || object.fileType == .text || object.fileType == .log {
+                Button {
+                    Task { await copyToClipboard(object) }
+                } label: {
+                    Label("Copy Content", systemImage: "doc.on.doc")
+                }
+            }
+
+            if object.fileType == .video, let url = s3Service.getPublicURL(for: object.key) {
+                ShareLink(item: url) {
+                    Label("Share Link", systemImage: "square.and.arrow.up")
+                }
+            }
+
+            Button {
+                starStore.toggle(object.key)
+            } label: {
+                Label(starStore.isStarred(object.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(object.key) ? "star.slash" : "star")
+            }
+
+            Button(role: .destructive) {
+                Task { await deleteObject(object) }
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+
+    private var listContent: some View {
+        List {
+            ForEach(sortedItems) { item in
+                switch item {
+                case .folder(let folder):
+                    Button(action: {
+                        Task {
+                            searchText = ""
+                            try? await s3Service.navigateToFolder(folder.prefix)
+                            savedPrefix = s3Service.currentPrefix
+                        }
+                    }) {
+                        FolderRow(folder: folder)
+                    }
+                case .file(let object):
+                    NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                        if viewStyle == .standard {
+                            FileRow(object: object)
+                        } else {
+                            CompactFileRow(object: object)
+                        }
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            Task { await deleteObject(object) }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .contextMenu { fileContextMenuItems(for: object) }
+                }
+            }
+        }
+        .refreshable { await refreshFiles() }
+    }
+
+    private var gridContent: some View {
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridCardSize), spacing: 10)], spacing: 10) {
+                ForEach(sortedItems) { item in
+                    switch item {
+                    case .folder(let folder):
+                        Button {
+                            Task {
+                                searchText = ""
+                                try? await s3Service.navigateToFolder(folder.prefix)
+                                savedPrefix = s3Service.currentPrefix
+                            }
+                        } label: {
+                            BrowserGridItem(item: .folder(folder), cardSize: gridCardSize)
+                        }
+                        .buttonStyle(.plain)
+                    case .file(let object):
+                        NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                            BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                        }
+                        .contextMenu { fileContextMenuItems(for: object) }
+                    }
+                }
+            }
+            .padding(10)
+        }
+        .refreshable { await refreshFiles() }
     }
 
     private var sortedItems: [S3Item] {
@@ -594,6 +651,100 @@ struct CompactFileRow: View {
         case .text: return .green
         case .html: return .teal
         case .unknown: return .gray
+        }
+    }
+}
+
+struct BrowserGridItem: View {
+    let item: S3Item
+    let cardSize: Double
+    @State private var thumbnail: UIImage?
+
+    private var iconColor: Color {
+        guard case .file(let obj) = item else { return .blue }
+        switch obj.fileType {
+        case .log: return .blue
+        case .image: return .purple
+        case .video: return .orange
+        case .text: return .green
+        case .html: return .teal
+        case .unknown: return .gray
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 6) {
+            ZStack(alignment: .bottomTrailing) {
+                ZStack {
+                    switch item {
+                    case .folder(let folder):
+                        Image(systemName: "folder.fill")
+                            .font(.system(size: cardSize > 100 ? 32 : 22))
+                            .foregroundStyle(.blue)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    case .file(let object):
+                        if let thumbnail = thumbnail {
+                            Image(uiImage: thumbnail)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .clipped()
+                        } else {
+                            Image(systemName: object.fileType.icon)
+                                .font(.system(size: cardSize > 100 ? 28 : 18))
+                                .foregroundStyle(iconColor)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+
+                        if case .file(let obj) = item, obj.fileType == .video {
+                            Image(systemName: "play.circle.fill")
+                                .font(.system(size: cardSize > 100 ? 28 : 18))
+                                .foregroundStyle(.white)
+                                .shadow(color: .black.opacity(0.5), radius: 3)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(height: cardSize)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(8)
+
+                if case .file(let obj) = item, starStore.isStarred(obj.key) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.yellow)
+                        .padding(2)
+                        .background(Color.black.opacity(0.35), in: Circle())
+                        .padding(4)
+                }
+            }
+
+            VStack(alignment: .center, spacing: 2) {
+                Text(item.displayName)
+                    .font(cardSize > 100 ? .caption : .system(size: 9))
+                    .fontWeight(.semibold)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+
+                if case .file(let object) = item {
+                    Text(object.formattedSize)
+                        .font(.system(size: cardSize > 100 ? 10 : 8))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .task {
+            await loadThumbnail()
+        }
+    }
+
+    private func loadThumbnail() async {
+        guard case .file(let object) = item,
+              object.fileType == .image || object.fileType == .video else { return }
+
+        if let cached = await ImageCacheActor.shared.getThumbnail(for: object.key) {
+            await MainActor.run { self.thumbnail = cached }
         }
     }
 }
