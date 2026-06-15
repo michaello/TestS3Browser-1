@@ -50,7 +50,23 @@ reverted): delete-failure alert and Clear All confirmation dialog both rendered 
 the production code paths. Receipts: `/tmp/s3b-receipts/` (13-delete-error-alert.png,
 15-clear-all-confirm.png, COLLAGE-phase3-verification.png).
 
-## Phase 4 - "Copy S3 URL" swipe action on RecentFilesView (TODO)
+## Phase 4 - "Copy S3 URL" swipe action on RecentFilesView (DONE)
+
+### Delivered
+Added a leading `.swipeActions(edge: .leading)` to the recent-files **list** row
+(`Sources/RecentFilesView.swift`, the `ForEach(filteredRecentFiles)` in `listView`): a
+"Copy URL" button (systemImage "link", `.tint(.blue)`) that calls
+`s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400)`,
+copies the URL to the pasteboard on success, and shows `showCopyToast("Link copied")`.
+The nil-URL return is guarded with `if let`, so the copy/toast only fire on a real URL.
+
+Build clean (xcodebuild, iOS Simulator). Commit: `9b5d6f8` add copy url swipe action to recent files list.
+
+Deviations from the plan below: shipped on the list row only (not the grid `ForEach`),
+and the nil-URL case is a silent no-op rather than a "Could not copy link" toast, matching
+the scope of the assigned task. Grid-mode swipe action + nil-URL toast remain open if wanted.
+
+### Original plan (TODO)
 
 ### Goal
 Give recent-file rows a one-swipe way to copy a shareable presigned S3 URL, parallel to
