@@ -78,13 +78,7 @@ struct StashView: View {
             .task {
                 if reports.isEmpty { await load() }
             }
-            .alert(isPresented: $showDeleteError) {
-                Alert(
-                    title: Text("Delete Failed"),
-                    message: Text(deleteErrorMessage),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+            .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
         }
     }
 

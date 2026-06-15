@@ -93,13 +93,7 @@ struct RecentFilesView: View {
         .onChange(of: config) { _, newConfig in
             Task { await handleConfigChange(newConfig) }
         }
-        .alert(isPresented: $showDeleteError) {
-            Alert(
-                title: Text("Delete Failed"),
-                message: Text(deleteErrorMessage),
-                dismissButton: .default(Text("OK"))
-            )
-        }
+        .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
         .confirmationDialog(
             "Clear all recent files?",
             isPresented: $showClearAllConfirm,
