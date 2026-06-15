@@ -5,6 +5,7 @@ import SmithyIdentity
 import Smithy
 import os.log
 import CommonCrypto
+import WidgetKit
 
 @Observable
 final class S3Service {
@@ -233,11 +234,12 @@ final class S3Service {
         persistRecentFiles()
     }
 
-    /// Writes the current recentFiles array to the shared App Group UserDefaults so the
-    /// widget can read it without an S3 round-trip.
+    /// Writes the current recentFiles array to the shared App Group UserDefaults and
+    /// tells WidgetKit to reload the timeline so the widget reflects the change immediately.
     func persistRecentFiles() {
         guard let data = try? JSONEncoder().encode(recentFiles) else { return }
         UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser")?.set(data, forKey: "recentUploads")
+        WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget")
     }
 
     /// Deletes an object from S3
