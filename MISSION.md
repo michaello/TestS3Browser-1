@@ -770,4 +770,4 @@ Commit: `c2da97a` feat: add change-storage-class action to FileDetailView
   row, followed by Save/Cancel toolbar buttons. Save calls `setObjectTags` then reloads.
 - Error surfaced via `.alert("Tag Save Failed")`.
 
-Commit: `<hash>` feat: add S3 object tag editor to FileDetailView
+Commit: `3d7ca24` feat: add S3 object tag editor to FileDetailView
