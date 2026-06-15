@@ -397,3 +397,37 @@ and total storage consumed, without downloading any object bodies.
 - Empty bucket (0 objects) shows "0 objects · 0 KB".
 - Inaccessible buckets are skipped silently (same pattern as `fetchRecentFilesFromAllBuckets`).
 - Build clean; commit with message "feat: add bucket usage stats tab".
+
+## Phase 18 - Bucket usage statistics dashboard (DONE)
+
+- Added `BucketStats` struct in `Sources/Models.swift`: `objectCount`, `totalBytes`,
+  `formattedSize` (KB/MB/GB), `formattedCount` (locale-formatted "N objects").
+- Added `Sources/Services/S3Service+Stats.swift`: `fetchBucketStats()` scans all
+  `availableBuckets` concurrently via `withTaskGroup`, paginating each bucket fully with
+  `ListObjectsV2`. Inaccessible buckets return `nil` and are skipped. Results sorted by
+  `totalBytes` descending.
+- Added `Sources/StatsView.swift`: `@Observable StatsViewModel` owns `stats`, `isLoading`,
+  `error`. The view is a `NavigationStack` with a summary section (total objects + size +
+  bucket count) and a per-bucket `List`. Pull-to-refresh and a toolbar refresh button
+  re-trigger `load()`. Loading / error / empty states use `ContentUnavailableView`.
+- Added `stats` case to `AppTab` in `ContentView.swift` (icon `chart.bar`, between Stash
+  and Upload) and wired `StatsView` into the tab switch.
+
+Commit: `b877c7a` feat: add bucket usage stats tab
+
+## Phase 19 - Search in BucketBrowserView (DONE)
+
+- Added `@State private var searchText = ""` to `BucketBrowserView`.
+- `sortedItems` gained a search filter step before sorting: when `searchText` is non-empty,
+  folders match on `folderName` and files match on `fileName` (both case-insensitive
+  substring). Folders are always shown when there is no active search; when a search is
+  active they are filtered too so the results only show what matches.
+- `.searchable(text: $searchText, prompt:)` added to the `NavigationStack`. The prompt
+  dynamically reads the current prefix name or bucket name so it says "Search in photos/"
+  rather than a static string.
+- When search is active and `sortedItems` is empty, `ContentUnavailableView.search(text:)`
+  replaces the normal empty state.
+- `searchText` is cleared when the user navigates into a subfolder (inside the folder-tap
+  `Button` action) so each level starts with a clean search bar.
+
+Commit: `91c2a9b` feat: add in-prefix search to BucketBrowserView
