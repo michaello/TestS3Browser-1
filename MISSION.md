@@ -212,3 +212,18 @@ Commit: `3ff1b1f` ui: add in-app search bar to RecentFilesView
 - Both list and grid rows get the rename item via the shared `deleteContextMenu` builder.
 
 Commit: `e67ceb4` feat: add file rename to RecentFilesView
+
+## Phase 8 - Bulk multi-select delete in RecentFilesView (DONE)
+
+- Toolbar gains an "Edit" button (top-left) that toggles selection mode. In selection mode
+  it becomes "Done" and the trailing trash button becomes "Delete (N)" showing the count.
+- In list mode each row shows a leading checkbox overlay; tapping the row toggles selection
+  instead of navigating. Grid mode cards get the same checkbox overlay.
+- "Delete (N)" is disabled when nothing is selected. Tapping it presents a confirmation
+  dialog then deletes all selected files concurrently via `withThrowingTaskGroup`, removing
+  each from `recentFiles` as it completes. Any per-file failures are collected and surfaced
+  in a single error alert after the batch finishes.
+- Exiting Edit mode (Done button or after a successful delete) clears the selection set.
+- Context menus, swipe actions, and navigation links are suppressed while in selection mode.
+
+Commit: `8014888` feat: add bulk multi-select delete to RecentFilesView
