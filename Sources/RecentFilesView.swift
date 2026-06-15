@@ -164,10 +164,7 @@ struct RecentFilesView: View {
                 .contextMenu { deleteContextMenu(for: file) }
                 .swipeActions(edge: .leading) {
                     Button {
-                        if let url = s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400) {
-                            UIPasteboard.general.string = url
-                            showCopyToast("Link copied")
-                        }
+                        copyURL(for: file)
                     } label: {
                         Label("Copy URL", systemImage: "link")
                     }
@@ -193,14 +190,22 @@ struct RecentFilesView: View {
         .refreshable { await refreshRecentFiles() }
     }
 
+    /// Copies a 1-day presigned URL for the file to the pasteboard, showing a toast for
+    /// either outcome. Shared by the leading swipe action and the context-menu Copy Link
+    /// item so both behave the same, including the nil-URL failure case.
+    private func copyURL(for file: S3Object) {
+        if let url = s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400) {
+            UIPasteboard.general.string = url
+            showCopyToast("Link copied")
+        } else {
+            showCopyToast("Could not copy link")
+        }
+    }
+
     @ViewBuilder
     private func deleteContextMenu(for file: S3Object) -> some View {
         Button {
-            let url = s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400)
-            if let url = url {
-                UIPasteboard.general.string = url
-                showCopyToast("Link copied")
-            }
+            copyURL(for: file)
         } label: {
             Label("Copy Link (1 day)", systemImage: "link")
         }

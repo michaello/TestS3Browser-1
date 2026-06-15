@@ -62,9 +62,14 @@ The nil-URL return is guarded with `if let`, so the copy/toast only fire on a re
 
 Build clean (xcodebuild, iOS Simulator). Commit: `9b5d6f8` add copy url swipe action to recent files list.
 
-Deviations from the plan below: shipped on the list row only (not the grid `ForEach`),
-and the nil-URL case is a silent no-op rather than a "Could not copy link" toast, matching
-the scope of the assigned task. Grid-mode swipe action + nil-URL toast remain open if wanted.
+Follow-up (resolves the two open deviations):
+- nil-URL toast: added. The list swipe and the context-menu Copy Link item now both call a
+  shared `copyURL(for:)` helper that shows "Link copied" on success and "Could not copy link"
+  when `generatePresignedURL` returns nil.
+- grid-mode swipe action: NOT implementable. `gridView` is a `LazyVGrid` inside a `ScrollView`,
+  not a `List`. SwiftUI `.swipeActions` only takes effect on `List` rows, so a swipe action on
+  a grid card would compile but never trigger. The grid keeps the Copy Link affordance via its
+  existing context menu (also routed through `copyURL(for:)`). No swipe is possible there.
 
 ### Original plan (TODO)
 
