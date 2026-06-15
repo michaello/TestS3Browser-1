@@ -12,6 +12,7 @@ struct DropUploadView: View {
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult?
     @State private var isDropTargeted = false
+    @State private var copyToast: String?
 
     enum UploadResult {
         case success(String)
@@ -20,48 +21,72 @@ struct DropUploadView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
+            ZStack {
+                VStack(spacing: 24) {
+                    Spacer()
 
-                // Drop zone
-                dropZone
+                    // Drop zone
+                    dropZone
 
-                // Or use photo picker
-                PhotosPicker(
-                    selection: $selectedItem,
-                    matching: .images,
-                    photoLibrary: .shared()
-                ) {
-                    Label("Choose from Library", systemImage: "photo.on.rectangle")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                }
-                .disabled(isUploading)
-                .padding(.horizontal)
-
-                // Upload status
-                if isUploading {
-                    VStack(spacing: 6) {
-                        ProgressView(value: uploadProgress)
-                            .progressViewStyle(.linear)
-                            .padding(.horizontal)
-                        Text(uploadProgress < 1 ? "Uploading \(Int(uploadProgress * 100))%..." : "Finishing...")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                    // Or use photo picker
+                    PhotosPicker(
+                        selection: $selectedItem,
+                        matching: .images,
+                        photoLibrary: .shared()
+                    ) {
+                        Label("Choose from Library", systemImage: "photo.on.rectangle")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
                     }
+                    .disabled(isUploading)
+                    .padding(.horizontal)
+
+                    // Upload status
+                    if isUploading {
+                        VStack(spacing: 6) {
+                            ProgressView(value: uploadProgress)
+                                .progressViewStyle(.linear)
+                                .padding(.horizontal)
+                            Text(uploadProgress < 1 ? "Uploading \(Int(uploadProgress * 100))%..." : "Finishing...")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // Result message
+                    if let result = uploadResult {
+                        resultView(result)
+                    }
+
+                    Spacer()
                 }
 
-                // Result message
-                if let result = uploadResult {
-                    resultView(result)
+                // Copy toast
+                if let toast = copyToast {
+                    VStack {
+                        Spacer()
+                        HStack(spacing: 8) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
+                            Text(toast)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(10)
+                        .padding(.bottom, 16)
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .allowsHitTesting(false)
                 }
-
-                Spacer()
             }
+            .animation(.easeInOut(duration: 0.25), value: copyToast)
             .navigationTitle("Upload to Dump")
             .onChange(of: selectedItem) { _, newItem in
                 Task {
@@ -127,13 +152,29 @@ struct DropUploadView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
 
-                Button {
-                    UIPasteboard.general.string = key
-                } label: {
-                    Label("Copy Path", systemImage: "doc.on.doc")
-                        .font(.caption)
+                HStack(spacing: 12) {
+                    Button {
+                        UIPasteboard.general.string = key
+                        showCopyToast("Path copied")
+                    } label: {
+                        Label("Copy Path", systemImage: "doc.on.doc")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button {
+                        if let url = s3Service.generatePresignedURL(for: key, expiresIn: 86400) {
+                            UIPasteboard.general.string = url
+                            showCopyToast("Link copied")
+                        } else {
+                            showCopyToast("Could not generate link")
+                        }
+                    } label: {
+                        Label("Copy Link", systemImage: "link")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .buttonStyle(.bordered)
             }
             .padding()
             .background(Color.green.opacity(0.1))
@@ -177,6 +218,14 @@ struct DropUploadView: View {
             await MainActor.run {
                 uploadResult = .failure(error.localizedDescription)
             }
+        }
+    }
+
+    private func showCopyToast(_ message: String) {
+        copyToast = message
+        Task {
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+            await MainActor.run { copyToast = nil }
         }
     }
 
