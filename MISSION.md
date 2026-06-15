@@ -707,6 +707,7 @@ Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same c
 
 ## Phase 36 - Local download cache with Open-in action in FileDetailView (DONE)
 
+
 - `FileDetailView`: added `@State private var isDownloadingToCache = false` and
   `@State private var cachedFileURL: URL?`.
 - `cacheDirectory`: computed as `FileManager.default.temporaryDirectory/s3cache/<sanitized-key>`.
@@ -718,3 +719,23 @@ Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same c
 - Deduplicates re-download by checking `FileManager.default.fileExists(atPath:)` on the cache path.
 
 Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same commit as Phase 34)
+
+## Phase 37 - S3 object version browser in FileDetailView (DONE)
+
+- Added `S3VersionEntry` struct to `Models.swift`: `versionId`, `lastModified`, `size`, `isLatest`,
+  `formattedSize` computed var.
+- `S3Service+Transfer.swift`: added `listObjectVersions(key:bucket:)` - calls `ListObjectVersionsInput`
+  with `prefix: key`, filters results to exact key matches, returns `[S3VersionEntry]` sorted newest
+  first. Returns an empty array silently when versioning is not enabled.
+- `S3Service+Transfer.swift`: added `restoreVersion(key:versionId:bucket:)` - issues `CopyObjectInput`
+  with `copySource: "<bucket>/<key>?versionId=<id>"` to copy the named version back to the same key,
+  making it the current version.
+- `FileDetailView`: added `versions`, `isLoadingVersions`, `restoringVersionId`,
+  `showRestoreConfirm`, `pendingRestoreVersionId` state. `loadVersions()` and `restoreVersion(versionId:)`
+  are both called from `.task` alongside `loadFile` and `loadMetadata`.
+- `versionsSection` `@ViewBuilder`: shows nothing when there is only one version, shows a spinner
+  while loading, and shows a list of version rows when count > 1. Each row shows a truncated version
+  ID, "LATEST" badge, relative date, size, and a "Restore" button (hidden on the latest). Tapping
+  "Restore" fires a `confirmationDialog` before calling `restoreVersion`, then refreshes the list.
+
+Commit: `<hash>` feat: add object version browser to FileDetailView

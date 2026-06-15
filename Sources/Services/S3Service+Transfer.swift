@@ -338,4 +338,44 @@ extension S3Service {
             onProgress: onProgress
         )
     }
+
+    /// Returns all non-delete-marker versions of an object, newest first.
+    /// Returns an empty array when versioning is not enabled on the bucket.
+    func listObjectVersions(key: String, bucket: String? = nil) async throws -> [S3VersionEntry] {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let target = bucket ?? currentBucket
+        let input = ListObjectVersionsInput(bucket: target, prefix: key)
+        let output = try await client.listObjectVersions(input: input)
+
+        return (output.versions ?? [])
+            .filter { $0.key == key }
+            .compactMap { v -> S3VersionEntry? in
+                guard let vid = v.versionId,
+                      let mod = v.lastModified,
+                      let size = v.size else { return nil }
+                return S3VersionEntry(
+                    versionId: vid,
+                    lastModified: mod,
+                    size: size,
+                    isLatest: v.isLatest ?? false
+                )
+            }
+            .sorted { $0.lastModified > $1.lastModified }
+    }
+
+    /// Restores a specific version of an object by copying it to the same key, making it the latest.
+    func restoreVersion(key: String, versionId: String, bucket: String? = nil) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let target = bucket ?? currentBucket
+        // copySource format: bucket/key?versionId=<id>  (URL-encoded key)
+        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? key
+        let copySource = "\(target)/\(encodedKey)?versionId=\(versionId)"
+        let input = CopyObjectInput(bucket: target, copySource: copySource, key: key)
+        _ = try await client.copyObject(input: input)
+        logger.info("Restored version \(versionId) of \(target)/\(key)")
+    }
 }

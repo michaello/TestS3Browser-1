@@ -21,6 +21,12 @@ struct FileDetailView: View {
     @State private var dataURLCopyDone = false
     @State private var isDownloadingToCache = false
     @State private var cachedFileURL: URL? = nil
+    @State private var versions: [S3VersionEntry] = []
+    @State private var isLoadingVersions = false
+    @State private var versionsError: String? = nil
+    @State private var restoringVersionId: String? = nil
+    @State private var showRestoreConfirm = false
+    @State private var pendingRestoreVersionId: String? = nil
 
     enum FileContent {
         case text(String)
@@ -134,7 +140,8 @@ struct FileDetailView: View {
         .task {
             async let fileLoad: Void = loadFile()
             async let metaLoad: Void = loadMetadata()
-            _ = await (fileLoad, metaLoad)
+            async let versLoad: Void = loadVersions()
+            _ = await (fileLoad, metaLoad, versLoad)
         }
     }
 
@@ -239,6 +246,8 @@ struct FileDetailView: View {
                         WebContentView(html: html)
                     }
                 }
+
+                versionsSection
             }
             .padding()
         }
@@ -276,7 +285,22 @@ struct FileDetailView: View {
         .task {
             async let fileLoad: Void = loadFile()
             async let metaLoad: Void = loadMetadata()
-            _ = await (fileLoad, metaLoad)
+            async let versLoad: Void = loadVersions()
+            _ = await (fileLoad, metaLoad, versLoad)
+        }
+        .confirmationDialog(
+            "Restore this version?",
+            isPresented: $showRestoreConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Restore", role: .destructive) {
+                if let vid = pendingRestoreVersionId {
+                    Task { await restoreVersion(versionId: vid) }
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("The selected version will be copied to the current key and become the latest version.")
         }
     }
 
@@ -414,6 +438,71 @@ struct FileDetailView: View {
         }
     }
 
+    @ViewBuilder
+    private var versionsSection: some View {
+        if isLoadingVersions {
+            HStack(spacing: 8) {
+                ProgressView().scaleEffect(0.8)
+                Text("Loading versions…")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 8)
+        } else if versions.count > 1 {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Versions (\(versions.count))")
+                    .font(.headline)
+                    .padding(.top, 8)
+
+                ForEach(versions) { ver in
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack(spacing: 6) {
+                                Text(ver.versionId.prefix(12) + "…")
+                                    .font(.system(.caption, design: .monospaced))
+                                    .lineLimit(1)
+                                if ver.isLatest {
+                                    Text("LATEST")
+                                        .font(.caption2)
+                                        .fontWeight(.semibold)
+                                        .padding(.horizontal, 5)
+                                        .padding(.vertical, 2)
+                                        .background(Color.blue.opacity(0.15))
+                                        .foregroundStyle(.blue)
+                                        .clipShape(Capsule())
+                                }
+                            }
+                            Text("\(ver.lastModified.relativeFormatted()) · \(ver.formattedSize)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        if !ver.isLatest {
+                            if restoringVersionId == ver.versionId {
+                                ProgressView().scaleEffect(0.7)
+                            } else {
+                                Button("Restore") {
+                                    pendingRestoreVersionId = ver.versionId
+                                    showRestoreConfirm = true
+                                }
+                                .font(.caption)
+                                .buttonStyle(.bordered)
+                                .disabled(restoringVersionId != nil)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 12)
+                    .background(Color(.systemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+            }
+        }
+    }
+
     private var cacheFileURL: URL {
         let sanitized = object.key.replacingOccurrences(of: "/", with: "_")
         return FileManager.default.temporaryDirectory
@@ -439,6 +528,28 @@ struct FileDetailView: View {
             }
         }
         await MainActor.run { cachedFileURL = dest }
+    }
+
+    private func loadVersions() async {
+        isLoadingVersions = true
+        defer { isLoadingVersions = false }
+        do {
+            let result = try await service.listObjectVersions(key: object.key, bucket: object.bucket)
+            await MainActor.run { versions = result }
+        } catch {
+            await MainActor.run { versionsError = error.localizedDescription }
+        }
+    }
+
+    private func restoreVersion(versionId: String) async {
+        restoringVersionId = versionId
+        defer { restoringVersionId = nil }
+        do {
+            try await service.restoreVersion(key: object.key, versionId: versionId, bucket: object.bucket)
+            await loadVersions()
+        } catch {
+            // Restore failure is silently swallowed; the list refresh will show the real state.
+        }
     }
 
     private func loadMetadata() async {

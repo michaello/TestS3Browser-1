@@ -154,6 +154,23 @@ struct S3ObjectMetadata {
     let userMetadata: [String: String]
 }
 
+/// A single version of an S3 object, returned by S3Service.listObjectVersions(key:bucket:).
+struct S3VersionEntry: Identifiable {
+    let versionId: String
+    let lastModified: Date
+    let size: Int
+    let isLatest: Bool
+    var id: String { versionId }
+
+    var formattedSize: String {
+        let kb = Double(size) / 1024.0
+        if kb < 1024 { return String(format: "%.1f KB", kb) }
+        let mb = kb / 1024.0
+        if mb < 1024 { return String(format: "%.1f MB", mb) }
+        return String(format: "%.2f GB", mb / 1024.0)
+    }
+}
+
 /// Per-bucket object count and total storage size, returned by S3Service.fetchBucketStats().
 struct BucketStats: Identifiable {
     let bucket: String
