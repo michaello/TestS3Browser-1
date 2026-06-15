@@ -50,6 +50,21 @@ extension S3Service {
         return results.sorted { $0.totalBytes > $1.totalBytes }
     }
 
+    /// Fetches the bucket policy JSON string for the given bucket.
+    /// Returns nil when no policy is configured or access is denied (both treated as "no policy").
+    func fetchBucketPolicy(bucket: String) async -> String? {
+        if client == nil { try? await initializeClient() }
+        guard let client else { return nil }
+        do {
+            let input = GetBucketPolicyInput(bucket: bucket)
+            let output = try await client.getBucketPolicy(input: input)
+            return output.policy
+        } catch {
+            // NoSuchBucketPolicy and AccessDenied both mean "no readable policy"
+            return nil
+        }
+    }
+
     /// Returns a quick object count for a single bucket using one list page (max 1000 keys).
     /// - Returns: `(count, truncated)` where `truncated` is true when the bucket has more than 1000 objects.
     func quickObjectCount(bucket: String) async -> (count: Int, truncated: Bool) {

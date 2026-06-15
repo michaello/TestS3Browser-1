@@ -11,6 +11,8 @@ struct SettingsView: View {
     @State private var confirmClearCache = false
     @State private var confirmClearStars = false
     @State private var confirmClearTags = false
+    @State private var policyJSON: String? = nil
+    @State private var isPolicyLoading = false
 
     var body: some View {
         NavigationStack {
@@ -77,6 +79,32 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Bucket Policy") {
+                    if isPolicyLoading {
+                        HStack {
+                            ProgressView()
+                            Text("Loading policy...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if let json = policyJSON {
+                        ScrollView(.vertical) {
+                            Text(json)
+                                .font(.system(.caption, design: .monospaced))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .textSelection(.enabled)
+                        }
+                        .frame(maxHeight: 260)
+                    } else {
+                        Text("No policy configured")
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Button("Refresh") {
+                        Task { await loadBucketPolicy() }
+                    }
+                    .disabled(isPolicyLoading || !isConfigValid)
+                }
+
                 Section("Storage & Cache") {
                     HStack {
                         Label("Image Cache", systemImage: "photo.on.rectangle")
@@ -111,6 +139,7 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .task { await loadCacheSize() }
+            .task(id: config.bucketName) { await loadBucketPolicy() }
             .confirmationDialog("Clear image cache?", isPresented: $confirmClearCache, titleVisibility: .visible) {
                 Button("Clear Cache", role: .destructive) {
                     Task {
@@ -135,6 +164,27 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             }
         }
+    }
+
+    private func loadBucketPolicy() async {
+        guard isConfigValid else { return }
+        isPolicyLoading = true
+        policyJSON = nil
+        let service = S3Service(config: config)
+        let raw = await service.fetchBucketPolicy(bucket: config.bucketName)
+        // Pretty-print if valid JSON, otherwise show raw string
+        let pretty: String?
+        if let raw,
+           let data = raw.data(using: .utf8),
+           let obj = try? JSONSerialization.jsonObject(with: data),
+           let prettyData = try? JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys]),
+           let prettyStr = String(data: prettyData, encoding: .utf8) {
+            pretty = prettyStr
+        } else {
+            pretty = raw
+        }
+        policyJSON = pretty
+        isPolicyLoading = false
     }
 
     private var isConfigValid: Bool {
