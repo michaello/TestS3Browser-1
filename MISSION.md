@@ -786,3 +786,25 @@ Commit: `3d7ca24` feat: add S3 object tag editor to FileDetailView
 - `renameFile(_:to:)` async func: calls `s3Service.renameObject`, then `await load()` to refresh.
 
 Commit: `9ba0504` feat: add rename to PrefixBrowserView file rows
+
+## Phase 41 - Batch download to Files app in BucketBrowserView (DONE)
+
+- `BucketBrowserView`: added `isBatchDownloading: Bool`, `batchDownloadProgress: Int`,
+  `batchDownloadTotal: Int`, `batchDownloadError: String?`, `showBatchDownloadError: Bool`,
+  `batchDownloadURLs: [URL]?`, `showBatchDownloadShare: Bool` state vars.
+- In the selection toolbar (trailing, when `isSelecting && !selectedKeys.isEmpty`), added a
+  download button (arrow.down.to.line icon) beside the delete button. Disabled while
+  `isBatchDownloading`.
+- `batchDownload()` async func: iterates `selectedKeys` concurrently via `withTaskGroup`,
+  calls `s3Service.downloadObject(key:bucket:)` for each, writes each `Data` to
+  `FileManager.default.temporaryDirectory/s3cache/<sanitized-key>`, collects `[URL]`.
+  On completion sets `batchDownloadURLs` and `showBatchDownloadShare = true`. Failed keys
+  accumulate; if any failed after all succeed, shows `.alert("Download Failed")`.
+- Progress shown in the existing `uploadStatusBar`-style bottom bar while downloading: "Downloading
+  N / total..." text with a `ProgressView` value of `batchDownloadProgress / batchDownloadTotal`.
+- `ActivityView` (already in project from Phase 35) presented as a `.sheet` on
+  `showBatchDownloadShare` with the array of file `URL`s so iOS presents the standard
+  Files / AirDrop / share sheet.
+- After share sheet dismisses, `batchDownloadURLs` is cleared and selection mode exits.
+
+Commit: `a58f009` feat: add batch download to Files app in BucketBrowserView
