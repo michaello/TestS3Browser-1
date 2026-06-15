@@ -659,4 +659,4 @@ Commit: `cdfc2ab` feat: add drag-and-drop upload to BucketBrowserView
   same alert + validation flow, calls `s3Service.createFolder` then `load()`.
 - Both views show a "Create Failed" alert on error.
 
-Commit: `<hash>` feat: add new folder creation to browser views
+Commit: `c345f18` feat: add new folder creation to browser views
