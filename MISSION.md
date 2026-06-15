@@ -856,3 +856,18 @@ Commit: `0865900` feat: add object ACL viewer to FileDetailView
   queue manager instance is passed as an `@Environment` value so child views can enqueue.
 
 Commit: `807d2e1` feat: add upload queue with retry support
+
+## Phase 44 - Bucket Policy viewer in SettingsView (DONE)
+
+- `S3Service+Stats.swift`: added `fetchBucketPolicy(bucket:) async -> String?`. Calls
+  `GetBucketPolicyInput(bucket:)`, returns `output.policy`. Returns nil on
+  `NoSuchBucketPolicy`, `AccessDenied`, or any other error — all treated as "no policy".
+- `SettingsView`: added `@State private var policyJSON: String?` and `isPolicyLoading`.
+  New "Bucket Policy" `Section` above "Storage & Cache": shows a `ProgressView` while
+  loading, a scrollable monospaced `Text` (`.textSelection(.enabled)`, max height 260 pt)
+  when a policy is present (pretty-printed via `JSONSerialization` with `.sortedKeys`),
+  or "No policy configured" in secondary color when nil. A "Refresh" button re-triggers
+  `loadBucketPolicy()`. `.task(id: config.bucketName)` reloads automatically when the
+  bucket name changes in the form.
+
+Commit: `6e9a666` feat: add bucket policy viewer to settings
