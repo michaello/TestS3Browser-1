@@ -349,3 +349,51 @@ Commit: `e01a845` feat: add move/copy to prefix browser
   `showingShareSheet = true` and present the sheet.
 
 Commit: `a65b2db` feat: add share presigned URL sheet with expiry picker
+
+## Phase 17 - Object metadata viewer via HeadObject (DONE)
+
+- Added `S3ObjectMetadata` struct in `Sources/Models.swift`: holds `contentType`, `contentLength`,
+  `lastModified`, `etag`, `storageClass`, `cacheControl`, `contentEncoding`, `versionId`, and
+  `userMetadata: [String: String]` (user-defined `x-amz-meta-*` headers).
+- Added `S3Service.headObject(key:bucket:)` in `Sources/Services/S3Service+Transfer.swift`:
+  issues a `HeadObjectInput` call and maps the response to `S3ObjectMetadata`.
+- `FileDetailView.metadataCard` now shows Content-Type, Storage Class, Encoding, Cache-Control,
+  Version ID, ETag, and all custom metadata keys in sorted order. While the HEAD fetch is in
+  flight a small spinner replaces the rows. Failure is silent so the rest of the view works.
+- Both `htmlPrimaryView` and `standardDetailView` fire `loadMetadata()` concurrently with
+  `loadFile()` via `async let`.
+
+Commit: `a3bff14` feat: add object metadata viewer via HeadObject in FileDetailView
+
+## Phase 18 - Bucket usage statistics dashboard
+
+### Goal
+Give the user a quick at-a-glance summary of how each S3 bucket is used: total object count
+and total storage consumed, without downloading any object bodies.
+
+### Scope
+- Add `BucketStats` struct to `Sources/Models.swift`:
+  `struct BucketStats: Identifiable { let bucket: String; let objectCount: Int; let totalBytes: Int64 }`
+- Add `S3Service.fetchBucketStats() async throws -> [BucketStats]` in a new extension file
+  `Sources/Services/S3Service+Stats.swift`. For each bucket in `availableBuckets`, issue
+  paginated `ListObjectsV2Input` calls (no delimiter, no prefix) accumulating `size` and
+  incrementing count per object. Run all buckets concurrently via `withTaskGroup`. Return
+  results sorted by `totalBytes` descending.
+- Add `Sources/StatsView.swift`: `@Observable final class StatsViewModel` owns
+  `stats: [BucketStats]`, `isLoading: Bool`, `error: String?`. `load()` calls
+  `s3Service.fetchBucketStats()`. The view is a `NavigationStack` with a `List` of bucket
+  rows showing bucket name, object count, and formatted total size. A toolbar refresh button
+  re-triggers `load()`. Pull-to-refresh also calls `load()`. Empty/error states use
+  `ContentUnavailableView`.
+- Add a `Stats` case to `AppTab` in `ContentView.swift` (icon `chart.bar`) and wire
+  `StatsView` into the tab switch. Add pbxproj entries for both new Swift files.
+
+### Acceptance criteria
+- "Stats" tab appears in the tab bar between "Stash" and "Upload".
+- On first visit the view shows a loading spinner, then populates the list.
+- Each row shows bucket name (headline), object count (e.g. "1 234 objects"), and total size
+  (formatted with the existing `formattedSize` approach: KB / MB / GB).
+- Pull-to-refresh and the toolbar refresh button re-fetch all bucket stats.
+- Empty bucket (0 objects) shows "0 objects · 0 KB".
+- Inaccessible buckets are skipped silently (same pattern as `fetchRecentFilesFromAllBuckets`).
+- Build clean; commit with message "feat: add bucket usage stats tab".

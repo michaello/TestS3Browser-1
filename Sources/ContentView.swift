@@ -6,6 +6,7 @@ enum AppTab: String, CaseIterable {
     case browse
     case recent
     case stash
+    case stats
     case upload
     case settings
 
@@ -14,6 +15,7 @@ enum AppTab: String, CaseIterable {
         case .browse: return "Browse"
         case .recent: return "Recent"
         case .stash: return "Stash"
+        case .stats: return "Stats"
         case .upload: return "Upload"
         case .settings: return "Settings"
         }
@@ -24,6 +26,7 @@ enum AppTab: String, CaseIterable {
         case .browse: return "folder"
         case .recent: return "clock"
         case .stash: return "doc.richtext"
+        case .stats: return "chart.bar"
         case .upload: return "square.and.arrow.up"
         case .settings: return "gear"
         }
@@ -70,6 +73,8 @@ struct ContentView: View {
                         RecentFilesView(config: config, s3Service: s3Service)
                     case .stash:
                         StashView(s3Service: s3Service)
+                    case .stats:
+                        StatsView(s3Service: s3Service)
                     case .upload:
                         DumpFilesView(s3Service: s3Service)
                     case .settings:

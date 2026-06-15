@@ -39,6 +39,8 @@
 		PFX001A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PFX002A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift */; };
 		PKS001A1B2C3D4E5F6A7B8C9 /* PrefixPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = PKS002A1B2C3D4E5F6A7B8C9 /* PrefixPickerSheet.swift */; };
 		SPU001A1B2C3D4E5F6A7B8C9 /* SharePresignedURLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPU002A1B2C3D4E5F6A7B8C9 /* SharePresignedURLSheet.swift */; };
+		STV001A1B2C3D4E5F6A7B8C9 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = STV002A1B2C3D4E5F6A7B8C9 /* StatsView.swift */; };
+		SST001A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */; };
 		3401198A5F394BE6B0673BAF /* ImageCacheActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */; };
 		DFC4D298C920476EAAD50165 /* SeenPhotosTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */; };
 		EA91A4AA204D4B6B9759745E /* SharedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */; };
@@ -115,6 +117,8 @@
 		PFX002A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixBrowserView.swift; sourceTree = "<group>"; };
 		PKS002A1B2C3D4E5F6A7B8C9 /* PrefixPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixPickerSheet.swift; sourceTree = "<group>"; };
 		SPU002A1B2C3D4E5F6A7B8C9 /* SharePresignedURLSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePresignedURLSheet.swift; sourceTree = "<group>"; };
+		STV002A1B2C3D4E5F6A7B8C9 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S3Service+Stats.swift"; sourceTree = "<group>"; };
 		70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheActor.swift; sourceTree = "<group>"; };
 		520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenPhotosTracker.swift; sourceTree = "<group>"; };
 		67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
@@ -175,6 +179,7 @@
 				PFX002A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift */,
 				PKS002A1B2C3D4E5F6A7B8C9 /* PrefixPickerSheet.swift */,
 				SPU002A1B2C3D4E5F6A7B8C9 /* SharePresignedURLSheet.swift */,
+				STV002A1B2C3D4E5F6A7B8C9 /* StatsView.swift */,
 				A635869177F74A9288E86533 /* S3Service.swift */,
 				8B141FDE0D8545FD9ACB5E0A /* SettingsView.swift */,
 				8B19E811AE05417290AB50CA /* StashView.swift */,
@@ -213,6 +218,7 @@
 			children = (
 				70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */,
 				520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */,
+				SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */,
 				67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */,
 				89FD0222DF68416599C6EF01 /* S3Service+RecentFiles.swift */,
 				C00B48D31EEC44569DD6A7C2 /* S3Service+Transfer.swift */,
@@ -426,6 +432,8 @@
 				PFX001A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift in Sources */,
 				PKS001A1B2C3D4E5F6A7B8C9 /* PrefixPickerSheet.swift in Sources */,
 				SPU001A1B2C3D4E5F6A7B8C9 /* SharePresignedURLSheet.swift in Sources */,
+				STV001A1B2C3D4E5F6A7B8C9 /* StatsView.swift in Sources */,
+				SST001A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift in Sources */,
 				77AD6104C24F4674BC0AB7AA /* S3Service+RecentFiles.swift in Sources */,
 				6F6A725BDF5045AC845B514C /* S3Service+Transfer.swift in Sources */,
 				3779A1DDCA494735896B705F /* S3Service+URLs.swift in Sources */,

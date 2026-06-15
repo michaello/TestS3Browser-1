@@ -152,6 +152,30 @@ struct S3ObjectMetadata {
     let userMetadata: [String: String]
 }
 
+/// Per-bucket object count and total storage size, returned by S3Service.fetchBucketStats().
+struct BucketStats: Identifiable {
+    let bucket: String
+    let objectCount: Int
+    let totalBytes: Int64
+
+    var id: String { bucket }
+
+    var formattedSize: String {
+        let gb = Double(totalBytes) / 1_073_741_824.0
+        if gb >= 1.0 { return String(format: "%.2f GB", gb) }
+        let mb = Double(totalBytes) / 1_048_576.0
+        if mb >= 1.0 { return String(format: "%.1f MB", mb) }
+        let kb = Double(totalBytes) / 1024.0
+        return String(format: "%.1f KB", kb)
+    }
+
+    var formattedCount: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return (formatter.string(from: NSNumber(value: objectCount)) ?? "\(objectCount)") + " object\(objectCount == 1 ? "" : "s")"
+    }
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String
