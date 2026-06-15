@@ -227,3 +227,21 @@ Commit: `e67ceb4` feat: add file rename to RecentFilesView
 - Context menus, swipe actions, and navigation links are suppressed while in selection mode.
 
 Commit: `8014888` feat: add bulk multi-select delete to RecentFilesView
+
+## Phase 9 - File tagging in RecentFilesView (DONE)
+
+- Added `Sources/TagStore.swift`: `@Observable` singleton backed by `UserDefaults.standard`
+  key `"s3FileTags"` holding a `[String: String]` dict (S3 object key -> tag label). Exposes
+  `setTag(_:forKey:)` (nil/empty removes the tag) and `allTags` (sorted distinct values).
+- Added `Sources/TagChip.swift`: small colored capsule that derives a stable hue from the
+  tag string's character sum so each distinct tag always renders in the same color.
+- `RecentFileRow` and `RecentFileGridItem` gained a `tag: String?` parameter and render a
+  `TagChip` in their existing badge row / below the filename respectively.
+- `RecentFilesView` context menu gained "Set Tag" / "Edit Tag" (tag icon), which pre-fills
+  the current tag and opens an alert with a text field, Save, Remove Tag, and Cancel actions.
+- `filteredRecentFiles` chains a tag filter step after the existing type and search filters.
+- A horizontally scrolling tag-filter bar (`tagFilterBar`) appears above the list/grid via
+  `.safeAreaInset(edge: .top)` when at least one tag exists. Tapping a chip sets `tagFilter`;
+  tapping again (or tapping "All") clears it. The bar is hidden when no tags are in use.
+
+Commit: `2864ecf` feat: add file tagging to RecentFilesView
