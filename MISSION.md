@@ -553,4 +553,4 @@ Commit: `cbce369` feat: add cache management section to SettingsView
   `deleteObject(_:)` now surfaces failures in a "Delete Failed" alert via
   `.deleteErrorAlert(isPresented:message:)` (the shared modifier from Phase 3).
 
-Commit: `<hash>` feat: add move/copy and delete error alert to BucketBrowserView
+Commit: `0302368` feat: add move/copy and delete error alert to BucketBrowserView
