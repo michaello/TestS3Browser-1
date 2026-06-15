@@ -42,6 +42,8 @@ struct ContentView: View {
     @State private var isDropTargeted = false
     @State private var uploadToast: UploadToast?
     @State private var showBucketSwitcher = false
+    @State private var showUploadQueue = false
+    @State private var queueManager = UploadQueueManager.shared
 
     enum UploadToast: Identifiable {
         case uploading
@@ -126,6 +128,42 @@ struct ContentView: View {
                 }
             }
 
+            // Upload queue badge button — top-trailing, visible when queue is busy or has failures
+            if queueManager.busyCount > 0 || queueManager.failedCount > 0 {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            showUploadQueue = true
+                        } label: {
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .font(.system(size: 26))
+                                    .foregroundStyle(queueManager.failedCount > 0 ? .red : .accentColor)
+                                    .padding(8)
+                                    .background(.bar, in: Circle())
+
+                                let badge = queueManager.failedCount > 0
+                                    ? queueManager.failedCount
+                                    : queueManager.busyCount
+                                Text("\(badge)")
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                                    .padding(4)
+                                    .background(queueManager.failedCount > 0 ? Color.red : Color.accentColor, in: Circle())
+                                    .offset(x: 4, y: -4)
+                            }
+                        }
+                        .padding(.trailing, 12)
+                        .padding(.top, 8)
+                    }
+                    Spacer()
+                }
+                .transition(.opacity)
+                .animation(.easeInOut(duration: 0.2), value: queueManager.busyCount + queueManager.failedCount)
+            }
+
             // Bucket switcher overlay
             if showBucketSwitcher {
                 Color.black.opacity(0.3)
@@ -168,11 +206,16 @@ struct ContentView: View {
         } isTargeted: { targeted in
             isDropTargeted = targeted
         }
+        .sheet(isPresented: $showUploadQueue) {
+            UploadQueueSheet()
+                .presentationDetents([.medium, .large])
+        }
         .onAppear {
             // Restore last selected tab on launch
             if let savedTab = AppTab(rawValue: lastSelectedTabRaw) {
                 selectedTab = savedTab
             }
+            queueManager.configure(s3Service: s3Service)
         }
         .onChange(of: selectedTab) { _, newTab in
             // Persist tab selection
