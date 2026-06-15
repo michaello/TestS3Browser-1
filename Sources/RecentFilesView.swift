@@ -230,6 +230,15 @@ struct RecentFilesView: View {
             filterMenu
 
             Button {
+                Task {
+                    await MainActor.run { s3Service.clearRecentFiles() }
+                    await refreshRecentFiles()
+                }
+            } label: {
+                Image(systemName: "trash")
+            }
+
+            Button {
                 viewModeRaw = viewMode == .list ? "grid" : "list"
             } label: {
                 Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")

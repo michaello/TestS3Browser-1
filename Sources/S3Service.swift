@@ -218,6 +218,13 @@ final class S3Service {
         try await listObjects()
     }
 
+    /// Clears the in-memory recent files list. recentFiles is private(set), so callers
+    /// outside S3Service go through this to empty it (for example the Clear All button).
+    @MainActor
+    func clearRecentFiles() {
+        recentFiles.removeAll()
+    }
+
     /// Fetches the most recent files from the current bucket recursively
     /// - Parameter limit: Maximum number of files to return (default 20)
     func fetchRecentFiles(limit: Int = 20) async throws {
