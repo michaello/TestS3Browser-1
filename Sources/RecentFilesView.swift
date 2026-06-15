@@ -41,6 +41,15 @@ struct RecentFilesView: View {
     /// Drives the "Set Tag" alert for a single file.
     @State private var tagTarget: S3Object? = nil
     @State private var tagText = ""
+    @State private var sortOrder: SortOrder = .newestFirst
+
+    enum SortOrder: String, CaseIterable {
+        case newestFirst = "Newest first"
+        case oldestFirst = "Oldest first"
+        case nameAZ      = "Name A-Z"
+        case nameZA      = "Name Z-A"
+        case bucket      = "Bucket"
+    }
 
     enum ViewMode {
         case list
@@ -67,9 +76,20 @@ struct RecentFilesView: View {
         } else {
             tagFiltered = typeFiltered
         }
-        guard !searchText.isEmpty else { return tagFiltered }
-        let lower = searchText.lowercased()
-        return tagFiltered.filter { $0.key.lowercased().contains(lower) }
+        let searchFiltered: [S3Object]
+        if searchText.isEmpty {
+            searchFiltered = tagFiltered
+        } else {
+            let lower = searchText.lowercased()
+            searchFiltered = tagFiltered.filter { $0.key.lowercased().contains(lower) }
+        }
+        switch sortOrder {
+        case .newestFirst: return searchFiltered.sorted { ($0.lastModified ?? .distantPast) > ($1.lastModified ?? .distantPast) }
+        case .oldestFirst: return searchFiltered.sorted { ($0.lastModified ?? .distantPast) < ($1.lastModified ?? .distantPast) }
+        case .nameAZ:      return searchFiltered.sorted { $0.fileName.localizedCompare($1.fileName) == .orderedAscending }
+        case .nameZA:      return searchFiltered.sorted { $0.fileName.localizedCompare($1.fileName) == .orderedDescending }
+        case .bucket:      return searchFiltered.sorted { ($0.bucket ?? "") < ($1.bucket ?? "") }
+        }
     }
 
     /// Returns only image files from the filtered list for gallery navigation
@@ -453,6 +473,8 @@ struct RecentFilesView: View {
                         .frame(width: 80)
                 }
 
+                sortMenu
+
                 filterMenu
 
                 Button {
@@ -503,6 +525,26 @@ struct RecentFilesView: View {
                 .foregroundStyle(isActive ? Color.white : Color.primary)
         }
         .buttonStyle(.plain)
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Section("Sort by") {
+                ForEach(SortOrder.allCases, id: \.self) { order in
+                    Button {
+                        sortOrder = order
+                    } label: {
+                        if sortOrder == order {
+                            Label(order.rawValue, systemImage: "checkmark")
+                        } else {
+                            Text(order.rawValue)
+                        }
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+        }
     }
 
     private var filterMenu: some View {
