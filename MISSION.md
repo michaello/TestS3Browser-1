@@ -306,3 +306,46 @@ Commit: `52baa67` feat: add file upload to folder browser
 - Pull-to-refresh still calls `load()`, which resets pagination from the beginning.
 
 Commit: `3c67c1c` feat: add pagination to prefix browser
+
+## Phase 14 - Delete in prefix browser (DONE)
+
+- `PrefixBrowserView` file rows gained `.swipeActions(edge: .trailing, allowsFullSwipe: true)`
+  with a destructive "Delete" button, and a "Delete" item in the `.contextMenu`.
+- Both call `deleteItem(_:)`, which calls `s3Service.deleteObject(key:bucket:)` and removes
+  the item from the local `@State items` array on success so the list updates without a reload.
+- Failures surface in a "Delete Failed" alert (`showDeleteError` / `deleteErrorMessage`).
+- Folder rows intentionally have no delete (S3 has no recursive folder delete).
+
+Commit: `01e61a3` feat: add delete to prefix browser
+
+## Phase 15 - Move/copy between prefixes (DONE)
+
+- Added `Sources/PrefixPickerSheet.swift`: half-height sheet that browses the bucket prefix
+  tree (folders only, one level at a time). Back button walks back up. Trailing "Move"/"Copy"
+  toolbar button confirms. A destination banner at the bottom shows where the file will land.
+  Disabled when source and destination prefix are the same.
+- `PrefixBrowserView` file row `.contextMenu` gained "Move to…" and "Copy to…" items that
+  set `moveCopyTarget` and present `PrefixPickerSheet`.
+- `performMoveCopy(object:destPrefix:)` calls `s3Service.copyObject(key:to:sourceBucket:destBucket:)`
+  then, for move, `deleteObject` and removes the row from `items`. Copy reloads the listing.
+- Added `S3Service.copyObject(key:to:sourceBucket:destBucket:)` in `S3Service+Transfer.swift`:
+  builds a `CopyObjectInput` with `copySource = "\(src)/\(key)"` and calls `client.copyObject`.
+
+Commit: `e01a845` feat: add move/copy to prefix browser
+
+## Phase 16 - Share presigned URL with expiry picker (DONE)
+
+- Added `Sources/SharePresignedURLSheet.swift`: `.presentationDetents([.medium])` sheet with
+  a file identity header, 4 expiry chips (1 hour / 1 day / 3 days / 7 days), a monospace URL
+  preview, a "Copy" button (copies to pasteboard with a toast), and a `ShareLink` button that
+  opens the system share sheet (AirDrop, Messages, Mail, etc.). URL is generated on-the-fly
+  from `s3Service.generatePresignedURL(for:bucket:expiresIn:)` whenever the expiry selection
+  changes.
+- `RecentFilesView`: context-menu "Copy Link (1 day)" replaced by "Share Link…" (opens sheet);
+  leading swipe action updated from direct clipboard copy to opening the same sheet.
+  `@State private var shareTarget: S3Object?` drives the `.sheet(item:)`.
+- `FileDetailView`: "Share Link…" added to the HTML view's `...` menu; a share toolbar button
+  (`square.and.arrow.up`) added to the standard detail view's navigation bar. Both set
+  `showingShareSheet = true` and present the sheet.
+
+Commit: `a65b2db` feat: add share presigned URL sheet with expiry picker

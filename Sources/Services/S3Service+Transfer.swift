@@ -252,6 +252,31 @@ extension S3Service {
         return (items, output.nextContinuationToken)
     }
 
+    /// Fetches metadata for an S3 object via HeadObject without downloading the body.
+    /// - Parameters:
+    ///   - key: S3 object key
+    ///   - bucket: Bucket containing the object (defaults to currentBucket)
+    /// - Returns: S3ObjectMetadata with content type, size, storage class, and user-defined metadata
+    func headObject(key: String, bucket: String? = nil) async throws -> S3ObjectMetadata {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let input = HeadObjectInput(bucket: bucket ?? currentBucket, key: key)
+        let output = try await client.headObject(input: input)
+
+        return S3ObjectMetadata(
+            contentType: output.contentType,
+            contentLength: output.contentLength,
+            lastModified: output.lastModified,
+            etag: output.eTag,
+            storageClass: output.storageClass?.rawValue,
+            cacheControl: output.cacheControl,
+            contentEncoding: output.contentEncoding,
+            versionId: output.versionId,
+            userMetadata: output.metadata ?? [:]
+        )
+    }
+
     /// Uploads an image to the dump folder with timestamp
     /// - Parameters:
     ///   - imageData: JPEG or PNG image data

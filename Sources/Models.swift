@@ -138,6 +138,20 @@ enum FileType {
     }
 }
 
+/// Metadata returned by a HeadObject call for a single S3 object.
+struct S3ObjectMetadata {
+    let contentType: String?
+    let contentLength: Int?
+    let lastModified: Date?
+    let etag: String?
+    let storageClass: String?
+    let cacheControl: String?
+    let contentEncoding: String?
+    let versionId: String?
+    /// User-defined metadata keys (x-amz-meta-* headers), with the "x-amz-meta-" prefix stripped.
+    let userMetadata: [String: String]
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String

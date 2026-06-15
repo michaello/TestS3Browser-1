@@ -12,6 +12,7 @@ struct FileDetailView: View {
     @State private var downloadedBytes: Int64 = 0
     @State private var showingDetails = false
     @State private var showingShareSheet = false
+    @State private var objectMetadata: S3ObjectMetadata? = nil
 
     enum FileContent {
         case text(String)
@@ -86,7 +87,11 @@ struct FileDetailView: View {
             }
             .presentationDetents([.medium])
         }
-        .task { await loadFile() }
+        .task {
+            async let fileLoad: Void = loadFile()
+            async let metaLoad: Void = loadMetadata()
+            _ = await (fileLoad, metaLoad)
+        }
     }
 
     private var metadataCard: some View {
@@ -97,6 +102,44 @@ struct FileDetailView: View {
             MetadataRow(label: "Name", value: object.fileName)
             MetadataRow(label: "Size", value: object.formattedSize)
             MetadataRow(label: "Modified", value: object.lastModified.relativeFormatted())
+
+            if let meta = objectMetadata {
+                if let ct = meta.contentType {
+                    MetadataRow(label: "Content-Type", value: ct)
+                }
+                if let sc = meta.storageClass {
+                    MetadataRow(label: "Storage Class", value: sc)
+                }
+                if let enc = meta.contentEncoding {
+                    MetadataRow(label: "Encoding", value: enc)
+                }
+                if let cc = meta.cacheControl {
+                    MetadataRow(label: "Cache-Control", value: cc)
+                }
+                if let vid = meta.versionId {
+                    MetadataRow(label: "Version ID", value: vid)
+                }
+                if let etag = meta.etag {
+                    MetadataRow(label: "ETag", value: etag)
+                }
+                if !meta.userMetadata.isEmpty {
+                    Divider()
+                    Text("Custom Metadata")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    ForEach(meta.userMetadata.keys.sorted(), id: \.self) { key in
+                        MetadataRow(label: key, value: meta.userMetadata[key] ?? "")
+                    }
+                }
+            } else {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .scaleEffect(0.7)
+                    Text("Loading metadata…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
 
             if let url = service.getPublicURL(for: object.key) {
                 Link("Open in Browser", destination: url)
@@ -159,7 +202,9 @@ struct FileDetailView: View {
             }
         }
         .task {
-            await loadFile()
+            async let fileLoad: Void = loadFile()
+            async let metaLoad: Void = loadMetadata()
+            _ = await (fileLoad, metaLoad)
         }
     }
 
@@ -197,6 +242,15 @@ struct FileDetailView: View {
         }
         let mb = kb / 1024.0
         return String(format: "%.1f MB", mb)
+    }
+
+    private func loadMetadata() async {
+        do {
+            let meta = try await service.headObject(key: object.key, bucket: object.bucket)
+            await MainActor.run { objectMetadata = meta }
+        } catch {
+            // Metadata load failure is non-fatal; the card stays in loading state.
+        }
     }
 
     private func loadFile() async {
