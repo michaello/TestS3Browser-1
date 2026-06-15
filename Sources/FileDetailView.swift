@@ -32,6 +32,9 @@ struct FileDetailView: View {
     @State private var isSavingTags = false
     @State private var tagsError: String? = nil
     @State private var showTagsError = false
+    @State private var objectACL: S3ObjectACL? = nil
+    @State private var isLoadingACL = false
+    @State private var aclError: String? = nil
     @State private var versions: [S3VersionEntry] = []
     @State private var isLoadingVersions = false
     @State private var versionsError: String? = nil
@@ -164,7 +167,8 @@ struct FileDetailView: View {
             async let metaLoad: Void = loadMetadata()
             async let versLoad: Void = loadVersions()
             async let tagsLoad: Void = loadTags()
-            _ = await (fileLoad, metaLoad, versLoad, tagsLoad)
+            async let aclLoad: Void = loadACL()
+            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad)
         }
     }
 
@@ -272,6 +276,7 @@ struct FileDetailView: View {
 
                 versionsSection
                 tagsSection
+                aclSection
             }
             .padding()
         }
@@ -314,7 +319,8 @@ struct FileDetailView: View {
             async let metaLoad: Void = loadMetadata()
             async let versLoad: Void = loadVersions()
             async let tagsLoad: Void = loadTags()
-            _ = await (fileLoad, metaLoad, versLoad, tagsLoad)
+            async let aclLoad: Void = loadACL()
+            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad)
         }
         .confirmationDialog(
             "Restore this version?",
@@ -733,6 +739,62 @@ struct FileDetailView: View {
                         Spacer()
                     }
                     .padding(.vertical, 2)
+                }
+            }
+        }
+        .padding()
+        .background(.gray.opacity(0.07))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    // MARK: - ACL
+
+    private func loadACL() async {
+        isLoadingACL = true
+        defer { isLoadingACL = false }
+        do {
+            let result = try await service.getObjectAcl(key: object.key, bucket: object.bucket)
+            await MainActor.run { objectACL = result }
+        } catch {
+            let msg = error.localizedDescription
+            let display = msg.contains("AccessControlListNotSupported")
+                ? "ACLs disabled on this bucket"
+                : msg
+            await MainActor.run { aclError = display }
+        }
+    }
+
+    private var aclSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Permissions")
+                .font(.headline)
+
+            if isLoadingACL {
+                HStack(spacing: 6) {
+                    ProgressView().scaleEffect(0.7)
+                    Text("Loading permissions…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else if let err = aclError {
+                MetadataRow(label: "ACL", value: err)
+            } else if let acl = objectACL {
+                MetadataRow(label: "Access", value: acl.summary)
+                if !acl.grants.isEmpty {
+                    DisclosureGroup("Show grants (\(acl.grants.count))") {
+                        ForEach(acl.grants) { grant in
+                            HStack {
+                                Text(grant.grantee)
+                                    .font(.caption)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Text(grant.permission)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .font(.caption)
                 }
             }
         }

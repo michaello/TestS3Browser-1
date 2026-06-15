@@ -195,6 +195,20 @@ struct BucketStats: Identifiable {
     }
 }
 
+/// A single ACL grant entry returned by GetObjectAcl.
+struct ACLGrant: Identifiable {
+    let grantee: String
+    let permission: String
+    var id: String { "\(grantee)-\(permission)" }
+}
+
+/// ACL information for an S3 object, returned by S3Service.getObjectAcl(key:bucket:).
+struct S3ObjectACL {
+    /// Human-readable summary: "Public (read)", "Private", or "Custom (N grants)".
+    let summary: String
+    let grants: [ACLGrant]
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String

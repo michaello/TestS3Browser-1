@@ -808,3 +808,24 @@ Commit: `9ba0504` feat: add rename to PrefixBrowserView file rows
 - After share sheet dismisses, `batchDownloadURLs` is cleared and selection mode exits.
 
 Commit: `a58f009` feat: add batch download to Files app in BucketBrowserView
+
+## Phase 42 - Object ACL viewer in FileDetailView (DONE)
+
+- `S3Service+Transfer.swift`: added `getObjectAcl(key:bucket:)` returning a new `S3ObjectACL`
+  struct. Calls `GetObjectAclInput(bucket:key:)`, maps each `S3ClientTypes.Grant` to an
+  `ACLGrant` value (grantee display name + permission label). Derives a top-level `summary`
+  string: `"Public (read)"` when the All Users group URI
+  (`http://acs.amazonaws.com/groups/global/AllUsers`) has READ permission, `"Private"` when
+  only the owner appears, otherwise `"Custom (\(n) grants)"`.
+- `Models.swift`: added `struct S3ObjectACL` with `summary: String` and
+  `grants: [ACLGrant]`; `struct ACLGrant: Identifiable` with `grantee: String` and
+  `permission: String`.
+- `FileDetailView.swift`: added `objectACL: S3ObjectACL?`, `isLoadingACL: Bool`,
+  `aclError: String?` state vars. `loadACL()` runs in `.task` alongside the other four
+  loaders. `aclSection` `@ViewBuilder` shows below `tagsSection`: a "Permissions" header
+  with the summary string as a `MetadataRow`, then a disclosure group "Show grants" revealing
+  per-grant rows (`grantee - permission`). Error state shows inline. Loading state shows a
+  spinner. If the bucket has ACLs disabled (Object Ownership enforced) the API returns
+  `AccessControlListNotSupported`; this is caught and shown as "ACLs disabled on this bucket".
+
+Commit: `<hash>` feat: add object ACL viewer to FileDetailView

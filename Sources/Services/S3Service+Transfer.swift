@@ -412,6 +412,75 @@ extension S3Service {
         }
     }
 
+    /// Returns the ACL for an S3 object, summarised as a human-readable label plus a flat list of grants.
+    func getObjectAcl(key: String, bucket: String? = nil) async throws -> S3ObjectACL {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let target = bucket ?? currentBucket
+        let input = GetObjectAclInput(bucket: target, key: key)
+        let output = try await client.getObjectAcl(input: input)
+
+        let allUsersURI = "http://acs.amazonaws.com/groups/global/AllUsers"
+        let authenticatedURI = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+
+        var grants: [ACLGrant] = []
+        var isPublicRead = false
+
+        for grant in output.grants ?? [] {
+            let perm = permissionLabel(grant.permission)
+            let granteeStr: String
+            if let g = grant.grantee {
+                switch g.type {
+                case .group:
+                    if g.uri == allUsersURI {
+                        granteeStr = "Everyone (public)"
+                        if grant.permission == .read || grant.permission == .fullControl {
+                            isPublicRead = true
+                        }
+                    } else if g.uri == authenticatedURI {
+                        granteeStr = "Authenticated AWS users"
+                    } else {
+                        granteeStr = g.uri ?? "Group"
+                    }
+                case .canonicaluser:
+                    granteeStr = g.displayName ?? String((g.id ?? "unknown").prefix(12)) + "…"
+                case .amazoncustomerbyemail:
+                    granteeStr = g.emailAddress ?? "email grantee"
+                default:
+                    granteeStr = "unknown"
+                }
+            } else {
+                granteeStr = "unknown"
+            }
+            grants.append(ACLGrant(grantee: granteeStr, permission: perm))
+        }
+
+        let ownerOnly = grants.allSatisfy { !$0.grantee.contains("public") && !$0.grantee.contains("Authenticated") }
+        let summary: String
+        if isPublicRead {
+            summary = "Public (read)"
+        } else if ownerOnly || grants.isEmpty {
+            summary = "Private"
+        } else {
+            summary = "Custom (\(grants.count) grants)"
+        }
+
+        logger.info("ACL for \(target)/\(key): \(summary)")
+        return S3ObjectACL(summary: summary, grants: grants)
+    }
+
+    private func permissionLabel(_ permission: S3ClientTypes.Permission?) -> String {
+        switch permission {
+        case .fullControl:  return "Full Control"
+        case .read:         return "Read"
+        case .readAcp:      return "Read ACP"
+        case .write:        return "Write"
+        case .writeAcp:     return "Write ACP"
+        default:            return permission?.rawValue ?? "Unknown"
+        }
+    }
+
     /// Replaces the S3 object tag set with the provided key-value pairs.
     func setObjectTags(key: String, tags: [(key: String, value: String)], bucket: String? = nil) async throws {
         if client == nil { try await initializeClient() }
