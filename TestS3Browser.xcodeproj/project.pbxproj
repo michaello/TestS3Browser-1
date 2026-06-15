@@ -10,6 +10,7 @@
 		8EE57922DC3E4874AF09C6B9 /* BreadcrumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E66C8C382C4B0893FFC4FC /* BreadcrumbView.swift */; };
 		47431F15E4B14785B4420A1D /* BucketBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E12204D769A401E9239CB5C /* BucketBrowserView.swift */; };
 		1AE2DC576ED347AB9FB4040D /* BucketPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64C31496AD04C879BE50520 /* BucketPickerView.swift */; };
+		BSW001A1B2C3D4E5F6A7B8C9 /* BucketSwitcherOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BSW002A1B2C3D4E5F6A7B8C9 /* BucketSwitcherOverlay.swift */; };
 		F39A891C626F41D9B1CD9537 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED97503FBF4EC4BD6C1F1A /* ContentView.swift */; };
 		A9D63BF9855C42C9829A586A /* DropUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E62028F5074740BD9E0F20 /* DropUploadView.swift */; };
 		0CF80B2C3F054BF18C90A116 /* DumpFilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C6BBB6AA1841B6A010DC47 /* DumpFilesView.swift */; };
@@ -89,6 +90,7 @@
 		B8E66C8C382C4B0893FFC4FC /* BreadcrumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreadcrumbView.swift; sourceTree = "<group>"; };
 		5E12204D769A401E9239CB5C /* BucketBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BucketBrowserView.swift; sourceTree = "<group>"; };
 		A64C31496AD04C879BE50520 /* BucketPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BucketPickerView.swift; sourceTree = "<group>"; };
+		BSW002A1B2C3D4E5F6A7B8C9 /* BucketSwitcherOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BucketSwitcherOverlay.swift; sourceTree = "<group>"; };
 		9AED97503FBF4EC4BD6C1F1A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		72E62028F5074740BD9E0F20 /* DropUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropUploadView.swift; sourceTree = "<group>"; };
 		08C6BBB6AA1841B6A010DC47 /* DumpFilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumpFilesView.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				B8E66C8C382C4B0893FFC4FC /* BreadcrumbView.swift */,
 				5E12204D769A401E9239CB5C /* BucketBrowserView.swift */,
 				A64C31496AD04C879BE50520 /* BucketPickerView.swift */,
+				BSW002A1B2C3D4E5F6A7B8C9 /* BucketSwitcherOverlay.swift */,
 				9AED97503FBF4EC4BD6C1F1A /* ContentView.swift */,
 				72E62028F5074740BD9E0F20 /* DropUploadView.swift */,
 				08C6BBB6AA1841B6A010DC47 /* DumpFilesView.swift */,
@@ -420,6 +423,7 @@
 				8EE57922DC3E4874AF09C6B9 /* BreadcrumbView.swift in Sources */,
 				47431F15E4B14785B4420A1D /* BucketBrowserView.swift in Sources */,
 				1AE2DC576ED347AB9FB4040D /* BucketPickerView.swift in Sources */,
+				BSW001A1B2C3D4E5F6A7B8C9 /* BucketSwitcherOverlay.swift in Sources */,
 				F39A891C626F41D9B1CD9537 /* ContentView.swift in Sources */,
 				A9D63BF9855C42C9829A586A /* DropUploadView.swift in Sources */,
 				0CF80B2C3F054BF18C90A116 /* DumpFilesView.swift in Sources */,

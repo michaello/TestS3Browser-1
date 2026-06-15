@@ -41,6 +41,7 @@ struct ContentView: View {
     @State private var selectedTab: AppTab = .browse
     @State private var isDropTargeted = false
     @State private var uploadToast: UploadToast?
+    @State private var showBucketSwitcher = false
 
     enum UploadToast: Identifiable {
         case uploading
@@ -97,6 +98,65 @@ struct ContentView: View {
             // Upload toast
             if let toast = uploadToast {
                 uploadToastView(toast)
+            }
+
+            // Bucket switcher trigger pill — only shown when multiple buckets exist
+            if s3Service.availableBuckets.count > 1 && !showBucketSwitcher {
+                VStack {
+                    Spacer()
+                    Button {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                            showBucketSwitcher = true
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "cylinder.split.1x2")
+                                .font(.caption)
+                            Text(s3Service.currentBucket)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .lineLimit(1)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(.bar, in: Capsule())
+                        .shadow(color: .black.opacity(0.12), radius: 6, x: 0, y: 2)
+                    }
+                    .padding(.bottom, 56) // sit just above the custom tab bar
+                }
+            }
+
+            // Bucket switcher overlay
+            if showBucketSwitcher {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                            showBucketSwitcher = false
+                        }
+                    }
+
+                VStack {
+                    Spacer()
+                    BucketSwitcherOverlay(
+                        s3Service: s3Service,
+                        onSelect: { bucket in
+                            showBucketSwitcher = false
+                            selectedTab = .browse
+                            Task {
+                                try? await s3Service.switchBucket(bucket)
+                            }
+                        },
+                        onDismiss: {
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                showBucketSwitcher = false
+                            }
+                        }
+                    )
+                    .frame(maxHeight: 420)
+                    .padding(.bottom, 84) // clear the custom tab bar
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .dropDestination(for: Data.self) { items, _ in

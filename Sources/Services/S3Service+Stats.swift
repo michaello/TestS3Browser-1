@@ -49,4 +49,20 @@ extension S3Service {
 
         return results.sorted { $0.totalBytes > $1.totalBytes }
     }
+
+    /// Returns a quick object count for a single bucket using one list page (max 1000 keys).
+    /// - Returns: `(count, truncated)` where `truncated` is true when the bucket has more than 1000 objects.
+    func quickObjectCount(bucket: String) async -> (count: Int, truncated: Bool) {
+        if client == nil { try? await initializeClient() }
+        guard let client else { return (0, false) }
+        do {
+            let input = ListObjectsV2Input(bucket: bucket, maxKeys: 1000)
+            let output = try await client.listObjectsV2(input: input)
+            let count = output.contents?.filter { !($0.key?.hasSuffix("/") ?? false) }.count ?? 0
+            let truncated = output.isTruncated ?? false
+            return (count, truncated)
+        } catch {
+            return (0, false)
+        }
+    }
 }
