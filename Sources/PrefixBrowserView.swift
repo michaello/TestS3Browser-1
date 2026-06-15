@@ -22,6 +22,12 @@ struct PrefixBrowserView: View {
     @State private var errorMessage: String? = nil
     @State private var searchText = ""
     @State private var sortOption: PrefixSortOption = .nameAZ
+    @AppStorage("prefixBrowserViewStyle") private var viewStyleRaw: String = "standard"
+    @AppStorage("prefixBrowserGridCardSize") private var cardSize: Double = 120
+
+    private var viewStyle: ViewStyle {
+        viewStyleRaw == "grid" ? .grid : .standard
+    }
 
     // Delete state
     @State private var showDeleteError = false
@@ -82,6 +88,32 @@ struct PrefixBrowserView: View {
                     systemImage: "folder",
                     description: Text("No files or folders here")
                 )
+            } else if viewStyle == .grid {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: cardSize), spacing: 10)], spacing: 10) {
+                        ForEach(displayedItems) { item in
+                            gridCell(for: item)
+                        }
+                    }
+                    .padding(.horizontal, 12)
+
+                    if let _ = nextToken {
+                        HStack {
+                            Spacer()
+                            if isLoadingMore {
+                                ProgressView()
+                            } else {
+                                Button("Load more") {
+                                    Task { await loadMore() }
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, 8)
+                    }
+                }
+                .refreshable { await load() }
             } else {
                 List {
                     ForEach(displayedItems) { item in
@@ -159,6 +191,11 @@ struct PrefixBrowserView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 4) {
+                    if viewStyle == .grid {
+                        Slider(value: $cardSize, in: 80...200)
+                            .frame(width: 80)
+                    }
+                    viewStyleToggle
                     sortMenuButton
                     uploadButton
                 }
@@ -209,6 +246,48 @@ struct PrefixBrowserView: View {
         .task { await load() }
     }
 
+    // MARK: - Grid cell
+
+    @ViewBuilder
+    private func gridCell(for item: S3Item) -> some View {
+        if case .file(let object) = item {
+            NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                PrefixGridItem(item: item, cardSize: cardSize)
+            }
+            .buttonStyle(.plain)
+            .contextMenu {
+                Button {
+                    moveCopyMode = .move
+                    moveCopyTarget = object
+                } label: {
+                    Label("Move to…", systemImage: "arrow.forward.circle")
+                }
+                Button {
+                    moveCopyMode = .copy
+                    moveCopyTarget = object
+                } label: {
+                    Label("Copy to…", systemImage: "doc.on.doc")
+                }
+                Divider()
+                Button(role: .destructive) {
+                    Task { await deleteItem(item) }
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+        } else if case .folder(let folder) = item {
+            NavigationLink(destination: PrefixBrowserView(
+                s3Service: s3Service,
+                prefix: folder.prefix,
+                bucket: bucket,
+                title: folder.folderName
+            )) {
+                PrefixGridItem(item: item, cardSize: cardSize)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
     // MARK: - Delete
 
     private func deleteItem(_ item: S3Item) async {
@@ -249,6 +328,16 @@ struct PrefixBrowserView: View {
                 moveCopyErrorMessage = error.localizedDescription
                 showMoveCopyError = true
             }
+        }
+    }
+
+    // MARK: - View style toggle
+
+    private var viewStyleToggle: some View {
+        Button {
+            viewStyleRaw = (viewStyle != .grid) ? "grid" : "standard"
+        } label: {
+            Image(systemName: viewStyle != .grid ? "square.grid.2x2" : "list.bullet")
         }
     }
 
@@ -453,6 +542,99 @@ enum PrefixSortOption: CaseIterable {
         case .nameZA:     return "Name (Z - A)"
         case .dateNewest: return "Date (Newest)"
         case .dateOldest: return "Date (Oldest)"
+        }
+    }
+}
+
+// MARK: - PrefixGridItem
+
+private let prefixStarStore = StarStore.shared
+
+struct PrefixGridItem: View {
+    let item: S3Item
+    let cardSize: Double
+    @State private var thumbnail: UIImage?
+
+    private var iconColor: Color {
+        guard case .file(let obj) = item else { return .blue }
+        switch obj.fileType {
+        case .log:     return .blue
+        case .image:   return .purple
+        case .video:   return .orange
+        case .text:    return .green
+        case .html:    return .teal
+        case .unknown: return .gray
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 6) {
+            ZStack(alignment: .bottomTrailing) {
+                ZStack {
+                    switch item {
+                    case .folder:
+                        Image(systemName: "folder.fill")
+                            .font(.system(size: cardSize > 100 ? 32 : 22))
+                            .foregroundStyle(.blue)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    case .file(let object):
+                        if let thumbnail {
+                            Image(uiImage: thumbnail)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .clipped()
+                        } else {
+                            Image(systemName: object.fileType.icon)
+                                .font(.system(size: cardSize > 100 ? 28 : 18))
+                                .foregroundStyle(iconColor)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                        if object.fileType == .video {
+                            Image(systemName: "play.circle.fill")
+                                .font(.system(size: cardSize > 100 ? 28 : 18))
+                                .foregroundStyle(.white)
+                                .shadow(color: .black.opacity(0.5), radius: 3)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(height: cardSize)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(8)
+
+                if case .file(let obj) = item, prefixStarStore.isStarred(obj.key) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.yellow)
+                        .padding(2)
+                        .background(Color.black.opacity(0.35), in: Circle())
+                        .padding(4)
+                }
+            }
+
+            VStack(alignment: .center, spacing: 2) {
+                Text(item.displayName)
+                    .font(cardSize > 100 ? .caption : .system(size: 9))
+                    .fontWeight(.semibold)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                if case .file(let object) = item {
+                    Text(object.formattedSize)
+                        .font(.system(size: cardSize > 100 ? 10 : 8))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .task { await loadThumbnail() }
+    }
+
+    private func loadThumbnail() async {
+        guard case .file(let object) = item,
+              object.fileType == .image || object.fileType == .video else { return }
+        if let cached = await ImageCacheActor.shared.getThumbnail(for: object.key) {
+            await MainActor.run { self.thumbnail = cached }
         }
     }
 }

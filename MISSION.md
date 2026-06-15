@@ -572,3 +572,21 @@ Commit: `0302368` feat: add move/copy and delete error alert to BucketBrowserVie
 - `searchText` is not cleared on load so it persists while the user browses the same level.
 
 Commit: `f308b81` feat: add search and sort to PrefixBrowserView
+
+## Phase 28 - Grid view in PrefixBrowserView (DONE)
+
+- Added `@AppStorage("prefixBrowserViewStyle") private var viewStyle: ViewStyle = .list`
+  to `PrefixBrowserView`; reuses the existing `ViewStyle` enum from `BucketBrowserView`.
+- The `else` branch (items non-empty, no error, not loading) now dispatches on `viewStyle`:
+  `.list` renders the existing `List`; `.grid` renders a `LazyVGrid` inside a `ScrollView`
+  with `GridItem(.adaptive(minimum: cardSize))` columns.
+- `@AppStorage("prefixBrowserGridCardSize") private var cardSize: Double = 120` controls
+  the thumbnail cell size; a `Slider(value: $cardSize, in: 80...200)` in the toolbar is
+  shown only when `viewStyle == .grid`.
+- Grid cells reuse `BrowserGridItem` from `BucketBrowserView.swift` (it is file-scoped
+  but accessible because both files are in the same module/target).
+- A `list.bullet` / `square.grid.2x2` toolbar toggle button switches modes.
+- The grid supports pull-to-refresh via `.refreshable { await load() }` and shows the
+  "Load more" row at the bottom just like the list.
+
+Commit: `<hash>` feat: add grid view to PrefixBrowserView
