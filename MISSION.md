@@ -627,3 +627,21 @@ Commit: `9bcff10` feat: batch select and bulk delete in BucketBrowserView
 - `viewStyleToggle` and `sortMenuButton` hidden during selection to reduce toolbar crowding.
 
 Commit: `31f48d5` feat: batch select and bulk delete in PrefixBrowserView
+
+## Phase 31 - Drag-and-drop upload in BucketBrowserView (DONE)
+
+- Added `@State private var isDragTargeted = false` to `BucketBrowserView`.
+- `.onDrop(of: [.fileURL, .data], isTargeted: $isDragTargeted)` attached to the `Group`
+  content area so the entire browser surface accepts drops.
+- When `isDragTargeted` is true an `.overlay` shows a semi-transparent blue rectangle with
+  a rounded border and an `arrow.down.doc` label — visible as long as the drag hovers.
+- Drop handler `handleDrop(providers:)` iterates each `NSItemProvider` and loads either
+  `.fileURL` (preferred) or `.data` (fallback). For URL items it reads the file with
+  security-scoped access; for raw-data items it uses the `suggestedName` as the filename.
+  Content-type is inferred via `UTType(filenameExtension:)?.preferredMIMEType` with
+  `application/octet-stream` as fallback. Each item fans out to the existing
+  `upload(data:filename:contentType:)` function which targets `currentPrefix + filename`.
+- Multiple dropped files are processed concurrently via `withTaskGroup`.
+- The modifier is gated on `isConfigured` so it is a no-op before credentials are set.
+
+Commit: `<hash>` feat: add drag-and-drop upload to BucketBrowserView

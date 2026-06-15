@@ -38,6 +38,7 @@ struct BucketBrowserView: View {
     @State private var isUploading = false
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult? = nil
+    @State private var isDragTargeted = false
     @State private var renameTarget: S3Object? = nil
     @State private var renameText = ""
     @State private var showRenameError = false
@@ -247,6 +248,29 @@ struct BucketBrowserView: View {
                         gridContent
                     } else {
                         listContent
+                    }
+                }
+                .onDrop(of: [.fileURL, .data], isTargeted: isConfigured ? $isDragTargeted : .constant(false)) { providers in
+                    guard isConfigured else { return false }
+                    Task { await handleDrop(providers: providers) }
+                    return true
+                }
+                .overlay {
+                    if isDragTargeted {
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Color.accentColor, lineWidth: 3)
+                            .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                            .overlay {
+                                VStack(spacing: 8) {
+                                    Image(systemName: "arrow.down.doc")
+                                        .font(.system(size: 36))
+                                    Text("Drop to upload")
+                                        .font(.headline)
+                                }
+                                .foregroundStyle(Color.accentColor)
+                            }
+                            .padding(8)
+                            .allowsHitTesting(false)
                     }
                 }
                 .navigationTitle("S3 Browser")
@@ -559,6 +583,44 @@ struct BucketBrowserView: View {
             } catch {
                 logger.error("File read failed: \(error.localizedDescription)")
                 await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+            }
+        }
+    }
+
+    private func handleDrop(providers: [NSItemProvider]) async {
+        await withTaskGroup(of: Void.self) { group in
+            for provider in providers {
+                group.addTask {
+                    // Prefer a file URL so we can read large files without loading all bytes at once.
+                    if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+                        await withCheckedContinuation { continuation in
+                            provider.loadFileRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { url, error in
+                                guard let url, error == nil else { continuation.resume(); return }
+                                let accessing = url.startAccessingSecurityScopedResource()
+                                defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+                                guard let data = try? Data(contentsOf: url) else { continuation.resume(); return }
+                                let filename = url.lastPathComponent
+                                let contentType = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType
+                                    ?? "application/octet-stream"
+                                Task { await self.upload(data: data, filename: filename, contentType: contentType) }
+                                continuation.resume()
+                            }
+                        }
+                    } else {
+                        // Fallback: load raw data.
+                        let types = provider.registeredTypeIdentifiers
+                        guard let typeID = types.first else { return }
+                        await withCheckedContinuation { continuation in
+                            provider.loadDataRepresentation(forTypeIdentifier: typeID) { data, error in
+                                guard let data, error == nil else { continuation.resume(); return }
+                                let filename = provider.suggestedName ?? "dropped-file"
+                                let contentType = UTType(typeID)?.preferredMIMEType ?? "application/octet-stream"
+                                Task { await self.upload(data: data, filename: filename, contentType: contentType) }
+                                continuation.resume()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
