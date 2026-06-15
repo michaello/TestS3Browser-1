@@ -378,4 +378,24 @@ extension S3Service {
         _ = try await client.copyObject(input: input)
         logger.info("Restored version \(versionId) of \(target)/\(key)")
     }
+
+    /// Changes the storage class of an object by copying it to itself with the new class.
+    /// All existing metadata is preserved via metadataDirective: .copy.
+    func changeStorageClass(key: String, storageClass: S3ClientTypes.StorageClass, bucket: String? = nil) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let target = bucket ?? currentBucket
+        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? key
+        let copySource = "\(target)/\(encodedKey)"
+        let input = CopyObjectInput(
+            bucket: target,
+            copySource: copySource,
+            key: key,
+            metadataDirective: .copy,
+            storageClass: storageClass
+        )
+        _ = try await client.copyObject(input: input)
+        logger.info("Changed storage class of \(target)/\(key) to \(storageClass.rawValue)")
+    }
 }

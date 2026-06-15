@@ -1,6 +1,7 @@
 import SwiftUI
 import AVKit
 import WebKit
+import AWSS3
 
 struct FileDetailView: View {
     let object: S3Object
@@ -21,6 +22,9 @@ struct FileDetailView: View {
     @State private var dataURLCopyDone = false
     @State private var isDownloadingToCache = false
     @State private var cachedFileURL: URL? = nil
+    @State private var isChangingStorageClass = false
+    @State private var storageClassError: String? = nil
+    @State private var showStorageClassError = false
     @State private var versions: [S3VersionEntry] = []
     @State private var isLoadingVersions = false
     @State private var versionsError: String? = nil
@@ -70,6 +74,11 @@ struct FileDetailView: View {
         } message: {
             Text(exportErrorMessage)
         }
+        .alert("Storage Class Change Failed", isPresented: $showStorageClassError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(storageClassError ?? "Unknown error")
+        }
     }
 
     /// For reports/.html the rendered page IS the screen - fill it edge to edge and
@@ -109,6 +118,7 @@ struct FileDetailView: View {
                         Label("Save to Files…", systemImage: "arrow.down.doc")
                     }
                     .disabled(isExporting)
+                    storageClassMenu
                     Button {
                         showingDetails = true
                     } label: {
@@ -255,6 +265,9 @@ struct FileDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                storageClassMenu
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 16) {
                     if isDownloadingToCache {
                         ProgressView()
@@ -338,6 +351,57 @@ struct FileDetailView: View {
         }
         let mb = kb / 1024.0
         return String(format: "%.1f MB", mb)
+    }
+
+    // The six tiers a user can move a general-purpose bucket object to.
+    private let userFacingStorageClasses: [(label: String, value: S3ClientTypes.StorageClass)] = [
+        ("Standard",               .standard),
+        ("Intelligent-Tiering",    .intelligentTiering),
+        ("Standard-IA",            .standardIa),
+        ("One Zone-IA",            .onezoneIa),
+        ("Glacier Instant",        .glacierIr),
+        ("Glacier Flexible",       .glacier),
+        ("Glacier Deep Archive",   .deepArchive),
+    ]
+
+    @ViewBuilder
+    private var storageClassMenu: some View {
+        let currentClass = objectMetadata?.storageClass
+        Menu {
+            ForEach(userFacingStorageClasses, id: \.label) { tier in
+                Button {
+                    Task { await applyStorageClass(tier.value) }
+                } label: {
+                    if currentClass == tier.value.rawValue {
+                        Label(tier.label, systemImage: "checkmark")
+                    } else {
+                        Text(tier.label)
+                    }
+                }
+                .disabled(isChangingStorageClass || currentClass == tier.value.rawValue)
+            }
+        } label: {
+            if isChangingStorageClass {
+                Label("Changing…", systemImage: "arrow.triangle.2.circlepath")
+            } else {
+                Label("Storage Class", systemImage: "archivebox")
+            }
+        }
+        .disabled(isChangingStorageClass)
+    }
+
+    private func applyStorageClass(_ storageClass: S3ClientTypes.StorageClass) async {
+        isChangingStorageClass = true
+        defer { isChangingStorageClass = false }
+        do {
+            try await service.changeStorageClass(key: object.key, storageClass: storageClass, bucket: object.bucket)
+            await loadMetadata()
+        } catch {
+            await MainActor.run {
+                storageClassError = error.localizedDescription
+                showStorageClassError = true
+            }
+        }
     }
 
     @ViewBuilder

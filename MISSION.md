@@ -739,3 +739,19 @@ Commit: `89cfbcf` feat: add copy-as-data-url for image objects (landed in same c
   "Restore" fires a `confirmationDialog` before calling `restoreVersion`, then refreshes the list.
 
 Commit: `c78d395` feat: add object version browser to FileDetailView
+
+## Phase 38 - Change storage class action in FileDetailView (DONE)
+
+- `S3Service+Transfer.swift`: added `changeStorageClass(key:storageClass:bucket:)` — issues a
+  `CopyObjectInput` copying the object to itself with the new `storageClass` and
+  `metadataDirective: .copy` to preserve all existing metadata.
+- `FileDetailView`: added `showStorageClassPicker`, `isChangingStorageClass`, `storageClassError`,
+  `showStorageClassError` state vars.
+- `storageClassMenu` `@ViewBuilder`: a `Menu` button ("Storage Class") listing the six user-facing
+  tiers (STANDARD, INTELLIGENT_TIERING, STANDARD_IA, ONEZONE_IA, GLACIER_IR, GLACIER,
+  DEEP_ARCHIVE). The current storage class is shown with a checkmark. Disabled while a change is
+  in flight. Appears in the standard detail toolbar `...` menu and the HTML "..." menu.
+- After a successful change, `loadMetadata()` is called to refresh the Storage Class row in the
+  metadata card.
+
+Commit: `<hash>` feat: add change-storage-class action to FileDetailView
