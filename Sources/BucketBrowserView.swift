@@ -1,4 +1,6 @@
 import SwiftUI
+import PhotosUI
+import UniformTypeIdentifiers
 import os.log
 
 private let starStore = StarStore.shared
@@ -30,6 +32,17 @@ struct BucketBrowserView: View {
     @AppStorage("s3BrowserGridCardSize") private var gridCardSize: Double = 100
     @State private var showingSortMenu = false
     @State private var searchText = ""
+    @State private var showPhotoPicker = false
+    @State private var showFilePicker = false
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var isUploading = false
+    @State private var uploadProgress: Double = 0
+    @State private var uploadResult: UploadResult? = nil
+
+    enum UploadResult {
+        case success(String)
+        case failure(String)
+    }
 
     private let logger = Logger(subsystem: "com.s3browser", category: "BucketBrowserView")
 
@@ -255,6 +268,21 @@ struct BucketBrowserView: View {
                             } label: {
                                 Image(systemName: "line.3.horizontal.decrease.circle")
                             }
+                            Menu {
+                                Button {
+                                    showPhotoPicker = true
+                                } label: {
+                                    Label("Photo or Video", systemImage: "photo")
+                                }
+                                Button {
+                                    showFilePicker = true
+                                } label: {
+                                    Label("File", systemImage: "doc")
+                                }
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                            .disabled(!isConfigured || isUploading)
                         }
                     }
                 }
@@ -323,6 +351,144 @@ struct BucketBrowserView: View {
                     ? "Search in \(s3Service.currentBucket)"
                     : "Search in \(s3Service.currentPrefix.split(separator: "/").last.map(String.init) ?? s3Service.currentPrefix)"
             )
+            .safeAreaInset(edge: .bottom) {
+                if isUploading || uploadResult != nil {
+                    uploadStatusBar
+                }
+            }
+            .photosPicker(
+                isPresented: $showPhotoPicker,
+                selection: $selectedPhoto,
+                matching: .any(of: [.images, .videos]),
+                photoLibrary: .shared()
+            )
+            .fileImporter(
+                isPresented: $showFilePicker,
+                allowedContentTypes: [.item],
+                allowsMultipleSelection: false
+            ) { result in
+                Task { await handleFileImport(result) }
+            }
+            .onChange(of: selectedPhoto) { _, item in
+                guard let item else { return }
+                Task { await handlePhotoPickerItem(item) }
+            }
+        }
+    }
+
+    // MARK: - Upload status bar
+
+    private var uploadStatusBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            Group {
+                if isUploading {
+                    VStack(spacing: 6) {
+                        ProgressView(value: uploadProgress)
+                            .progressViewStyle(.linear)
+                        Text(uploadProgress < 1 ? "Uploading \(Int(uploadProgress * 100))%..." : "Finishing...")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                } else if let result = uploadResult {
+                    HStack(spacing: 10) {
+                        switch result {
+                        case .success(let key):
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                            Text(URL(string: key)?.lastPathComponent ?? key)
+                                .font(.subheadline)
+                                .lineLimit(1)
+                        case .failure(let msg):
+                            Image(systemName: "xmark.circle.fill").foregroundStyle(.red)
+                            Text(msg)
+                                .font(.subheadline)
+                                .lineLimit(2)
+                        }
+                        Spacer()
+                        Button { uploadResult = nil } label: {
+                            Image(systemName: "xmark")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                }
+            }
+            .background(Color(.secondarySystemBackground))
+        }
+    }
+
+    // MARK: - Upload handlers
+
+    private func handlePhotoPickerItem(_ item: PhotosPickerItem) async {
+        defer { Task { @MainActor in selectedPhoto = nil } }
+        do {
+            guard let data = try await item.loadTransferable(type: Data.self) else { return }
+            let base = (item.itemIdentifier ?? "photo")
+                .components(separatedBy: "/").last ?? "photo"
+            let filename = base.hasSuffix(".jpg") || base.hasSuffix(".png") ? base : base + ".jpg"
+            let contentType = filename.hasSuffix(".png") ? "image/png" : "image/jpeg"
+            await upload(data: data, filename: filename, contentType: contentType)
+        } catch {
+            logger.error("Photo picker load failed: \(error.localizedDescription)")
+            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+        }
+    }
+
+    private func handleFileImport(_ result: Result<[URL], Error>) async {
+        switch result {
+        case .failure(let error):
+            logger.error("File import failed: \(error.localizedDescription)")
+            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+        case .success(let urls):
+            guard let url = urls.first else { return }
+            do {
+                let accessing = url.startAccessingSecurityScopedResource()
+                defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+                let data = try Data(contentsOf: url)
+                let filename = url.lastPathComponent
+                let contentType = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType
+                    ?? "application/octet-stream"
+                await upload(data: data, filename: filename, contentType: contentType)
+            } catch {
+                logger.error("File read failed: \(error.localizedDescription)")
+                await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+            }
+        }
+    }
+
+    private func upload(data: Data, filename: String, contentType: String) async {
+        let prefix = s3Service.currentPrefix
+        let key = prefix.isEmpty ? filename : "\(prefix)\(filename)"
+        await MainActor.run {
+            isUploading = true
+            uploadProgress = 0
+            uploadResult = nil
+        }
+        do {
+            try await s3Service.uploadObject(
+                data: data,
+                key: key,
+                contentType: contentType,
+                onProgress: { fraction in
+                    self.uploadProgress = fraction
+                }
+            )
+            logger.info("Uploaded \(key) to \(s3Service.currentBucket)")
+            await MainActor.run {
+                isUploading = false
+                uploadResult = .success(key)
+            }
+            await refreshFiles()
+        } catch {
+            logger.error("Upload failed for \(key): \(error.localizedDescription)")
+            await MainActor.run {
+                isUploading = false
+                uploadResult = .failure(error.localizedDescription)
+            }
         }
     }
 

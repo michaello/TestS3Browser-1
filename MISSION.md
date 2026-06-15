@@ -487,3 +487,20 @@ Commit: `d66ba4f` feat: add grid view mode to BucketBrowserView
   object's original filename so the Files app shows the correct name.
 
 Commit: `0ca1d3e` feat: add Save to Files export to FileDetailView
+
+## Phase 23 - Upload from BucketBrowserView (DONE)
+
+- Added upload state (`isUploading`, `uploadProgress`, `uploadResult`, `showPhotoPicker`,
+  `showFilePicker`, `selectedPhoto`) to `BucketBrowserView`, mirroring `PrefixBrowserView`.
+- Added a `+` toolbar button (Menu with "Photo or Video" and "File" options) as a second
+  `ToolbarItem` in the trailing area, disabled while uploading or when not configured.
+- Added `uploadStatusBar` as a `.safeAreaInset(edge: .bottom)` overlay (identical pattern
+  to `PrefixBrowserView`): shows a linear progress view while uploading and a
+  success/failure row with a dismiss button after completion.
+- `handlePhotoPickerItem`, `handleFileImport`, and `upload(data:filename:contentType:)`
+  are ported directly from `PrefixBrowserView`, with the key built as
+  `s3Service.currentPrefix + filename` so files land in the currently browsed prefix.
+  On success the listing reloads automatically via `refreshFiles()`.
+- `.photosPicker` and `.fileImporter` modifiers added to `NavigationStack`.
+
+Commit: `<hash>` feat: add upload to BucketBrowserView
