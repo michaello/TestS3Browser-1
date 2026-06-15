@@ -38,6 +38,10 @@ struct BucketBrowserView: View {
     @State private var isUploading = false
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult? = nil
+    @State private var renameTarget: S3Object? = nil
+    @State private var renameText = ""
+    @State private var showRenameError = false
+    @State private var renameErrorMessage = ""
 
     enum UploadResult {
         case success(String)
@@ -345,6 +349,29 @@ struct BucketBrowserView: View {
                     await refreshFiles()
                 }
             }
+            .alert("Rename File", isPresented: .init(
+                get: { renameTarget != nil },
+                set: { if !$0 { renameTarget = nil } }
+            )) {
+                TextField("New filename", text: $renameText)
+                    .autocorrectionDisabled()
+                Button("Rename") {
+                    guard let file = renameTarget else { return }
+                    let newName = renameText.trimmingCharacters(in: .whitespaces)
+                    guard !newName.isEmpty else { renameTarget = nil; return }
+                    let dir = (file.key as NSString).deletingLastPathComponent
+                    let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
+                    Task { await renameFile(file, to: newKey) }
+                }
+                Button("Cancel", role: .cancel) { renameTarget = nil }
+            } message: {
+                if let file = renameTarget { Text(file.fileName) }
+            }
+            .alert("Rename Failed", isPresented: $showRenameError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(renameErrorMessage)
+            }
             .searchable(
                 text: $searchText,
                 prompt: s3Service.currentPrefix.isEmpty
@@ -514,6 +541,13 @@ struct BucketBrowserView: View {
                 Label(starStore.isStarred(object.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(object.key) ? "star.slash" : "star")
             }
 
+            Button {
+                renameText = object.fileName
+                renameTarget = object
+            } label: {
+                Label("Rename…", systemImage: "pencil")
+            }
+
             Button(role: .destructive) {
                 Task { await deleteObject(object) }
             } label: {
@@ -643,6 +677,21 @@ struct BucketBrowserView: View {
             await refreshFiles()
         } catch {
             logger.error("Failed to delete object: \(error.localizedDescription)")
+        }
+    }
+
+    private func renameFile(_ file: S3Object, to newKey: String) async {
+        renameTarget = nil
+        do {
+            try await s3Service.renameObject(key: file.key, to: newKey, bucket: file.bucket)
+            logger.info("Renamed \(file.key) -> \(newKey)")
+            await refreshFiles()
+        } catch {
+            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
+            await MainActor.run {
+                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
+                showRenameError = true
+            }
         }
     }
 

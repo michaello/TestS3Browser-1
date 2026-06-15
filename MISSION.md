@@ -504,3 +504,19 @@ Commit: `0ca1d3e` feat: add Save to Files export to FileDetailView
 - `.photosPicker` and `.fileImporter` modifiers added to `NavigationStack`.
 
 Commit: `7a87094` feat: add upload to BucketBrowserView
+
+## Phase 24 - Rename files in BucketBrowserView (DONE)
+
+- Added rename state (`renameTarget: S3Object?`, `renameText: String`, `showRenameError`,
+  `renameErrorMessage`) to `BucketBrowserView`.
+- `fileContextMenuItems(for:)` gained a "Rename…" item (pencil icon) that pre-fills
+  `renameText` with the current `fileName` and sets `renameTarget`.
+- A `.alert("Rename File", isPresented:)` driven by `renameTarget != nil` presents a
+  `TextField` pre-filled with the current filename, plus Rename and Cancel buttons.
+  On confirm the new name is joined back onto the original key's directory prefix so the
+  file stays in its folder (same logic as `RecentFilesView.renameFile`).
+- `renameFile(_:to:)` calls `s3Service.renameObject(key:to:bucket:)` and on success
+  calls `refreshFiles()` to update the listing. Failure surfaces in a "Rename Failed"
+  alert via `showRenameError` / `renameErrorMessage`.
+
+Commit: `<hash>` feat: add file rename to BucketBrowserView
