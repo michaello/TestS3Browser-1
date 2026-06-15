@@ -162,6 +162,17 @@ struct RecentFilesView: View {
                     RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
                 }
                 .contextMenu { deleteContextMenu(for: file) }
+                .swipeActions(edge: .leading) {
+                    Button {
+                        if let url = s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400) {
+                            UIPasteboard.general.string = url
+                            showCopyToast("Link copied")
+                        }
+                    } label: {
+                        Label("Copy URL", systemImage: "link")
+                    }
+                    .tint(.blue)
+                }
             }
         }
         .refreshable { await refreshRecentFiles() }
