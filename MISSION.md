@@ -467,4 +467,4 @@ Commit: `5e1a488` feat: add starred/favorited files
   Delete) are preserved; in grid mode they are attached to the `BrowserGridItem` via
   `.contextMenu` on the `NavigationLink` / `Button`.
 
-Commit: `<hash>` feat: add grid view mode to BucketBrowserView
+Commit: `d66ba4f` feat: add grid view mode to BucketBrowserView
