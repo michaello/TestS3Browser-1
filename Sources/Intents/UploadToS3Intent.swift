@@ -96,5 +96,13 @@ struct TestS3BrowserShortcuts: AppShortcutsProvider {
             shortTitle: "Recent S3 Files",
             systemImageName: "list.bullet"
         )
+        AppShortcut(
+            intent: DownloadFileIntent(),
+            phrases: [
+                "Download S3 file with \(.applicationName)"
+            ],
+            shortTitle: "Download S3 File",
+            systemImageName: "arrow.down.circle"
+        )
     }
 }
