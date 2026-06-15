@@ -174,3 +174,13 @@ Commit: `b4e4b74` upload: add Copy Link button to upload success card
   `SharedConfig.loadConfig()`.
 
 Commit: `0b32e2f` recent-files: persist upload history across cold launches
+
+### `SearchFileIntent` Siri shortcut
+- Added `Sources/Intents/SearchFileIntent.swift`: takes `query: String`, calls
+  `fetchRecentFilesFromAllBuckets(limit: 50)`, filters keys by case-insensitive substring
+  match, returns matching keys as `[String]` with a count dialog.
+- Registered in `TestS3BrowserShortcuts` with phrase
+  "Search my S3 files with ${applicationName}" and systemImage `magnifyingglass`.
+- Confirmed in `Metadata.appintents/extract.actionsdata` alongside all five intents.
+
+Commit: `3e1b4d6` intents: add SearchFileIntent Siri shortcut
