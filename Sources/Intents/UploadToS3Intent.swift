@@ -88,5 +88,13 @@ struct TestS3BrowserShortcuts: AppShortcutsProvider {
             shortTitle: "Upload to S3",
             systemImageName: "arrow.up.circle"
         )
+        AppShortcut(
+            intent: ListRecentFilesIntent(),
+            phrases: [
+                "List my recent S3 files with \(.applicationName)"
+            ],
+            shortTitle: "Recent S3 Files",
+            systemImageName: "list.bullet"
+        )
     }
 }

@@ -24,6 +24,7 @@
 		5D3AE742A2EA4D618B77B8B2 /* TestS3BrowserApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DBEFB2BD8406098FECD29 /* TestS3BrowserApp.swift */; };
 		9897E965C2F44FE5AAB54758 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E6BE194A064F52A9FBAF15 /* DateExtensions.swift */; };
 		8DE01CE7C44F4639934B3264 /* UploadToS3Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F30023AC02845ADACF29001 /* UploadToS3Intent.swift */; };
+		51988917043544A6A97863B3 /* ListRecentFilesIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022E1F96766A479FA2621359 /* ListRecentFilesIntent.swift */; };
 		3401198A5F394BE6B0673BAF /* ImageCacheActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */; };
 		DFC4D298C920476EAAD50165 /* SeenPhotosTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */; };
 		EA91A4AA204D4B6B9759745E /* SharedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */; };
@@ -75,6 +76,7 @@
 		694DBEFB2BD8406098FECD29 /* TestS3BrowserApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestS3BrowserApp.swift; sourceTree = "<group>"; };
 		C2E6BE194A064F52A9FBAF15 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		7F30023AC02845ADACF29001 /* UploadToS3Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadToS3Intent.swift; sourceTree = "<group>"; };
+		022E1F96766A479FA2621359 /* ListRecentFilesIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRecentFilesIntent.swift; sourceTree = "<group>"; };
 		70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheActor.swift; sourceTree = "<group>"; };
 		520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenPhotosTracker.swift; sourceTree = "<group>"; };
 		67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				7F30023AC02845ADACF29001 /* UploadToS3Intent.swift */,
+				022E1F96766A479FA2621359 /* ListRecentFilesIntent.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				5D3AE742A2EA4D618B77B8B2 /* TestS3BrowserApp.swift in Sources */,
 				9897E965C2F44FE5AAB54758 /* DateExtensions.swift in Sources */,
 				8DE01CE7C44F4639934B3264 /* UploadToS3Intent.swift in Sources */,
+				51988917043544A6A97863B3 /* ListRecentFilesIntent.swift in Sources */,
 				3401198A5F394BE6B0673BAF /* ImageCacheActor.swift in Sources */,
 				DFC4D298C920476EAAD50165 /* SeenPhotosTracker.swift in Sources */,
 				EA91A4AA204D4B6B9759745E /* SharedConfig.swift in Sources */,
