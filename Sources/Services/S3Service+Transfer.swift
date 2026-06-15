@@ -398,4 +398,30 @@ extension S3Service {
         _ = try await client.copyObject(input: input)
         logger.info("Changed storage class of \(target)/\(key) to \(storageClass.rawValue)")
     }
+
+    /// Returns the S3 object tag set as key-value pairs. Returns an empty array when no tags exist.
+    func getObjectTags(key: String, bucket: String? = nil) async throws -> [(key: String, value: String)] {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let input = GetObjectTaggingInput(bucket: bucket ?? currentBucket, key: key)
+        let output = try await client.getObjectTagging(input: input)
+        return (output.tagSet ?? []).compactMap { tag in
+            guard let k = tag.key, let v = tag.value else { return nil }
+            return (key: k, value: v)
+        }
+    }
+
+    /// Replaces the S3 object tag set with the provided key-value pairs.
+    func setObjectTags(key: String, tags: [(key: String, value: String)], bucket: String? = nil) async throws {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let target = bucket ?? currentBucket
+        let tagSet = tags.map { S3ClientTypes.Tag(key: $0.key, value: $0.value) }
+        let tagging = S3ClientTypes.Tagging(tagSet: tagSet)
+        let input = PutObjectTaggingInput(bucket: target, key: key, tagging: tagging)
+        _ = try await client.putObjectTagging(input: input)
+        logger.info("Set \(tags.count) tag(s) on \(target)/\(key)")
+    }
 }

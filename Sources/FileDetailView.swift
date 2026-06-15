@@ -25,6 +25,13 @@ struct FileDetailView: View {
     @State private var isChangingStorageClass = false
     @State private var storageClassError: String? = nil
     @State private var showStorageClassError = false
+    @State private var objectTags: [(key: String, value: String)] = []
+    @State private var isLoadingTags = false
+    @State private var isEditingTags = false
+    @State private var editableTags: [(key: String, value: String)] = []
+    @State private var isSavingTags = false
+    @State private var tagsError: String? = nil
+    @State private var showTagsError = false
     @State private var versions: [S3VersionEntry] = []
     @State private var isLoadingVersions = false
     @State private var versionsError: String? = nil
@@ -78,6 +85,11 @@ struct FileDetailView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(storageClassError ?? "Unknown error")
+        }
+        .alert("Tag Save Failed", isPresented: $showTagsError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(tagsError ?? "Unknown error")
         }
     }
 
@@ -151,7 +163,8 @@ struct FileDetailView: View {
             async let fileLoad: Void = loadFile()
             async let metaLoad: Void = loadMetadata()
             async let versLoad: Void = loadVersions()
-            _ = await (fileLoad, metaLoad, versLoad)
+            async let tagsLoad: Void = loadTags()
+            _ = await (fileLoad, metaLoad, versLoad, tagsLoad)
         }
     }
 
@@ -258,6 +271,7 @@ struct FileDetailView: View {
                 }
 
                 versionsSection
+                tagsSection
             }
             .padding()
         }
@@ -299,7 +313,8 @@ struct FileDetailView: View {
             async let fileLoad: Void = loadFile()
             async let metaLoad: Void = loadMetadata()
             async let versLoad: Void = loadVersions()
-            _ = await (fileLoad, metaLoad, versLoad)
+            async let tagsLoad: Void = loadTags()
+            _ = await (fileLoad, metaLoad, versLoad, tagsLoad)
         }
         .confirmationDialog(
             "Restore this version?",
@@ -592,6 +607,138 @@ struct FileDetailView: View {
             }
         }
         await MainActor.run { cachedFileURL = dest }
+    }
+
+    private func loadTags() async {
+        isLoadingTags = true
+        defer { isLoadingTags = false }
+        do {
+            let result = try await service.getObjectTags(key: object.key, bucket: object.bucket)
+            await MainActor.run { objectTags = result }
+        } catch {
+            // Tag load failure is non-fatal; section stays empty.
+        }
+    }
+
+    private func saveTags() async {
+        isSavingTags = true
+        defer { isSavingTags = false }
+        let trimmed = editableTags.filter { !$0.key.trimmingCharacters(in: .whitespaces).isEmpty }
+        do {
+            try await service.setObjectTags(key: object.key, tags: trimmed, bucket: object.bucket)
+            await MainActor.run {
+                objectTags = trimmed
+                isEditingTags = false
+            }
+        } catch {
+            await MainActor.run {
+                tagsError = error.localizedDescription
+                showTagsError = true
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var tagsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("S3 Tags")
+                    .font(.headline)
+                Spacer()
+                if isLoadingTags {
+                    ProgressView().scaleEffect(0.7)
+                } else if isEditingTags {
+                    Button("Cancel") {
+                        isEditingTags = false
+                    }
+                    .font(.caption)
+                    Button {
+                        Task { await saveTags() }
+                    } label: {
+                        if isSavingTags {
+                            ProgressView().scaleEffect(0.7)
+                        } else {
+                            Text("Save")
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .font(.caption)
+                    .disabled(isSavingTags)
+                } else {
+                    Button("Edit") {
+                        editableTags = objectTags
+                        isEditingTags = true
+                    }
+                    .font(.caption)
+                }
+            }
+            .padding(.top, 8)
+
+            if isEditingTags {
+                ForEach(editableTags.indices, id: \.self) { i in
+                    HStack(spacing: 8) {
+                        TextField("Key", text: Binding(
+                            get: { editableTags[i].key },
+                            set: { editableTags[i].key = $0 }
+                        ))
+                        .textFieldStyle(.roundedBorder)
+                        .font(.caption)
+                        .frame(maxWidth: .infinity)
+
+                        Text("=")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        TextField("Value", text: Binding(
+                            get: { editableTags[i].value },
+                            set: { editableTags[i].value = $0 }
+                        ))
+                        .textFieldStyle(.roundedBorder)
+                        .font(.caption)
+                        .frame(maxWidth: .infinity)
+
+                        Button {
+                            editableTags.remove(at: i)
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+
+                Button {
+                    editableTags.append((key: "", value: ""))
+                } label: {
+                    Label("Add Tag", systemImage: "plus.circle")
+                        .font(.caption)
+                }
+            } else if objectTags.isEmpty {
+                Text("No tags")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
+            } else {
+                ForEach(objectTags, id: \.key) { tag in
+                    HStack {
+                        Text(tag.key)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                        Text("=")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(tag.value)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+        }
+        .padding()
+        .background(.gray.opacity(0.07))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private func loadVersions() async {

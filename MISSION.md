@@ -755,3 +755,19 @@ Commit: `c78d395` feat: add object version browser to FileDetailView
   metadata card.
 
 Commit: `c2da97a` feat: add change-storage-class action to FileDetailView
+
+## Phase 39 - S3 object tag editor in FileDetailView (DONE)
+
+- `S3Service+Transfer.swift`: added `getObjectTags(key:bucket:)` returning `[(key:String,value:String)]`
+  via `GetObjectTaggingInput`, and `setObjectTags(key:tags:bucket:)` issuing `PutObjectTaggingInput`
+  with a `S3ClientTypes.Tagging` wrapping the new tag set.
+- `FileDetailView`: added `objectTags`, `isLoadingTags`, `isEditingTags`, `editableTags`,
+  `isSavingTags`, `tagsError`, `showTagsError` state. `loadTags()` runs in `.task` alongside
+  `loadFile`/`loadMetadata`/`loadVersions`.
+- `tagsSection` `@ViewBuilder`: shown in `standardDetailView` below `versionsSection`. Displays a
+  "Tags" header with an "Edit" button. In view mode: a flat list of `key=value` rows (or "No tags"
+  placeholder). In edit mode: `TextField` pairs per tag with per-row delete buttons and an "Add Tag"
+  row, followed by Save/Cancel toolbar buttons. Save calls `setObjectTags` then reloads.
+- Error surfaced via `.alert("Tag Save Failed")`.
+
+Commit: `<hash>` feat: add S3 object tag editor to FileDetailView
