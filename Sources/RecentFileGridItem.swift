@@ -8,6 +8,7 @@ struct RecentFileGridItem: View {
     let s3Service: S3Service
     let cardSize: Double
     var isNew: Bool = false
+    var tag: String? = nil
     @State private var thumbnail: UIImage?
 
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFileGridItem")
@@ -80,6 +81,10 @@ struct RecentFileGridItem: View {
                 Text("\(object.formattedSize) · \(object.lastModified.relativeFormattedCompact())")
                     .font(.system(size: cardSize > 100 ? 10 : 8))
                     .foregroundStyle(.secondary)
+
+                if let tag {
+                    TagChip(tag: tag)
+                }
             }
         }
         .frame(maxWidth: .infinity)

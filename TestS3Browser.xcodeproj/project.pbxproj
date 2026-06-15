@@ -34,6 +34,8 @@
 		DL0001A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DL0002A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift */; };
 		DEL001A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEL002A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift */; };
 		SRC001A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC002A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift */; };
+		TAG001A1B2C3D4E5F6A7B8C9 /* TagStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = TAG002A1B2C3D4E5F6A7B8C9 /* TagStore.swift */; };
+		CHI001A1B2C3D4E5F6A7B8C9 /* TagChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHI002A1B2C3D4E5F6A7B8C9 /* TagChip.swift */; };
 		3401198A5F394BE6B0673BAF /* ImageCacheActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */; };
 		DFC4D298C920476EAAD50165 /* SeenPhotosTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */; };
 		EA91A4AA204D4B6B9759745E /* SharedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */; };
@@ -105,6 +107,8 @@
 		DL0002A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFileIntent.swift; sourceTree = "<group>"; };
 		DEL002A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFileIntent.swift; sourceTree = "<group>"; };
 		SRC002A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFileIntent.swift; sourceTree = "<group>"; };
+		TAG002A1B2C3D4E5F6A7B8C9 /* TagStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStore.swift; sourceTree = "<group>"; };
+		CHI002A1B2C3D4E5F6A7B8C9 /* TagChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChip.swift; sourceTree = "<group>"; };
 		70B69E1A64DB401FAC1B4A50 /* ImageCacheActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheActor.swift; sourceTree = "<group>"; };
 		520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenPhotosTracker.swift; sourceTree = "<group>"; };
 		67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
@@ -160,6 +164,8 @@
 				2FDC7F53EF744488AC2312D6 /* RecentFilesView.swift */,
 				DB9545AF3C4C4A7D84031E7E /* RecentFileRow.swift */,
 				E0E1E1E67FCD438AAAA93813 /* RecentFileGridItem.swift */,
+				TAG002A1B2C3D4E5F6A7B8C9 /* TagStore.swift */,
+				CHI002A1B2C3D4E5F6A7B8C9 /* TagChip.swift */,
 				A635869177F74A9288E86533 /* S3Service.swift */,
 				8B141FDE0D8545FD9ACB5E0A /* SettingsView.swift */,
 				8B19E811AE05417290AB50CA /* StashView.swift */,
@@ -406,6 +412,8 @@
 				3B0E6F0205524F3ABE553AFC /* RecentFilesView.swift in Sources */,
 				E7CBA059E09D4E69B2780DF2 /* RecentFileRow.swift in Sources */,
 				90134C9638BB48B38E1F3C3E /* RecentFileGridItem.swift in Sources */,
+				TAG001A1B2C3D4E5F6A7B8C9 /* TagStore.swift in Sources */,
+				CHI001A1B2C3D4E5F6A7B8C9 /* TagChip.swift in Sources */,
 				77AD6104C24F4674BC0AB7AA /* S3Service+RecentFiles.swift in Sources */,
 				6F6A725BDF5045AC845B514C /* S3Service+Transfer.swift in Sources */,
 				3779A1DDCA494735896B705F /* S3Service+URLs.swift in Sources */,

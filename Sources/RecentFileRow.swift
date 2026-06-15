@@ -7,6 +7,7 @@ struct RecentFileRow: View {
     let object: S3Object
     let s3Service: S3Service
     var isNew: Bool = false
+    var tag: String? = nil
     @State private var thumbnail: UIImage?
 
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFileRow")
@@ -70,6 +71,10 @@ struct RecentFileRow: View {
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
                                 .background(.blue, in: Capsule())
+                        }
+
+                        if let tag {
+                            TagChip(tag: tag)
                         }
                     }
 

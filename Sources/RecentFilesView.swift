@@ -6,6 +6,7 @@ import os.log
 struct RecentFilesView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFilesView")
     @Environment(\.scenePhase) private var scenePhase
+    @State private var tagStore = TagStore.shared
     let config: S3Config
     let s3Service: S3Service
     @AppStorage("s3RecentViewMode") private var viewModeRaw: String = "list"
@@ -35,6 +36,11 @@ struct RecentFilesView: View {
     @State private var showBulkDeleteConfirm = false
     @State private var showBulkDeleteError = false
     @State private var bulkDeleteErrorMessage = ""
+    /// Tag filter. nil means "show all". A non-nil string shows only files with that tag.
+    @State private var tagFilter: String? = nil
+    /// Drives the "Set Tag" alert for a single file.
+    @State private var tagTarget: S3Object? = nil
+    @State private var tagText = ""
 
     enum ViewMode {
         case list
@@ -55,9 +61,15 @@ struct RecentFilesView: View {
         let typeFiltered = fileTypeFilter == .all
             ? s3Service.recentFiles
             : s3Service.recentFiles.filter { fileTypeFilter.matches($0.fileType) }
-        guard !searchText.isEmpty else { return typeFiltered }
+        let tagFiltered: [S3Object]
+        if let tagFilter {
+            tagFiltered = typeFiltered.filter { tagStore.tag(forKey: $0.key) == tagFilter }
+        } else {
+            tagFiltered = typeFiltered
+        }
+        guard !searchText.isEmpty else { return tagFiltered }
         let lower = searchText.lowercased()
-        return typeFiltered.filter { $0.key.lowercased().contains(lower) }
+        return tagFiltered.filter { $0.key.lowercased().contains(lower) }
     }
 
     /// Returns only image files from the filtered list for gallery navigation
@@ -101,6 +113,9 @@ struct RecentFilesView: View {
             }
             .toolbar { toolbarContent }
             .searchable(text: $searchText, prompt: "Search files")
+            .safeAreaInset(edge: .top) {
+                tagFilterBar
+            }
         }
         .task { await initialLoad() }
         .onChange(of: scenePhase) { _, newPhase in
@@ -135,6 +150,29 @@ struct RecentFilesView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(renameErrorMessage)
+        }
+        .alert("Set Tag", isPresented: .init(
+            get: { tagTarget != nil },
+            set: { if !$0 { tagTarget = nil } }
+        )) {
+            TextField("Tag (leave blank to remove)", text: $tagText)
+                .autocorrectionDisabled()
+                .autocapitalization(.none)
+            Button("Save") {
+                guard let file = tagTarget else { return }
+                tagStore.setTag(tagText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : tagText.trimmingCharacters(in: .whitespaces), forKey: file.key)
+                tagTarget = nil
+            }
+            Button("Remove Tag", role: .destructive) {
+                guard let file = tagTarget else { return }
+                tagStore.setTag(nil, forKey: file.key)
+                tagTarget = nil
+            }
+            Button("Cancel", role: .cancel) { tagTarget = nil }
+        } message: {
+            if let file = tagTarget {
+                Text(file.fileName)
+            }
         }
         .confirmationDialog(
             "Delete \(selectedIDs.count) file\(selectedIDs.count == 1 ? "" : "s")?",
@@ -227,13 +265,13 @@ struct RecentFilesView: View {
                             Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle")
                                 .foregroundStyle(selectedIDs.contains(file.id) ? .blue : .secondary)
                                 .font(.title3)
-                            RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
+                            RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
                         }
                     }
                     .buttonStyle(.plain)
                 } else {
                     NavigationLink(destination: destinationView(for: file)) {
-                        RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key))
+                        RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
                     }
                     .contextMenu { deleteContextMenu(for: file) }
                     .swipeActions(edge: .leading) {
@@ -259,7 +297,7 @@ struct RecentFilesView: View {
                             toggleSelection(file)
                         } label: {
                             ZStack(alignment: .topTrailing) {
-                                RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key))
+                                RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
                                     .opacity(selectedIDs.contains(file.id) ? 0.75 : 1.0)
                                 Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle.fill")
                                     .foregroundStyle(selectedIDs.contains(file.id) ? .blue : Color(.systemBackground).opacity(0.8))
@@ -270,7 +308,7 @@ struct RecentFilesView: View {
                         .buttonStyle(.plain)
                     } else {
                         NavigationLink(destination: destinationView(for: file)) {
-                            RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key))
+                            RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
                         }
                         .contextMenu { deleteContextMenu(for: file) }
                     }
@@ -357,6 +395,13 @@ struct RecentFilesView: View {
             Label("Rename", systemImage: "pencil")
         }
 
+        Button {
+            tagText = tagStore.tag(forKey: file.key) ?? ""
+            tagTarget = file
+        } label: {
+            Label(tagStore.tag(forKey: file.key) != nil ? "Edit Tag" : "Set Tag", systemImage: "tag")
+        }
+
         Divider()
 
         Button(role: .destructive) {
@@ -423,6 +468,41 @@ struct RecentFilesView: View {
                 }
             }
         }
+    }
+
+    /// Horizontally scrolling tag-filter bar. Hidden when there are no tags in use.
+    @ViewBuilder
+    private var tagFilterBar: some View {
+        let tags = tagStore.allTags
+        if !tags.isEmpty {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    tagFilterChip(label: "All", value: nil)
+                    ForEach(tags, id: \.self) { tag in
+                        tagFilterChip(label: tag, value: tag)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+            }
+            .background(.bar)
+        }
+    }
+
+    private func tagFilterChip(label: String, value: String?) -> some View {
+        let isActive = tagFilter == value
+        return Button {
+            tagFilter = isActive ? nil : value
+        } label: {
+            Text(label)
+                .font(.subheadline)
+                .fontWeight(isActive ? .semibold : .regular)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(isActive ? Color.accentColor : Color(.secondarySystemFill), in: Capsule())
+                .foregroundStyle(isActive ? Color.white : Color.primary)
+        }
+        .buttonStyle(.plain)
     }
 
     private var filterMenu: some View {
