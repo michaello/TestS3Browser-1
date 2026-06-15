@@ -16,6 +16,9 @@ struct RecentFilesView: View {
     @State private var autoPreviewPhoto: S3Object?
     @State private var navigationPath = NavigationPath()
     @State private var copyToast: String?
+    /// Drives the delete-failure alert. Set when deleteFile catches a thrown error.
+    @State private var showDeleteError = false
+    @State private var deleteErrorMessage = ""
     /// Keys of files that are new since the last time the screen was visited
     @State private var newFileKeys: Set<String> = []
 
@@ -87,6 +90,13 @@ struct RecentFilesView: View {
         }
         .onChange(of: config) { _, newConfig in
             Task { await handleConfigChange(newConfig) }
+        }
+        .alert(isPresented: $showDeleteError) {
+            Alert(
+                title: Text("Delete Failed"),
+                message: Text(deleteErrorMessage),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 
@@ -423,6 +433,8 @@ struct RecentFilesView: View {
             await refreshRecentFiles()
         } catch {
             logger.error("Failed to delete file \(file.key): \(error.localizedDescription)")
+            deleteErrorMessage = "Could not delete \(file.fileName): \(error.localizedDescription)"
+            showDeleteError = true
         }
     }
 
