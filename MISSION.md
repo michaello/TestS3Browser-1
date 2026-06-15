@@ -275,3 +275,20 @@ Commit: `1c1b25a` feat: add sort controls to RecentFilesView
   `BrowseRoot()` to the existing `navigationPath`, triggering the push.
 
 Commit: `dda02e3` feat: add folder/prefix navigation to RecentFilesView
+
+## Phase 12 - File upload from folder browser (DONE)
+
+- `PrefixBrowserView` gained a `+` toolbar button that opens a Menu with two options:
+  "Photo or Video" (PhotosPicker, matches images + videos) and "File" (fileImporter,
+  accepts any `.item` UTType / document picker).
+- Photo picker handler: loads `Data` via `loadTransferable`, infers filename from the
+  item identifier (falls back to `photo.jpg`), derives content type from extension.
+- File importer handler: opens a security-scoped URL, reads bytes with `Data(contentsOf:)`,
+  derives MIME type via `UTType(filenameExtension:).preferredMIMEType`.
+- Both paths call `s3Service.uploadObject(data:key:contentType:onProgress:)` with the key
+  set to `\(prefix)\(filename)` so the file lands in the current browsed prefix.
+- A `.safeAreaInset(edge: .bottom)` status bar shows a linear progress view while uploading
+  and a success/failure row with an ✕ dismiss button after completion.
+- On success, the listing reloads automatically so the new file appears immediately.
+
+Commit: `52baa67` feat: add file upload to folder browser
