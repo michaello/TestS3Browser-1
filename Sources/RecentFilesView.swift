@@ -2,6 +2,9 @@ import SwiftUI
 import AVFoundation
 import os.log
 
+/// Sentinel value pushed onto the NavigationStack path to trigger the folder browser.
+private struct BrowseRoot: Hashable {}
+
 /// Displays the most recent files from the current bucket
 struct RecentFilesView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFilesView")
@@ -127,6 +130,14 @@ struct RecentFilesView: View {
             .navigationTitle("Recent Files")
             .navigationDestination(for: S3Object.self) { file in
                 destinationView(for: file)
+            }
+            .navigationDestination(for: BrowseRoot.self) { _ in
+                PrefixBrowserView(
+                    s3Service: s3Service,
+                    prefix: "",
+                    bucket: s3Service.currentBucket,
+                    title: s3Service.currentBucket
+                )
             }
             .fullScreenCover(item: $autoPreviewPhoto) { photo in
                 autoPreviewCover(for: photo)
@@ -471,6 +482,12 @@ struct RecentFilesView: View {
                 if viewMode == .grid {
                     Slider(value: $gridCardSize, in: 60...160, step: 10)
                         .frame(width: 80)
+                }
+
+                Button {
+                    navigationPath.append(BrowseRoot())
+                } label: {
+                    Image(systemName: "folder")
                 }
 
                 sortMenu

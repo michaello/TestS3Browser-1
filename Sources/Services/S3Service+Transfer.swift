@@ -175,6 +175,48 @@ extension S3Service {
         logger.info("Renamed \(key) -> \(newKey) in \(targetBucket)")
     }
 
+    /// Lists folders and files directly under a prefix without touching the service's
+    /// observable state (items, isLoading, currentPrefix). Safe to call from a
+    /// PrefixBrowserView that manages its own local state in parallel with BucketBrowserView.
+    /// - Parameters:
+    ///   - prefix: The S3 key prefix to list under. Empty string lists the bucket root.
+    ///   - bucket: Bucket to list (defaults to currentBucket).
+    /// - Returns: Array of S3Item (folders first, then files), sorted by display name.
+    func listPrefix(_ prefix: String, bucket: String? = nil) async throws -> [S3Item] {
+        if client == nil { try await initializeClient() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+
+        let targetBucket = bucket ?? currentBucket
+        let input = ListObjectsV2Input(
+            bucket: targetBucket,
+            delimiter: "/",
+            prefix: prefix.isEmpty ? nil : prefix
+        )
+        let output = try await client.listObjectsV2(input: input)
+
+        var items: [S3Item] = []
+        if let commonPrefixes = output.commonPrefixes {
+            for cp in commonPrefixes {
+                if let p = cp.prefix {
+                    items.append(.folder(S3Folder(prefix: p)))
+                }
+            }
+        }
+        if let contents = output.contents {
+            for item in contents {
+                guard let key = item.key, !key.hasSuffix("/") else { continue }
+                items.append(.file(S3Object(
+                    key: key,
+                    size: Int64(item.size ?? 0),
+                    lastModified: item.lastModified ?? Date(),
+                    etag: item.eTag,
+                    bucket: targetBucket
+                )))
+            }
+        }
+        return items
+    }
+
     /// Uploads an image to the dump folder with timestamp
     /// - Parameters:
     ///   - imageData: JPEG or PNG image data
