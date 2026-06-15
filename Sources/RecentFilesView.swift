@@ -418,7 +418,7 @@ struct RecentFilesView: View {
 
     private func deleteFile(_ file: S3Object) async {
         do {
-            try await s3Service.deleteObject(key: file.key)
+            try await s3Service.deleteObject(key: file.key, bucket: file.bucket)
             logger.info("Deleted file: \(file.key)")
             await refreshRecentFiles()
         } catch {

@@ -539,23 +539,29 @@ final class S3Service {
         return "https://\(host)/\(encodedKey)?\(queryParams)&X-Amz-Signature=\(signature)"
     }
 
-    /// Deletes an object from the S3 bucket
-    /// - Parameter key: The S3 object key to delete
+    /// Deletes an object from S3
+    /// - Parameters:
+    ///   - key: The S3 object key to delete
+    ///   - bucket: Bucket the object lives in. Defaults to currentBucket. Recent Files
+    ///     mixes objects from all buckets, so callers there must pass the object's own bucket -
+    ///     deleting a key from the wrong bucket "succeeds" silently and the file stays.
     /// - Throws: S3ServiceError if the client is not initialized or AWS SDK errors
-    func deleteObject(key: String) async throws {
+    func deleteObject(key: String, bucket: String? = nil) async throws {
         guard let client = client else {
             throw S3ServiceError.clientNotInitialized
         }
 
+        let targetBucket = bucket ?? currentBucket
+
         do {
             let input = DeleteObjectInput(
-                bucket: currentBucket,
+                bucket: targetBucket,
                 key: key
             )
 
             _ = try await client.deleteObject(input: input)
 
-            // Update local items array to reflect deletion
+            // Update local arrays to reflect deletion
             await MainActor.run {
                 items.removeAll { item in
                     if case .file(let object) = item {
@@ -563,9 +569,12 @@ final class S3Service {
                     }
                     return false
                 }
+                recentFiles.removeAll { object in
+                    object.key == key && (object.bucket ?? currentBucket) == targetBucket
+                }
             }
         } catch {
-            self.logger.error("Failed to delete object '\(key)': \(error.localizedDescription)")
+            self.logger.error("Failed to delete object '\(key)' from '\(targetBucket)': \(error.localizedDescription)")
             throw error
         }
     }
