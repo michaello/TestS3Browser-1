@@ -29,6 +29,12 @@ struct PrefixBrowserView: View {
         viewStyleRaw == "grid" ? .grid : .standard
     }
 
+    // Selection state
+    @State private var isSelecting = false
+    @State private var selectedKeys: Set<String> = []
+    @State private var showBulkDeleteConfirm = false
+    @State private var isBulkDeleting = false
+
     // Delete state
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
@@ -119,47 +125,69 @@ struct PrefixBrowserView: View {
                     ForEach(displayedItems) { item in
                         switch item {
                         case .folder(let folder):
-                            NavigationLink {
-                                PrefixBrowserView(
-                                    s3Service: s3Service,
-                                    prefix: folder.prefix,
-                                    bucket: bucket,
-                                    title: folder.folderName
-                                )
-                            } label: {
+                            if isSelecting {
                                 FolderRow(folder: folder)
+                            } else {
+                                NavigationLink {
+                                    PrefixBrowserView(
+                                        s3Service: s3Service,
+                                        prefix: folder.prefix,
+                                        bucket: bucket,
+                                        title: folder.folderName
+                                    )
+                                } label: {
+                                    FolderRow(folder: folder)
+                                }
                             }
                         case .file(let object):
-                            NavigationLink {
-                                FileDetailView(object: object, service: s3Service)
-                            } label: {
-                                FileRow(object: object)
-                            }
-                            .contextMenu {
+                            if isSelecting {
                                 Button {
-                                    moveCopyMode = .move
-                                    moveCopyTarget = object
+                                    if selectedKeys.contains(object.key) {
+                                        selectedKeys.remove(object.key)
+                                    } else {
+                                        selectedKeys.insert(object.key)
+                                    }
                                 } label: {
-                                    Label("Move to…", systemImage: "arrow.forward.circle")
+                                    HStack {
+                                        Image(systemName: selectedKeys.contains(object.key)
+                                              ? "checkmark.circle.fill" : "circle")
+                                            .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
+                                        FileRow(object: object)
+                                    }
                                 }
-                                Button {
-                                    moveCopyMode = .copy
-                                    moveCopyTarget = object
+                                .buttonStyle(.plain)
+                            } else {
+                                NavigationLink {
+                                    FileDetailView(object: object, service: s3Service)
                                 } label: {
-                                    Label("Copy to…", systemImage: "doc.on.doc")
+                                    FileRow(object: object)
                                 }
-                                Divider()
-                                Button(role: .destructive) {
-                                    Task { await deleteItem(.file(object)) }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                                .contextMenu {
+                                    Button {
+                                        moveCopyMode = .move
+                                        moveCopyTarget = object
+                                    } label: {
+                                        Label("Move to…", systemImage: "arrow.forward.circle")
+                                    }
+                                    Button {
+                                        moveCopyMode = .copy
+                                        moveCopyTarget = object
+                                    } label: {
+                                        Label("Copy to…", systemImage: "doc.on.doc")
+                                    }
+                                    Divider()
+                                    Button(role: .destructive) {
+                                        Task { await deleteItem(.file(object)) }
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
-                            }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    Task { await deleteItem(.file(object)) }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        Task { await deleteItem(.file(object)) }
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
                             }
                         }
@@ -189,15 +217,50 @@ struct PrefixBrowserView: View {
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search in \(title)")
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 4) {
-                    if viewStyle == .grid {
-                        Slider(value: $cardSize, in: 80...200)
-                            .frame(width: 80)
+            ToolbarItem(placement: .topBarLeading) {
+                if isSelecting {
+                    HStack(spacing: 12) {
+                        Button("Cancel") {
+                            isSelecting = false
+                            selectedKeys.removeAll()
+                        }
+                        let fileCount = displayedItems.filter { !$0.isFolder }.count
+                        if selectedKeys.count == fileCount {
+                            Button("Deselect All") { selectedKeys.removeAll() }
+                        } else {
+                            Button("Select All") {
+                                selectedKeys = Set(displayedItems.compactMap { item -> String? in
+                                    if case .file(let o) = item { return o.key }
+                                    return nil
+                                })
+                            }
+                        }
                     }
-                    viewStyleToggle
-                    sortMenuButton
-                    uploadButton
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                if isSelecting {
+                    if !selectedKeys.isEmpty {
+                        Button(role: .destructive) {
+                            showBulkDeleteConfirm = true
+                        } label: {
+                            Label("Delete (\(selectedKeys.count))", systemImage: "trash")
+                        }
+                        .disabled(isBulkDeleting)
+                    }
+                } else {
+                    HStack(spacing: 4) {
+                        if !items.isEmpty {
+                            Button("Select") { isSelecting = true }
+                        }
+                        if viewStyle == .grid {
+                            Slider(value: $cardSize, in: 80...200)
+                                .frame(width: 80)
+                        }
+                        viewStyleToggle
+                        sortMenuButton
+                        uploadButton
+                    }
                 }
             }
         }
@@ -243,6 +306,16 @@ struct PrefixBrowserView: View {
         } message: {
             Text(moveCopyErrorMessage)
         }
+        .confirmationDialog(
+            "Delete \(selectedKeys.count) file\(selectedKeys.count == 1 ? "" : "s")?",
+            isPresented: $showBulkDeleteConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Delete \(selectedKeys.count) File\(selectedKeys.count == 1 ? "" : "s")", role: .destructive) {
+                Task { await bulkDelete() }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
         .task { await load() }
     }
 
@@ -251,28 +324,49 @@ struct PrefixBrowserView: View {
     @ViewBuilder
     private func gridCell(for item: S3Item) -> some View {
         if case .file(let object) = item {
-            NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                PrefixGridItem(item: item, cardSize: cardSize)
-            }
-            .buttonStyle(.plain)
-            .contextMenu {
+            if isSelecting {
                 Button {
-                    moveCopyMode = .move
-                    moveCopyTarget = object
+                    if selectedKeys.contains(object.key) {
+                        selectedKeys.remove(object.key)
+                    } else {
+                        selectedKeys.insert(object.key)
+                    }
                 } label: {
-                    Label("Move to…", systemImage: "arrow.forward.circle")
+                    ZStack(alignment: .topLeading) {
+                        PrefixGridItem(item: item, cardSize: cardSize)
+                        Image(systemName: selectedKeys.contains(object.key)
+                              ? "checkmark.circle.fill" : "circle")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .white)
+                            .shadow(color: .black.opacity(0.4), radius: 2)
+                            .padding(4)
+                    }
                 }
-                Button {
-                    moveCopyMode = .copy
-                    moveCopyTarget = object
-                } label: {
-                    Label("Copy to…", systemImage: "doc.on.doc")
+                .buttonStyle(.plain)
+            } else {
+                NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
+                    PrefixGridItem(item: item, cardSize: cardSize)
                 }
-                Divider()
-                Button(role: .destructive) {
-                    Task { await deleteItem(item) }
-                } label: {
-                    Label("Delete", systemImage: "trash")
+                .buttonStyle(.plain)
+                .contextMenu {
+                    Button {
+                        moveCopyMode = .move
+                        moveCopyTarget = object
+                    } label: {
+                        Label("Move to…", systemImage: "arrow.forward.circle")
+                    }
+                    Button {
+                        moveCopyMode = .copy
+                        moveCopyTarget = object
+                    } label: {
+                        Label("Copy to…", systemImage: "doc.on.doc")
+                    }
+                    Divider()
+                    Button(role: .destructive) {
+                        Task { await deleteItem(item) }
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
                 }
             }
         } else if case .folder(let folder) = item {
@@ -299,6 +393,44 @@ struct PrefixBrowserView: View {
             logger.error("Delete failed for \(object.key): \(error.localizedDescription)")
             await MainActor.run {
                 deleteErrorMessage = "Could not delete \(object.fileName): \(error.localizedDescription)"
+                showDeleteError = true
+            }
+        }
+    }
+
+    private func bulkDelete() async {
+        let keys = selectedKeys
+        isBulkDeleting = true
+        var failedKeys: [String] = []
+        await withTaskGroup(of: (String, Error?).self) { group in
+            for key in keys {
+                group.addTask {
+                    do {
+                        try await self.s3Service.deleteObject(key: key, bucket: self.bucket)
+                        return (key, nil)
+                    } catch {
+                        return (key, error)
+                    }
+                }
+            }
+            for await (key, error) in group {
+                if let error {
+                    logger.error("Bulk delete failed for \(key): \(error.localizedDescription)")
+                    failedKeys.append(key)
+                } else {
+                    items.removeAll { item in
+                        if case .file(let o) = item { return o.key == key }
+                        return false
+                    }
+                }
+            }
+        }
+        await MainActor.run {
+            isBulkDeleting = false
+            isSelecting = false
+            selectedKeys.removeAll()
+            if !failedKeys.isEmpty {
+                deleteErrorMessage = "Could not delete \(failedKeys.count) file\(failedKeys.count == 1 ? "" : "s")."
                 showDeleteError = true
             }
         }
@@ -503,6 +635,8 @@ struct PrefixBrowserView: View {
     // MARK: - Listing
 
     private func load() async {
+        isSelecting = false
+        selectedKeys.removeAll()
         isLoading = true
         errorMessage = nil
         nextToken = nil

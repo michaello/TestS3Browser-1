@@ -608,3 +608,22 @@ Commit: `04aaa6a` feat: add grid view to PrefixBrowserView
 - Folder rows are excluded from selection; only file rows are selectable.
 
 Commit: `9bcff10` feat: batch select and bulk delete in BucketBrowserView
+
+## Phase 30 - Batch select and bulk delete in PrefixBrowserView (DONE)
+
+- Added `@State private var isSelecting = false`, `selectedKeys: Set<String>`, `showBulkDeleteConfirm`,
+  `isBulkDeleting` to `PrefixBrowserView`.
+- "Select" button (`.topBarLeading` when not in selection mode) enters selection mode.
+  "Cancel" exits and clears the selection set.
+- "Select All" / "Deselect All" toggle in the leading toolbar during selection mode.
+- In list mode: file rows become tap-to-toggle buttons with a circle / filled-checkmark indicator.
+  Swipe-to-delete and context menus are hidden while selecting. Folder rows stay tappable but skip
+  navigation when `isSelecting`.
+- In grid mode: file cells show a checkmark overlay in the top-leading corner.
+- "Delete (N)" destructive button in trailing toolbar during selection. Triggers a `.confirmationDialog`
+  then calls `bulkDelete()` which fans out deletions concurrently, removes succeeded keys from
+  `items`, then reports partial-failure count via the existing "Delete Failed" alert.
+- Selection cleared on each `load()` call so navigating back and refreshing starts fresh.
+- `viewStyleToggle` and `sortMenuButton` hidden during selection to reduce toolbar crowding.
+
+Commit: `<hash>` feat: batch select and bulk delete in PrefixBrowserView
