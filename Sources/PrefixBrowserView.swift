@@ -20,6 +20,8 @@ struct PrefixBrowserView: View {
     @State private var isLoadingMore = false
     @State private var nextToken: String? = nil
     @State private var errorMessage: String? = nil
+    @State private var searchText = ""
+    @State private var sortOption: PrefixSortOption = .nameAZ
 
     // Delete state
     @State private var showDeleteError = false
@@ -45,6 +47,22 @@ struct PrefixBrowserView: View {
         case failure(String)
     }
 
+    private var displayedItems: [S3Item] {
+        let filtered: [S3Item] = searchText.isEmpty ? items : items.filter { item in
+            item.displayName.localizedCaseInsensitiveContains(searchText)
+        }
+        return filtered.sorted { a, b in
+            // Folders always sort before files.
+            if a.isFolder != b.isFolder { return a.isFolder }
+            switch sortOption {
+            case .nameAZ:    return a.displayName.localizedCompare(b.displayName) == .orderedAscending
+            case .nameZA:    return a.displayName.localizedCompare(b.displayName) == .orderedDescending
+            case .dateNewest: return a.sortDate > b.sortDate
+            case .dateOldest: return a.sortDate < b.sortDate
+            }
+        }
+    }
+
     var body: some View {
         Group {
             if isLoading && items.isEmpty {
@@ -56,6 +74,8 @@ struct PrefixBrowserView: View {
                     systemImage: "exclamationmark.triangle",
                     description: Text(msg)
                 )
+            } else if !searchText.isEmpty && displayedItems.isEmpty {
+                ContentUnavailableView.search(text: searchText)
             } else if items.isEmpty {
                 ContentUnavailableView(
                     "Empty Folder",
@@ -64,7 +84,7 @@ struct PrefixBrowserView: View {
                 )
             } else {
                 List {
-                    ForEach(items) { item in
+                    ForEach(displayedItems) { item in
                         switch item {
                         case .folder(let folder):
                             NavigationLink {
@@ -135,9 +155,13 @@ struct PrefixBrowserView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .searchable(text: $searchText, prompt: "Search in \(title)")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                uploadButton
+                HStack(spacing: 4) {
+                    sortMenuButton
+                    uploadButton
+                }
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -225,6 +249,26 @@ struct PrefixBrowserView: View {
                 moveCopyErrorMessage = error.localizedDescription
                 showMoveCopyError = true
             }
+        }
+    }
+
+    // MARK: - Sort menu
+
+    private var sortMenuButton: some View {
+        Menu {
+            ForEach(PrefixSortOption.allCases, id: \.self) { option in
+                Button {
+                    sortOption = option
+                } label: {
+                    if sortOption == option {
+                        Label(option.label, systemImage: "checkmark")
+                    } else {
+                        Text(option.label)
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
         }
     }
 
@@ -395,6 +439,21 @@ struct PrefixBrowserView: View {
             logger.error("listPrefix(\(prefix)) page failed: \(error.localizedDescription)")
         }
         isLoadingMore = false
+    }
+}
+
+// MARK: - Supporting types
+
+enum PrefixSortOption: CaseIterable {
+    case nameAZ, nameZA, dateNewest, dateOldest
+
+    var label: String {
+        switch self {
+        case .nameAZ:     return "Name (A - Z)"
+        case .nameZA:     return "Name (Z - A)"
+        case .dateNewest: return "Date (Newest)"
+        case .dateOldest: return "Date (Oldest)"
+        }
     }
 }
 

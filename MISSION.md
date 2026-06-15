@@ -554,3 +554,21 @@ Commit: `cbce369` feat: add cache management section to SettingsView
   `.deleteErrorAlert(isPresented:message:)` (the shared modifier from Phase 3).
 
 Commit: `0302368` feat: add move/copy and delete error alert to BucketBrowserView
+
+## Phase 27 - Search and sort in PrefixBrowserView (DONE)
+
+- Added `@State private var searchText = ""` and `@State private var sortOption:
+  PrefixSortOption = .nameAZ` to `PrefixBrowserView`.
+- `PrefixSortOption` enum with four cases: `nameAZ`, `nameZA`, `dateNewest`,
+  `dateOldest`. Folders always sort before files within each option.
+- `displayedItems` computed var: filters `items` by case-insensitive `displayName`
+  substring when `searchText` is non-empty, then applies the active sort.
+- The `List` now iterates `displayedItems` instead of `items`.
+- `ContentUnavailableView.search(text: searchText)` replaces the list when
+  `displayedItems` is empty and a search is active.
+- `.searchable(text: $searchText, prompt: "Search in \(title)")` added to the view body.
+- Sort `Menu` button (`arrow.up.arrow.down`) added to the trailing toolbar next to the
+  existing upload `+` button. Active sort shows a checkmark.
+- `searchText` is not cleared on load so it persists while the user browses the same level.
+
+Commit: `<hash>` feat: add search and sort to PrefixBrowserView
