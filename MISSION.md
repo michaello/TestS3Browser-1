@@ -607,4 +607,4 @@ Commit: `04aaa6a` feat: add grid view to PrefixBrowserView
 - `isSelecting` is automatically reset to false after bulk delete completes.
 - Folder rows are excluded from selection; only file rows are selectable.
 
-Commit: `<hash>` feat: batch select and bulk delete in BucketBrowserView
+Commit: `9bcff10` feat: batch select and bulk delete in BucketBrowserView
