@@ -257,3 +257,21 @@ Commit: `2864ecf` feat: add file tagging to RecentFilesView
   filter menu) via a new `sortMenu` computed var. Active option shows a checkmark.
 
 Commit: `1c1b25a` feat: add sort controls to RecentFilesView
+
+## Phase 11 - Folder/prefix navigation from RecentFilesView (DONE)
+
+- Added `S3Service.listPrefix(_:bucket:)` in `S3Service+Transfer.swift`: lists common
+  prefixes (virtual folders) and objects under a given prefix using delimiter `/`, returns
+  `[S3Item]` directly without touching the service's observable state, so it runs safely
+  in parallel with BucketBrowserView's own listing.
+- Added `Sources/PrefixBrowserView.swift`: self-contained recursive drill-down view.
+  Owns its own `@State` items/isLoading/error. Tapping a folder `NavigationLink` pushes
+  a new `PrefixBrowserView` at the child prefix; tapping a file opens `FileDetailView`.
+  Pull-to-refresh reloads the current level. Reuses `FolderRow` and `FileRow` from
+  `BucketBrowserView.swift`.
+- `RecentFilesView` gained a `BrowseRoot` sentinel (private `Hashable` struct), a
+  `.navigationDestination(for: BrowseRoot.self)` that opens `PrefixBrowserView` at the
+  bucket root, and a folder-icon toolbar button (left of the sort menu) that appends
+  `BrowseRoot()` to the existing `navigationPath`, triggering the push.
+
+Commit: `dda02e3` feat: add folder/prefix navigation to RecentFilesView
