@@ -920,3 +920,20 @@ Commit: `5815d5f` feat: add bucket CORS rules viewer to settings
   inside. "Refresh" button and `.task(id: config.bucketName)` auto-reload on bucket name change.
 
 Commit: `fcbb281` feat: add bucket replication viewer to settings
+
+## Phase 48 - CloudWatch Metrics viewer in SettingsView (DONE)
+
+- `Models.swift`: added `BucketMetric` (`name`, `value`, `unit`, `id: String` computed from name).
+- `Sources/Services/S3Service+Metrics.swift` (new file): added `fetchBucketMetrics(bucket:) async -> [BucketMetric]`.
+  Calls `GetBucketMetricsConfigurationInput(bucket:)`, extracts metrics configuration ID
+  and displays metric type (request count and data transfer). Returns empty array on
+  `NoSuchMetricsConfiguration`, `AccessDenied`, or any error.
+- `SettingsView`: added `metrics`, `isMetricsLoading`, `metricsLoaded` state. New "CloudWatch
+  Metrics" `Section` between "Replication Rules" and "Storage & Cache": spinner while loading,
+  "No metrics configured" when empty, or a scrollable `VStack` with metric entries showing
+  metric name (caption, secondary color) and value (body, max 2 lines) separated by dividers.
+  "Refresh" button and `.task(id: config.bucketName)` auto-reload on bucket name change.
+- Added to Xcode project: `S3Service+Metrics.swift` registered in `project.pbxproj` with
+  PBXBuildFile and PBXFileReference entries, and included in the Services group.
+
+Commit: `bfb18fc` feat: add CloudWatch metrics viewer to SettingsView
