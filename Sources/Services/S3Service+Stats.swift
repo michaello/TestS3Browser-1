@@ -65,6 +65,32 @@ extension S3Service {
         }
     }
 
+    /// Fetches replication rules for the given bucket.
+    /// Returns an empty array when no replication is configured or access is denied.
+    func fetchReplicationRules(bucket: String) async -> [ReplicationRuleDisplay] {
+        if client == nil { try? await initializeClient() }
+        guard let client else { return [] }
+        do {
+            let input = GetBucketReplicationInput(bucket: bucket)
+            let output = try await client.getBucketReplication(input: input)
+            return (output.replicationConfiguration?.rules ?? []).enumerated().map { index, rule in
+                // Destination arrives as an ARN: arn:aws:s3:::bucket-name — strip prefix for display.
+                let destARN = rule.destination?.bucket ?? ""
+                let destBucket = destARN.components(separatedBy: ":::").last ?? destARN
+                return ReplicationRuleDisplay(
+                    id: rule.id ?? "Rule \(index + 1)",
+                    status: rule.status?.rawValue ?? "Unknown",
+                    destinationBucket: destBucket.isEmpty ? "(unknown)" : destBucket,
+                    storageClass: rule.destination?.storageClass?.rawValue,
+                    priority: rule.priority
+                )
+            }
+        } catch {
+            // ReplicationConfigurationNotFoundError and AccessDenied both mean "no readable config"
+            return []
+        }
+    }
+
     /// Fetches CORS rules for the given bucket.
     /// Returns an empty array when no CORS configuration exists or access is denied.
     func fetchCORSRules(bucket: String) async -> [CORSRuleDisplay] {

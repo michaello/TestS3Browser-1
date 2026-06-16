@@ -209,6 +209,16 @@ struct S3ObjectACL {
     let grants: [ACLGrant]
 }
 
+struct ReplicationRuleDisplay: Identifiable {
+    let id: String
+    let status: String
+    let destinationBucket: String
+    let storageClass: String?
+    let priority: Int?
+
+    var isEnabled: Bool { status.lowercased() == "enabled" }
+}
+
 struct CORSRuleDisplay: Identifiable {
     let id: String
     let allowedOrigins: [String]

@@ -19,6 +19,9 @@ struct SettingsView: View {
     @State private var corsRules: [CORSRuleDisplay] = []
     @State private var isCORSLoading = false
     @State private var corsLoaded = false
+    @State private var replicationRules: [ReplicationRuleDisplay] = []
+    @State private var isReplicationLoading = false
+    @State private var replicationLoaded = false
 
     var body: some View {
         NavigationStack {
@@ -194,6 +197,45 @@ struct SettingsView: View {
                     .disabled(isCORSLoading || !isConfigValid)
                 }
 
+                Section("Replication Rules") {
+                    if isReplicationLoading {
+                        HStack {
+                            ProgressView()
+                            Text("Loading replication rules...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if replicationLoaded && replicationRules.isEmpty {
+                        Text("No replication configured")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(replicationRules) { rule in
+                            DisclosureGroup {
+                                LabeledContent("Destination", value: rule.destinationBucket)
+                                if let sc = rule.storageClass {
+                                    LabeledContent("Storage Class", value: sc)
+                                }
+                                if let p = rule.priority {
+                                    LabeledContent("Priority", value: "\(p)")
+                                }
+                            } label: {
+                                HStack {
+                                    Text(rule.id)
+                                        .lineLimit(1)
+                                    Spacer()
+                                    Text(rule.status)
+                                        .font(.caption)
+                                        .foregroundStyle(rule.isEnabled ? .green : .secondary)
+                                }
+                            }
+                        }
+                    }
+
+                    Button("Refresh") {
+                        Task { await loadReplicationRules() }
+                    }
+                    .disabled(isReplicationLoading || !isConfigValid)
+                }
+
                 Section("Storage & Cache") {
                     HStack {
                         Label("Image Cache", systemImage: "photo.on.rectangle")
@@ -231,6 +273,7 @@ struct SettingsView: View {
             .task(id: config.bucketName) { await loadBucketPolicy() }
             .task(id: config.bucketName) { await loadLifecycleRules() }
             .task(id: config.bucketName) { await loadCORSRules() }
+            .task(id: config.bucketName) { await loadReplicationRules() }
             .confirmationDialog("Clear image cache?", isPresented: $confirmClearCache, titleVisibility: .visible) {
                 Button("Clear Cache", role: .destructive) {
                     Task {
@@ -255,6 +298,17 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             }
         }
+    }
+
+    private func loadReplicationRules() async {
+        guard isConfigValid else { return }
+        isReplicationLoading = true
+        replicationLoaded = false
+        replicationRules = []
+        let service = S3Service(config: config)
+        replicationRules = await service.fetchReplicationRules(bucket: config.bucketName)
+        replicationLoaded = true
+        isReplicationLoading = false
     }
 
     private func loadCORSRules() async {
