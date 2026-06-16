@@ -937,3 +937,21 @@ Commit: `fcbb281` feat: add bucket replication viewer to settings
   PBXBuildFile and PBXFileReference entries, and included in the Services group.
 
 Commit: `bfb18fc` feat: add CloudWatch metrics viewer to SettingsView
+
+## Phase 49 - Lifecycle Transition Simulator in FileDetailView (DONE)
+
+- `Models.swift`: added `LifecycleTransition` (`transitionDate`, `targetStorageClass`, `id` computed from target).
+- `Sources/Services/S3Service+Lifecycle.swift` (new file): added `calculateNextTransition(objectKey:objectCreated:rules:) -> LifecycleTransition?`.
+  Scans the bucket's lifecycle rules, finds all enabled transitions with days set, calculates each transition date
+  by adding days to the object's creation date, filters to future transitions only, and returns the soonest one.
+  Returns nil if no transitions apply.
+- `FileDetailView`: added `lifecycleRules`, `isLoadingLifecycle`, `nextTransition` state. New "Lifecycle" `Section`
+  at the end of standardDetailView: shows a spinner while loading, "No lifecycle rules configured" when empty,
+  or (if rules exist) displays the next transition date (relative formatted) and target storage class via `MetadataRow`,
+  or "No upcoming transitions" if the transition calculation returns nil. A "Refresh" button triggers `loadLifecycle()`,
+  which fetches the bucket's lifecycle rules and recalculates the next transition. Loading happens automatically
+  via `.task` on initial display.
+- Added to Xcode project: `S3Service+Lifecycle.swift` registered in `project.pbxproj` with PBXBuildFile and
+  PBXFileReference entries, and included in the Services group and target build sources.
+
+Commit: `2af346e` feat: add lifecycle transition simulator to FileDetailView
