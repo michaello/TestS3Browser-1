@@ -904,3 +904,19 @@ Commit: `9b936a9` feat: add bucket lifecycle rules viewer to settings
   "Refresh" button and `.task(id: config.bucketName)` auto-reload on bucket name change.
 
 Commit: `5815d5f` feat: add bucket CORS rules viewer to settings
+
+## Phase 47 - Bucket Replication Rules viewer in SettingsView (DONE)
+
+- `Models.swift`: added `ReplicationRuleDisplay` (`id`, `status`, `destinationBucket`,
+  `storageClass?`, `priority?`, `isEnabled` computed from status).
+- `S3Service+Stats.swift`: added `fetchReplicationRules(bucket:) async -> [ReplicationRuleDisplay]`.
+  Calls `GetBucketReplicationInput(bucket:)`, reads `output.replicationConfiguration.rules`,
+  strips the `arn:aws:s3:::` prefix from the destination ARN to show the bare bucket name.
+  Returns empty array on `ReplicationConfigurationNotFoundError`, `AccessDenied`, or any error.
+- `SettingsView`: added `replicationRules`, `isReplicationLoading`, `replicationLoaded` state.
+  New "Replication Rules" `Section` between "CORS Rules" and "Storage & Cache": spinner while
+  loading, "No replication configured" when empty, or one `DisclosureGroup` per rule with id +
+  enabled/disabled status badge as label, and destination bucket, storage class, and priority
+  inside. "Refresh" button and `.task(id: config.bucketName)` auto-reload on bucket name change.
+
+Commit: `fcbb281` feat: add bucket replication viewer to settings
