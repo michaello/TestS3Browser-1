@@ -250,6 +250,12 @@ struct BucketMetric: Identifiable {
     var id: String { name }
 }
 
+struct LifecycleTransition: Identifiable {
+    let transitionDate: Date
+    let targetStorageClass: String
+    var id: String { targetStorageClass }
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String

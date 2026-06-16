@@ -41,6 +41,9 @@ struct FileDetailView: View {
     @State private var restoringVersionId: String? = nil
     @State private var showRestoreConfirm = false
     @State private var pendingRestoreVersionId: String? = nil
+    @State private var lifecycleRules: [LifecycleRuleDisplay] = []
+    @State private var isLoadingLifecycle = false
+    @State private var nextTransition: LifecycleTransition? = nil
 
     enum FileContent {
         case text(String)
@@ -277,6 +280,7 @@ struct FileDetailView: View {
                 versionsSection
                 tagsSection
                 aclSection
+                lifecycleSection
             }
             .padding()
         }
@@ -320,7 +324,8 @@ struct FileDetailView: View {
             async let versLoad: Void = loadVersions()
             async let tagsLoad: Void = loadTags()
             async let aclLoad: Void = loadACL()
-            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad)
+            async let lifecycleLoad: Void = loadLifecycle()
+            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad, lifecycleLoad)
         }
         .confirmationDialog(
             "Restore this version?",
@@ -764,6 +769,20 @@ struct FileDetailView: View {
         }
     }
 
+    private func loadLifecycle() async {
+        isLoadingLifecycle = true
+        defer { isLoadingLifecycle = false }
+        guard let bucket = object.bucket else { return }
+        lifecycleRules = await service.fetchLifecycleRules(bucket: bucket)
+        if !lifecycleRules.isEmpty {
+            nextTransition = service.calculateNextTransition(
+                objectKey: object.key,
+                objectCreated: object.lastModified,
+                rules: lifecycleRules
+            )
+        }
+    }
+
     private var aclSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Permissions")
@@ -796,6 +815,54 @@ struct FileDetailView: View {
                     }
                     .font(.caption)
                 }
+            }
+        }
+        .padding()
+        .background(.gray.opacity(0.07))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    private var lifecycleSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Lifecycle")
+                    .font(.headline)
+                Spacer()
+                if isLoadingLifecycle {
+                    ProgressView().scaleEffect(0.7)
+                } else {
+                    Button("Refresh") {
+                        Task { await loadLifecycle() }
+                    }
+                    .font(.caption)
+                }
+            }
+            .padding(.top, 8)
+
+            if isLoadingLifecycle {
+                HStack(spacing: 6) {
+                    ProgressView().scaleEffect(0.7)
+                    Text("Loading lifecycle rules…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else if lifecycleRules.isEmpty {
+                Text("No lifecycle rules configured")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
+            } else if let transition = nextTransition {
+                VStack(alignment: .leading, spacing: 8) {
+                    MetadataRow(label: "Next Transition", value: transition.transitionDate.relativeFormatted())
+                    MetadataRow(label: "Target Storage Class", value: transition.targetStorageClass)
+                }
+            } else {
+                Text("No upcoming transitions")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
             }
         }
         .padding()

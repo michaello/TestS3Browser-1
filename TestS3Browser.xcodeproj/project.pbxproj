@@ -43,6 +43,7 @@
 		STV001A1B2C3D4E5F6A7B8C9 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = STV002A1B2C3D4E5F6A7B8C9 /* StatsView.swift */; };
 		SST001A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */; };
 		MET001A1B2C3D4E5F6A7B8C9 /* S3Service+Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = MET002A1B2C3D4E5F6A7B8C9 /* S3Service+Metrics.swift */; };
+		LCY001A1B2C3D4E5F6A7B8C9 /* S3Service+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = LCY002A1B2C3D4E5F6A7B8C9 /* S3Service+Lifecycle.swift */; };
 		STR001A1B2C3D4E5F6A7B8C9 /* StarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = STR002A1B2C3D4E5F6A7B8C9 /* StarStore.swift */; };
 		UQM001A1B2C3D4E5F6A7B8C9 /* UploadQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = UQM002A1B2C3D4E5F6A7B8C9 /* UploadQueueManager.swift */; };
 		UQS001A1B2C3D4E5F6A7B8C9 /* UploadQueueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = UQS002A1B2C3D4E5F6A7B8C9 /* UploadQueueSheet.swift */; };
@@ -126,6 +127,7 @@
 		STV002A1B2C3D4E5F6A7B8C9 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S3Service+Stats.swift"; sourceTree = "<group>"; };
 		MET002A1B2C3D4E5F6A7B8C9 /* S3Service+Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S3Service+Metrics.swift"; sourceTree = "<group>"; };
+		LCY002A1B2C3D4E5F6A7B8C9 /* S3Service+Lifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "S3Service+Lifecycle.swift"; sourceTree = "<group>"; };
 		STR002A1B2C3D4E5F6A7B8C9 /* StarStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStore.swift; sourceTree = "<group>"; };
 		UQM002A1B2C3D4E5F6A7B8C9 /* UploadQueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadQueueManager.swift; sourceTree = "<group>"; };
 		UQS002A1B2C3D4E5F6A7B8C9 /* UploadQueueSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadQueueSheet.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				520B327926A84AC2835F5EE9 /* SeenPhotosTracker.swift */,
 				SST002A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift */,
 				MET002A1B2C3D4E5F6A7B8C9 /* S3Service+Metrics.swift */,
+				LCY002A1B2C3D4E5F6A7B8C9 /* S3Service+Lifecycle.swift */,
 				67E7F38BCA514DBBAA2EB528 /* SharedConfig.swift */,
 				89FD0222DF68416599C6EF01 /* S3Service+RecentFiles.swift */,
 				C00B48D31EEC44569DD6A7C2 /* S3Service+Transfer.swift */,
@@ -454,6 +457,7 @@
 				STV001A1B2C3D4E5F6A7B8C9 /* StatsView.swift in Sources */,
 				SST001A1B2C3D4E5F6A7B8C9 /* S3Service+Stats.swift in Sources */,
 				MET001A1B2C3D4E5F6A7B8C9 /* S3Service+Metrics.swift in Sources */,
+				LCY001A1B2C3D4E5F6A7B8C9 /* S3Service+Lifecycle.swift in Sources */,
 				77AD6104C24F4674BC0AB7AA /* S3Service+RecentFiles.swift in Sources */,
 				6F6A725BDF5045AC845B514C /* S3Service+Transfer.swift in Sources */,
 				3779A1DDCA494735896B705F /* S3Service+URLs.swift in Sources */,
