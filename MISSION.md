@@ -888,3 +888,19 @@ Commit: `6e9a666` feat: add bucket policy viewer to settings
   on bucket name change.
 
 Commit: `9b936a9` feat: add bucket lifecycle rules viewer to settings
+
+## Phase 46 - Bucket CORS Rules viewer in SettingsView (DONE)
+
+- `Models.swift`: added `CORSRuleDisplay` (`id`, `allowedOrigins`, `allowedMethods`,
+  `allowedHeaders`, `exposeHeaders`, `maxAgeSeconds`).
+- `S3Service+Stats.swift`: added `fetchCORSRules(bucket:) async -> [CORSRuleDisplay]`.
+  Calls `GetBucketCorsInput(bucket:)`, maps each `S3ClientTypes.CORSRule` to a
+  `CORSRuleDisplay` (falling back to "Rule N" when no id is set). Returns empty array
+  on `NoSuchCORSConfiguration`, `AccessDenied`, or any other error.
+- `SettingsView`: added `corsRules`, `isCORSLoading`, `corsLoaded` state. New "CORS Rules"
+  `Section` between "Lifecycle Rules" and "Storage & Cache": spinner while loading,
+  "No CORS rules configured" when empty, or one `DisclosureGroup` per rule showing id
+  as label and origins, methods, allowed headers, expose headers, and max-age inside.
+  "Refresh" button and `.task(id: config.bucketName)` auto-reload on bucket name change.
+
+Commit: `5815d5f` feat: add bucket CORS rules viewer to settings
