@@ -22,6 +22,9 @@ struct SettingsView: View {
     @State private var replicationRules: [ReplicationRuleDisplay] = []
     @State private var isReplicationLoading = false
     @State private var replicationLoaded = false
+    @State private var metrics: [BucketMetric] = []
+    @State private var isMetricsLoading = false
+    @State private var metricsLoaded = false
 
     var body: some View {
         NavigationStack {
@@ -236,6 +239,49 @@ struct SettingsView: View {
                     .disabled(isReplicationLoading || !isConfigValid)
                 }
 
+                Section("CloudWatch Metrics") {
+                    if isMetricsLoading {
+                        HStack {
+                            ProgressView()
+                            Text("Loading metrics...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if metricsLoaded && metrics.isEmpty {
+                        Text("No metrics configured")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ScrollView(.vertical) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                ForEach(metrics) { metric in
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(metric.name)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        HStack {
+                                            Text(metric.value)
+                                                .font(.body)
+                                                .lineLimit(2)
+                                            if !metric.unit.isEmpty {
+                                                Text(metric.unit)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                        }
+                                    }
+                                    Divider()
+                                }
+                            }
+                            .padding(.vertical, 8)
+                        }
+                        .frame(maxHeight: 260)
+                    }
+
+                    Button("Refresh") {
+                        Task { await loadMetrics() }
+                    }
+                    .disabled(isMetricsLoading || !isConfigValid)
+                }
+
                 Section("Storage & Cache") {
                     HStack {
                         Label("Image Cache", systemImage: "photo.on.rectangle")
@@ -274,6 +320,7 @@ struct SettingsView: View {
             .task(id: config.bucketName) { await loadLifecycleRules() }
             .task(id: config.bucketName) { await loadCORSRules() }
             .task(id: config.bucketName) { await loadReplicationRules() }
+            .task(id: config.bucketName) { await loadMetrics() }
             .confirmationDialog("Clear image cache?", isPresented: $confirmClearCache, titleVisibility: .visible) {
                 Button("Clear Cache", role: .destructive) {
                     Task {
@@ -309,6 +356,17 @@ struct SettingsView: View {
         replicationRules = await service.fetchReplicationRules(bucket: config.bucketName)
         replicationLoaded = true
         isReplicationLoading = false
+    }
+
+    private func loadMetrics() async {
+        guard isConfigValid else { return }
+        isMetricsLoading = true
+        metricsLoaded = false
+        metrics = []
+        let service = S3Service(config: config)
+        metrics = await service.fetchBucketMetrics(bucket: config.bucketName)
+        metricsLoaded = true
+        isMetricsLoading = false
     }
 
     private func loadCORSRules() async {

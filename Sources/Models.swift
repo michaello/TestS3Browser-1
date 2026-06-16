@@ -243,6 +243,13 @@ struct LifecycleRuleDisplay: Identifiable {
     var isEnabled: Bool { status.lowercased() == "enabled" }
 }
 
+struct BucketMetric: Identifiable {
+    let name: String
+    let value: String
+    let unit: String
+    var id: String { name }
+}
+
 struct S3Config: Codable, Equatable {
     var bucketName: String
     var region: String
