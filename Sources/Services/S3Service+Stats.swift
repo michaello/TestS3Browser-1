@@ -65,6 +65,30 @@ extension S3Service {
         }
     }
 
+    /// Fetches CORS rules for the given bucket.
+    /// Returns an empty array when no CORS configuration exists or access is denied.
+    func fetchCORSRules(bucket: String) async -> [CORSRuleDisplay] {
+        if client == nil { try? await initializeClient() }
+        guard let client else { return [] }
+        do {
+            let input = GetBucketCorsInput(bucket: bucket)
+            let output = try await client.getBucketCors(input: input)
+            return (output.corsRules ?? []).enumerated().map { index, rule in
+                CORSRuleDisplay(
+                    id: rule.id ?? "Rule \(index + 1)",
+                    allowedOrigins: rule.allowedOrigins ?? [],
+                    allowedMethods: rule.allowedMethods ?? [],
+                    allowedHeaders: rule.allowedHeaders ?? [],
+                    exposeHeaders: rule.exposeHeaders ?? [],
+                    maxAgeSeconds: rule.maxAgeSeconds
+                )
+            }
+        } catch {
+            // NoSuchCORSConfiguration and AccessDenied both mean "no readable CORS rules"
+            return []
+        }
+    }
+
     /// Fetches lifecycle rules for the given bucket.
     /// Returns an empty array when no rules are configured or access is denied.
     func fetchLifecycleRules(bucket: String) async -> [LifecycleRuleDisplay] {

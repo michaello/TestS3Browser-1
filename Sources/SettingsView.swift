@@ -16,6 +16,9 @@ struct SettingsView: View {
     @State private var lifecycleRules: [LifecycleRuleDisplay] = []
     @State private var isLifecycleLoading = false
     @State private var lifecycleLoaded = false
+    @State private var corsRules: [CORSRuleDisplay] = []
+    @State private var isCORSLoading = false
+    @State private var corsLoaded = false
 
     var body: some View {
         NavigationStack {
@@ -154,6 +157,43 @@ struct SettingsView: View {
                     .disabled(isLifecycleLoading || !isConfigValid)
                 }
 
+                Section("CORS Rules") {
+                    if isCORSLoading {
+                        HStack {
+                            ProgressView()
+                            Text("Loading CORS rules...")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if corsLoaded && corsRules.isEmpty {
+                        Text("No CORS rules configured")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(corsRules) { rule in
+                            DisclosureGroup {
+                                LabeledContent("Origins", value: rule.allowedOrigins.joined(separator: ", "))
+                                LabeledContent("Methods", value: rule.allowedMethods.joined(separator: ", "))
+                                if !rule.allowedHeaders.isEmpty {
+                                    LabeledContent("Allow Headers", value: rule.allowedHeaders.joined(separator: ", "))
+                                }
+                                if !rule.exposeHeaders.isEmpty {
+                                    LabeledContent("Expose Headers", value: rule.exposeHeaders.joined(separator: ", "))
+                                }
+                                if let age = rule.maxAgeSeconds {
+                                    LabeledContent("Max Age", value: "\(age)s")
+                                }
+                            } label: {
+                                Text(rule.id)
+                                    .lineLimit(1)
+                            }
+                        }
+                    }
+
+                    Button("Refresh") {
+                        Task { await loadCORSRules() }
+                    }
+                    .disabled(isCORSLoading || !isConfigValid)
+                }
+
                 Section("Storage & Cache") {
                     HStack {
                         Label("Image Cache", systemImage: "photo.on.rectangle")
@@ -190,6 +230,7 @@ struct SettingsView: View {
             .task { await loadCacheSize() }
             .task(id: config.bucketName) { await loadBucketPolicy() }
             .task(id: config.bucketName) { await loadLifecycleRules() }
+            .task(id: config.bucketName) { await loadCORSRules() }
             .confirmationDialog("Clear image cache?", isPresented: $confirmClearCache, titleVisibility: .visible) {
                 Button("Clear Cache", role: .destructive) {
                     Task {
@@ -214,6 +255,17 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             }
         }
+    }
+
+    private func loadCORSRules() async {
+        guard isConfigValid else { return }
+        isCORSLoading = true
+        corsLoaded = false
+        corsRules = []
+        let service = S3Service(config: config)
+        corsRules = await service.fetchCORSRules(bucket: config.bucketName)
+        corsLoaded = true
+        isCORSLoading = false
     }
 
     private func loadLifecycleRules() async {

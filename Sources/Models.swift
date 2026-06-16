@@ -209,6 +209,15 @@ struct S3ObjectACL {
     let grants: [ACLGrant]
 }
 
+struct CORSRuleDisplay: Identifiable {
+    let id: String
+    let allowedOrigins: [String]
+    let allowedMethods: [String]
+    let allowedHeaders: [String]
+    let exposeHeaders: [String]
+    let maxAgeSeconds: Int?
+}
+
 struct LifecycleTransitionDisplay: Identifiable {
     var id: String { "\(days ?? -1)-\(storageClass)" }
     let days: Int?
