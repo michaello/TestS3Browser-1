@@ -35,6 +35,7 @@
 		DL0001A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DL0002A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift */; };
 		DEL001A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEL002A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift */; };
 		SRC001A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = SRC002A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift */; };
+		144483F2886BBA02162E74CD /* GetStorageStatsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B990B2865B2A3B414CA672C /* GetStorageStatsIntent.swift */; };
 		TAG001A1B2C3D4E5F6A7B8C9 /* TagStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = TAG002A1B2C3D4E5F6A7B8C9 /* TagStore.swift */; };
 		CHI001A1B2C3D4E5F6A7B8C9 /* TagChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHI002A1B2C3D4E5F6A7B8C9 /* TagChip.swift */; };
 		PFX001A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PFX002A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift */; };
@@ -119,6 +120,7 @@
 		DL0002A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFileIntent.swift; sourceTree = "<group>"; };
 		DEL002A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFileIntent.swift; sourceTree = "<group>"; };
 		SRC002A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFileIntent.swift; sourceTree = "<group>"; };
+		9B990B2865B2A3B414CA672C /* GetStorageStatsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStorageStatsIntent.swift; sourceTree = "<group>"; };
 		TAG002A1B2C3D4E5F6A7B8C9 /* TagStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStore.swift; sourceTree = "<group>"; };
 		CHI002A1B2C3D4E5F6A7B8C9 /* TagChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChip.swift; sourceTree = "<group>"; };
 		PFX002A1B2C3D4E5F6A7B8C9 /* PrefixBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixBrowserView.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				DL0002A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift */,
 				DEL002A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift */,
 				SRC002A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift */,
+				9B990B2865B2A3B414CA672C /* GetStorageStatsIntent.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				DL0001A1B2C3D4E5F6A7B8C9 /* DownloadFileIntent.swift in Sources */,
 				DEL001A1B2C3D4E5F6A7B8C9 /* DeleteFileIntent.swift in Sources */,
 				SRC001A1B2C3D4E5F6A7B8C9 /* SearchFileIntent.swift in Sources */,
+				144483F2886BBA02162E74CD /* GetStorageStatsIntent.swift in Sources */,
 				3401198A5F394BE6B0673BAF /* ImageCacheActor.swift in Sources */,
 				DFC4D298C920476EAAD50165 /* SeenPhotosTracker.swift in Sources */,
 				EA91A4AA204D4B6B9759745E /* SharedConfig.swift in Sources */,

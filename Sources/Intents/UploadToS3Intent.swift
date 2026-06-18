@@ -120,5 +120,14 @@ struct TestS3BrowserShortcuts: AppShortcutsProvider {
             shortTitle: "Search S3 Files",
             systemImageName: "magnifyingglass"
         )
+        AppShortcut(
+            intent: GetStorageStatsIntent(),
+            phrases: [
+                "Get my S3 storage stats with \(.applicationName)",
+                "How much S3 storage am I using with \(.applicationName)"
+            ],
+            shortTitle: "S3 Storage Stats",
+            systemImageName: "chart.bar"
+        )
     }
 }
