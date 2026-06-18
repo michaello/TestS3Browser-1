@@ -955,3 +955,22 @@ Commit: `bfb18fc` feat: add CloudWatch metrics viewer to SettingsView
   PBXFileReference entries, and included in the Services group and target build sources.
 
 Commit: `2af346e` feat: add lifecycle transition simulator to FileDetailView
+
+## Phase 50 - GetStorageStatsIntent Siri shortcut (DONE)
+
+- `Sources/Intents/GetStorageStatsIntent.swift` (new file): added `GetStorageStatsIntent`, an `AppIntent`
+  in the "Browse" category. `perform()` loads config via `SharedConfig.loadConfig() ?? S3Config.default`,
+  builds a fresh `S3Service(config:)`, calls `fetchAvailableBuckets()` then `fetchBucketStats()`, and returns
+  `.result(value: perBucketLines, dialog:)`. The returned `[String]` value lists each bucket as
+  "bucket-name: N objects, X GB" (using `BucketStats.formattedSize`), and the spoken `IntentDialog` is a
+  total summary like "3 buckets, 1,234 objects, 42.7 GB total" computed by reducing object counts and bytes.
+- `UploadToS3Intent.swift`: registered the intent in `TestS3BrowserShortcuts.appShortcuts` as the 6th shortcut,
+  with phrases "Get my S3 storage stats with <app>" and "How much S3 storage am I using with <app>",
+  shortTitle "S3 Storage Stats", systemImageName `chart.bar`. No other intent files were changed.
+- Added to Xcode project: `GetStorageStatsIntent.swift` registered in `project.pbxproj` with PBXBuildFile and
+  PBXFileReference entries, and included in the Intents group children and the main target build sources,
+  matching the existing SearchFileIntent pattern.
+- The app now exposes 6 App Intents (Upload, List, Download, Delete, Search, GetStorageStats), all registered.
+- Verified with `xcodebuild` against the iPhone 17 Pro Max (OS 27.0) simulator: BUILD SUCCEEDED.
+
+Commit: `18c724e` feat: add GetStorageStatsIntent Siri shortcut
