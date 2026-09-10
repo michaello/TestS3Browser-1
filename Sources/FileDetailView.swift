@@ -918,7 +918,7 @@ struct FileDetailView: View {
                 }
             }
 
-            let data = try await service.downloadObject(key: object.key)
+            let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
             await MainActor.run {
                 downloadedBytes = Int64(data.count)
             }
