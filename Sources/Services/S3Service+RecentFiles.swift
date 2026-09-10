@@ -71,8 +71,15 @@ extension S3Service {
     }
 
     /// Fetches the most recent files from ALL available buckets concurrently
-    /// - Parameter limit: Maximum number of files to return per bucket (default 10)
-    func fetchRecentFilesFromAllBuckets(limit: Int = 10) async throws {
+    /// - Parameters:
+    ///   - limit: Maximum number of matching files to return (default 10).
+    ///   - typeFilter: Match types before limiting, so newer unrelated files cannot hide matches.
+    func fetchRecentFilesFromAllBuckets(limit: Int = 10, typeFilter: FileTypeFilter = .all) async throws {
+        let requestID = UUID()
+        recentFilesRequestID = requestID
+        defer {
+            if recentFilesRequestID == requestID { isLoading = false }
+        }
         if client == nil {
             try await initializeClient()
         }
@@ -124,7 +131,9 @@ extension S3Service {
                                         etag: item.eTag,
                                         bucket: bucketName
                                     )
-                                    bucketFiles.append(object)
+                                    if typeFilter.matches(object.fileType) {
+                                        bucketFiles.append(object)
+                                    }
                                 }
                             }
 
@@ -145,6 +154,10 @@ extension S3Service {
                 allFiles.append(contentsOf: capped)
             }
         }
+
+        // A changed filter cancels its previous scan; do not publish stale results.
+        try Task.checkCancellation()
+        guard recentFilesRequestID == requestID else { throw CancellationError() }
 
         // Sort combined capped results by date descending and take top N
         let sorted = allFiles.sorted { $0.lastModified > $1.lastModified }

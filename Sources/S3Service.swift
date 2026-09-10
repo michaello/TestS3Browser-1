@@ -21,6 +21,7 @@ final class S3Service {
     internal(set) var error: String?
     private(set) var availableBuckets: [String] = []
     internal(set) var recentFiles: [S3Object] = []
+    var recentFilesRequestID: UUID?
 
     /// Status message during loading operations (e.g. "Fetching files..." or "Found 42 files")
     internal(set) var loadingStatus: String = ""
@@ -353,4 +354,3 @@ enum S3ServiceError: LocalizedError {
         }
     }
 }
-

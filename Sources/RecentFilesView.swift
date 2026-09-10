@@ -155,7 +155,7 @@ struct RecentFilesView: View {
                 tagFilterBar
             }
         }
-        .task { await initialLoad() }
+        .task(id: fileTypeFilterRaw) { await initialLoad() }
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active, isConfigured else { return }
             Task { await refreshRecentFilesAndCheckForNew() }
@@ -693,7 +693,7 @@ struct RecentFilesView: View {
 
     private func refreshRecentFiles() async {
         do {
-            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50)
+            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50, typeFilter: fileTypeFilter)
 
             // Compute new file keys before marking seen, grouped by bucket
             var discoveredNewKeys: Set<String> = []
@@ -713,6 +713,8 @@ struct RecentFilesView: View {
             await MainActor.run {
                 newFileKeys = discoveredNewKeys
             }
+        } catch is CancellationError {
+            return
         } catch {
             logger.error("Failed to fetch recent files: \(error.localizedDescription)")
         }
@@ -734,7 +736,7 @@ struct RecentFilesView: View {
         }
 
         do {
-            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50)
+            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50, typeFilter: fileTypeFilter)
 
             // Compute new keys across all buckets (all file types), grouped by bucket
             var discoveredNewKeys: Set<String> = []
@@ -768,6 +770,8 @@ struct RecentFilesView: View {
                     autoPreviewPhoto = newestPhoto
                 }
             }
+        } catch is CancellationError {
+            return
         } catch {
             logger.error("Failed to fetch recent files: \(error.localizedDescription)")
         }
