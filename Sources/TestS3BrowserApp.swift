@@ -3,27 +3,25 @@ import SwiftUI
 @main
 struct TestS3BrowserApp: App {
     @AppStorage("s3Config") private var configData = Data()
-    @State private var config: S3Config = S3Config.default
+    @State private var config: S3Config
+
+    init() {
+        // Resolve saved credentials before ContentView creates its service or starts requests.
+        let savedConfig = UserDefaults.standard.data(forKey: "s3Config")
+            .flatMap { try? JSONDecoder().decode(S3Config.self, from: $0) }
+        _config = State(initialValue: savedConfig ?? SharedConfig.loadConfig() ?? .default)
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView(config: $config)
                 .task {
-                    loadConfig()
+                    SharedConfig.saveConfig(config)
                 }
                 .onChange(of: config) { _, newConfig in
                     saveConfig(newConfig)
                 }
         }
-    }
-
-    private func loadConfig() {
-        if !configData.isEmpty,
-           let decoded = try? JSONDecoder().decode(S3Config.self, from: configData) {
-            config = decoded
-        }
-        // Always sync current config to App Group for share extension
-        SharedConfig.saveConfig(config)
     }
 
     private func saveConfig(_ config: S3Config) {

@@ -794,6 +794,16 @@ struct BucketBrowserView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if let error = s3Service.error {
+            ContentUnavailableView {
+                Label("Couldn't load files", systemImage: "exclamationmark.triangle")
+            } description: {
+                Text(error)
+            } actions: {
+                Button("Retry") {
+                    Task { await refreshFiles() }
+                }
+            }
         } else if s3Service.items.isEmpty {
             ScrollView {
                 ContentUnavailableView(
