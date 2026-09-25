@@ -24,7 +24,7 @@ struct S3Object: Identifiable, Hashable, Codable {
         switch ext {
         case "txt", "log":
             return .log
-        case "png", "jpg", "jpeg", "gif", "heic":
+        case "png", "jpg", "jpeg", "gif", "heic", "webp":
             return .image
         case "mp4", "mov", "avi", "m4v":
             return .video

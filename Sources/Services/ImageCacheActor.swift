@@ -1,6 +1,30 @@
 import UIKit
 import Foundation
 import os.log
+import ImageIO
+
+/// Keeps scrolling through a large folder from starting hundreds of S3 downloads at once.
+private actor ThumbnailRequestLimiter {
+    static let shared = ThumbnailRequestLimiter()
+    private var available = 4
+    private var waiters: [CheckedContinuation<Void, Never>] = []
+
+    func acquire() async {
+        if available > 0 {
+            available -= 1
+        } else {
+            await withCheckedContinuation { waiters.append($0) }
+        }
+    }
+
+    func release() {
+        if waiters.isEmpty {
+            available += 1
+        } else {
+            waiters.removeFirst().resume()
+        }
+    }
+}
 
 /// Global actor responsible for caching image thumbnails and full images
 /// Maintains separate caches for thumbnails and full-size images to optimize memory usage
@@ -16,6 +40,7 @@ actor ImageCacheActor {
     /// Cache for thumbnail images (smaller, suitable for list views)
     /// Key: S3 object key, Value: Thumbnail UIImage
     private var thumbnailCache: [String: UIImage] = [:]
+    private var thumbnailLoads: [String: Task<UIImage?, Never>] = [:]
 
     /// Cache for full-size images
     /// Key: S3 object key, Value: Full UIImage
@@ -69,6 +94,48 @@ actor ImageCacheActor {
         }
 
         return nil
+    }
+
+    /// Downloads small, visible images once and creates a thumbnail without retaining the full image.
+    func loadThumbnail(for object: S3Object, using service: S3Service) async -> UIImage? {
+        if let cached = getThumbnail(for: object.key) { return cached }
+        guard object.fileType == .image, object.size > 0,
+              object.size <= 2 * 1024 * 1024 else { return nil }
+
+        let requestKey = "\(object.bucket ?? service.currentBucket)/\(object.key)"
+        if let existing = thumbnailLoads[requestKey] { return await existing.value }
+
+        let task = Task<UIImage?, Never> {
+            await ThumbnailRequestLimiter.shared.acquire()
+            let result: UIImage?
+            if Task.isCancelled {
+                result = nil
+            } else {
+                do {
+                    let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
+                    result = makeThumbnail(from: data)
+                    if let result { cacheThumbnail(result, for: object.key) }
+                } catch {
+                    result = nil
+                }
+            }
+            await ThumbnailRequestLimiter.shared.release()
+            return result
+        }
+        thumbnailLoads[requestKey] = task
+        let thumbnail = await task.value
+        thumbnailLoads.removeValue(forKey: requestKey)
+        return thumbnail
+    }
+
+    private func makeThumbnail(from data: Data) -> UIImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let image = CGImageSourceCreateThumbnailAtIndex(source, 0, [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceThumbnailMaxPixelSize: 360
+              ] as CFDictionary) else { return nil }
+        return UIImage(cgImage: image)
     }
 
     /// Caches a thumbnail image to both memory and disk

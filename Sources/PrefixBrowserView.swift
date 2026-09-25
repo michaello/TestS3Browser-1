@@ -333,7 +333,7 @@ struct PrefixBrowserView: View {
                     }
                 } label: {
                     ZStack(alignment: .topLeading) {
-                        PrefixGridItem(item: item, cardSize: cardSize)
+                        PrefixGridItem(item: item, cardSize: cardSize, s3Service: s3Service)
                         Image(systemName: selectedKeys.contains(object.key)
                               ? "checkmark.circle.fill" : "circle")
                             .font(.system(size: 20, weight: .semibold))
@@ -345,7 +345,7 @@ struct PrefixBrowserView: View {
                 .buttonStyle(.plain)
             } else {
                 NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                    PrefixGridItem(item: item, cardSize: cardSize)
+                    PrefixGridItem(item: item, cardSize: cardSize, s3Service: s3Service)
                 }
                 .buttonStyle(.plain)
                 .contextMenu {
@@ -376,7 +376,7 @@ struct PrefixBrowserView: View {
                 bucket: bucket,
                 title: folder.folderName
             )) {
-                PrefixGridItem(item: item, cardSize: cardSize)
+                PrefixGridItem(item: item, cardSize: cardSize, s3Service: s3Service)
             }
             .buttonStyle(.plain)
         }
@@ -415,7 +415,7 @@ struct PrefixBrowserView: View {
                         Image(systemName: selectedKeys.contains(object.key)
                               ? "checkmark.circle.fill" : "circle")
                             .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
-                        FileRow(object: object)
+                        FileRow(object: object, s3Service: s3Service)
                     }
                 }
                 .buttonStyle(.plain)
@@ -430,7 +430,7 @@ struct PrefixBrowserView: View {
         NavigationLink {
             FileDetailView(object: object, service: s3Service)
         } label: {
-            FileRow(object: object)
+            FileRow(object: object, s3Service: s3Service)
         }
         .contextMenu {
             Button {
@@ -803,6 +803,7 @@ private let prefixStarStore = StarStore.shared
 struct PrefixGridItem: View {
     let item: S3Item
     let cardSize: Double
+    let s3Service: S3Service
     @State private var thumbnail: UIImage?
 
     private var iconColor: Color {
@@ -883,7 +884,7 @@ struct PrefixGridItem: View {
     private func loadThumbnail() async {
         guard case .file(let object) = item,
               object.fileType == .image || object.fileType == .video else { return }
-        if let cached = await ImageCacheActor.shared.getThumbnail(for: object.key) {
+        if let cached = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service) {
             await MainActor.run { self.thumbnail = cached }
         }
     }

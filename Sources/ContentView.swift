@@ -4,6 +4,7 @@ import os.log
 /// Tab identifiers for navigation
 enum AppTab: String, CaseIterable {
     case browse
+    case apps
     case recent
     case stash
     case stats
@@ -13,6 +14,7 @@ enum AppTab: String, CaseIterable {
     var title: String {
         switch self {
         case .browse: return "Browse"
+        case .apps: return "Apps"
         case .recent: return "Recent"
         case .stash: return "Stash"
         case .stats: return "Stats"
@@ -24,6 +26,7 @@ enum AppTab: String, CaseIterable {
     var icon: String {
         switch self {
         case .browse: return "folder"
+        case .apps: return "square.grid.2x2"
         case .recent: return "clock"
         case .stash: return "doc.richtext"
         case .stats: return "chart.bar"
@@ -72,6 +75,8 @@ struct ContentView: View {
                     switch selectedTab {
                     case .browse:
                         BucketBrowserView(s3Service: s3Service, config: $config)
+                    case .apps:
+                        ScreensDesignAppsView(s3Service: s3Service)
                     case .recent:
                         RecentFilesView(config: config, s3Service: s3Service)
                     case .stash:

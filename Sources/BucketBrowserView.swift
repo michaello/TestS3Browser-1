@@ -852,7 +852,7 @@ struct BucketBrowserView: View {
                                       ? "checkmark.circle.fill" : "circle")
                                     .foregroundStyle(selectedKeys.contains(object.key) ? .blue : .secondary)
                                 if viewStyle == .standard {
-                                    FileRow(object: object)
+                                    FileRow(object: object, s3Service: s3Service)
                                 } else {
                                     CompactFileRow(object: object)
                                 }
@@ -862,7 +862,7 @@ struct BucketBrowserView: View {
                     } else {
                         NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
                             if viewStyle == .standard {
-                                FileRow(object: object)
+                                FileRow(object: object, s3Service: s3Service)
                             } else {
                                 CompactFileRow(object: object)
                             }
@@ -896,7 +896,7 @@ struct BucketBrowserView: View {
                                 savedPrefix = s3Service.currentPrefix
                             }
                         } label: {
-                            BrowserGridItem(item: .folder(folder), cardSize: gridCardSize)
+                            BrowserGridItem(item: .folder(folder), cardSize: gridCardSize, s3Service: s3Service)
                         }
                         .buttonStyle(.plain)
                     case .file(let object):
@@ -909,7 +909,7 @@ struct BucketBrowserView: View {
                                 }
                             } label: {
                                 ZStack(alignment: .topLeading) {
-                                    BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                                    BrowserGridItem(item: .file(object), cardSize: gridCardSize, s3Service: s3Service)
                                     Image(systemName: selectedKeys.contains(object.key)
                                           ? "checkmark.circle.fill" : "circle")
                                         .font(.system(size: 20, weight: .semibold))
@@ -921,7 +921,7 @@ struct BucketBrowserView: View {
                             .buttonStyle(.plain)
                         } else {
                             NavigationLink(destination: FileDetailView(object: object, service: s3Service)) {
-                                BrowserGridItem(item: .file(object), cardSize: gridCardSize)
+                                BrowserGridItem(item: .file(object), cardSize: gridCardSize, s3Service: s3Service)
                             }
                             .contextMenu { fileContextMenuItems(for: object) }
                         }
@@ -1164,6 +1164,7 @@ struct BucketBrowserView: View {
 
 struct FileRow: View {
     let object: S3Object
+    let s3Service: S3Service
     @State private var thumbnail: UIImage?
 
     var body: some View {
@@ -1240,11 +1241,8 @@ struct FileRow: View {
     }
 
     private func loadThumbnail() async {
-        // Only load thumbnails for images
         guard object.fileType == .image else { return }
-
-        // Check cache first
-        if let cached = await ImageCacheActor.shared.getThumbnail(for: object.key) {
+        if let cached = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service) {
             await MainActor.run {
                 self.thumbnail = cached
             }
@@ -1290,6 +1288,7 @@ struct CompactFileRow: View {
 struct BrowserGridItem: View {
     let item: S3Item
     let cardSize: Double
+    let s3Service: S3Service
     @State private var thumbnail: UIImage?
 
     private var iconColor: Color {
@@ -1375,7 +1374,7 @@ struct BrowserGridItem: View {
         guard case .file(let object) = item,
               object.fileType == .image || object.fileType == .video else { return }
 
-        if let cached = await ImageCacheActor.shared.getThumbnail(for: object.key) {
+        if let cached = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service) {
             await MainActor.run { self.thumbnail = cached }
         }
     }
