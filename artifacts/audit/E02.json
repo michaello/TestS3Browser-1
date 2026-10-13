@@ -1,8 +1,8 @@
 {
   "id": "E02",
   "passed": true,
-  "recorded_at": "2026-10-13T07:42:25.453617+00:00",
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "recorded_at": "2026-10-13T08:15:39.986276+00:00",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "commands": [
     {
       "command": [
@@ -13,7 +13,7 @@
         "HEAD"
       ],
       "exit_code": 0,
-      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+      "stdout": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
       "stderr": ""
     },
     {
@@ -65,7 +65,7 @@
         "HEAD"
       ],
       "exit_code": 0,
-      "stdout": "artifacts/audit/E01-resolve-20261013-153807-823458.log",
+      "stdout": "",
       "stderr": ""
     },
     {
@@ -78,7 +78,7 @@
         "--exclude-standard"
       ],
       "exit_code": 0,
-      "stdout": "artifacts/audit/E02-initial-no-upstream.json\nartifacts/audit/E02.json",
+      "stdout": "",
       "stderr": ""
     },
     {
@@ -92,7 +92,7 @@
         "refs/heads/main"
       ],
       "exit_code": 0,
-      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170\trefs/heads/main",
+      "stdout": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57\trefs/heads/main",
       "stderr": ""
     },
     {
@@ -102,8 +102,8 @@
         "/Users/mike/Developer/test-projects/TestS3Browser-1",
         "merge-base",
         "--is-ancestor",
-        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170"
+        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -132,7 +132,7 @@
         "*.entitlements"
       ],
       "exit_code": 0,
-      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+      "stdout": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
       "stderr": ""
     },
     {
@@ -142,8 +142,8 @@
         "/Users/mike/Developer/test-projects/TestS3Browser-1",
         "merge-base",
         "--is-ancestor",
-        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170"
+        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -158,7 +158,7 @@
         "HEAD:AUDIT_QUEUE.json"
       ],
       "exit_code": 0,
-      "stdout": "0a3d4e43d74e68cbdce351931daa712d582610c7",
+      "stdout": "865326fba17369dcac6513dc45993b6bef49dcde",
       "stderr": ""
     },
     {
@@ -167,10 +167,10 @@
         "-C",
         "/Users/mike/Developer/test-projects/TestS3Browser-1",
         "rev-parse",
-        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170:AUDIT_QUEUE.json"
+        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57:AUDIT_QUEUE.json"
       ],
       "exit_code": 0,
-      "stdout": "0a3d4e43d74e68cbdce351931daa712d582610c7",
+      "stdout": "865326fba17369dcac6513dc45993b6bef49dcde",
       "stderr": ""
     }
   ],
@@ -184,9 +184,9 @@
   "branch": "main",
   "remote": "origin",
   "remote_ref": "refs/heads/main",
-  "remote_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-  "delivered_source_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-  "delivered_ledger_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-  "ledger_blob": "0a3d4e43d74e68cbdce351931daa712d582610c7",
-  "ledger_sha256": "34929be9d170b0028fdab3224e979612ac3dbabe26be5cf5e51e3aa75fac0cc4"
+  "remote_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+  "delivered_source_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+  "delivered_ledger_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+  "ledger_blob": "865326fba17369dcac6513dc45993b6bef49dcde",
+  "ledger_sha256": "b16d77930bfad7644dabec8a3c0991c61d3250a434a54c3419dc2f90160d68ae"
 }

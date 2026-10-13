@@ -4430,7 +4430,7 @@
       "order": 87,
       "priority": "P1",
       "tier": "Access-gated",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Commit and push the finished working tree to the configured remote branch",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --delivery",
       "required_behavior": "Commit and push all authorized work, then verify the remote branch contains the delivered commit. Do not create a pull request.",
@@ -4443,17 +4443,22 @@
       "proof": [
         {
           "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E02.json",
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
-          "source_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-          "ledger_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
-          "remote_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+          "command": [
+            "python3",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py",
+            "--delivery"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
+          "source_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
           "assertions": [
             "Source/build/test inputs are committed",
             "The ledger is committed",
             "Configured remote branch contains the local source commit and ledger commit",
             "Remote ledger blob matches the committed local ledger",
             "Source fingerprint stayed unchanged"
-          ]
+          ],
+          "ledger_verification": "The delivery verifier is rerun after this final ledger commit; E02.json records its exact remote ledger blob and commit."
         }
       ],
       "blocker": null,
@@ -4466,7 +4471,7 @@
         "All authorized files are committed and pushed to the configured origin/current branch.",
         "Remote branch contains the delivered app-source commit and the final proof ledger; artifacts/audit/E02.json or the final report records remote verification."
       ],
-      "progress_notes": "Source/current ledger pushed as e2e87002e6a78e7af197eb43e3f56c69d0dfd170. Configured existing main upstream to the already-verified origin/main; actual delivery verifier passes. Final Release result/ledger metadata commit remains after E01."
+      "progress_notes": "All source/build/test inputs delivered toorigin/main. Real delivery verifier passes; finalledger/proof-only commits verified separately without changing tested source."
     }
   ],
   "allowed_statuses": [
