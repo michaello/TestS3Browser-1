@@ -1,19 +1,20 @@
 Building for debugging...
-[1 / 2] AuditCoreTests-product
-Build complete! (0.22 sec)
+[Computing dependencies]
+[1 / 1]
+Build complete! (0.61 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F28 cached bounded progressive Apps index" started.
-􀟈  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" started.
 􀟈  Test "Unchanged ETags reuse decoded manifests and cover metadata; only changed manifest downloads" started.
-􀟈  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" started.
 􀟈  Test "Launch reads scoped saved index before network and fresh revisits make no requests" started.
 􀟈  Test "Four manifest workers publish usable apps before delayed remaining manifests complete" started.
-􁁛  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" passed after 0.006 seconds.
-􁁛  Test "Unchanged ETags reuse decoded manifests and cover metadata; only changed manifest downloads" passed after 0.006 seconds.
-􁁛  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" passed after 0.007 seconds.
-􁁛  Test "Four manifest workers publish usable apps before delayed remaining manifests complete" passed after 0.008 seconds.
-􁁛  Test "Launch reads scoped saved index before network and fresh revisits make no requests" passed after 0.008 seconds.
-􁁛  Suite "F28 cached bounded progressive Apps index" passed after 0.009 seconds.
-􁁛  Test run with 5 tests in 1 suite passed after 0.009 seconds.
+􀟈  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" started.
+􀟈  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" started.
+􁁛  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" passed after 0.028 seconds.
+􁁛  Test "Unchanged ETags reuse decoded manifests and cover metadata; only changed manifest downloads" passed after 0.030 seconds.
+􁁛  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" passed after 0.032 seconds.
+􁁛  Test "Four manifest workers publish usable apps before delayed remaining manifests complete" passed after 0.034 seconds.
+􁁛  Test "Launch reads scoped saved index before network and fresh revisits make no requests" passed after 0.035 seconds.
+􁁛  Suite "F28 cached bounded progressive Apps index" passed after 0.035 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.035 seconds.

@@ -1,19 +1,18 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.36 sec)
+Build complete! (0.21 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
-􀟈  Suite F07PagedListingTests started.
 􀟈  Suite F07ResourceOwnershipTests started.
-􀟈  Test "Request completion cannot clear a newer view request's loading flag" started.
-􀟈  Test "Stale page errors cannot overwrite a refreshed resource's error state" started.
-􀟈  Test "Automatic refresh obeys 60 seconds and explicit refresh bypasses freshness" started.
-􀟈  Test "Identical requests join without taking another resource's loading flag" started.
+􀟈  Suite F07PagedListingTests started.
 􀟈  Test "An old account error cannot clear newer work or publish its message" started.
-􀟈  Test "An explicit refresh during work schedules a replacement and both waiters receive it" started.
-􀟈  Test "Stale pagination cannot append into refreshed rows or discard the new token" started.
 􀟈  Test "Out-of-order folders and their loading flags remain request-owned" started.
+􀟈  Test "Stale pagination cannot append into refreshed rows or discard the new token" started.
+􀟈  Test "Identical requests join without taking another resource's loading flag" started.
+􀟈  Test "Automatic refresh obeys 60 seconds and explicit refresh bypasses freshness" started.
+􀟈  Test "Stale page errors cannot overwrite a refreshed resource's error state" started.
+􀟈  Test "Request completion cannot clear a newer view request's loading flag" started.
+􀟈  Test "An explicit refresh during work schedules a replacement and both waiters receive it" started.
 􁁛  Test "Request completion cannot clear a newer view request's loading flag" passed after 0.001 seconds.
 􁁛  Test "Automatic refresh obeys 60 seconds and explicit refresh bypasses freshness" passed after 0.001 seconds.
 􁁛  Test "Identical requests join without taking another resource's loading flag" passed after 0.001 seconds.
@@ -21,7 +20,7 @@ Build complete! (0.36 sec)
 􁁛  Test "Stale page errors cannot overwrite a refreshed resource's error state" passed after 0.002 seconds.
 􁁛  Test "Stale pagination cannot append into refreshed rows or discard the new token" passed after 0.002 seconds.
 􁁛  Suite F07PagedListingTests passed after 0.002 seconds.
-􁁛  Test "An old account error cannot clear newer work or publish its message" passed after 0.002 seconds.
 􁁛  Test "Out-of-order folders and their loading flags remain request-owned" passed after 0.002 seconds.
+􁁛  Test "An old account error cannot clear newer work or publish its message" passed after 0.002 seconds.
 􁁛  Suite F07ResourceOwnershipTests passed after 0.002 seconds.
 􁁛  Test run with 8 tests in 2 suites passed after 0.002 seconds.

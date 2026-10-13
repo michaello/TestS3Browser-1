@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.009196125">
-    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="boundedProgressiveResults()" time="0.008068583" />
-    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="staleCoverRevision()" time="0.006292292" />
-    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="unchangedManifestAndCoverReuse()" time="0.006519125" />
-    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="cachedLaunchAndFreshness()" time="0.008916666" />
-    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="resetRejectsLateManifest()" time="0.007863708" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.035547958">
+    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="resetRejectsLateManifest()" time="0.032890167" />
+    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="unchangedManifestAndCoverReuse()" time="0.0301095" />
+    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="boundedProgressiveResults()" time="0.034344041" />
+    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="cachedLaunchAndFreshness()" time="0.035172417" />
+    <testcase classname="AuditCoreTests.F28ScreensIndexTests" name="staleCoverRevision()" time="0.02859825" />
   </testsuite>
 </testsuites>

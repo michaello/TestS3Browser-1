@@ -42,7 +42,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N02.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -92,7 +92,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 13,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -143,7 +143,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N01.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -193,7 +193,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -243,7 +243,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N03.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -294,7 +294,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -352,7 +352,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F07.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 8,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -410,7 +410,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F05.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -460,7 +460,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 13,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -510,7 +510,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -560,7 +560,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F02.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -610,7 +610,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -660,7 +660,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -710,7 +710,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -760,7 +760,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F08.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -811,7 +811,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -862,8 +862,8 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
-          "assertion_count": 5,
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
+          "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -879,7 +879,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Six production-linked checks pass, including delayed body-permit admission. Replaced CPU-yield fixture deadline with explicit fetch-start acknowledgement and bounded monotonic readiness. Original byte equality,6distinctleases,onefetch,persistent-reopen assertions retained; production unchanged."
     },
     {
       "id": "F12",
@@ -913,7 +914,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -963,7 +964,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F17.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1014,7 +1015,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F20.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1064,7 +1065,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1116,7 +1117,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F22.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1165,7 +1166,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1215,7 +1216,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N06.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1264,7 +1265,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F13.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1315,7 +1316,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F14.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1365,7 +1366,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F15.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1414,7 +1415,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1463,7 +1464,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1512,7 +1513,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F19.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1570,7 +1571,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F24.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1627,7 +1628,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F25.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1678,7 +1679,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1727,7 +1728,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F27.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1776,7 +1777,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F28.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1825,7 +1826,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1882,7 +1883,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1931,7 +1932,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 8,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1981,7 +1982,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F32.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2030,7 +2031,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2080,7 +2081,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2130,7 +2131,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2180,7 +2181,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N10.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2230,7 +2231,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N11.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2280,7 +2281,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N12.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2330,7 +2331,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N13.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2380,7 +2381,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N14.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2430,7 +2431,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2480,7 +2481,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2530,7 +2531,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2580,7 +2581,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N18.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2630,7 +2631,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2680,7 +2681,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N20.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2731,7 +2732,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2781,7 +2782,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N22.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2831,7 +2832,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N23.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2881,7 +2882,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N24.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2931,7 +2932,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N25.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2981,7 +2982,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N26.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3031,7 +3032,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3081,7 +3082,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3131,7 +3132,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N29.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3181,7 +3182,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3231,7 +3232,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N31.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 14,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3282,7 +3283,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3332,7 +3333,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3382,7 +3383,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N34.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3432,7 +3433,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N35.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3482,7 +3483,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3532,7 +3533,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3582,7 +3583,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N38.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3632,7 +3633,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3682,7 +3683,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3732,7 +3733,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3782,7 +3783,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N42.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 14,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3826,7 +3827,7 @@
             "N43"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
         }
@@ -3877,7 +3878,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3927,7 +3928,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N45.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3977,7 +3978,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N46.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4029,7 +4030,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F34.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4078,7 +4079,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4128,7 +4129,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4178,7 +4179,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N47.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4228,7 +4229,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N48.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -4271,7 +4272,7 @@
             "N49"
           ],
           "exit_code": 0,
-          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
           "assertion_count": 3,
           "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
         }
@@ -4297,7 +4298,7 @@
       "order": 86,
       "priority": "P1",
       "tier": "Access-gated",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Release simulator build and integrated regression suite for the delivered app-source tree",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --release-simulator",
       "required_behavior": "Resolve the pinned AWS SDK packages and build the Release app, share extension and widget with code signing disabled for simulator, using the IDE DerivedData path without removing it. Run the iOS regression/UI suite.",
@@ -4308,7 +4309,109 @@
         "Run all package-independent production-logic/contract tests, resource checks and Swift syntax checks; retain the exact build command and failure output.",
         "Recheck once before an external-only stop. Never label an unbuilt app or stub-based check as a successful Release build."
       ],
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01.json",
+          "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
+          "commands": [
+            {
+              "command": [
+                "xcodebuild",
+                "-project",
+                "/Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj",
+                "-scheme",
+                "TestS3Browser",
+                "-derivedDataPath",
+                "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit",
+                "-scmProvider",
+                "system",
+                "-resolvePackageDependencies",
+                "-onlyUsePackageVersionsFromResolvedFile",
+                "-skipPackageUpdates",
+                "CODE_SIGNING_ALLOWED=NO"
+              ],
+              "pid": 47381,
+              "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-161134-742232.log",
+              "started_at_epoch": 1791879094.742264,
+              "timeout_seconds": 1200,
+              "status": "completed",
+              "exit_code": 0,
+              "elapsed_seconds": 9.417338848114014
+            },
+            {
+              "command": [
+                "xcodebuild",
+                "-project",
+                "/Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj",
+                "-scheme",
+                "TestS3Browser",
+                "-derivedDataPath",
+                "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit",
+                "-scmProvider",
+                "system",
+                "-configuration",
+                "Release",
+                "-destination",
+                "platform=iOS Simulator,id=5B87AEFD-8266-4451-8795-8728177C5241",
+                "-disableAutomaticPackageResolution",
+                "-skipPackageUpdates",
+                "CODE_SIGNING_ALLOWED=NO",
+                "-parallel-testing-enabled",
+                "NO",
+                "build-for-testing"
+              ],
+              "pid": 54158,
+              "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-release-build-20261013-161144-160048.log",
+              "started_at_epoch": 1791879104.160083,
+              "timeout_seconds": 1800,
+              "status": "completed",
+              "exit_code": 0,
+              "elapsed_seconds": 27.389490842819214
+            },
+            {
+              "command": [
+                "xcodebuild",
+                "-project",
+                "/Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj",
+                "-scheme",
+                "TestS3Browser",
+                "-derivedDataPath",
+                "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit",
+                "-scmProvider",
+                "system",
+                "-configuration",
+                "Release",
+                "-destination",
+                "platform=iOS Simulator,id=5B87AEFD-8266-4451-8795-8728177C5241",
+                "-disableAutomaticPackageResolution",
+                "-skipPackageUpdates",
+                "CODE_SIGNING_ALLOWED=NO",
+                "-parallel-testing-enabled",
+                "NO",
+                "-resultBundlePath",
+                "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161211.xcresult",
+                "test-without-building"
+              ],
+              "pid": 79418,
+              "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-simulator-tests-20261013-161211-583114.log",
+              "started_at_epoch": 1791879131.5831208,
+              "timeout_seconds": 1800,
+              "status": "completed",
+              "exit_code": 0,
+              "elapsed_seconds": 92.68320512771606
+            }
+          ],
+          "xcresult_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161211.xcresult",
+          "test_count": 13,
+          "exit_code": 0,
+          "runtime_performance_paths": [
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36-runtime-cache-success.json",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36-runtime-offline.json",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36-runtime-scrolling.json",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36-runtime-selection.json"
+          ]
+        }
+      ],
       "blocker": null,
       "proof_requirements": [
         "Exact command and exit code",
@@ -4320,14 +4423,14 @@
         "Built app-source fingerprint matches delivered source; ledger/log-only commits may follow without changing tested app inputs.",
         "artifacts/audit/E01.json records commands, SDK/runtime details, .xcresult/build logs and built resource checks."
       ],
-      "progress_notes": "Pinned AWS SDK exact Git tree hydrated and fsck-verified; Xcode package resolution live on pinned CRT submodules. Release app/share/widget build and simulator tests remain required."
+      "progress_notes": "Final pinned-SDK Release app/share/widget build and8integration+5nativeUItests passed against delivered inputs. Own3bundles and14SDKmanifestresources across4pinnedtargets matchsource. Runtimefixturemeasurements andxcresult retained."
     },
     {
       "id": "E02",
       "order": 87,
       "priority": "P1",
       "tier": "Access-gated",
-      "status": "Open",
+      "status": "In Progress",
       "title": "Commit and push the finished working tree to the configured remote branch",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --delivery",
       "required_behavior": "Commit and push all authorized work, then verify the remote branch contains the delivered commit. Do not create a pull request.",
@@ -4337,7 +4440,22 @@
         "Keep all validated source and proof committed locally and record the exact failed push command/output; do not retrieve Keychain credentials or alter authentication controls.",
         "Continue all other executable implementation/verification items; recheck push once before an external-only stop."
       ],
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E02.json",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "source_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+          "ledger_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+          "remote_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+          "assertions": [
+            "Source/build/test inputs are committed",
+            "The ledger is committed",
+            "Configured remote branch contains the local source commit and ledger commit",
+            "Remote ledger blob matches the committed local ledger",
+            "Source fingerprint stayed unchanged"
+          ]
+        }
+      ],
       "blocker": null,
       "proof_requirements": [
         "Exact command and exit code",
@@ -4347,7 +4465,8 @@
       "done_when": [
         "All authorized files are committed and pushed to the configured origin/current branch.",
         "Remote branch contains the delivered app-source commit and the final proof ledger; artifacts/audit/E02.json or the final report records remote verification."
-      ]
+      ],
+      "progress_notes": "Source/current ledger pushed as e2e87002e6a78e7af197eb43e3f56c69d0dfd170. Configured existing main upstream to the already-verified origin/main; actual delivery verifier passes. Final Release result/ledger metadata commit remains after E01."
     }
   ],
   "allowed_statuses": [
@@ -4443,11 +4562,14 @@
       "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py",
       "--all"
     ],
-    "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+    "exit_code": 0,
+    "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
     "all_id_log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/all-final.log",
     "required_id_count": 85,
     "passing_id_count": 85,
     "full_core_log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/final-core.log",
-    "full_core_report": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/final-core.xml"
+    "full_core_report": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/final-core.xml",
+    "full_core_test_count": 345,
+    "full_core_suite_count": 90
   }
 }

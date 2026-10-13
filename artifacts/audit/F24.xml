@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.003097458">
-    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="fileNamesAndNavigationNeverInterpretURLSyntax()" time="0.000631708" />
-    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="invalidExpirationCannotProduceSignedURL()" time="0.000591375" />
-    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="publishedAWSSigV4ExampleMatches()" time="0.0026835" />
-    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct()" time="0.00075275" />
-    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs()" time="0.00182775" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.004409167">
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs()" time="0.003255875" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="invalidExpirationCannotProduceSignedURL()" time="0.000331208" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct()" time="0.000301166" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="publishedAWSSigV4ExampleMatches()" time="0.004106667" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="fileNamesAndNavigationNeverInterpretURLSyntax()" time="0.000338708" />
   </testsuite>
 </testsuites>

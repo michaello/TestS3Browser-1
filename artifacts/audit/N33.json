@@ -2,9 +2,9 @@
   "id": "N33",
   "expected_behavior": "Version history follows both pagination markers or provides explicit history pagination; valid older restore points remain reachable beyond the first page.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:05.058190+00:00",
+  "recorded_at": "2026-10-13T08:13:43.960613+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
-      "name": "laterFailureAndChangedGenerationNeverReturnPartialSuccess()",
-      "time": "0.007728417"
+      "name": "keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()",
+      "time": "0.005183542"
     },
     {
       "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
       "name": "cancellationStopsBeforeFetchingAnotherPage()",
-      "time": "0.007750166"
-    },
-    {
-      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
-      "name": "keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()",
-      "time": "0.007383583"
+      "time": "0.011793791"
     },
     {
       "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
       "name": "bothMarkersReachOlderRestorePointsBeyondOneThousandVersions()",
-      "time": "0.002498125"
+      "time": "0.00515975"
     },
     {
       "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
       "name": "missingOrRepeatedMarkersFailRatherThanHidingHistory()",
-      "time": "0.007733709"
+      "time": "0.011572417"
+    },
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "laterFailureAndChangedGenerationNeverReturnPartialSuccess()",
+      "time": "0.011812583"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.log",

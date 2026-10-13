@@ -1,19 +1,20 @@
 Building for debugging...
-Build complete! (0.41 sec)
+[1 / 1]
+Build complete! (0.43 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N48FolderValidationTests started.
+􀟈  Test fullPrefixByteLimitAndRemoteFailureAreActionable() started.
 􀟈  Test correctedNameCanBeSubmittedWithExactSpecialBytes() started.
 􀟈  Test invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
-􀟈  Test fullPrefixByteLimitAndRemoteFailureAreActionable() started.
 􀟈  Test case passing 1 argument input → "" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
 􀟈  Test case passing 1 argument input → "   
 " to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
 􀟈  Test case passing 1 argument input → "a/b" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
 􀟈  Test case passing 1 argument input → "null􀟈  Test case passing 1 argument input → "路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
-􁁛  Test correctedNameCanBeSubmittedWithExactSpecialBytes() passed after 0.001 seconds.
-􁁛  Test invalidNamesKeepInputAndShowErrorWithoutSending(_:) with 5 test cases passed after 0.001 seconds.
-􁁛  Test fullPrefixByteLimitAndRemoteFailureAreActionable() passed after 0.007 seconds.
-􁁛  Suite N48FolderValidationTests passed after 0.007 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.007 seconds.
+􁁛  Test fullPrefixByteLimitAndRemoteFailureAreActionable() passed after 0.027 seconds.
+􁁛  Test invalidNamesKeepInputAndShowErrorWithoutSending(_:) with 5 test cases passed after 0.027 seconds.
+􁁛  Test correctedNameCanBeSubmittedWithExactSpecialBytes() passed after 0.027 seconds.
+􁁛  Suite N48FolderValidationTests passed after 0.027 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.027 seconds.

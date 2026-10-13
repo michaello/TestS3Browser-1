@@ -2,9 +2,9 @@
   "id": "N31",
   "expected_behavior": "Rename/copy/restore/storage actions preserve applicable ACL/storage/encryption properties or explicitly disclose/handle an intended change; default COPY metadata is not falsely described as lost.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:02.590588+00:00",
+  "recorded_at": "2026-10-13T08:13:39.540218+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,73 +23,73 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
-      "name": "multipartTagValuesAreEncodedWithoutChangingBytes()",
-      "time": "0.000517125"
-    },
-    {
-      "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "crossOwnerCopyRetainsSourceOwnersGrant()",
-      "time": "0.000519209"
+      "time": "0.000437708"
     },
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "ownerOnlyPermissionUsesCompatibleExplicitCannedACL()",
-      "time": "0.000437167"
+      "time": "0.000385959"
     },
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "unknownOwnersOrUnsafeGrantsFailBeforeMutation()",
-      "time": "0.000565625"
+      "time": "0.000356959"
     },
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "customAndPublicGrantsRemainExplicitForBothCopyModes()",
-      "time": "0.000405708"
+      "time": "0.000406084"
     },
     {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion()",
-      "time": "0.022213958"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "invalidJSONOrBase64CannotConstructAnApprovedContext()",
-      "time": "0.019317125"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely()",
-      "time": "0.019308667"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths()",
-      "time": "0.019166959"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "encryptionConsentNeverAuthorizesDestinationReplacement()",
-      "time": "0.021251625"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "emptyOrMissingCopyAcknowledgementRetainsSource()",
-      "time": "0.022596375"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement()",
-      "time": "0.022593209"
-    },
-    {
-      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
-      "name": "sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent()",
-      "time": "0.022481792"
+      "classname": "AuditCoreTests.N31CopyPropertyTests",
+      "name": "multipartTagValuesAreEncodedWithoutChangingBytes()",
+      "time": "0.000296959"
     },
     {
       "classname": "AuditCoreTests.N31EncryptionPolicyTests",
       "name": "cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable()",
-      "time": "0.023718167"
+      "time": "0.011671791"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement()",
+      "time": "0.011364875"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion()",
+      "time": "0.011065583"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "emptyOrMissingCopyAcknowledgementRetainsSource()",
+      "time": "0.011586042"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths()",
+      "time": "0.001023334"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent()",
+      "time": "0.011518333"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "encryptionConsentNeverAuthorizesDestinationReplacement()",
+      "time": "0.010933333"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "invalidJSONOrBase64CannotConstructAnApprovedContext()",
+      "time": "0.011569916"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely()",
+      "time": "0.011505416"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N31.log",

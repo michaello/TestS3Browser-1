@@ -1,22 +1,22 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.36 sec)
+Build complete! (0.51 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N47 numbered text retains original lines" started.
-􀟈  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test "Changed source updates rows while unchanged progress-style updates reuse derivation" started.
 􀟈  Test "Preview derivation preserves exact Unicode source bytes" started.
+􀟈  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test case passing 1 argument fixture → ("", [""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test case passing 1 argument fixture → ("one", ["one"]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test case passing 1 argument fixture → ("one\n\nthree\n", ["one", "", "three", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test case passing 1 argument fixture → ("one\r\n\r\nthree\r\n", ["one", "", "three", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
-􀟈  Test case passing 1 argument fixture → ("one\r\n\ntwo\n\r\n", ["one", "", "two", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
-􀟈  Test case passing 1 argument fixture → ("\r\n\r\n", ["", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
 􀟈  Test case passing 1 argument fixture → ("\n\n", ["", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
-􁁛  Test "Preview derivation preserves exact Unicode source bytes" passed after 0.007 seconds.
-􁁛  Test "Changed source updates rows while unchanged progress-style updates reuse derivation" passed after 0.007 seconds.
-􁁛  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" with 7 test cases passed after 0.007 seconds.
-􁁛  Suite "N47 numbered text retains original lines" passed after 0.007 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.007 seconds.
+􀟈  Test case passing 1 argument fixture → ("\r\n\r\n", ["", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument fixture → ("one\r\n\ntwo\n\r\n", ["one", "", "two", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􁁛  Test "Changed source updates rows while unchanged progress-style updates reuse derivation" passed after 0.008 seconds.
+􁁛  Test "Preview derivation preserves exact Unicode source bytes" passed after 0.008 seconds.
+􁁛  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" with 7 test cases passed after 0.009 seconds.
+􁁛  Suite "N47 numbered text retains original lines" passed after 0.009 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.009 seconds.

@@ -1,12 +1,10 @@
 Building for debugging...
-[Computing dependencies]
-[1 / 1]
-Build complete! (0.58 sec)
+Build complete! (0.21 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F19 bounded hashed local paths" started.
 􀟈  Test "190-byte,308-byte,UUID-plus-long basename and Unicode keys write and persist safely" started.
-􁁛  Test "190-byte,308-byte,UUID-plus-long basename and Unicode keys write and persist safely" passed after 0.017 seconds.
-􁁛  Suite "F19 bounded hashed local paths" passed after 0.017 seconds.
-􁁛  Test run with 1 test in 1 suite passed after 0.017 seconds.
+􁁛  Test "190-byte,308-byte,UUID-plus-long basename and Unicode keys write and persist safely" passed after 0.012 seconds.
+􁁛  Suite "F19 bounded hashed local paths" passed after 0.012 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.012 seconds.

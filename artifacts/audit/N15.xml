@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.00134575">
-    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="zeroDoesNotFetch()" time="0.000156916" />
-    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="shortResultAndFailure()" time="0.000932125" />
-    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="invalidCounts(value:)" time="0.000980292" />
-    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="cancelledFetch()" time="0.001003458" />
-    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="positiveBoundaries(value:)" time="0.000972542" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.001626417">
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="cancelledFetch()" time="0.001258916" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="zeroDoesNotFetch()" time="0.001035" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="positiveBoundaries(value:)" time="0.001078666" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="shortResultAndFailure()" time="0.001058792" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="invalidCounts(value:)" time="0.001198542" />
   </testsuite>
 </testsuites>

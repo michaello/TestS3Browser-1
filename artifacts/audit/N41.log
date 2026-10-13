@@ -1,17 +1,16 @@
 Building for debugging...
-[Computing dependencies]
-Build complete! (0.40 sec)
+Build complete! (0.23 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN41 started.
 􀟈  Test failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure() started.
-􀟈  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() started.
-􀟈  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() started.
-􀟈  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
-􀟈  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test cancellationCannotPublishAnAbsentConfiguration() started.
-􀟈  Test case passing 1 argument resource → .replication to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() started.
+􀟈  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() started.
+􀟈  Test case passing 1 argument resource → .policy to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
 􀟈  Test case passing 1 argument resource → .cors to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
 􀟈  Test case passing 1 argument resource → .lifecycle to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
 􀟈  Test case passing 2 arguments resource → .policy, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
@@ -21,6 +20,7 @@ Build complete! (0.40 sec)
 􀟈  Test case passing 2 arguments resource → .policy, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .replication, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .replication, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .replication, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .replication, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .cors, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
@@ -29,17 +29,16 @@ Build complete! (0.40 sec)
 􀟈  Test case passing 2 arguments resource → .cors, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .cors, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
-􀟈  Test case passing 1 argument resource → .policy to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
 􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
 􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
-􀟈  Test case passing 2 arguments resource → .replication, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
-􁁛  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() passed after 0.054 seconds.
-􁁛  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) with 20 test cases passed after 0.054 seconds.
-􁁛  Test cancellationCannotPublishAnAbsentConfiguration() passed after 0.054 seconds.
-􁁛  Test failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure() passed after 0.058 seconds.
-􁁛  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) with 4 test cases passed after 0.058 seconds.
-􁁛  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() passed after 0.058 seconds.
-􁁛  Suite AuditN41 passed after 0.059 seconds.
-􁁛  Test run with 6 tests in 1 suite passed after 0.059 seconds.
+􀟈  Test case passing 1 argument resource → .replication to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􁁛  Test cancellationCannotPublishAnAbsentConfiguration() passed after 0.003 seconds.
+􁁛  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() passed after 0.014 seconds.
+􁁛  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) with 20 test cases passed after 0.014 seconds.
+􁁛  Test failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure() passed after 0.014 seconds.
+􁁛  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) with 4 test cases passed after 0.014 seconds.
+􁁛  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() passed after 0.014 seconds.
+􁁛  Suite AuditN41 passed after 0.014 seconds.
+􁁛  Test run with 6 tests in 1 suite passed after 0.014 seconds.

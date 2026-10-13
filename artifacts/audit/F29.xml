@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.005910917">
-    <testcase classname="AuditCoreTests.AuditF29" name="typingDraftDoesNotPublishOrPersistUntilApply()" time="0.000740167" />
-    <testcase classname="AuditCoreTests.AuditF29" name="failedForcedRefreshRetainsGoodAdministrationData()" time="0.005492209" />
-    <testcase classname="AuditCoreTests.AuditF29" name="sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()" time="0.005484042" />
-    <testcase classname="AuditCoreTests.AuditF29" name="obsoleteResponseCannotOverwriteTheCurrentAdministrationResults()" time="0.005649833" />
-    <testcase classname="AuditCoreTests.AuditF29" name="collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()" time="0.000820208" />
-    <testcase classname="AuditCoreTests.AuditF29" name="failedApplyKeepsTheAppliedConfigurationAndEditableDraft()" time="0.000878958" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.006092833">
+    <testcase classname="AuditCoreTests.AuditF29" name="obsoleteResponseCannotOverwriteTheCurrentAdministrationResults()" time="0.005714125" />
+    <testcase classname="AuditCoreTests.AuditF29" name="typingDraftDoesNotPublishOrPersistUntilApply()" time="0.000827542" />
+    <testcase classname="AuditCoreTests.AuditF29" name="failedApplyKeepsTheAppliedConfigurationAndEditableDraft()" time="0.000809625" />
+    <testcase classname="AuditCoreTests.AuditF29" name="collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()" time="0.00082575" />
+    <testcase classname="AuditCoreTests.AuditF29" name="failedForcedRefreshRetainsGoodAdministrationData()" time="0.005533291" />
+    <testcase classname="AuditCoreTests.AuditF29" name="sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()" time="0.005596333" />
   </testsuite>
 </testsuites>

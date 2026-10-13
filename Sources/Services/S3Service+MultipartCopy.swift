@@ -21,15 +21,15 @@ private struct S3MultipartCopyTransport: MultipartCopyTransport {
         input.cacheControl = values["cacheControl"]
         input.expires = values["expires"]
         input.websiteRedirectLocation = values["websiteRedirectLocation"]
-        input.storageClass = values["storageClass"].map(S3ClientTypes.StorageClass.init(rawValue:))
-        input.serverSideEncryption = values["serverSideEncryption"].map(S3ClientTypes.ServerSideEncryption.init(rawValue:))
+        input.storageClass = values["storageClass"].flatMap { S3ClientTypes.StorageClass(rawValue: $0) }
+        input.serverSideEncryption = values["serverSideEncryption"].flatMap { S3ClientTypes.ServerSideEncryption(rawValue: $0) }
         input.ssekmsKeyId = values["ssekmsKeyId"]
         input.ssekmsEncryptionContext = values["ssekmsEncryptionContext"]
         input.bucketKeyEnabled = values["bucketKeyEnabled"].map { $0 == "true" }
-        input.objectLockMode = values["objectLockMode"].map(S3ClientTypes.ObjectLockMode.init(rawValue:))
-        input.objectLockLegalHoldStatus = values["objectLockLegalHoldStatus"].map(S3ClientTypes.ObjectLockLegalHoldStatus.init(rawValue:))
+        input.objectLockMode = values["objectLockMode"].flatMap { S3ClientTypes.ObjectLockMode(rawValue: $0) }
+        input.objectLockLegalHoldStatus = values["objectLockLegalHoldStatus"].flatMap { S3ClientTypes.ObjectLockLegalHoldStatus(rawValue: $0) }
         input.objectLockRetainUntilDate = values["objectLockRetainUntilDate"].flatMap(Double.init).map(Date.init(timeIntervalSince1970:))
-        input.acl = values["acl"].map(S3ClientTypes.ObjectCannedACL.init(rawValue:))
+        input.acl = values["acl"].flatMap { S3ClientTypes.ObjectCannedACL(rawValue: $0) }
         input.grantFullControl = values["grantFullControl"]
         input.grantRead = values["grantRead"]
         input.grantReadACP = values["grantReadACP"]
@@ -167,7 +167,7 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
         input.objectLockLegalHoldStatus = source.objectLockLegalHoldStatus
         input.objectLockRetainUntilDate = source.objectLockRetainUntilDate
         input.websiteRedirectLocation = source.websiteRedirectLocation
-        input.acl = headers["acl"].map(S3ClientTypes.ObjectCannedACL.init(rawValue:))
+        input.acl = headers["acl"].flatMap { S3ClientTypes.ObjectCannedACL(rawValue: $0) }
         input.grantFullControl = headers["grantFullControl"]
         input.grantRead = headers["grantRead"]
         input.grantReadACP = headers["grantReadACP"]

@@ -2,9 +2,9 @@
   "id": "F35",
   "expected_behavior": "Existing app upload producers use the finished queue with captured destinations, file-backed payloads, retry/cancel behavior and successful/cancelled payload cleanup; the feature is retained.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:27.682796+00:00",
+  "recorded_at": "2026-10-13T08:14:09.564103+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F35FileUploadQueueTests",
-      "name": "cancelledQueuedJobNeverStartsAndOtherJobsContinue()",
-      "time": "0.009687875"
-    },
-    {
-      "classname": "AuditCoreTests.F35FileUploadQueueTests",
-      "name": "failedUploadRetainsFileAndRetryUsesSameDestination()",
-      "time": "0.010070125"
-    },
-    {
-      "classname": "AuditCoreTests.F35FileUploadQueueTests",
       "name": "cancellationOfActiveUploadCleansOwnedFile()",
-      "time": "0.009752375"
-    },
-    {
-      "classname": "AuditCoreTests.F35FileUploadQueueTests",
-      "name": "successfulUploadReadsOwnedFileAndCleansPayload()",
-      "time": "0.008984375"
+      "time": "0.009828417"
     },
     {
       "classname": "AuditCoreTests.F35FileUploadQueueTests",
       "name": "fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue()",
-      "time": "0.0099685"
+      "time": "0.009951166"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "successfulUploadReadsOwnedFileAndCleansPayload()",
+      "time": "0.009061"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "cancelledQueuedJobNeverStartsAndOtherJobsContinue()",
+      "time": "0.009579416"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "failedUploadRetainsFileAndRetryUsesSameDestination()",
+      "time": "0.009710542"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.log",

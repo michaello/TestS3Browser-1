@@ -2,9 +2,9 @@
   "id": "N42",
   "expected_behavior": "Successful upload completion updates the account-scoped persisted widget snapshot and requests a timeline reload without requiring a later Recent-tab scan.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:18.309316+00:00",
+  "recorded_at": "2026-10-13T08:13:58.817119+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,73 +23,73 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN42",
-      "name": "scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt()",
-      "time": "0.022758209"
+      "name": "lateShareCompletionPreservesTheNewActiveWidgetAccount()",
+      "time": "0.065057084"
     },
     {
       "classname": "AuditCoreTests.AuditN42",
       "name": "canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter()",
-      "time": "0.023132041"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "coordinationFailuresCannotPublishOrReloadUncoordinatedState()",
-      "time": "0.034392125"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "lateShareCompletionPreservesTheNewActiveWidgetAccount()",
-      "time": "0.022746334"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "cachedAppPublicationCannotEraseANewerShareUpload()",
-      "time": "0.022662375"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload()",
-      "time": "0.034408542"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning()",
-      "time": "0.022695666"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization()",
-      "time": "0.034307333"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock()",
-      "time": "0.02276325"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry()",
-      "time": "0.034402459"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget()",
-      "time": "0.034485083"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN42",
-      "name": "pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity()",
-      "time": "0.034503292"
+      "time": "0.065041292"
     },
     {
       "classname": "AuditCoreTests.AuditN42",
       "name": "failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp()",
-      "time": "0.023099042"
+      "time": "0.065119083"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization()",
+      "time": "0.065070375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload()",
+      "time": "0.065152459"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt()",
+      "time": "0.065057875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning()",
+      "time": "0.065221834"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity()",
+      "time": "0.065070459"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "coordinationFailuresCannotPublishOrReloadUncoordinatedState()",
+      "time": "0.065036833"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock()",
+      "time": "0.065081375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "cachedAppPublicationCannotEraseANewerShareUpload()",
+      "time": "0.065081458"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry()",
+      "time": "0.065079541"
     },
     {
       "classname": "AuditCoreTests.AuditN42",
       "name": "uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget()",
-      "time": "0.034418667"
+      "time": "0.065222459"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN42",
+      "name": "competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget()",
+      "time": "0.065154458"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N42.log",

@@ -1,17 +1,17 @@
 Building for debugging...
-[Computing dependencies]
-Build complete! (0.84 sec)
+[1 / 1]
+Build complete! (0.35 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F15 file-backed original reuse and lease-safe disk budget" started.
-􀟈  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" started.
 􀟈  Test "Old presentation cleanup cannot release a newer stream and deinit releases final permit" started.
-􀟈  Test "Truncated streams fail and remove their partial files" started.
 􀟈  Test "Player resource owner retains an evicted file through presentation changes" started.
-􁁛  Test "Old presentation cleanup cannot release a newer stream and deinit releases final permit" passed after 0.013 seconds.
-􁁛  Test "Player resource owner retains an evicted file through presentation changes" passed after 0.017 seconds.
-􁁛  Test "Truncated streams fail and remove their partial files" passed after 0.017 seconds.
-􁁛  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" passed after 0.018 seconds.
-􁁛  Suite "F15 file-backed original reuse and lease-safe disk budget" passed after 0.018 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.018 seconds.
+􀟈  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" started.
+􀟈  Test "Truncated streams fail and remove their partial files" started.
+􁁛  Test "Old presentation cleanup cannot release a newer stream and deinit releases final permit" passed after 0.003 seconds.
+􁁛  Test "Truncated streams fail and remove their partial files" passed after 0.004 seconds.
+􁁛  Test "Player resource owner retains an evicted file through presentation changes" passed after 0.005 seconds.
+􁁛  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" passed after 0.006 seconds.
+􁁛  Suite "F15 file-backed original reuse and lease-safe disk budget" passed after 0.007 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.007 seconds.

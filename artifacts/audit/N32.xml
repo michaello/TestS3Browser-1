@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.016227125">
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cleanupFailureIncludesUploadIDAndOriginalFailure()" time="0.014871667" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="failedPartOrCompletionAbortsAndRetainsMoveSource()" time="0.015780333" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision()" time="0.015741375" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="missingDestinationETagFailsBeforeCreatingMultipartUpload()" time="0.000852208" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="plansCoverEveryByteWithoutExceedingPartLimits()" time="0.01451825" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()" time="0.000939375" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()" time="0.01568975" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.018638709">
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="plansCoverEveryByteWithoutExceedingPartLimits()" time="0.017674" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()" time="0.000686708" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cleanupFailureIncludesUploadIDAndOriginalFailure()" time="0.018029209" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()" time="0.018130459" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="failedPartOrCompletionAbortsAndRetainsMoveSource()" time="0.018206833" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision()" time="0.018215375" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="missingDestinationETagFailsBeforeCreatingMultipartUpload()" time="0.000981459" />
   </testsuite>
 </testsuites>

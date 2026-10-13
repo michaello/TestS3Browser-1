@@ -1,16 +1,17 @@
 Building for debugging...
-Build complete! (0.21 sec)
+[1 / 1]
+Build complete! (0.39 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F18 original export hashes and truthful Data URL formats" started.
 􀟈  Test "Animated GIF export preserves all bytes/frames and Data URL declares original signature" started.
 􀟈  Test "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
-􀟈  Test case passing 1 argument fixture → ("image/webp", 20 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
-􀟈  Test case passing 1 argument fixture → ("image/gif", 14 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
 􀟈  Test case passing 1 argument fixture → ("image/png", 10 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
 􀟈  Test case passing 1 argument fixture → ("image/jpeg", 6 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
-􁁛  Test "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" with 4 test cases passed after 0.002 seconds.
-􁁛  Test "Animated GIF export preserves all bytes/frames and Data URL declares original signature" passed after 0.012 seconds.
-􁁛  Suite "F18 original export hashes and truthful Data URL formats" passed after 0.012 seconds.
-􁁛  Test run with 2 tests in 1 suite passed after 0.012 seconds.
+􀟈  Test case passing 1 argument fixture → ("image/gif", 14 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test case passing 1 argument fixture → ("image/webp", 20 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􁁛  Test "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" with 4 test cases passed after 0.005 seconds.
+􁁛  Test "Animated GIF export preserves all bytes/frames and Data URL declares original signature" passed after 0.060 seconds.
+􁁛  Suite "F18 original export hashes and truthful Data URL formats" passed after 0.060 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.060 seconds.

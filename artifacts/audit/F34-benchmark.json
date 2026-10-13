@@ -1,7 +1,7 @@
 {
   "actual_derivations" : 3,
-  "derivation_milliseconds" : 4.0342079999999996,
-  "fixture_total_milliseconds" : 4.742667,
+  "derivation_milliseconds" : 4.1034169999999994,
+  "fixture_total_milliseconds" : 4.7960830000000003,
   "input_rows" : 10000,
   "scope" : "Actual macOS production-helper timing and work counts. Full Release view-body\/frame measurements remain E01.",
   "unrelated_updates" : 1000

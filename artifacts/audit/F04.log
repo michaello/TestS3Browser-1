@@ -1,12 +1,12 @@
 Building for debugging...
-Build complete! (0.46 sec)
+Build complete! (0.22 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F04SharedCatalogQueryTests started.
-􀟈  Test "Type selections and Stats reuse one fully paginated account scan" started.
 􀟈  Test "Simultaneous consumers join one catalog refresh" started.
-􁁛  Test "Type selections and Stats reuse one fully paginated account scan" passed after 0.006 seconds.
-􁁛  Test "Simultaneous consumers join one catalog refresh" passed after 0.006 seconds.
-􁁛  Suite F04SharedCatalogQueryTests passed after 0.006 seconds.
-􁁛  Test run with 2 tests in 1 suite passed after 0.006 seconds.
+􀟈  Test "Type selections and Stats reuse one fully paginated account scan" started.
+􁁛  Test "Type selections and Stats reuse one fully paginated account scan" passed after 0.004 seconds.
+􁁛  Test "Simultaneous consumers join one catalog refresh" passed after 0.004 seconds.
+􁁛  Suite F04SharedCatalogQueryTests passed after 0.005 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.005 seconds.

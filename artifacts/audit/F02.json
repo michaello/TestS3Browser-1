@@ -2,9 +2,9 @@
   "id": "F02",
   "expected_behavior": "Restoring a saved bucket/prefix sends one scoped listing, does not wait for bucket discovery, and does not erase the all-bucket Recent snapshot.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:39.530897+00:00",
+  "recorded_at": "2026-10-13T08:12:05.395829+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F02BrowseStartupTests",
-      "name": "rootIsListedOnce()",
-      "time": "0.0005755"
+      "name": "listingDoesNotWaitForDiscovery()",
+      "time": "0.001187125"
     },
     {
       "classname": "AuditCoreTests.F02BrowseStartupTests",
-      "name": "listingDoesNotWaitForDiscovery()",
-      "time": "0.000678125"
+      "name": "rootIsListedOnce()",
+      "time": "0.001084"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F02.log",

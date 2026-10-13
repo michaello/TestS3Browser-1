@@ -2,9 +2,9 @@
   "id": "N17",
   "expected_behavior": "A no-match search on an incomplete folder retains access to remaining pages/search work; a matching later-page file remains discoverable.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:42.834794+00:00",
+  "recorded_at": "2026-10-13T08:13:09.439513+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,7 +24,7 @@
     {
       "classname": "AuditCoreTests.N17PartialFolderSearchTests",
       "name": "noMatchCanLoadMore()",
-      "time": "0.002367875"
+      "time": "0.000636292"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.log",

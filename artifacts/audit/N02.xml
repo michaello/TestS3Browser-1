@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.006448417">
-    <testcase classname="AuditCoreTests.AuditN02" name="retryPreservesUneditedRemoteTags()" time="0.006011333" />
-    <testcase classname="AuditCoreTests.AuditN02" name="successfulEmptyReadAllowsFirstTag()" time="0.006043958" />
-    <testcase classname="AuditCoreTests.AuditN02" name="unknownAndFailedReadsCannotReplaceTags()" time="0.006029667" />
-    <testcase classname="AuditCoreTests.AuditN02" name="writeFailureRetainsDraftAndRemoteSnapshot()" time="0.005974208" />
-    <testcase classname="AuditCoreTests.AuditN02" name="oldReadCannotAuthorizeEditingAfterNewFailure()" time="0.006174125" />
-    <testcase classname="AuditCoreTests.AuditN02" name="cancelledReadDoesNotBecomeEmptySuccess()" time="0.000777417" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.023859583">
+    <testcase classname="AuditCoreTests.AuditN02" name="writeFailureRetainsDraftAndRemoteSnapshot()" time="0.018543291" />
+    <testcase classname="AuditCoreTests.AuditN02" name="retryPreservesUneditedRemoteTags()" time="0.018559084" />
+    <testcase classname="AuditCoreTests.AuditN02" name="unknownAndFailedReadsCannotReplaceTags()" time="0.018564917" />
+    <testcase classname="AuditCoreTests.AuditN02" name="successfulEmptyReadAllowsFirstTag()" time="0.018573792" />
+    <testcase classname="AuditCoreTests.AuditN02" name="oldReadCannotAuthorizeEditingAfterNewFailure()" time="0.023472958" />
+    <testcase classname="AuditCoreTests.AuditN02" name="cancelledReadDoesNotBecomeEmptySuccess()" time="0.018565375" />
   </testsuite>
 </testsuites>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.001017708">
-    <testcase classname="AuditCoreTests.AuditN28" name="cancelledRequestCannotPublishConfiguration()" time="0.00073225" />
-    <testcase classname="AuditCoreTests.AuditN28" name="configuredPagesProduceEntriesAndOpaqueTokensAdvance()" time="0.000331292" />
-    <testcase classname="AuditCoreTests.AuditN28" name="invalidConfigurationDoesNotMasqueradeAsUnconfigured()" time="0.000553292" />
-    <testcase classname="AuditCoreTests.AuditN28" name="laterPageFailureDoesNotReturnPartialAsComplete()" time="0.000575625" />
-    <testcase classname="AuditCoreTests.AuditN28" name="duplicateConfigurationKeepsStableDisplayIdentity()" time="0.000334416" />
-    <testcase classname="AuditCoreTests.AuditN28" name="truncatedMissingOrRepeatedTokenFails()" time="0.000580166" />
-    <testcase classname="AuditCoreTests.AuditN28" name="emptyConfigurationIsOnlyASuccessfulEmptyResponse()" time="0.000526583" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.006579875">
+    <testcase classname="AuditCoreTests.AuditN28" name="duplicateConfigurationKeepsStableDisplayIdentity()" time="0.000813958" />
+    <testcase classname="AuditCoreTests.AuditN28" name="cancelledRequestCannotPublishConfiguration()" time="0.005821583" />
+    <testcase classname="AuditCoreTests.AuditN28" name="laterPageFailureDoesNotReturnPartialAsComplete()" time="0.005503917" />
+    <testcase classname="AuditCoreTests.AuditN28" name="configuredPagesProduceEntriesAndOpaqueTokensAdvance()" time="0.000790292" />
+    <testcase classname="AuditCoreTests.AuditN28" name="truncatedMissingOrRepeatedTokenFails()" time="0.005532792" />
+    <testcase classname="AuditCoreTests.AuditN28" name="emptyConfigurationIsOnlyASuccessfulEmptyResponse()" time="0.005543958" />
+    <testcase classname="AuditCoreTests.AuditN28" name="invalidConfigurationDoesNotMasqueradeAsUnconfigured()" time="0.005493541" />
   </testsuite>
 </testsuites>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.00656825">
-    <testcase classname="AuditCoreTests.F06CanonicalCatalogTests" name="consumerIsolation()" time="0.006057333" />
-    <testcase classname="AuditCoreTests.F06CanonicalCatalogTests" name="exactIdentity()" time="0.006062084" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.007318583">
+    <testcase classname="AuditCoreTests.F06CanonicalCatalogTests" name="consumerIsolation()" time="0.007036583" />
+    <testcase classname="AuditCoreTests.F06CanonicalCatalogTests" name="exactIdentity()" time="0.000343375" />
   </testsuite>
 </testsuites>

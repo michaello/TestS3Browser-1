@@ -5,10 +5,10 @@ Build complete! (0.21 sec)
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F20ListingPaginationTests started.
 􀟈  Test "Stash sorts only after scanning every report page, including the newest report" started.
-􀟈  Test "A folder picker exposes destinations after the first thousand prefixes" started.
 􀟈  Test "Browse publishes the first thousand rows before explicitly loading the next page" started.
+􀟈  Test "A folder picker exposes destinations after the first thousand prefixes" started.
 􁁛  Test "Stash sorts only after scanning every report page, including the newest report" passed after 0.003 seconds.
-􁁛  Test "Browse publishes the first thousand rows before explicitly loading the next page" passed after 0.003 seconds.
 􁁛  Test "A folder picker exposes destinations after the first thousand prefixes" passed after 0.004 seconds.
+􁁛  Test "Browse publishes the first thousand rows before explicitly loading the next page" passed after 0.004 seconds.
 􁁛  Suite F20ListingPaginationTests passed after 0.004 seconds.
 􁁛  Test run with 3 tests in 1 suite passed after 0.004 seconds.

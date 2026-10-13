@@ -21,6 +21,12 @@ PROJECT = ROOT / "TestS3Browser.xcodeproj"
 LOCK = PROJECT / "project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 UDID = "5B87AEFD-8266-4451-8795-8728177C5241"
 DEFAULT_DERIVED = Path.home() / "Library/Developer/Xcode/DerivedData/TestS3BrowserAudit"
+SDK_MANIFESTS = (
+    ("smithy-swift_ClientRuntime.bundle", "smithy-swift/Sources/ClientRuntime/PrivacyInfo.xcprivacy"),
+    ("aws-sdk-swift_AWSClientRuntime.bundle", "aws-sdk-swift/Sources/Core/AWSClientRuntime/Sources/AWSClientRuntime/Resources/PrivacyInfo.xcprivacy"),
+    ("aws-crt-swift_AwsCommonRuntimeKit.bundle", "aws-crt-swift/Source/AwsCommonRuntimeKit/PrivacyInfo.xcprivacy"),
+    ("SwiftProtobuf_SwiftProtobuf.bundle", "swift-protobuf/Sources/SwiftProtobuf/PrivacyInfo.xcprivacy"),
+)
 
 
 def write_json(path, value):
@@ -143,10 +149,10 @@ def validate_test_summary(summary):
 def inspect_sdk_resources(app, derived):
     checks = []
     packages = derived / "SourcePackages/checkouts"
-    for target, source in (("ClientRuntime", packages / "smithy-swift/Sources/ClientRuntime/PrivacyInfo.xcprivacy"),
-                           ("AwsCommonRuntimeKit", packages / "aws-crt-swift/Source/AwsCommonRuntimeKit/PrivacyInfo.xcprivacy")):
+    for target, relative in SDK_MANIFESTS:
+        source = packages / relative
         expected = plistlib.loads(source.read_bytes())
-        candidates = [path for path in app.rglob("PrivacyInfo.xcprivacy") if target.lower() in path.parent.name.lower()]
+        candidates = [path for path in app.rglob("PrivacyInfo.xcprivacy") if path.parent.name == target]
         if not candidates: raise RuntimeError("Pinned SDK privacy resource is missing from app: " + target)
         for path in candidates:
             if plistlib.loads(path.read_bytes()) != expected:
@@ -270,12 +276,12 @@ def main():
                 (bundle / "Info.plist").write_bytes(plistlib.dumps(info));(bundle / executable).write_bytes(b"fixture executable")
             assert len(inspect_resources(app)) == 3
             derived = Path(directory) / "derived"
-            for target, relative in (("ClientRuntime", "smithy-swift/Sources/ClientRuntime"), ("AwsCommonRuntimeKit", "aws-crt-swift/Source/AwsCommonRuntimeKit")):
-                source = derived / "SourcePackages/checkouts" / relative / "PrivacyInfo.xcprivacy"
-                source.parent.mkdir(parents=True);source.write_bytes(plistlib.dumps({"NSPrivacyAccessedAPITypes": []}))
-                bundle = app / (target + ".bundle");bundle.mkdir();(bundle / "PrivacyInfo.xcprivacy").write_bytes(source.read_bytes())
-            assert len(inspect_sdk_resources(app, derived)) == 2
-            sdk = app / "ClientRuntime.bundle/PrivacyInfo.xcprivacy";baseline_sdk = sdk.read_bytes();sdk.unlink()
+            for target, relative in SDK_MANIFESTS:
+                source = derived / "SourcePackages/checkouts" / relative
+                source.parent.mkdir(parents=True);source.write_bytes(plistlib.dumps({"NSPrivacyAccessedAPITypes": [], "fixtureTarget": target}))
+                bundle = app / target;bundle.mkdir();(bundle / "PrivacyInfo.xcprivacy").write_bytes(source.read_bytes())
+            assert len(inspect_sdk_resources(app, derived)) == len(SDK_MANIFESTS)
+            sdk = app / "smithy-swift_ClientRuntime.bundle/PrivacyInfo.xcprivacy";baseline_sdk = sdk.read_bytes();sdk.unlink()
             try: inspect_sdk_resources(app, derived)
             except RuntimeError: resource_cases.append("missing pinned SDK manifest rejected")
             else: raise AssertionError("Missing pinned SDK manifest passed")

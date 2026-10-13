@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.00135875">
-    <testcase classname="AuditCoreTests.AuditN12" name="everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:)" time="0.001002083" />
-    <testcase classname="AuditCoreTests.AuditN12" name="uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot()" time="0.000728167" />
-    <testcase classname="AuditCoreTests.AuditN12" name="obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList()" time="0.000720417" />
-    <testcase classname="AuditCoreTests.AuditN12" name="nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing()" time="0.000632916" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.001204791">
+    <testcase classname="AuditCoreTests.AuditN12" name="everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:)" time="0.000918291" />
+    <testcase classname="AuditCoreTests.AuditN12" name="nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing()" time="0.00061475" />
+    <testcase classname="AuditCoreTests.AuditN12" name="uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot()" time="0.000636042" />
+    <testcase classname="AuditCoreTests.AuditN12" name="obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList()" time="0.000916875" />
   </testsuite>
 </testsuites>

@@ -1,18 +1,19 @@
 Building for debugging...
-Build complete! (0.20 sec)
+[1 / 1]
+Build complete! (0.34 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N33ObjectVersionHistoryTests started.
-􀟈  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() started.
-􀟈  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() started.
-􀟈  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() started.
 􀟈  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() started.
+􀟈  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() started.
+􀟈  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() started.
+􀟈  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() started.
 􀟈  Test cancellationStopsBeforeFetchingAnotherPage() started.
-􁁛  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() passed after 0.002 seconds.
-􁁛  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() passed after 0.007 seconds.
-􁁛  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() passed after 0.007 seconds.
-􁁛  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() passed after 0.007 seconds.
-􁁛  Test cancellationStopsBeforeFetchingAnotherPage() passed after 0.007 seconds.
-􁁛  Suite N33ObjectVersionHistoryTests passed after 0.007 seconds.
-􁁛  Test run with 5 tests in 1 suite passed after 0.008 seconds.
+􁁛  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() passed after 0.005 seconds.
+􁁛  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() passed after 0.005 seconds.
+􁁛  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() passed after 0.011 seconds.
+􁁛  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() passed after 0.011 seconds.
+􁁛  Test cancellationStopsBeforeFetchingAnotherPage() passed after 0.011 seconds.
+􁁛  Suite N33ObjectVersionHistoryTests passed after 0.011 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.012 seconds.

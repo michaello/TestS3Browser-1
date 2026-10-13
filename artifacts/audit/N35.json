@@ -2,9 +2,9 @@
   "id": "N35",
   "expected_behavior": "Share provider/representation failures appear in attempted/succeeded/failed counts and per-item outcomes; a smaller loaded subset cannot be reported as an entirely successful original batch.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:08.109473+00:00",
+  "recorded_at": "2026-10-13T08:13:47.191064+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.N35ShareOutcomeTests",
       "name": "totalProviderFailureCannotReportSuccessfulSmallerBatch()",
-      "time": "0.007393709"
-    },
-    {
-      "classname": "AuditCoreTests.N35ShareOutcomeTests",
-      "name": "middleUploadFailureDoesNotDropOtherAttachmentOutcomes()",
-      "time": "0.009025416"
+      "time": "0.01383825"
     },
     {
       "classname": "AuditCoreTests.N35ShareOutcomeTests",
       "name": "providerAndUnsupportedFailuresRemainInOriginalAttemptedCount()",
-      "time": "0.007347083"
+      "time": "0.027571333"
+    },
+    {
+      "classname": "AuditCoreTests.N35ShareOutcomeTests",
+      "name": "middleUploadFailureDoesNotDropOtherAttachmentOutcomes()",
+      "time": "0.030367417"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N35.log",

@@ -2,9 +2,9 @@
   "id": "F26",
   "expected_behavior": "Stars, tags and new-file markers use account/bucket-qualified identities; equal keys remain independent and legacy mappings are migrated or retained without silent reassignment/data loss.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:15.243889+00:00",
+  "recorded_at": "2026-10-13T08:12:39.684100+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditF26",
-      "name": "ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()",
-      "time": "0.012016625"
+      "name": "newFileMarkersDoNotCrossBucketOrAccountBoundaries()",
+      "time": "0.015885083"
     },
     {
       "classname": "AuditCoreTests.AuditF26",
       "name": "unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()",
-      "time": "0.010316542"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF26",
-      "name": "equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()",
-      "time": "0.008741458"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF26",
-      "name": "newFileMarkersDoNotCrossBucketOrAccountBoundaries()",
-      "time": "0.010293458"
+      "time": "0.015846875"
     },
     {
       "classname": "AuditCoreTests.AuditF26",
       "name": "exactUnicodeAndRepeatedSlashKeysRemainDistinct()",
-      "time": "0.010331166"
+      "time": "0.015882792"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()",
+      "time": "0.018665042"
     },
     {
       "classname": "AuditCoreTests.AuditF26",
       "name": "renameAndMoveCarryAnnotationsToTheExactDestination()",
-      "time": "0.011976959"
+      "time": "0.015871416"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()",
+      "time": "0.015809875"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.log",

@@ -2,16 +2,16 @@
   "measurement_environment" : "macOS production-core fixture",
   "metrics" : {
     "byteMeasurementScope" : "Consumed SDK object-download bytes and confirmed upload payload sizes; excludes HTTP overhead and retransmission.",
-    "cacheToFirstContentMilliseconds" : 0.031875000000000001,
+    "cacheToFirstContentMilliseconds" : 0.026209,
     "confirmedUploadPayloadBytes" : 0,
     "duplicateBodyRequests" : 0,
     "failedRequests" : 0,
-    "launchToFirstContentMilliseconds" : 0.042208999999999997,
+    "launchToFirstContentMilliseconds" : 0.032000000000000001,
     "maximumFrameGapMilliseconds" : 16,
-    "peakResidentBytes" : 123600896,
+    "peakResidentBytes" : 124338176,
     "receivedBytes" : 512,
     "refreshMilliseconds" : [
-      334.52754199999998
+      376.43783399999995
     ],
     "requestCount" : 1,
     "scrollingStalls" : 0,

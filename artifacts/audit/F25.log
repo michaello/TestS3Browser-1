@@ -1,17 +1,18 @@
 Building for debugging...
-Build complete! (0.20 sec)
+[1 / 1]
+Build complete! (0.53 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F25SameObjectTransferTests started.
-􀟈  Test "Picker identifies root, nested and repeated-slash same destinations" started.
-􀟈  Test "Canonically equivalent Unicode keys remain different S3 objects" started.
 􀟈  Test "Generic same-object operations fail before any transport call" started.
-􀟈  Test case passing 1 argument kind → .rename to "Generic same-object operations fail before any transport call" started.
-􀟈  Test case passing 1 argument kind → .move to "Generic same-object operations fail before any transport call" started.
+􀟈  Test "Canonically equivalent Unicode keys remain different S3 objects" started.
 􀟈  Test case passing 1 argument kind → .copy to "Generic same-object operations fail before any transport call" started.
-􁁛  Test "Picker identifies root, nested and repeated-slash same destinations" passed after 0.001 seconds.
+􀟈  Test case passing 1 argument kind → .move to "Generic same-object operations fail before any transport call" started.
+􀟈  Test case passing 1 argument kind → .rename to "Generic same-object operations fail before any transport call" started.
+􀟈  Test "Picker identifies root, nested and repeated-slash same destinations" started.
 􁁛  Test "Canonically equivalent Unicode keys remain different S3 objects" passed after 0.001 seconds.
 􁁛  Test "Generic same-object operations fail before any transport call" with 3 test cases passed after 0.001 seconds.
+􁁛  Test "Picker identifies root, nested and repeated-slash same destinations" passed after 0.001 seconds.
 􁁛  Suite F25SameObjectTransferTests passed after 0.001 seconds.
 􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="8" failures="0" skipped="0" time="0.062337541">
-    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="cancelledProviderProgressResolvesAndLateFileIsDisposed()" time="0.028466" />
-    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile()" time="0.010221125" />
-    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile()" time="0.010719708" />
-    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="cancelledBeforeStartNeverRequestsRepresentation()" time="0.027225" />
-    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked()" time="0.027218959" />
-    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="attachmentsAreLoadedSentAndCleanedOneAtATime()" time="0.062003209" />
-    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments()" time="0.022883417" />
-    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation()" time="0.02544375" />
+  <testsuite name="TestResults" errors="0" tests="8" failures="0" skipped="0" time="0.036163959">
+    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked()" time="0.009879542" />
+    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="attachmentsAreLoadedSentAndCleanedOneAtATime()" time="0.035836417" />
+    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments()" time="0.008199" />
+    <testcase classname="AuditCoreTests.F31SharePipelineTests" name="cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation()" time="0.008350625" />
+    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile()" time="0.006448042" />
+    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="cancelledProviderProgressResolvesAndLateFileIsDisposed()" time="0.011676167" />
+    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile()" time="0.005762625" />
+    <testcase classname="AuditCoreTests.F31FilePromiseTests" name="cancelledBeforeStartNeverRequestsRepresentation()" time="0.010249292" />
   </testsuite>
 </testsuites>

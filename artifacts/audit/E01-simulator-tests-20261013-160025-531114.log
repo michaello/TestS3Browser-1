@@ -1,0 +1,427 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project /Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj -scheme TestS3Browser -derivedDataPath /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit -scmProvider system -configuration Release -destination "platform=iOS Simulator,id=5B87AEFD-8266-4451-8795-8728177C5241" -disableAutomaticPackageResolution -skipPackageUpdates CODE_SIGNING_ALLOWED=NO -parallel-testing-enabled NO -resultBundlePath /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-160025.xcresult test-without-building
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  swift-log: https://github.com/apple/swift-log.git @ 1.6.4
+  swift-atomics: https://github.com/apple/swift-atomics.git @ 1.3.0
+  swift-service-lifecycle: https://github.com/swift-server/swift-service-lifecycle.git @ 2.9.0
+  swift-crypto: https://github.com/apple/swift-crypto.git @ 4.0.0
+  swift-nio-http2: https://github.com/apple/swift-nio-http2.git @ 1.38.0
+  swift-async-algorithms: https://github.com/apple/swift-async-algorithms.git @ 1.0.4
+  swift-http-types: https://github.com/apple/swift-http-types.git @ 1.5.0
+  SwiftProtobuf: https://github.com/apple/swift-protobuf.git @ 1.32.0
+  swift-certificates: https://github.com/apple/swift-certificates.git @ 1.15.0
+  swift-nio-ssl: https://github.com/apple/swift-nio-ssl.git @ 2.35.0
+  swift-nio: https://github.com/apple/swift-nio.git @ 2.87.0
+  aws-crt-swift: https://github.com/awslabs/aws-crt-swift @ 0.54.0
+  Opentracing: https://github.com/undefinedlabs/opentracing-objc @ 0.5.2
+  swift-algorithms: https://github.com/apple/swift-algorithms.git @ 1.2.1
+  swift-argument-parser: https://github.com/apple/swift-argument-parser.git @ 1.6.2
+  grpc-swift: https://github.com/grpc/grpc-swift.git @ 1.26.1
+  aws-sdk-swift: https://github.com/awslabs/aws-sdk-swift @ 1.5.66
+  swift-nio-extras: https://github.com/apple/swift-nio-extras.git @ 1.29.0
+  swift-collections: https://github.com/apple/swift-collections.git @ 1.3.0
+  swift-numerics: https://github.com/apple/swift-numerics.git @ 1.1.1
+  swift-metrics: https://github.com/apple/swift-metrics.git @ 2.7.1
+  Thrift: https://github.com/undefinedlabs/Thrift-Swift @ 1.1.2
+  opentelemetry-swift: https://github.com/open-telemetry/opentelemetry-swift @ 1.17.1
+  swift-system: https://github.com/apple/swift-system.git @ 1.6.3
+  swift-asn1: https://github.com/apple/swift-asn1.git @ 1.5.0
+  swift-http-structured-headers: https://github.com/apple/swift-http-structured-headers.git @ 1.5.0
+  smithy-swift: https://github.com/smithy-lang/smithy-swift @ 0.165.0
+  swift-nio-transport-services: https://github.com/apple/swift-nio-transport-services.git @ 1.25.2
+
+Writing result bundle at path:
+	/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-160025.xcresult
+
+2026-10-13 16:00:48.419542+0800 TestS3Browser[84050:182121348] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:00:48.419737+0800 TestS3Browser[84050:182121348] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:00:48.908949+0800 TestS3Browser[84050:182121348] [Assert] _dictationButton not yet initialized when setting up for the large content viewer.
+2026-10-13 16:00:48.970450+0800 TestS3Browser[84050:182121348] [API] cannot add handler to 0 from 0 - dropping
+2026-10-13 16:00:48.972758+0800 TestS3Browser[84050:182131843] [General] Failed to send CA Event for app launch measurements for ca_event_type: 0 event_name: com.apple.app_launch_measurement.FirstFramePresentationMetric
+2026-10-13 16:00:48.980882+0800 TestS3Browser[84050:182121348] [XPCErrors] non-launching port is incompatible with service identifier "com.apple.PointerUI.pointeruid.default-service"
+2026-10-13 16:00:48.997430+0800 TestS3Browser[84050:182121348] [API] cannot add handler to 0 from 0 - dropping
+2026-10-13 16:00:49.106934+0800 TestS3Browser[84050:182131843] [General] Failed to send CA Event for app launch measurements for ca_event_type: 1 event_name: com.apple.app_launch_measurement.ExtendedLaunchMetrics
+Test Suite 'All tests' started at 2026-10-13 16:00:49.608.
+Test Suite 'All tests' passed at 2026-10-13 16:00:49.609.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 2078
+↳ Target Platform: arm64-apple-ios17.0-simulator
+◇ Suite AppServiceIntegrationTests started.
+◇ Test appHostUsesSyntheticBoundaries() started.
+✔ Test appHostUsesSyntheticBoundaries() passed after 0.001 seconds.
+◇ Test cachedRecentRowsArePresentBeforeDelayedServiceResponse() started.
+✔ Test cachedRecentRowsArePresentBeforeDelayedServiceResponse() passed after 0.012 seconds.
+◇ Test actualServicePaginatesMoreThanOneThousandObjects() started.
+✔ Test actualServicePaginatesMoreThanOneThousandObjects() passed after 0.001 seconds.
+◇ Test failedRefreshPreservesCachedAndPersistedRows() started.
+✔ Test failedRefreshPreservesCachedAndPersistedRows() passed after 0.016 seconds.
+◇ Test staleFolderResponseCannotAppearInNewRoute() started.
+✔ Test staleFolderResponseCannotAppearInNewRoute() passed after 0.001 seconds.
+◇ Test realSDKLifecycleProjectionPreservesDatesAndAndFilter() started.
+✔ Test realSDKLifecycleProjectionPreservesDatesAndAndFilter() passed after 0.002 seconds.
+◇ Test nativeImageDecodeAndFileExportPreserveOriginalBytes() started.
+✔ Test nativeImageDecodeAndFileExportPreserveOriginalBytes() passed after 0.228 seconds.
+◇ Test galleryRetainsOnlyCurrentAndAdjacentImagesWithinByteBudget() started.
+✔ Test galleryRetainsOnlyCurrentAndAdjacentImagesWithinByteBudget() passed after 0.001 seconds.
+✔ Suite AppServiceIntegrationTests passed after 0.263 seconds.
+✔ Test run with 8 tests in 1 suite passed after 0.263 seconds.
+2026-10-13 16:00:51.168596+0800 TestS3BrowserUITests-Runner[89052:182134925] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'All tests' started at 2026-10-13 16:00:54.522.
+Test Suite 'TestS3BrowserUITests.xctest' started at 2026-10-13 16:00:54.523.
+Test Suite 'LaunchAndCacheUITests' started at 2026-10-13 16:00:54.523.
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCachedContentPrecedesDelayedRefresh]' started.
+    t =     0.00s Start Test at 2026-10-13 16:00:54.526
+    t =     0.14s Set Up
+    t =     0.14s Open com.crispytoast.TestS3Browser
+    t =     0.14s     Launch com.crispytoast.TestS3Browser
+2026-10-13 16:00:54.733 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-13 16:00:54.733 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-10-13 16:00:54.706891+0800 TestS3BrowserUITests-Runner[89052:182134925] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:00:54.707726+0800 TestS3BrowserUITests-Runner[89052:182134925] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+    t =     0.42s         Setting up automation session
+objc[89052]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1089b4398) and /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x108aa8310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     3.11s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     4.84s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     5.86s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     5.87s         Checking existence of `"audit-cache-first.txt" Any`
+    t =     6.18s Waiting 8.0s for "audit-refreshed.txt" Any to exist
+    t =     7.24s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+    t =     7.24s         Checking existence of `"audit-refreshed.txt" Any`
+    t =     8.22s Pressing Home button
+    t =     8.79s Terminate com.crispytoast.TestS3Browser:92040
+    t =     9.88s Tear Down
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCachedContentPrecedesDelayedRefresh]' passed (9.944 seconds).
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCustomTabsExposeExactlyOneSelectedAccessibleControl]' started.
+    t =     0.00s Start Test at 2026-10-13 16:01:04.471
+    t =     0.01s Set Up
+    t =     0.02s Open com.crispytoast.TestS3Browser
+2026-10-13 16:01:04.490 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-13 16:01:04.490 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.02s     Launch com.crispytoast.TestS3Browser
+    t =     0.23s         Setting up automation session
+    t =     2.87s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     4.53s Waiting 4.0s for "tab.recent" Button to exist
+    t =     5.57s     Checking `Expect predicate `existsNoRetry == 1` for object "tab.recent" Button`
+    t =     5.57s         Checking existence of `"tab.recent" Button`
+    t =     5.74s Tap "tab.browse" Button
+    t =     5.74s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     5.74s     Find the "tab.browse" Button
+    t =     5.79s     Check for interrupting elements affecting "tab.browse" Button
+    t =     5.84s     Synthesize event
+    t =     6.14s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     6.19s Checking existence of `"tab.browse" Button`
+    t =     6.27s Find the "tab.browse" Button
+    t =     6.36s Find the "tab.browse" Button
+    t =     6.43s Checking existence of `"tab.apps" Button`
+    t =     6.57s Find the "tab.apps" Button
+    t =     6.80s Find the "tab.apps" Button
+    t =     6.92s Checking existence of `"tab.recent" Button`
+    t =     6.98s Find the "tab.recent" Button
+    t =     7.08s Find the "tab.recent" Button
+    t =     7.16s Checking existence of `"tab.stash" Button`
+    t =     7.24s Find the "tab.stash" Button
+    t =     7.33s Find the "tab.stash" Button
+    t =     7.42s Checking existence of `"tab.stats" Button`
+    t =     7.48s Find the "tab.stats" Button
+    t =     7.54s Find the "tab.stats" Button
+    t =     7.73s Checking existence of `"tab.upload" Button`
+    t =     7.90s Find the "tab.upload" Button
+    t =     7.99s Find the "tab.upload" Button
+    t =     8.12s Checking existence of `"tab.settings" Button`
+    t =     8.23s Find the "tab.settings" Button
+    t =     8.31s Find the "tab.settings" Button
+    t =     8.41s Tap "tab.apps" Button
+    t =     8.41s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.42s     Find the "tab.apps" Button
+    t =     8.61s     Check for interrupting elements affecting "tab.apps" Button
+    t =     8.67s     Synthesize event
+    t =     8.97s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.97s Checking existence of `"tab.browse" Button`
+    t =     9.03s Find the "tab.browse" Button
+    t =     9.10s Find the "tab.browse" Button
+    t =     9.19s Checking existence of `"tab.apps" Button`
+    t =     9.37s Find the "tab.apps" Button
+    t =     9.49s Find the "tab.apps" Button
+    t =     9.57s Checking existence of `"tab.recent" Button`
+    t =     9.65s Find the "tab.recent" Button
+    t =     9.74s Find the "tab.recent" Button
+    t =     9.80s Checking existence of `"tab.stash" Button`
+    t =     9.85s Find the "tab.stash" Button
+    t =     9.92s Find the "tab.stash" Button
+    t =     9.99s Checking existence of `"tab.stats" Button`
+    t =    10.05s Find the "tab.stats" Button
+    t =    10.12s Find the "tab.stats" Button
+    t =    10.17s Checking existence of `"tab.upload" Button`
+    t =    10.23s Find the "tab.upload" Button
+    t =    10.30s Find the "tab.upload" Button
+    t =    10.36s Checking existence of `"tab.settings" Button`
+    t =    10.42s Find the "tab.settings" Button
+    t =    10.48s Find the "tab.settings" Button
+    t =    10.54s Tap "tab.recent" Button
+    t =    10.54s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    10.54s     Find the "tab.recent" Button
+    t =    10.61s     Check for interrupting elements affecting "tab.recent" Button
+    t =    10.67s     Synthesize event
+    t =    10.96s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    10.97s Checking existence of `"tab.browse" Button`
+    t =    11.03s Find the "tab.browse" Button
+    t =    11.10s Find the "tab.browse" Button
+    t =    11.16s Checking existence of `"tab.apps" Button`
+    t =    11.22s Find the "tab.apps" Button
+    t =    11.28s Find the "tab.apps" Button
+    t =    11.34s Checking existence of `"tab.recent" Button`
+    t =    11.41s Find the "tab.recent" Button
+    t =    11.48s Find the "tab.recent" Button
+    t =    11.57s Checking existence of `"tab.stash" Button`
+    t =    11.64s Find the "tab.stash" Button
+    t =    11.70s Find the "tab.stash" Button
+    t =    11.78s Checking existence of `"tab.stats" Button`
+    t =    11.92s Find the "tab.stats" Button
+    t =    12.00s Find the "tab.stats" Button
+    t =    12.11s Checking existence of `"tab.upload" Button`
+    t =    12.20s Find the "tab.upload" Button
+    t =    12.27s Find the "tab.upload" Button
+    t =    12.36s Checking existence of `"tab.settings" Button`
+    t =    12.45s Find the "tab.settings" Button
+    t =    12.55s Find the "tab.settings" Button
+    t =    12.70s Tap "tab.stash" Button
+    t =    12.70s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    12.71s     Find the "tab.stash" Button
+    t =    12.81s     Check for interrupting elements affecting "tab.stash" Button
+    t =    12.93s     Synthesize event
+    t =    13.34s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    13.34s Checking existence of `"tab.browse" Button`
+    t =    13.43s Find the "tab.browse" Button
+    t =    13.50s Find the "tab.browse" Button
+    t =    13.56s Checking existence of `"tab.apps" Button`
+    t =    13.63s Find the "tab.apps" Button
+    t =    13.72s Find the "tab.apps" Button
+    t =    13.80s Checking existence of `"tab.recent" Button`
+    t =    13.89s Find the "tab.recent" Button
+    t =    13.96s Find the "tab.recent" Button
+    t =    14.03s Checking existence of `"tab.stash" Button`
+    t =    14.10s Find the "tab.stash" Button
+    t =    14.18s Find the "tab.stash" Button
+    t =    14.24s Checking existence of `"tab.stats" Button`
+    t =    14.30s Find the "tab.stats" Button
+    t =    14.36s Find the "tab.stats" Button
+    t =    14.42s Checking existence of `"tab.upload" Button`
+    t =    14.47s Find the "tab.upload" Button
+    t =    14.53s Find the "tab.upload" Button
+    t =    14.59s Checking existence of `"tab.settings" Button`
+    t =    14.64s Find the "tab.settings" Button
+    t =    14.70s Find the "tab.settings" Button
+    t =    14.76s Tap "tab.stats" Button
+    t =    14.76s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    14.76s     Find the "tab.stats" Button
+    t =    14.82s     Check for interrupting elements affecting "tab.stats" Button
+    t =    14.88s     Synthesize event
+    t =    15.17s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    15.18s Checking existence of `"tab.browse" Button`
+    t =    15.25s Find the "tab.browse" Button
+    t =    15.32s Find the "tab.browse" Button
+    t =    15.39s Checking existence of `"tab.apps" Button`
+    t =    15.46s Find the "tab.apps" Button
+    t =    15.52s Find the "tab.apps" Button
+    t =    15.59s Checking existence of `"tab.recent" Button`
+    t =    15.65s Find the "tab.recent" Button
+    t =    15.72s Find the "tab.recent" Button
+    t =    15.79s Checking existence of `"tab.stash" Button`
+    t =    15.85s Find the "tab.stash" Button
+    t =    15.92s Find the "tab.stash" Button
+    t =    15.98s Checking existence of `"tab.stats" Button`
+    t =    16.05s Find the "tab.stats" Button
+    t =    16.11s Find the "tab.stats" Button
+    t =    16.18s Checking existence of `"tab.upload" Button`
+    t =    16.25s Find the "tab.upload" Button
+    t =    16.34s Find the "tab.upload" Button
+    t =    16.42s Checking existence of `"tab.settings" Button`
+    t =    16.55s Find the "tab.settings" Button
+    t =    16.70s Find the "tab.settings" Button
+    t =    16.81s Tap "tab.upload" Button
+    t =    16.81s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    16.81s     Find the "tab.upload" Button
+    t =    16.93s     Check for interrupting elements affecting "tab.upload" Button
+    t =    17.02s     Synthesize event
+    t =    17.31s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    17.31s Checking existence of `"tab.browse" Button`
+    t =    17.41s Find the "tab.browse" Button
+    t =    17.51s Find the "tab.browse" Button
+    t =    17.62s Checking existence of `"tab.apps" Button`
+    t =    17.73s Find the "tab.apps" Button
+    t =    17.86s Find the "tab.apps" Button
+    t =    18.00s Checking existence of `"tab.recent" Button`
+    t =    18.13s Find the "tab.recent" Button
+    t =    18.24s Find the "tab.recent" Button
+    t =    18.35s Checking existence of `"tab.stash" Button`
+    t =    18.45s Find the "tab.stash" Button
+    t =    18.58s Find the "tab.stash" Button
+    t =    18.68s Checking existence of `"tab.stats" Button`
+    t =    18.79s Find the "tab.stats" Button
+    t =    18.90s Find the "tab.stats" Button
+    t =    18.99s Checking existence of `"tab.upload" Button`
+    t =    19.09s Find the "tab.upload" Button
+    t =    19.18s Find the "tab.upload" Button
+    t =    19.28s Checking existence of `"tab.settings" Button`
+    t =    19.37s Find the "tab.settings" Button
+    t =    19.46s Find the "tab.settings" Button
+    t =    19.54s Tap "tab.settings" Button
+    t =    19.54s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    19.54s     Find the "tab.settings" Button
+    t =    19.63s     Check for interrupting elements affecting "tab.settings" Button
+    t =    19.70s     Synthesize event
+    t =    20.00s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    20.00s Checking existence of `"tab.browse" Button`
+    t =    20.12s Find the "tab.browse" Button
+    t =    20.22s Find the "tab.browse" Button
+    t =    20.40s Checking existence of `"tab.apps" Button`
+    t =    20.53s Find the "tab.apps" Button
+    t =    20.67s Find the "tab.apps" Button
+    t =    20.79s Checking existence of `"tab.recent" Button`
+    t =    20.92s Find the "tab.recent" Button
+    t =    21.05s Find the "tab.recent" Button
+    t =    21.20s Checking existence of `"tab.stash" Button`
+    t =    21.34s Find the "tab.stash" Button
+    t =    21.52s Find the "tab.stash" Button
+    t =    21.67s Checking existence of `"tab.stats" Button`
+    t =    21.81s Find the "tab.stats" Button
+    t =    21.95s Find the "tab.stats" Button
+    t =    22.15s Checking existence of `"tab.upload" Button`
+    t =    22.33s Find the "tab.upload" Button
+    t =    22.50s Find the "tab.upload" Button
+    t =    22.64s Checking existence of `"tab.settings" Button`
+    t =    22.77s Find the "tab.settings" Button
+    t =    22.98s Find the "tab.settings" Button
+    t =    23.15s Pressing Home button
+    t =    23.61s Terminate com.crispytoast.TestS3Browser:1138
+    t =    24.68s Tear Down
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCustomTabsExposeExactlyOneSelectedAccessibleControl]' passed (24.706 seconds).
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testOfflineRefreshRetainsSavedContentAndShowsError]' started.
+    t =     0.00s Start Test at 2026-10-13 16:01:29.177
+    t =     0.01s Set Up
+    t =     0.02s Open com.crispytoast.TestS3Browser
+    t =     0.02s     Launch com.crispytoast.TestS3Browser
+2026-10-13 16:01:29.195 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-13 16:01:29.195 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.23s         Setting up automation session
+    t =     2.90s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     4.58s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     5.62s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     5.62s         Checking existence of `"audit-cache-first.txt" Any`
+    t =     6.48s Waiting 8.0s for StaticText (First Match) to exist
+    t =     7.52s     Checking `Expect predicate `existsNoRetry == 1` for object StaticText (First Match)`
+    t =     7.52s         Checking existence of `StaticText (First Match)`
+    t =     7.64s Checking existence of `"audit-cache-first.txt" Any`
+    t =     8.88s Pressing Home button
+    t =     9.36s Terminate com.crispytoast.TestS3Browser:22245
+    t =    10.37s Tear Down
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testOfflineRefreshRetainsSavedContentAndShowsError]' passed (10.422 seconds).
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testScrollingUsesTheRealRecentList]' started.
+    t =     0.00s Start Test at 2026-10-13 16:01:39.600
+    t =     0.01s Set Up
+    t =     0.02s Open com.crispytoast.TestS3Browser
+    t =     0.02s     Launch com.crispytoast.TestS3Browser
+2026-10-13 16:01:39.627 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-13 16:01:39.627 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.24s         Setting up automation session
+    t =     2.93s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     4.64s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     5.65s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     5.65s         Checking existence of `"audit-cache-first.txt" Any`
+    t =     5.91s Swipe up Target Application 'com.crispytoast.TestS3Browser'
+    t =     5.91s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     5.93s     Find the Target Application 'com.crispytoast.TestS3Browser'
+    t =     5.96s     Check for interrupting elements affecting "CrispyAWS" Application
+    t =     6.01s     Synthesize event
+    t =     6.44s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.64s Swipe up Target Application 'com.crispytoast.TestS3Browser'
+    t =     8.64s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.64s     Find the Target Application 'com.crispytoast.TestS3Browser'
+    t =     8.69s     Check for interrupting elements affecting "CrispyAWS" Application
+    t =     8.73s     Synthesize event
+    t =     9.16s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    11.33s Swipe down Target Application 'com.crispytoast.TestS3Browser'
+    t =    11.33s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    11.33s     Find the Target Application 'com.crispytoast.TestS3Browser'
+    t =    11.38s     Check for interrupting elements affecting "CrispyAWS" Application
+    t =    11.42s     Synthesize event
+    t =    11.85s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    13.96s Checking existence of `"Recent" Button`
+    t =    14.01s Pressing Home button
+    t =    14.48s Terminate com.crispytoast.TestS3Browser:32641
+    t =    15.52s Tear Down
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testScrollingUsesTheRealRecentList]' passed (15.597 seconds).
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testSelectionCanBeCancelledWithoutOpeningOrDeletingAFile]' started.
+    t =     0.00s Start Test at 2026-10-13 16:01:55.198
+    t =     0.02s Set Up
+    t =     0.02s Open com.crispytoast.TestS3Browser
+    t =     0.02s     Launch com.crispytoast.TestS3Browser
+2026-10-13 16:01:55.217 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-13 16:01:55.217 xcodebuild[68785:182081944] [MT] IDELaunchParametersSnapshot: no debugger version
+    t =     0.23s         Setting up automation session
+    t =     2.90s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     4.64s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     5.68s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     5.68s         Checking existence of `"audit-cache-first.txt" Any`
+    t =     6.21s Tap "Edit" Button
+    t =     6.21s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     6.21s     Find the "Edit" Button
+    t =     6.36s     Check for interrupting elements affecting "Edit" Button
+    t =     6.42s     Synthesize event
+    t =     6.73s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     7.48s Tap "audit-cache-first.txt" Any
+    t =     7.48s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     7.49s     Find the "audit-cache-first.txt" Any
+    t =     8.12s     Check for interrupting elements affecting "audit-cache-first.txt" StaticText
+    t =     8.30s     Synthesize event
+    t =     8.60s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.85s Checking existence of `"Done" Button`
+    t =     8.91s Tap "Browse" Button
+    t =     8.91s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     8.91s     Find the "Browse" Button
+    t =     8.96s     Check for interrupting elements affecting "tab.browse" Button
+    t =     9.02s     Synthesize event
+    t =     9.32s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     9.32s Tap "Recent" Button
+    t =     9.32s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     9.35s     Find the "Recent" Button
+    t =     9.43s     Check for interrupting elements affecting "tab.recent" Button
+    t =     9.49s     Synthesize event
+    t =     9.79s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     9.80s Checking existence of `"Done" Button`
+    t =     9.85s Tap "Done" Button
+    t =     9.85s     Wait for com.crispytoast.TestS3Browser to idle
+    t =     9.86s     Find the "Done" Button
+    t =     9.91s     Check for interrupting elements affecting "Done" Button
+    t =     9.95s     Synthesize event
+    t =    10.25s     Wait for com.crispytoast.TestS3Browser to idle
+    t =    11.02s Checking existence of `"audit-cache-first.txt" StaticText`
+    t =    11.84s Pressing Home button
+    t =    12.32s Terminate com.crispytoast.TestS3Browser:44930
+    t =    13.33s Tear Down
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testSelectionCanBeCancelledWithoutOpeningOrDeletingAFile]' passed (13.384 seconds).
+Test Suite 'LaunchAndCacheUITests' passed at 2026-10-13 16:02:08.581.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 74.053 (74.059) seconds
+Test Suite 'TestS3BrowserUITests.xctest' passed at 2026-10-13 16:02:08.583.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 74.053 (74.060) seconds
+Test Suite 'All tests' passed at 2026-10-13 16:02:08.583.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 74.053 (74.061) seconds
+2026-10-13 16:02:08.896 xcodebuild[68785:182081944] [MT] IDETestOperationsObserverDebug: 93.053 elapsed -- Testing started completed.
+2026-10-13 16:02:08.896 xcodebuild[68785:182081944] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-13 16:02:08.896 xcodebuild[68785:182081944] [MT] IDETestOperationsObserverDebug: 93.053 sec, +93.053 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-160025.xcresult
+
+** TEST EXECUTE SUCCEEDED ** [93.120 sec]
+
+Testing started

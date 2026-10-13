@@ -14,7 +14,7 @@ PASS: F04; executed 2 tests; /Users/mike/Developer/test-projects/TestS3Browser-1
 PASS: F06; executed 2 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.json
 PASS: F08; executed 4 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F08.json
 PASS: F10; executed 2 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.json
-PASS: F11; executed 5 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.json
+PASS: F11; executed 6 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.json
 PASS: F12; executed 7 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.json
 PASS: F17; executed 4 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F17.json
 PASS: F20; executed 3 tests; /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F20.json

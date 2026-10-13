@@ -8,9 +8,9 @@ Build complete! (0.22 sec)
 􀟈  Test failedStagingReleasesOriginalAndLeavesNoExportLease() started.
 􀟈  Test activityCompletionAndCancelledShareBothReleaseAllFiles() started.
 􀟈  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" started.
-􁁛  Test activityCompletionAndCancelledShareBothReleaseAllFiles() passed after 0.005 seconds.
-􁁛  Test failedStagingReleasesOriginalAndLeavesNoExportLease() passed after 0.008 seconds.
-􁁛  Suite N44BatchExportCleanupTests passed after 0.008 seconds.
-􁁛  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" passed after 0.009 seconds.
-􁁛  Suite "N44 export staging lifetime" passed after 0.009 seconds.
-􁁛  Test run with 3 tests in 2 suites passed after 0.009 seconds.
+􁁛  Test activityCompletionAndCancelledShareBothReleaseAllFiles() passed after 0.010 seconds.
+􁁛  Test failedStagingReleasesOriginalAndLeavesNoExportLease() passed after 0.013 seconds.
+􁁛  Suite N44BatchExportCleanupTests passed after 0.013 seconds.
+􁁛  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" passed after 0.013 seconds.
+􁁛  Suite "N44 export staging lifetime" passed after 0.013 seconds.
+􁁛  Test run with 3 tests in 2 suites passed after 0.013 seconds.

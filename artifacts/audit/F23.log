@@ -1,14 +1,16 @@
 Building for debugging...
-Build complete! (0.21 sec)
+[Provisioning 1 / 4]
+[1 / 1]
+Build complete! (0.41 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F23 frame refresh owns rows and continuation" started.
-􀟈  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" started.
 􀟈  Test "Changing frame account or prefix rejects a non-cooperative old page" started.
 􀟈  Test "Failed replacement preserves frames and an explicit refresh can retry immediately" started.
-􁁛  Test "Failed replacement preserves frames and an explicit refresh can retry immediately" passed after 0.001 seconds.
-􁁛  Test "Changing frame account or prefix rejects a non-cooperative old page" passed after 0.001 seconds.
-􁁛  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" passed after 0.002 seconds.
-􁁛  Suite "F23 frame refresh owns rows and continuation" passed after 0.002 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.002 seconds.
+􀟈  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" started.
+􁁛  Test "Failed replacement preserves frames and an explicit refresh can retry immediately" passed after 0.009 seconds.
+􁁛  Test "Changing frame account or prefix rejects a non-cooperative old page" passed after 0.014 seconds.
+􁁛  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" passed after 0.015 seconds.
+􁁛  Suite "F23 frame refresh owns rows and continuation" passed after 0.015 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.015 seconds.

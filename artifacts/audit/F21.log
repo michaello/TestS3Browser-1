@@ -1,10 +1,11 @@
 Building for debugging...
-Build complete! (0.20 sec)
+[1 / 5] AuditCore
+Build complete! (0.24 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F21UniqueUploadKeyTests started.
 􀟈  Test sameSecondUploadsPreserveBothObjects() started.
-􁁛  Test sameSecondUploadsPreserveBothObjects() passed after 0.021 seconds.
-􁁛  Suite F21UniqueUploadKeyTests passed after 0.021 seconds.
-􁁛  Test run with 1 test in 1 suite passed after 0.021 seconds.
+􁁛  Test sameSecondUploadsPreserveBothObjects() passed after 0.018 seconds.
+􁁛  Suite F21UniqueUploadKeyTests passed after 0.018 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.018 seconds.

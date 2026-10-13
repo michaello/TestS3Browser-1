@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="14" failures="0" skipped="0" time="0.024300334">
-    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="multipartTagValuesAreEncodedWithoutChangingBytes()" time="0.000517125" />
-    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="crossOwnerCopyRetainsSourceOwnersGrant()" time="0.000519209" />
-    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="ownerOnlyPermissionUsesCompatibleExplicitCannedACL()" time="0.000437167" />
-    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="unknownOwnersOrUnsafeGrantsFailBeforeMutation()" time="0.000565625" />
-    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="customAndPublicGrantsRemainExplicitForBothCopyModes()" time="0.000405708" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion()" time="0.022213958" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="invalidJSONOrBase64CannotConstructAnApprovedContext()" time="0.019317125" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely()" time="0.019308667" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths()" time="0.019166959" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="encryptionConsentNeverAuthorizesDestinationReplacement()" time="0.021251625" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="emptyOrMissingCopyAcknowledgementRetainsSource()" time="0.022596375" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement()" time="0.022593209" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent()" time="0.022481792" />
-    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable()" time="0.023718167" />
+  <testsuite name="TestResults" errors="0" tests="14" failures="0" skipped="0" time="0.012144875">
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="crossOwnerCopyRetainsSourceOwnersGrant()" time="0.000437708" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="ownerOnlyPermissionUsesCompatibleExplicitCannedACL()" time="0.000385959" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="unknownOwnersOrUnsafeGrantsFailBeforeMutation()" time="0.000356959" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="customAndPublicGrantsRemainExplicitForBothCopyModes()" time="0.000406084" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="multipartTagValuesAreEncodedWithoutChangingBytes()" time="0.000296959" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable()" time="0.011671791" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement()" time="0.011364875" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion()" time="0.011065583" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="emptyOrMissingCopyAcknowledgementRetainsSource()" time="0.011586042" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths()" time="0.001023334" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent()" time="0.011518333" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="encryptionConsentNeverAuthorizesDestinationReplacement()" time="0.010933333" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="invalidJSONOrBase64CannotConstructAnApprovedContext()" time="0.011569916" />
+    <testcase classname="AuditCoreTests.N31EncryptionPolicyTests" name="nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely()" time="0.011505416" />
   </testsuite>
 </testsuites>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.010357417">
-    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancelledQueuedJobNeverStartsAndOtherJobsContinue()" time="0.009687875" />
-    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="failedUploadRetainsFileAndRetryUsesSameDestination()" time="0.010070125" />
-    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancellationOfActiveUploadCleansOwnedFile()" time="0.009752375" />
-    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="successfulUploadReadsOwnedFileAndCleansPayload()" time="0.008984375" />
-    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue()" time="0.0099685" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.010255292">
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancellationOfActiveUploadCleansOwnedFile()" time="0.009828417" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue()" time="0.009951166" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="successfulUploadReadsOwnedFileAndCleansPayload()" time="0.009061" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancelledQueuedJobNeverStartsAndOtherJobsContinue()" time="0.009579416" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="failedUploadRetainsFileAndRetryUsesSameDestination()" time="0.009710542" />
   </testsuite>
 </testsuites>

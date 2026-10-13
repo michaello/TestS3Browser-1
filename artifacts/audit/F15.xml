@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.018359167">
-    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerFileOwnership()" time="0.017116" />
-    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="truncatedFailure()" time="0.017428292" />
-    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="filesAndLeaseBudget()" time="0.01811325" />
-    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerPermitOwnership()" time="0.013008333" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.007148833">
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerFileOwnership()" time="0.005699292" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="truncatedFailure()" time="0.004678959" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="filesAndLeaseBudget()" time="0.006847375" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerPermitOwnership()" time="0.003235584" />
   </testsuite>
 </testsuites>

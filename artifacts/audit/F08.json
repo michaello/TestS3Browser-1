@@ -2,9 +2,9 @@
   "id": "F08",
   "expected_behavior": "Changed UI/service/cache state has an explicit isolation boundary, passes strict concurrency checking in its local test target, and survives concurrent fixture requests without unsynchronized dictionary access.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:45.407910+00:00",
+  "recorded_at": "2026-10-13T08:12:10.852281+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,23 +23,23 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
-      "name": "mixedMetadataConsumersStayBounded()",
-      "time": "0.010460583"
-    },
-    {
-      "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
       "name": "concurrentOriginalRequests()",
-      "time": "0.022747333"
-    },
-    {
-      "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
-      "name": "concurrentLoaderRequests()",
-      "time": "0.016161542"
+      "time": "0.01673925"
     },
     {
       "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
       "name": "staleGeneration()",
-      "time": "0.002552875"
+      "time": "0.002118125"
+    },
+    {
+      "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
+      "name": "concurrentLoaderRequests()",
+      "time": "0.018695417"
+    },
+    {
+      "classname": "AuditCoreTests.F08ConcurrencyBoundaryTests",
+      "name": "mixedMetadataConsumersStayBounded()",
+      "time": "0.002840417"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F08.log",

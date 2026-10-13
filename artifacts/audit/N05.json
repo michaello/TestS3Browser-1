@@ -2,9 +2,9 @@
   "id": "N05",
   "expected_behavior": "An existing destination is never replaced without confirmation; declining causes no copy/delete and unknown conflict-check errors are not interpreted as an absent destination.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:22.487936+00:00",
+  "recorded_at": "2026-10-13T08:11:53.197915+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,68 +23,68 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "keepBoth()",
-      "time": "0.003118125"
+      "name": "cancelledAfterCopy()",
+      "time": "0.012505666"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
       "name": "failedCopy()",
-      "time": "0.015813417"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "unknownHeadFailure(_:)",
-      "time": "0.014442541"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "failedDelete()",
-      "time": "0.015799708"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "cancelledAfterCopy()",
-      "time": "0.016366584"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "scopedApproval()",
-      "time": "0.019737333"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "changedAfterCopy(_:)",
-      "time": "0.015984791"
-    },
-    {
-      "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "exactUnicodeApproval()",
-      "time": "0.015720375"
+      "time": "0.011813625"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
       "name": "encodedSource()",
-      "time": "0.016336875"
+      "time": "0.012845125"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
-      "name": "absentCopy()",
-      "time": "0.012478333"
+      "name": "scopedApproval()",
+      "time": "0.014460625"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "changedAfterCopy(_:)",
+      "time": "0.012269084"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
       "name": "concurrentDestination()",
-      "time": "0.019705458"
+      "time": "0.014582"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "absentCopy()",
+      "time": "0.011451875"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
       "name": "missingSourceETag()",
-      "time": "0.015921709"
+      "time": "0.012337917"
     },
     {
       "classname": "AuditCoreTests.N05ObjectTransferTests",
       "name": "collisionWithoutApproval()",
-      "time": "0.015733791"
+      "time": "0.011889208"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "exactUnicodeApproval()",
+      "time": "0.012117958"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "keepBoth()",
+      "time": "0.011346541"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "failedDelete()",
+      "time": "0.012130625"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "unknownHeadFailure(_:)",
+      "time": "0.0121915"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.log",

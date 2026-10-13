@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.021502166">
-    <testcase classname="AuditCoreTests.F21UniqueUploadKeyTests" name="sameSecondUploadsPreserveBothObjects()" time="0.021230958" />
+  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.018872917">
+    <testcase classname="AuditCoreTests.F21UniqueUploadKeyTests" name="sameSecondUploadsPreserveBothObjects()" time="0.018603667" />
   </testsuite>
 </testsuites>

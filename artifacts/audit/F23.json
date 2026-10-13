@@ -2,9 +2,9 @@
   "id": "F23",
   "expected_behavior": "Refreshing during delayed frame pagination cannot replace page one with page two or publish an obsolete continuation token.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:59.929778+00:00",
+  "recorded_at": "2026-10-13T08:12:22.991907+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.F23FramesRefreshTests",
       "name": "failedRefreshRetainsFrames()",
-      "time": "0.001756708"
-    },
-    {
-      "classname": "AuditCoreTests.F23FramesRefreshTests",
-      "name": "replacesObsoletePagination()",
-      "time": "0.002037458"
+      "time": "0.009840417"
     },
     {
       "classname": "AuditCoreTests.F23FramesRefreshTests",
       "name": "changedQueryRejectsOld()",
-      "time": "0.001916125"
+      "time": "0.014038833"
+    },
+    {
+      "classname": "AuditCoreTests.F23FramesRefreshTests",
+      "name": "replacesObsoletePagination()",
+      "time": "0.01554975"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.log",

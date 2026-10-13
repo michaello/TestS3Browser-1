@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.004390834">
-    <testcase classname="AuditCoreTests.AuditN29" name="pastDateRulesContinueApplyingToNewMatchingObjects()" time="0.003331458" />
-    <testcase classname="AuditCoreTests.AuditN29" name="dateOnlySchedulesRemainVisibleAndCalculable()" time="0.003607292" />
-    <testcase classname="AuditCoreTests.AuditN29" name="daysAndDatesCoexistAcrossRulesAndExpireFirstWins()" time="0.004123083" />
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.008189">
+    <testcase classname="AuditCoreTests.AuditN29" name="dateOnlySchedulesRemainVisibleAndCalculable()" time="0.007298834" />
+    <testcase classname="AuditCoreTests.AuditN29" name="daysAndDatesCoexistAcrossRulesAndExpireFirstWins()" time="0.007905459" />
+    <testcase classname="AuditCoreTests.AuditN29" name="pastDateRulesContinueApplyingToNewMatchingObjects()" time="0.006113" />
   </testsuite>
 </testsuites>

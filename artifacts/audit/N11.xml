@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.564615167">
-    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="nonImagesAreRejectedBeforeUpload()" time="0.009347709" />
-    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="imageBytesAndActualTypeArePreserved(_:)" time="0.564263375" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.209720416">
+    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="nonImagesAreRejectedBeforeUpload()" time="0.010553375" />
+    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="imageBytesAndActualTypeArePreserved(_:)" time="0.209408958" />
   </testsuite>
 </testsuites>

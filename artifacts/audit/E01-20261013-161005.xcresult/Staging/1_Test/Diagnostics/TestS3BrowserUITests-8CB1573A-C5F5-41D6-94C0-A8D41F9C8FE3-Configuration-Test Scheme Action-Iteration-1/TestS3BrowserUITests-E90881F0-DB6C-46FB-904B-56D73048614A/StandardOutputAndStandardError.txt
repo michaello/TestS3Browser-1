@@ -1,0 +1,23 @@
+2026-10-13 16:10:23.540104+0800 TestS3BrowserUITests-Runner[86402:183349755] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'All tests' started at 2026-10-13 16:10:26.810.
+Test Suite 'TestS3BrowserUITests.xctest' started at 2026-10-13 16:10:26.811.
+Test Suite 'LaunchAndCacheUITests' started at 2026-10-13 16:10:26.811.
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCachedContentPrecedesDelayedRefresh]' started.
+    t =     0.02s Start Test at 2026-10-13 16:10:26.828
+    t =     0.04s Set Up
+    t =     0.05s Open com.crispytoast.TestS3Browser
+    t =     0.05s     Launch com.crispytoast.TestS3Browser
+2026-10-13 16:10:27.124549+0800 TestS3BrowserUITests-Runner[86402:183349755] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:10:27.126202+0800 TestS3BrowserUITests-Runner[86402:183349755] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+    t =     0.68s         Setting up automation session
+objc[86402]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x112e44398) and /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x112f38310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     3.51s         Wait for com.crispytoast.TestS3Browser to idle
+    t =     5.24s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     6.32s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     6.32s         Checking existence of `"audit-cache-first.txt" Any`
+    t =     6.65s Waiting 8.0s for "audit-refreshed.txt" Any to exist
+    t =     7.72s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+    t =     7.72s         Checking existence of `"audit-refreshed.txt" Any`
+    t =     7.96s Pressing Home button
+    t =     8.43s Terminate com.crispytoast.TestS3Browser:89591

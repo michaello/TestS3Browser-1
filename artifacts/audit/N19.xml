@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.005934458">
-    <testcase classname="AuditCoreTests.AuditN19" name="partialFailureRetainsOnlyTheFailedIdentitiesForRetry()" time="0.005652209" />
-    <testcase classname="AuditCoreTests.AuditN19" name="secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection()" time="0.000679416" />
-    <testcase classname="AuditCoreTests.AuditN19" name="cancelledOldAccountCannotChangeTheReplacementSelection()" time="0.000712333" />
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.0237335">
+    <testcase classname="AuditCoreTests.AuditN19" name="secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection()" time="0.008273708" />
+    <testcase classname="AuditCoreTests.AuditN19" name="cancelledOldAccountCannotChangeTheReplacementSelection()" time="0.008245916" />
+    <testcase classname="AuditCoreTests.AuditN19" name="partialFailureRetainsOnlyTheFailedIdentitiesForRetry()" time="0.023447333" />
   </testsuite>
 </testsuites>

@@ -2,9 +2,9 @@
   "id": "N13",
   "expected_behavior": "Successful restore refreshes visible content, metadata and version state; failure produces a terminal visible error rather than stale success.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:35.812199+00:00",
+  "recorded_at": "2026-10-13T08:13:01.903179+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,23 +23,23 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N13VersionRestoreTests",
-      "name": "successfulRestore()",
-      "time": "0.01007275"
-    },
-    {
-      "classname": "AuditCoreTests.N13VersionRestoreTests",
       "name": "refreshFailure()",
-      "time": "0.002823792"
+      "time": "0.005316167"
     },
     {
       "classname": "AuditCoreTests.N13VersionRestoreTests",
-      "name": "cancelAfterWrite()",
-      "time": "0.003455667"
+      "name": "successfulRestore()",
+      "time": "0.019743459"
     },
     {
       "classname": "AuditCoreTests.N13VersionRestoreTests",
       "name": "writeFailureAndRetry()",
-      "time": "0.002792625"
+      "time": "0.009283791"
+    },
+    {
+      "classname": "AuditCoreTests.N13VersionRestoreTests",
+      "name": "cancelAfterWrite()",
+      "time": "0.008997625"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N13.log",

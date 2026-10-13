@@ -2,9 +2,9 @@
   "id": "N14",
   "expected_behavior": "Zoom is accumulated across gestures; returning a panned image to 1x recenters/clamps it and leaves no displaced image with disabled corrective panning.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:37.978171+00:00",
+  "recorded_at": "2026-10-13T08:13:04.174168+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,18 +23,18 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N14MediaZoomTests",
+      "name": "resetAndInvalidInputs()",
+      "time": "0.0001285"
+    },
+    {
+      "classname": "AuditCoreTests.N14MediaZoomTests",
       "name": "aspectFittedBounds()",
-      "time": "0.00053275"
+      "time": "6.8709e-05"
     },
     {
       "classname": "AuditCoreTests.N14MediaZoomTests",
       "name": "accumulatedAndRecenters()",
-      "time": "0.000502042"
-    },
-    {
-      "classname": "AuditCoreTests.N14MediaZoomTests",
-      "name": "resetAndInvalidInputs()",
-      "time": "0.000485083"
+      "time": "9.4708e-05"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N14.log",

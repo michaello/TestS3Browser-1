@@ -1,6 +1,6 @@
 import Foundation
 import AWSS3
-import ClientRuntime
+import AWSClientRuntime
 
 /// Bucket-level usage statistics for S3Service.
 extension S3Service {
@@ -19,7 +19,7 @@ extension S3Service {
         try await initializeClient()
         guard let client else { throw S3ServiceError.clientNotInitialized }
         return try await BucketAdministrationRead.perform(.policy, absent: String?.none,
-            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
+            serviceCode: { ($0 as? any AWSClientRuntime.AWSServiceError)?.errorCode }) {
             let input = GetBucketPolicyInput(bucket: bucket)
             let output = try await client.getBucketPolicy(input: input)
             guard let policy = output.policy else { throw BucketAdministrationReadError.invalidResponse(.policy) }
@@ -33,7 +33,7 @@ extension S3Service {
         try await initializeClient()
         guard let client else { throw S3ServiceError.clientNotInitialized }
         return try await BucketAdministrationRead.perform(.replication, absent: [],
-            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
+            serviceCode: { ($0 as? any AWSClientRuntime.AWSServiceError)?.errorCode }) {
             let input = GetBucketReplicationInput(bucket: bucket)
             let output = try await client.getBucketReplication(input: input)
             guard let rules = output.replicationConfiguration?.rules else { throw BucketAdministrationReadError.invalidResponse(.replication) }
@@ -57,7 +57,7 @@ extension S3Service {
         try await initializeClient()
         guard let client else { throw S3ServiceError.clientNotInitialized }
         return try await BucketAdministrationRead.perform(.cors, absent: [],
-            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
+            serviceCode: { ($0 as? any AWSClientRuntime.AWSServiceError)?.errorCode }) {
             let input = GetBucketCorsInput(bucket: bucket)
             let output = try await client.getBucketCors(input: input)
             guard let rules = output.corsRules else { throw BucketAdministrationReadError.invalidResponse(.cors) }
@@ -79,7 +79,7 @@ extension S3Service {
         try await initializeClient()
         guard let client else { throw S3ServiceError.clientNotInitialized }
         return try await BucketAdministrationRead.perform(.lifecycle, absent: [],
-            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
+            serviceCode: { ($0 as? any AWSClientRuntime.AWSServiceError)?.errorCode }) {
             let input = GetBucketLifecycleConfigurationInput(bucket: bucket)
             let output = try await client.getBucketLifecycleConfiguration(input: input)
             guard output.rules != nil else { throw BucketAdministrationReadError.invalidResponse(.lifecycle) }

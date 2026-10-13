@@ -19,14 +19,14 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/D464EC22-534F-4E81-B1F4-6788499589AB/data",
-          "dataPathSize": 379727872,
+          "dataPathSize": 862355456,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/D464EC22-534F-4E81-B1F4-6788499589AB",
           "udid": "D464EC22-534F-4E81-B1F4-6788499589AB",
-          "lastUsedAt": "2026-10-13T07:09:38Z",
+          "lastUsedAt": "2026-10-13T07:44:34Z",
           "isAvailable": true,
-          "logPathSize": 192512,
+          "logPathSize": 397312,
           "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-12-46mm",
-          "state": "Shutdown",
+          "state": "Booted",
           "name": "WorkoutProbe-watchOS-27.0"
         },
         {
@@ -382,7 +382,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/1C65CF10-0026-4068-994E-EB3F31B03247/data",
-          "dataPathSize": 5081255936,
+          "dataPathSize": 5088915456,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/1C65CF10-0026-4068-994E-EB3F31B03247",
           "udid": "1C65CF10-0026-4068-994E-EB3F31B03247",
           "lastUsedAt": "2026-10-13T04:37:14Z",
@@ -430,7 +430,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA/data",
-          "dataPathSize": 3604439040,
+          "dataPathSize": 3607658496,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA",
           "udid": "90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA",
           "lastUsedAt": "2026-10-12T23:31:36Z",
@@ -454,7 +454,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/AF891273-7437-4271-87A4-5D7E82B4C360/data",
-          "dataPathSize": 2330648576,
+          "dataPathSize": 2588676096,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/AF891273-7437-4271-87A4-5D7E82B4C360",
           "udid": "AF891273-7437-4271-87A4-5D7E82B4C360",
           "lastUsedAt": "2026-10-13T05:48:52Z",
@@ -466,7 +466,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/C4AC21A6-ABA4-492B-91DA-C44D39331FBF/data",
-          "dataPathSize": 9957732352,
+          "dataPathSize": 9961480192,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/C4AC21A6-ABA4-492B-91DA-C44D39331FBF",
           "udid": "C4AC21A6-ABA4-492B-91DA-C44D39331FBF",
           "lastUsedAt": "2026-10-13T04:21:19Z",
@@ -634,7 +634,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/D440FDEB-88E7-4927-9A44-3E25F7544188/data",
-          "dataPathSize": 2336772096,
+          "dataPathSize": 2339979264,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/D440FDEB-88E7-4927-9A44-3E25F7544188",
           "udid": "D440FDEB-88E7-4927-9A44-3E25F7544188",
           "lastUsedAt": "2026-10-12T09:56:09Z",
@@ -658,7 +658,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/57882042-314E-4686-BBFD-4A0C11887731/data",
-          "dataPathSize": 9856659456,
+          "dataPathSize": 9860620288,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/57882042-314E-4686-BBFD-4A0C11887731",
           "udid": "57882042-314E-4686-BBFD-4A0C11887731",
           "lastUsedAt": "2026-10-13T04:42:27Z",
@@ -694,7 +694,7 @@
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/914521E1-EB2D-42C1-BE06-FED0D3175722/data",
-          "dataPathSize": 12603310080,
+          "dataPathSize": 12603072512,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/914521E1-EB2D-42C1-BE06-FED0D3175722",
           "udid": "914521E1-EB2D-42C1-BE06-FED0D3175722",
           "lastUsedAt": "2026-10-13T03:44:29Z",
@@ -850,24 +850,24 @@
       "com.apple.CoreSimulator.SimRuntime.iOS-27-0": [
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data",
-          "dataPathSize": 2463272960,
+          "dataPathSize": 3282460672,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/5B87AEFD-8266-4451-8795-8728177C5241",
           "udid": "5B87AEFD-8266-4451-8795-8728177C5241",
-          "lastUsedAt": "2026-10-11T10:28:13Z",
+          "lastUsedAt": "2026-10-13T07:48:56Z",
           "isAvailable": true,
-          "logPathSize": 499712,
+          "logPathSize": 356352,
           "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro",
-          "state": "Shutdown",
+          "state": "Booted",
           "name": "iPhone 18 Pro"
         },
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/71959F17-A928-4F0D-9F11-210E3E940C9B/data",
-          "dataPathSize": 2550648832,
+          "dataPathSize": 2795552768,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/71959F17-A928-4F0D-9F11-210E3E940C9B",
           "udid": "71959F17-A928-4F0D-9F11-210E3E940C9B",
           "lastUsedAt": "2026-10-13T07:09:38Z",
           "isAvailable": true,
-          "logPathSize": 610304,
+          "logPathSize": 741376,
           "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro",
           "state": "Booted",
           "name": "WorkoutProbe-iOS-27.0"
@@ -959,7 +959,7 @@
           "dataPathSize": 3084767232,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/0BB7EC4C-89EE-4EBA-88FC-5FB57355D496",
           "udid": "0BB7EC4C-89EE-4EBA-88FC-5FB57355D496",
-          "lastUsedAt": "2026-10-13T07:34:38Z",
+          "lastUsedAt": "2026-10-13T08:00:26Z",
           "isAvailable": true,
           "logPathSize": 241664,
           "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
@@ -1147,7 +1147,7 @@
       "com.apple.CoreSimulator.SimRuntime.watchOS-26-5": [
         {
           "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/159932EC-EAF9-4E54-B56C-017163B8FCFF/data",
-          "dataPathSize": 1715130368,
+          "dataPathSize": 1719025664,
           "logPath": "/Users/mike/Library/Logs/CoreSimulator/159932EC-EAF9-4E54-B56C-017163B8FCFF",
           "udid": "159932EC-EAF9-4E54-B56C-017163B8FCFF",
           "lastUsedAt": "2026-10-13T04:37:14Z",

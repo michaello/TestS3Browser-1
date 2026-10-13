@@ -2,9 +2,9 @@
   "id": "N30",
   "expected_behavior": "CopySource encodes exact bucket/key bytes once, and versionId is query-encoded separately; literal percent-encoded-looking names and repeated slashes select the original object.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:00.382838+00:00",
+  "recorded_at": "2026-10-13T08:13:37.107207+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.N30CopySourceEncodingTests",
       "name": "keyAndVersionAreEncodedExactlyOnce()",
-      "time": "0.000237209"
+      "time": "0.00058375"
     },
     {
       "classname": "AuditCoreTests.N30CopySourceEncodingTests",
       "name": "unicodeNormalizationDoesNotChangeCopyHeader()",
-      "time": "0.000169667"
+      "time": "0.000628875"
     },
     {
       "classname": "AuditCoreTests.N30CopySourceEncodingTests",
       "name": "literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects()",
-      "time": "0.000185541"
+      "time": "0.000703125"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.log",

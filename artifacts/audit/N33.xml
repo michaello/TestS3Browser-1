@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.008070958">
-    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="laterFailureAndChangedGenerationNeverReturnPartialSuccess()" time="0.007728417" />
-    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="cancellationStopsBeforeFetchingAnotherPage()" time="0.007750166" />
-    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()" time="0.007383583" />
-    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="bothMarkersReachOlderRestorePointsBeyondOneThousandVersions()" time="0.002498125" />
-    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="missingOrRepeatedMarkersFailRatherThanHidingHistory()" time="0.007733709" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.01213975">
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()" time="0.005183542" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="cancellationStopsBeforeFetchingAnotherPage()" time="0.011793791" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="bothMarkersReachOlderRestorePointsBeyondOneThousandVersions()" time="0.00515975" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="missingOrRepeatedMarkersFailRatherThanHidingHistory()" time="0.011572417" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="laterFailureAndChangedGenerationNeverReturnPartialSuccess()" time="0.011812583" />
   </testsuite>
 </testsuites>

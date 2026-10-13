@@ -1,0 +1,1037 @@
+Xcode version: 27.0 (27A5252f)
+16:10:22.159 xcodebuild[70415:183312397] Beginning test session TestS3BrowserUITests-93235C8A-813F-4EB7-85E4-128F5ABFC7F5 at 2026-10-13 16:10:22.159 on target <DVTiPhoneSimulator: 0x799a7f4200> {
+		SimDevice: iPhone 18 Pro (5B87AEFD-8266-4451-8795-8728177C5241, iOS 27.0, Booted)
+} (27.0 (24A5423a))
+16:10:22.159 xcodebuild[70415:183312397] 	/Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild
+-project
+/Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj
+-scheme
+TestS3Browser
+-derivedDataPath
+/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit
+-scmProvider
+system
+-configuration
+Release
+-destination
+platform=iOS Simulator,id=5B87AEFD-8266-4451-8795-8728177C5241
+-disableAutomaticPackageResolution
+-skipPackageUpdates
+CODE_SIGNING_ALLOWED=NO
+-parallel-testing-enabled
+NO
+-resultBundlePath
+/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161005.xcresult
+test-without-building
+16:10:22.159 xcodebuild[70415:183312397] Test standard output and standard error is at /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161005.xcresult/Staging/1_Test/Diagnostics/TestS3BrowserUITests-8CB1573A-C5F5-41D6-94C0-A8D41F9C8FE3-Configuration-Test Scheme Action-Iteration-1/TestS3BrowserUITests-E90881F0-DB6C-46FB-904B-56D73048614A/StandardOutputAndStandardError.txt
+16:10:22.160 xcodebuild[70415:183313784] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a5f3600 on simulator was issued, 2 claims exist.
+16:10:22.160 xcodebuild[70415:183312397] Setting up test runner session
+16:10:22.160 xcodebuild[70415:183312397] Registering/updating daemon-based crash report observer for process names (
+    debugserver,
+    FrontBoard,
+    runningboardd,
+    SpringBoard,
+    backboardd,
+    DTServiceHub,
+    DumpShareExtension,
+    TestS3BrowserWidget,
+    TestS3Browser,
+    xctest,
+    assertiond,
+    testmanagerd,
+    "TestS3BrowserUITests-Runner"
+)
+16:10:22.161 xcodebuild[70415:183312397] Finished requesting crash reports. Continuing with testing.
+16:10:22.161 xcodebuild[70415:183313784] Sim iPhone 18 Pro: Unregistering for sim device notification with token 12
+16:10:22.161 xcodebuild[70415:183313784] Calling -[SimDevice getenv:error:] for TESTMANAGERD_SIM_SOCK
+16:10:22.163 xcodebuild[70415:183313784] Sim iPhone 18 Pro has testmanagerd socket at /private/var/tmp/com.apple.launchd.nePClGKYw2/com.apple.testmanagerd.unix-domain.socket
+16:10:22.163 xcodebuild[70415:183313784] Validating test connection socket path (/private/var/tmp/com.apple.launchd.nePClGKYw2/com.apple.testmanagerd.unix-domain.socket)
+16:10:22.163 xcodebuild[70415:183313784] Constructing transport for test connection socket
+16:10:22.163 xcodebuild[70415:183313784] Connected socket 29 to testmanagerd for Sim iPhone 18 Pro
+16:10:22.163 xcodebuild[70415:183313801] Received connection for test runner session
+16:10:22.163 xcodebuild[70415:183313801] Listening for proxy connection request from the test bundle
+16:10:22.163 xcodebuild[70415:183313801] Initiating session with identifier: 93235C8A-813F-4EB7-85E4-128F5ABFC7F5
+16:10:22.165 xcodebuild[70415:183333307] Got reply to session initiation request with identifier 93235C8A-813F-4EB7-85E4-128F5ABFC7F5 (error: (null))
+16:10:22.167 xcodebuild[70415:183312397] Launch session started.
+16:10:22.168 xcodebuild[70415:183312397] Test runner session acquired connection.
+16:10:22.170 xcodebuild[70415:183313778] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a5f3600 on simulator was issued, 2 claims exist.
+16:10:22.177 xcodebuild[70415:183313778] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a5f3600 on simulator was issued, 2 claims exist.
+16:10:22.177 xcodebuild[70415:183313778] 5B87AEFD-8266-4451-8795-8728177C5241: Registered for sim device notification, got token 15
+16:10:22.177 xcodebuild[70415:183333307] 5B87AEFD-8266-4451-8795-8728177C5241: Unregistering for sim device notification with token 15
+16:10:22.177 xcodebuild[70415:183313778] 5B87AEFD-8266-4451-8795-8728177C5241: Installing app at path: /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3BrowserUITests-Runner.app and options: {
+    SkipWatchAppInstall = 1;
+}
+16:10:22.732 xcodebuild[70415:183313778] 5B87AEFD-8266-4451-8795-8728177C5241: Installed app at path: /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3BrowserUITests-Runner.app and options: {
+    SkipWatchAppInstall = 1;
+}
+16:10:22.732 xcodebuild[70415:183313778] 5B87AEFD-8266-4451-8795-8728177C5241: Launching app with identifier: com.crispytoast.TestS3Browser.TestS3BrowserUITests.xctrunner and options: {
+    "activate_suspended" = 1;
+    arguments =     (
+    );
+    environment =     {
+        "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+        "CA_ASSERT_MAIN_THREAD_TRANSACTIONS" = 0;
+        "CA_DEBUG_TRANSACTIONS" = 0;
+        "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks:/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks:/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks";
+        "DYLD_INSERT_LIBRARIES" = "/usr/lib/libRPAC.dylib:/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib:/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib";
+        "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib";
+        "IDE_CHOSEN_LOGGING_METHOD" = 1;
+        "LLVM_PROFILE_FILE" = "/dev/null";
+        NSUnbufferedIO = YES;
+        "OS_ACTIVITY_DT_MODE" = YES;
+        "PERFC_ENABLE_EXTENDED_DIAGNOSTIC_FORMAT" = 1;
+        "PERFC_ENABLE_PROFILE_MODE" = 1;
+        "PERFC_RESET_INSERT_LIBRARIES" = 1;
+        "PERFC_SUPPRESS_SYSTEM_REPORTS" = 1;
+        "RUN_DESTINATION_DEVICE_NAME" = "iPhone 18 Pro";
+        "RUN_DESTINATION_DEVICE_PLATFORM_IDENTIFIER" = "com.apple.platform.iphonesimulator";
+        "RUN_DESTINATION_DEVICE_UDID" = "5B87AEFD-8266-4451-8795-8728177C5241";
+        "S3BROWSER_AUDIT_FIXTURE" = 1;
+        "SQLITE_ENABLE_THREAD_ASSERTIONS" = 1;
+        "SWIFT_BACKTRACE" = "enable=no";
+        TERM = dumb;
+        "XCODE_SCHEME_NAME" = TestS3Browser;
+        XCTestBundleInjectPath = "/usr/lib/libRPAC.dylib:/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib:/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib";
+        XCTestBundlePath = "PlugIns/TestS3BrowserUITests.xctest";
+        XCTestConfigurationFilePath = "";
+        XCTestSessionIdentifier = "93235C8A-813F-4EB7-85E4-128F5ABFC7F5";
+        "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_LLVM_PROFILE_FILE" = "/dev/null";
+    };
+    stderr = "/dev/ttys117";
+    stdout = "/dev/ttys117";
+    "terminate_running_process" = 1;
+    "wait_for_debugger" = 1;
+}
+16:10:22.771 xcodebuild[70415:183313784] 5B87AEFD-8266-4451-8795-8728177C5241: Launched app with identifier: com.crispytoast.TestS3Browser.TestS3BrowserUITests.xctrunner (pid = 86402)
+16:10:22.771 xcodebuild[70415:183313784] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> tracking pid 86402
+16:10:22.771 xcodebuild[70415:183313784] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> checking to see if pid 86402 is valid: kill(pid, 0) = 0 (YES, it's still running)
+16:10:22.774 xcodebuild[70415:183312397] Test process runnable PID is 86402.
+16:10:22.774 xcodebuild[70415:183333307] XCTHTestOperationStateMachine: Transitioning from state Initial to AcquiredPID
+2026-10-13 16:10:23.540104+0800 TestS3BrowserUITests-Runner[86402:183349755] [Default] Running tests...
+16:10:23.565 xcodebuild[70415:183313784] Handling proxy channel request from test runner
+16:10:23.564 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting test configuration' with timeout 600.00
+16:10:23.564 TestS3BrowserUITests-Runner[86402:183349755] Notifying test runner ready
+16:10:23.565 xcodebuild[70415:183313784] Test runner is ready with capabilities: <XCTCapabilities: 0x7998ea4a80>: {
+    "delayed attachment transfer" = 1;
+    "fetch all test identifiers" = 2;
+    "supports crashlog generation progress" = 4;
+    "ubiquitous test identifiers" = 1;
+}
+16:10:23.567 xcodebuild[70415:183312397] Test runner session successfully initiated.
+16:10:23.567 xcodebuild[70415:183312397] Authorizing test process ID 86402
+16:10:23.565 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x107462cd0> entering wait loop for 600.00s with expectations: `requesting test configuration`
+16:10:23.567 xcodebuild[70415:183313804] XCTHTestOperationStateMachine: Transitioning from state AcquiredPID to ReportedReady
+16:10:23.568 xcodebuild[70415:183312397] Got authorization response from test daemon: Success
+16:10:23.568 xcodebuild[70415:183312397] Registering/updating daemon-based crash report observer for process names (
+    debugserver,
+    FrontBoard,
+    runningboardd,
+    SpringBoard,
+    backboardd,
+    DTServiceHub,
+    DumpShareExtension,
+    TestS3BrowserWidget,
+    TestS3Browser,
+    xctest,
+    assertiond,
+    testmanagerd,
+    "TestS3BrowserUITests-Runner"
+)
+16:10:23.570 xcodebuild[70415:183312397] Telling test runner to start executing tests.
+16:10:23.570 TestS3BrowserUITests-Runner[86402:183352000] Received test runner ready reply. Waiting for request to start running tests.
+16:10:23.571 TestS3BrowserUITests-Runner[86402:183351960] _IDE_startExecutingTestPlanWithProtocolVersion:36
+16:10:23.588 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x107462cd0>
+16:10:23.588 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x1076c2080> completed after 0.023s
+16:10:23.588 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting test configuration
+16:10:23.588 TestS3BrowserUITests-Runner[86402:183349755] Loading test bundle at: file:///Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/4D8AEA79-4F89-4F21-8F3F-9B641190EA41/TestS3BrowserUITests-Runner.app/PlugIns/TestS3BrowserUITests.xctest/
+16:10:23.601 TestS3BrowserUITests-Runner[86402:183349755] Finished loading test bundle
+16:10:23.601 TestS3BrowserUITests-Runner[86402:183349755] Interop: installing the default fallback event handler
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Interop: fallback event handler installation outcome: true
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Registering in-process symbolication service with image names: TestS3BrowserWidget, TestS3BrowserUITests-Runner, DumpShareExtension, TestS3BrowserUITests, TestS3Browser, TestS3BrowserIntegrationTests
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Running tests with active test configuration: <XCTestConfiguration: 0x1076b8480>
+	                  testBundleURL:file:///Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/4D8AEA79-4F89-4F21-8F3F-9B641190EA41/TestS3BrowserUITests-Runner.app/PlugIns/TestS3BrowserUITests.xctest/
+	         testBundleRelativePath:PlugIns/TestS3BrowserUITests.xctest
+	              productModuleName:TestS3BrowserUITests
+	                  testSelection:<XCTTestSelection: 0x1074618c0>
+	            identifiersToRun:(null)
+	            identifiersToSkip:
+	            tagsToRun:(null)
+	            tagsToSkip:<XCTTagSelection: 0x1075d7620>
+	            mode:and
+	            tags:{(
+)}
+	  includeXCTests:NO
+
+
+	             reportResultsToIDE:YES
+	     resultChannelConfiguration:(null)
+	                   baseTestsURL:test://com.apple.xcode/TestS3Browser/TestS3BrowserUITests
+	               testsDrivenByIDE:NO
+	inProcessParallelizationEnabled:NO
+	              sessionIdentifier:93235C8A-813F-4EB7-85E4-128F5ABFC7F5
+	      disablePerformanceMetrics:NO
+	treatMissingBaselinesAsFailures:NO
+	                baselineFileURL:(null)
+	       baselineFileRelativePath:(null)
+	          targetApplicationPath:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app
+	      targetApplicationBundleID:com.crispytoast.TestS3Browser
+	 testApplicationDependencies:
+{
+    "com.crispytoast.TestS3Browser" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app";
+    "com.crispytoast.TestS3Browser.TestS3BrowserUITests.xctrunner" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3BrowserUITests-Runner.app";
+}
+	 bundleIDsForCrashReportEmphasis:
+{(
+    "com.crispytoast.TestS3Browser",
+    "com.crispytoast.TestS3Browser.Widget",
+    "com.crispytoast.TestS3Browser.TestS3BrowserIntegrationTests",
+    "com.crispytoast.TestS3Browser.TestS3BrowserUITests",
+    "com.crispytoast.TestS3Browser.DumpShareExtension"
+)}
+	 testApplicationUserOverrides:(null)
+	     targetApplicationArguments:
+	   targetApplicationEnvironment:
+{
+    "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+    "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks";
+    "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "XCODE_SCHEME_NAME" = TestS3Browser;
+    "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+}
+	                  reportActivities:YES
+	          testsMustRunOnMainThread:YES
+	            initializeForUITesting:YES
+	            traceCollectionEnabled:(null)
+	 enablePerformanceTestsDiagnostics:(null)
+	 aggregateStatisticsBeforeCrash:
+{
+    XCSuiteRecordsKey =     {
+    };
+}
+	        automationFrameworkPath:/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework
+	                     emitOSLogs:NO
+	       systemAttachmentLifetime:deleteOnSuccess
+	         userAttachmentLifetime:deleteOnSuccess
+	   preferredScreenCaptureFormat:screenRecording
+	   gatherLocalizableStringsData:NO
+	          testExecutionOrdering:alphabetical
+	    randomExecutionOrderingSeed:(null)
+	               repetitionPolicy:<XCTRepetitionPolicy: 0x1075d73a0>
+	            mode:None
+	            maximumIterations:1
+	            repeatInNewRunnerProcess:NO
+
+	       runtimeDiagnosticsPolicy:<XCTRuntimeDiagnosticsPolicy: 0x107463e70>
+	            otherRuntimeIssuesDetectionPolicy:<XCTRuntimeIssueDetectionPolicy: 0x1075d7700>
+	            detectionEnabled:YES
+	            severity:warning
+
+	            threadPerformanceCheckerRuntimeIssueDetectionPolicy:<XCTRuntimeIssueDetectionPolicy: 0x1075d7700>
+	            detectionEnabled:YES
+	            severity:warning
+
+	            mainThreadCheckerDetectionPolicy:<XCTRuntimeIssueDetectionPolicy: 0x1075d7700>
+	            detectionEnabled:YES
+	            severity:warning
+
+	            checkedAllocations:disabled
+
+	 isMemoryTaggingAddressSanitizerEnabled:NO
+	    deferSymbolicationToHarness:NO
+	applicationCrashDetectionPolicy:<XCTApplicationCrashDetectionPolicy: 0x1075d7120>
+	            severity:Failure
+
+	          hangDetectionPolicy:<XCTHangDetectionPolicy: detectionEnabled=NO, severity=off, durationThreshold=1.000s>
+	            testTimeoutsEnabled:NO
+	              leaksCheckingMode:off
+	                testInteropMode:complete
+	 defaultTestExecutionTimeAllowance:600
+	 maximumTestExecutionTimeAllowance:0
+	                IDECapabilities:<XCTCapabilities: 0x1076a1290>: {
+    "XCTIssue capability" = 1;
+    "delayed attachment transfer" = 1;
+    "expected failure test capability" = 1;
+    "in-process test parallelization capability" = 1;
+    "lazy test case snapshots" = 1;
+    "monitoring crash reports for additional processes" = 1;
+    "request diagnostics for specific devices" = 1;
+    "request spindump capability" = 1;
+    "runner plan" = 1;
+    "skipped suite capability" = 1;
+    "skipped test capability" = 1;
+    "sync crash reporter capability" = 1;
+    "test case run configurations" = 1;
+    "test iterations" = 3;
+    "test timeout capability" = 1;
+    traits = 1;
+    "ubiquitous test identifiers" = 1;
+    "unified issue recorded" = 1;
+}
+	        symbolicationImageNames:TestS3BrowserIntegrationTests, TestS3BrowserUITests-Runner, DumpShareExtension, TestS3BrowserUITests, TestS3Browser, TestS3BrowserWidget
+	         applicationBundleInfos:
+{
+    "com.crispytoast.TestS3Browser" = "<XCTApplicationBundleInfo localizations:[en] infoDictionary:[UISupportedInterfaceOrientations: (\n    UIInterfaceOrientationPortrait,\n    UIInterfaceOrientationLandscapeLeft,\n    UIInterfaceOrientationLandscapeRight\n)]>";
+    "com.crispytoast.TestS3Browser.TestS3BrowserUITests.xctrunner" = "<XCTApplicationBundleInfo localizations:[en] infoDictionary:[UISupportedInterfaceOrientations: (\n    UIInterfaceOrientationPortrait,\n    UIInterfaceOrientationLandscapeLeft,\n    UIInterfaceOrientationLandscapeRight\n), UISupportedInterfaceOrientations~ipad: (\n    UIInterfaceOrientationPortrait,\n    UIInterfaceOrientationPortraitUpsideDown,\n    UIInterfaceOrientationLandscapeLeft,\n    UIInterfaceOrientationLandscapeRight\n)]>";
+}
+
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a438f00> entering wait loop for 600.00s with expectations: `requesting ready for testing`
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a438f00>
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x107469e00> completed after 0.000s
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting ready for testing
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43bfc0> entering wait loop for 600.00s with expectations: `IDE proxy`
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43bfc0>
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x107469f40> completed after 0.000s
+16:10:23.602 TestS3BrowserUITests-Runner[86402:183349755] cleaning up IDE proxy
+16:10:23.603 TestS3BrowserUITests-Runner[86402:183349755] Initializing for UI testing.
+16:10:23.604 TestS3BrowserUITests-Runner[86402:183349755] Linked XCTAutomationSupport.framework from /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework/XCTAutomationSupport, built with Xcode 2700(27A252), modified on Thursday, August 20, 2026 at 13:38:02 Hong Kong Standard Time, bundle version: 25227
+16:10:23.604 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a439b30> entering wait loop for 60.00s with expectations: `initiating daemon session`
+16:10:23.604 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a439b30>
+16:10:23.604 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10746a140> completed after 0.000s
+16:10:23.604 TestS3BrowserUITests-Runner[86402:183349755] cleaning up initiating daemon session
+16:10:23.605 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'enabling automation mode' with timeout 60.00
+16:10:23.605 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43b1b0> entering wait loop for 60.00s with expectations: `enabling automation mode`
+16:10:23.615 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43b1b0>
+16:10:23.615 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10746a300> completed after 0.010s
+16:10:23.615 TestS3BrowserUITests-Runner[86402:183349755] cleaning up enabling automation mode
+16:10:23.615 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'loading Accessibility' with timeout 70.00
+16:10:23.615 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10768d230> entering wait loop for 70.00s with expectations: `loading Accessibility`
+    t =      nans Interface orientation changed to Portrait
+16:10:26.573 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10768d230>
+16:10:26.573 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10746aa40> completed after 2.958s
+16:10:26.574 TestS3BrowserUITests-Runner[86402:183349755] cleaning up loading Accessibility
+16:10:26.574 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'enabling localized string gathering' with timeout 70.00
+16:10:26.574 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a495fe0> entering wait loop for 70.00s with expectations: `enabling localized string gathering`
+16:10:26.592 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a495fe0>
+16:10:26.592 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10746af80> completed after 0.019s
+16:10:26.592 TestS3BrowserUITests-Runner[86402:183349755] cleaning up enabling localized string gathering
+16:10:26.592 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'setting AX timeout to 60.00s' with timeout 65.00
+16:10:26.592 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4964c0> entering wait loop for 65.00s with expectations: `setting AX timeout to 60.00s`
+16:10:26.594 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4964c0>
+16:10:26.594 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10746b980> completed after 0.002s
+16:10:26.594 TestS3BrowserUITests-Runner[86402:183349755] cleaning up setting AX timeout to 60.00s
+16:10:26.594 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'registering for kAXUserTestingNotification' with timeout 65.00
+16:10:26.595 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a496040> entering wait loop for 65.00s with expectations: `registering for kAXUserTestingNotification`
+16:10:26.617 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a496040>
+16:10:26.617 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7c80> completed after 0.022s
+16:10:26.617 TestS3BrowserUITests-Runner[86402:183349755] cleaning up registering for kAXUserTestingNotification
+16:10:26.617 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'registering for kAXAlertNotification' with timeout 65.00
+16:10:26.617 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a494c60> entering wait loop for 65.00s with expectations: `registering for kAXAlertNotification`
+16:10:26.619 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a494c60>
+16:10:26.619 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a73c0> completed after 0.002s
+16:10:26.620 TestS3BrowserUITests-Runner[86402:183349755] cleaning up registering for kAXAlertNotification
+16:10:26.620 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'registering for kAXPidStatusChangedNotification' with timeout 65.00
+16:10:26.620 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4954d0> entering wait loop for 65.00s with expectations: `registering for kAXPidStatusChangedNotification`
+16:10:26.629 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4954d0>
+16:10:26.629 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a68c0> completed after 0.009s
+16:10:26.629 TestS3BrowserUITests-Runner[86402:183349755] cleaning up registering for kAXPidStatusChangedNotification
+16:10:26.629 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'registering for AXNotification 3031' with timeout 65.00
+16:10:26.629 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a495a70> entering wait loop for 65.00s with expectations: `registering for AXNotification 3031`
+16:10:26.630 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a495a70>
+16:10:26.630 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6f40> completed after 0.001s
+16:10:26.631 TestS3BrowserUITests-Runner[86402:183349755] cleaning up registering for AXNotification 3031
+16:10:26.631 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting background assertion for test process' with timeout 30.00
+16:10:26.631 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4963a0> entering wait loop for 30.00s with expectations: `requesting background assertion for test process`
+16:10:26.632 TestS3BrowserUITests-Runner[86402:183351971] Got reply for background assertion for 86402, acquired: YES.
+16:10:26.633 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4963a0>
+16:10:26.633 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6e00> completed after 0.002s
+16:10:26.633 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting background assertion for test process
+16:10:26.633 TestS3BrowserUITests-Runner[86402:183349755] Test runner is already executing in the background.
+16:10:26.633 TestS3BrowserUITests-Runner[86402:183349755] Done initializing for UI testing.
+16:10:26.634 xcodebuild[70415:183312397] Test runner began initialization for UI testing.
+16:10:26.650 TestS3BrowserUITests-Runner[86402:183349755] Loading test suite...
+16:10:26.735 TestS3BrowserUITests-Runner[86402:183349755] Finished loading test suite, took 0.086s
+16:10:26.738 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10768d5f0> entering wait loop for 596.80s with expectations: `preparing execution worker`
+16:10:26.795 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10768d5f0>
+16:10:26.795 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a55c0> completed after 0.058s
+16:10:26.795 TestS3BrowserUITests-Runner[86402:183349755] cleaning up preparing execution worker
+16:10:26.796 xcodebuild[70415:183313801] XCTHTestOperationStateMachine: Transitioning from state ReportedReady to ExecutingTests
+16:10:26.796 xcodebuild[70415:183312397] Test runner started executing tests.
+16:10:26.796 TestS3BrowserUITests-Runner[86402:183349755] Entering test execution event loop
+16:10:26.809 TestS3BrowserUITests-Runner[86402:183349755] Setting a new interop record handler: Optional(XCTestCore.XCTestInteropRecordHandler())
+16:10:26.810 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRunnerIDESession(_XCTestObservationInternal) testBundleWillStart:]
+16:10:26.810 TestS3BrowserUITests-Runner[86402:183349755] Running suite...
+16:10:26.810 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRunnerIDESession(_XCTestObservationInternal) testSuiteWillStart:]
+16:10:26.811 xcodebuild[70415:183312397] _XCT_testSuiteWithIdentifier:<XCTTestIdentifier container ["All tests"]> didStartAt:2026-10-13 08:10:26 +0000 traits:(null)
+16:10:26.811 xcodebuild[70415:183312397] Nothing to delete
+Test Suite 'All tests' started at 2026-10-13 16:10:26.810.
+Test Suite 'TestS3BrowserUITests.xctest' started at 2026-10-13 16:10:26.811.
+16:10:26.811 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRunnerIDESession(_XCTestObservationInternal) testSuiteWillStart:]
+16:10:26.812 xcodebuild[70415:183312397] _XCT_testSuiteWithIdentifier:<XCTTestIdentifier container []> didStartAt:2026-10-13 08:10:26 +0000 traits:(null)
+16:10:26.812 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.811 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRunnerIDESession(_XCTestObservationInternal) testSuiteWillStart:]
+16:10:26.812 xcodebuild[70415:183312397] _XCT_testSuiteWithIdentifier:<XCTTestIdentifier container, class ["LaunchAndCacheUITests"]> didStartAt:2026-10-13 08:10:26 +0000 traits:(null)
+16:10:26.812 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.811 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRuntimeIssueDetectionManager runtimeIssueDetectionEnabled] runtimeIssueDetectionEnabled based on XCTDisableRuntimeIssues and runtime diagnostics policies: YES
+16:10:26.813 xcodebuild[70415:183312397] Nothing to delete
+Test Suite 'LaunchAndCacheUITests' started at 2026-10-13 16:10:26.811.
+16:10:26.813 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.813 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.813 xcodebuild[70415:183312397] Nothing to delete
+Test Case '-[TestS3BrowserUITests.LaunchAndCacheUITests testCachedContentPrecedesDelayedRefresh]' started.
+16:10:26.826 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRunnerIDESession(_XCTestObservationInternal) testCaseWillStart:] TestS3BrowserUITests.LaunchAndCacheUITests testCachedContentPrecedesDelayedRefresh
+16:10:26.829 xcodebuild[70415:183312397] _XCT_testCaseDidStartWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]>testCaseRunConfiguration:<XCTestCaseRunConfiguration: 0x7996f3d3e0>traits:(null)
+16:10:26.829 xcodebuild[70415:183312397] Test case did start: <XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]>
+16:10:26.829 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.829 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.829 xcodebuild[70415:183312397] Nothing to delete
+    t =     0.02s Start Test at 2026-10-13 16:10:26.828
+16:10:26.830 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.828 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x10a6f4960> started activity <XCActivityRecord: 0x10a63ec30> 2026-10-13 08:10:26 +0000: Start Test at 2026-10-13 16:10:26.828
+16:10:26.830 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991728fc0> 2026-10-13 08:10:26 +0000: Start Test at 2026-10-13 16:10:26.828
+16:10:26.830 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.828 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting to start screen recording' with timeout 30.00
+16:10:26.829 TestS3BrowserUITests-Runner[86402:183349755] Starting diagnostic screen recording.
+16:10:26.829 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4974b0> entering wait loop for 30.00s with expectations: `requesting to start screen recording`
+16:10:26.848 TestS3BrowserUITests-Runner[86402:183352000] Did start diagnostic screen recording with UUID 14CFD11E-E153-496C-B842-143FFAB1CFAC.
+16:10:26.849 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4974b0>
+16:10:26.849 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a5e80> completed after 0.020s
+16:10:26.849 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting to start screen recording
+16:10:26.851 TestS3BrowserUITests-Runner[86402:183349755] Activity 88F834B5-7BE0-4E45-AB1A-FBA74A1863DF added attachment with name 'kXCTAttachmentScreenRecording', Uniform Type Identifier 'public.mpeg-4', lifetime 'deleteOnSuccess', hasPayload: NO, size (in bytes): 0.
+16:10:26.851 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen identifiers' with timeout 30.00
+16:10:26.851 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497720> entering wait loop for 30.00s with expectations: `getting screen identifiers`
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497720>
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6100> completed after 0.000s
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen identifiers
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497a50> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497a50>
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6300> completed after 0.000s
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497b10> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497b10>
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6380> completed after 0.000s
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4979f0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4979f0>
+16:10:26.852 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6400> completed after 0.000s
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497a80> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497a80>
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6300> completed after 0.000s
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x10a6f4960> finished activity <XCActivityRecord: 0x10a63ec30> 2026-10-13 08:10:26 +0000: Start Test at 2026-10-13 16:10:26.828 (0.024858s)
+16:10:26.855 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004310> 2026-10-13 08:10:26 +0000: Start Test at 2026-10-13 16:10:26.828 (0.024858s)
+16:10:26.855 xcodebuild[70415:183312397] Did finish activity with attachment future (<XCTAttachmentFuture 14CFD11E-E153-496C-B842-143FFAB1CFAC>) for test identifier <XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]>
+16:10:26.855 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.853 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x10a6f4960> started activity <XCActivityRecord: 0x10a63ec30> 2026-10-13 08:10:26 +0000: Set Up
+    t =     0.04s Set Up
+16:10:26.856 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x79910042a0> 2026-10-13 08:10:26 +0000: Set Up
+16:10:26.856 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.855 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4973c0> entering indefinite wait loop for expectations: `failable invocation block completion`
+16:10:26.855 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4973c0>
+16:10:26.855 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a60c0> completed after 0.000s
+16:10:26.855 TestS3BrowserUITests-Runner[86402:183349755] cleaning up failable invocation block completion
+16:10:26.855 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x10a6f4960> finished activity <XCActivityRecord: 0x10a63ec30> 2026-10-13 08:10:26 +0000: Set Up (0.00150609s)
+16:10:26.856 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004380> 2026-10-13 08:10:26 +0000: Set Up (0.00150609s)
+16:10:26.856 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.856 TestS3BrowserUITests-Runner[86402:183349755] XCUIApplicationImplDepot: Creating XCUIApplicationImpl for identifier: com.crispytoast.TestS3Browser
+16:10:26.856 TestS3BrowserUITests-Runner[86402:183349755] updating com.crispytoast.TestS3Browser crashDetectionSeverity to 2
+16:10:26.856 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=NO
+16:10:26.856 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=NO
+16:10:26.856 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497780> entering wait loop for 60.00s with expectations: `Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1'`
+16:10:26.857 TestS3BrowserUITests-Runner[86402:183351961] -[XCTRunnerDaemonSession(XCTMessagingRole_UIApplicationStateUpdating) _XCT_applicationDidUpdateState:] com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app pid: 0 state: not running
+16:10:26.858 TestS3BrowserUITests-Runner[86402:183349755] [AM:0] Processing state snapshot com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app pid: 0 state: not running
+16:10:26.858 TestS3BrowserUITests-Runner[86402:183349755] <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> changing currentProcess from (null) to com.crispytoast.TestS3Browser (pid:0)
+16:10:26.858 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=NO
+16:10:26.859 TestS3BrowserUITests-Runner[86402:183349755] Setting pid for 0x10a498580 0 -> 0
+16:10:26.859 TestS3BrowserUITests-Runner[86402:183352000] -[XCTRunnerDaemonSession(XCTMessagingRole_UIApplicationStateUpdating) _XCT_applicationDidUpdateState:] com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app pid: 0 state: not running
+16:10:26.859 TestS3BrowserUITests-Runner[86402:183351961] com.crispytoast.TestS3Browser (pid:0) application state Unknown (0) -> Not Running (1)
+16:10:26.860 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=YES
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=YES
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] App state updated for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>: Not Running (1)
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1': fulfill=YES
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] Done setting pid for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to 0
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497780>
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6340> completed after 0.005s
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1'
+16:10:26.861 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'isApplicationStateKnown' of Target Application 'com.crispytoast.TestS3Browser' to be '1'
+    t =     0.05s Open com.crispytoast.TestS3Browser
+16:10:26.862 TestS3BrowserUITests-Runner[86402:183349755] Launching Target Application 'com.crispytoast.TestS3Browser' with arguments and environment variables:
+(
+)
+{
+    "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+    "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks";
+    "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "S3BROWSER_AUDIT_CASE" = "cache-success";
+    "S3BROWSER_AUDIT_FAILURE" = 0;
+    "S3BROWSER_AUDIT_FIXTURE" = 1;
+    "XCODE_SCHEME_NAME" = TestS3Browser;
+    "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+}
+16:10:26.862 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a63da40> 2026-10-13 08:10:26 +0000: Open com.crispytoast.TestS3Browser
+16:10:26.863 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991febe20> 2026-10-13 08:10:26 +0000: Open com.crispytoast.TestS3Browser
+16:10:26.863 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.862 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen identifiers' with timeout 30.00
+16:10:26.862 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497450> entering wait loop for 30.00s with expectations: `getting screen identifiers`
+16:10:26.862 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497450>
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6300> completed after 0.000s
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen identifiers
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a4979c0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a4979c0>
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6940> completed after 0.000s
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497ae0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497ae0>
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6dc0> completed after 0.000s
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+    t =     0.05s     Launch com.crispytoast.TestS3Browser
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a497a50> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a497a50>
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6b00> completed after 0.000s
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x107463e40> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x107463e40>
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6940> completed after 0.000s
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a63dab0> 2026-10-13 08:10:26 +0000: Launch com.crispytoast.TestS3Browser
+16:10:26.867 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991728fc0> 2026-10-13 08:10:26 +0000: Launch com.crispytoast.TestS3Browser
+16:10:26.867 xcodebuild[70415:183312397] Nothing to delete
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1': fulfill=NO
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1': fulfill=NO
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Launching <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> via Xcode with args: env:{
+    "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+    "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks";
+    "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "OS_ACTIVITY_MODE" = info;
+    "S3BROWSER_AUDIT_CASE" = "cache-success";
+    "S3BROWSER_AUDIT_FAILURE" = 0;
+    "S3BROWSER_AUDIT_FIXTURE" = 1;
+    "XCODE_SCHEME_NAME" = TestS3Browser;
+    "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+}
+16:10:26.863 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'launching application via Xcode' with timeout 60.00
+16:10:26.867 xcodebuild[70415:183313801] Dispatching!
+16:10:26.868 xcodebuild[70415:183312397] Test runner session received application launch request: <XCTProcessLaunchParameters: 0x799e394300> bundleID: com.crispytoast.TestS3Browser, path: /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app	Launch environment: {
+    "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+    "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks";
+    "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "OS_ACTIVITY_MODE" = info;
+    "S3BROWSER_AUDIT_CASE" = "cache-success";
+    "S3BROWSER_AUDIT_FAILURE" = 0;
+    "S3BROWSER_AUDIT_FIXTURE" = 1;
+    "XCODE_SCHEME_NAME" = TestS3Browser;
+    "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+    "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+}
+16:10:27.047 xcodebuild[70415:183312397] Stored token 1 for launch of com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app
+16:10:27.048 xcodebuild[70415:183312397] Launch session standard output and standard error is at /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161005.xcresult/Staging/1_Test/Diagnostics/TestS3BrowserUITests-8CB1573A-C5F5-41D6-94C0-A8D41F9C8FE3-Configuration-Test Scheme Action-Iteration-1/TestS3BrowserUITests-E90881F0-DB6C-46FB-904B-56D73048614A/StandardOutputAndStandardError-com.crispytoast.TestS3Browser.txt
+16:10:27.048 xcodebuild[70415:183312397] Invoking receipt with: 1, (null)
+16:10:26.864 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x1074617d0> entering wait loop for 60.00s with expectations: `launching application via Xcode`
+16:10:26.864 TestS3BrowserUITests-Runner[86402:183349755] [AM:0] Processing state snapshot com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app pid: 0 state: not running
+16:10:26.864 TestS3BrowserUITests-Runner[86402:183349755] Done setting pid for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to 0
+16:10:26.876 TestS3BrowserUITests-Runner[86402:183351961] Handling AXNotification 3031
+2026-10-13 16:10:27.124549+0800 TestS3BrowserUITests-Runner[86402:183349755] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:10:27.126202+0800 TestS3BrowserUITests-Runner[86402:183349755] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+16:10:27.048 TestS3BrowserUITests-Runner[86402:183351961] Got launch request reply from Xcode, token/error: 1
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183351961] Got launch request reply from Xcode, token 1, error (null)
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x1074617d0>
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6a80> completed after 0.186s
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] cleaning up launching application via Xcode
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] Waiting for Xcode to confirm launch completion...
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] 	Checking status using token 1 for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting launch progress' with timeout 60.00
+16:10:27.235 xcodebuild[70415:183312397] Test runner session received request for launch process status with token 1
+16:10:27.250 xcodebuild[70415:183312397] Got status 0 from operation for token 1
+16:10:27.049 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a6583f0> entering wait loop for 60.00s with expectations: `requesting launch progress`
+16:10:27.256 xcodebuild[70415:183313801] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a637900 on simulator was issued, 3 claims exist.
+16:10:27.251 TestS3BrowserUITests-Runner[86402:183351971] Got status/error: 0 for token 1
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a6583f0>
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6cc0> completed after 0.203s
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting launch progress
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] 	Got progress 0 for token 1
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] 	Checking status using token 1 for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting launch progress' with timeout 60.00
+16:10:27.258 xcodebuild[70415:183312397] Test runner session received request for launch process status with token 1
+16:10:27.258 xcodebuild[70415:183312397] Got status 0 from operation for token 1
+16:10:27.252 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a659e00> entering wait loop for 60.00s with expectations: `requesting launch progress`
+16:10:27.268 xcodebuild[70415:183313784] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a637900 on simulator was issued, 3 claims exist.
+16:10:27.268 xcodebuild[70415:183313784] 5B87AEFD-8266-4451-8795-8728177C5241: Registered for sim device notification, got token 18
+16:10:27.268 xcodebuild[70415:183313784] 5B87AEFD-8266-4451-8795-8728177C5241: Unregistering for sim device notification with token 18
+16:10:27.269 xcodebuild[70415:183313784] 5B87AEFD-8266-4451-8795-8728177C5241: Launching app with identifier: com.crispytoast.TestS3Browser and options: {
+    "activate_suspended" = 0;
+    arguments =     (
+    );
+    environment =     {
+        "APP_DISTRIBUTOR_ID_OVERRIDE" = "com.apple.AppStore";
+        "CA_ASSERT_MAIN_THREAD_TRANSACTIONS" = 0;
+        "CA_DEBUG_TRANSACTIONS" = 0;
+        "DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator:/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/PackageFrameworks";
+        "DYLD_INSERT_LIBRARIES" = "/Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/usr/lib/libMainThreadChecker.dylib:/usr/lib/libRPAC.dylib:/usr/lib/libRPAC.dylib";
+        "DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "IDE_CHOSEN_LOGGING_METHOD" = 1;
+        "LLVM_PROFILE_FILE" = "/dev/null";
+        NSUnbufferedIO = YES;
+        "OS_ACTIVITY_DT_MODE" = YES;
+        "OS_ACTIVITY_MODE" = info;
+        "PERFC_ENABLE_EXTENDED_DIAGNOSTIC_FORMAT" = 1;
+        "PERFC_ENABLE_PROFILE_MODE" = 1;
+        "PERFC_RESET_INSERT_LIBRARIES" = 1;
+        "PERFC_SUPPRESS_SYSTEM_REPORTS" = 1;
+        "S3BROWSER_AUDIT_CASE" = "cache-success";
+        "S3BROWSER_AUDIT_FAILURE" = 0;
+        "S3BROWSER_AUDIT_FIXTURE" = 1;
+        "SWIFT_BACKTRACE" = "enable=no";
+        TERM = dumb;
+        "XCODE_SCHEME_NAME" = TestS3Browser;
+        "__XCODE_BUILT_PRODUCTS_DIR_PATHS" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_DYLD_FRAMEWORK_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_DYLD_LIBRARY_PATH" = "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator";
+        "__XPC_LLVM_PROFILE_FILE" = "/dev/null";
+    };
+    stderr = "/dev/ttys118";
+    stdout = "/dev/ttys118";
+    "terminate_running_process" = 1;
+    "wait_for_debugger" = 1;
+}
+16:10:27.263 TestS3BrowserUITests-Runner[86402:183351961] Got status/error: 0 for token 1
+16:10:27.267 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a659e00>
+16:10:27.267 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a45c0> completed after 0.015s
+16:10:27.267 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting launch progress
+16:10:27.267 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a659e00> entering wait loop for 0.18s with expectations: `delay`
+16:10:27.362 xcodebuild[70415:183313778] 5B87AEFD-8266-4451-8795-8728177C5241: Launched app with identifier: com.crispytoast.TestS3Browser (pid = 89591)
+16:10:27.365 TestS3BrowserUITests-Runner[86402:183351961] -[XCTRunnerDaemonSession(XCTMessagingRole_UIApplicationStateUpdating) _XCT_applicationDidUpdateState:] com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/41CFCAE0-DD50-4B00-A15E-D9C0E7BA6368/TestS3Browser.app processName: TestS3Browser pid: 89591 state: running foreground
+16:10:27.365 TestS3BrowserUITests-Runner[86402:183349755] [AM:0] Processing state snapshot com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/41CFCAE0-DD50-4B00-A15E-D9C0E7BA6368/TestS3Browser.app processName: TestS3Browser pid: 89591 state: running foreground
+16:10:27.365 TestS3BrowserUITests-Runner[86402:183349755] Updating pid for currentProcess com.crispytoast.TestS3Browser (pid:0) to 89591
+16:10:27.365 TestS3BrowserUITests-Runner[86402:183349755] Setting pid for 0x10a498580 0 -> 89591
+16:10:27.365 TestS3BrowserUITests-Runner[86402:183349755] Done setting pid for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to 89591
+16:10:27.366 TestS3BrowserUITests-Runner[86402:183351971] com.crispytoast.TestS3Browser (pid:0) pid 0 -> 89591
+16:10:27.366 TestS3BrowserUITests-Runner[86402:183351971] com.crispytoast.TestS3Browser (pid:0) checking for cached AX loaded value using pid 89591
+16:10:27.366 TestS3BrowserUITests-Runner[86402:183351971] Monitor: set com.crispytoast.TestS3Browser (pid:89591) for pid 89591
+16:10:27.369 TestS3BrowserUITests-Runner[86402:183351971] Handling kAXPidStatusChangedNotification
+16:10:27.370 TestS3BrowserUITests-Runner[86402:183351971] Got kAXPidStatusChangedNotification for pid 89591: active
+16:10:27.370 TestS3BrowserUITests-Runner[86402:183351971] com.crispytoast.TestS3Browser (pid:89591) application state Not Running (1) -> Running Foreground (4)
+16:10:27.376 xcodebuild[70415:183313778] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> tracking pid 89591
+16:10:27.376 xcodebuild[70415:183313778] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> checking to see if pid 89591 is valid: kill(pid, 0) = 0 (YES, it's still running)
+16:10:27.379 xcodebuild[70415:183313778] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> checking to see if pid 86402 is valid: kill(pid, 0) = 0 (YES, it's still running)
+16:10:27.372 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1': fulfill=YES
+16:10:27.373 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1': fulfill=YES
+16:10:27.373 TestS3BrowserUITests-Runner[86402:183349755] App state updated for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>: Running Foreground (4)
+16:10:27.373 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1': fulfill=YES
+16:10:27.374 TestS3BrowserUITests-Runner[86402:183352000] com.crispytoast.TestS3Browser (pid:89591) accessibility active (loaded) NO -> YES
+16:10:27.408 TestS3BrowserUITests-Runner[86402:183351961] Handling kAXUserTestingNotification
+16:10:27.408 TestS3BrowserUITests-Runner[86402:183351961] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    controllerClass = SBDeviceApplicationSceneViewController;
+    event = ViewDidAppear;
+}
+16:10:27.411 TestS3BrowserUITests-Runner[86402:183352000] Handling kAXUserTestingNotification
+16:10:27.411 TestS3BrowserUITests-Runner[86402:183352000] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    controllerClass = SBSwitcherViewController;
+    event = ViewDidAppear;
+}
+16:10:27.411 TestS3BrowserUITests-Runner[86402:183352000] Handling kAXUserTestingNotification
+16:10:27.411 TestS3BrowserUITests-Runner[86402:183352000] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    controllerClass = SBDeckSwitcherViewController;
+    event = ViewDidAppear;
+}
+16:10:27.462 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a659e00>
+16:10:27.462 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a45c0> completed after 0.195s
+16:10:27.462 TestS3BrowserUITests-Runner[86402:183349755] cleaning up delay
+16:10:27.462 TestS3BrowserUITests-Runner[86402:183349755] 	Checking status using token 1 for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>
+16:10:27.463 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting launch progress' with timeout 60.00
+16:10:27.464 xcodebuild[70415:183312397] Test runner session received request for launch process status with token 1
+16:10:27.464 xcodebuild[70415:183312397] Got status 1 from operation for token 1
+16:10:27.463 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a610> entering wait loop for 60.00s with expectations: `requesting launch progress`
+16:10:27.467 TestS3BrowserUITests-Runner[86402:183351961] Got status/error: 1 for token 1
+16:10:27.472 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a610>
+16:10:27.472 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a4400> completed after 0.009s
+16:10:27.472 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting launch progress
+16:10:27.472 TestS3BrowserUITests-Runner[86402:183349755] 	Got progress 1 for token 1
+16:10:27.472 TestS3BrowserUITests-Runner[86402:183349755] Xcode confirmed launch completion.
+16:10:27.473 TestS3BrowserUITests-Runner[86402:183349755] com.crispytoast.TestS3Browser (pid:89591) setting launch token to 1
+16:10:27.473 TestS3BrowserUITests-Runner[86402:183351961] Monitor: set com.crispytoast.TestS3Browser (pid:89591) for token 1
+16:10:27.473 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isProcessIDValid' of com.crispytoast.TestS3Browser (pid:89591) to be '1': fulfill=YES
+16:10:27.475 TestS3BrowserUITests-Runner[86402:183349755] cleaning up (during deallocation) Expect value of 'isProcessIDValid' of com.crispytoast.TestS3Browser (pid:89591) to be '1'
+16:10:27.475 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'isProcessIDValid' of com.crispytoast.TestS3Browser (pid:89591) to be '1'
+16:10:27.476 TestS3BrowserUITests-Runner[86402:183349755] Waiting for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to activate
+16:10:27.476 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65abb0> entering wait loop for 60.00s with expectations: `Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1'`
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65abb0>
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a4040> completed after 0.001s
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1'
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'activated' of <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to be '1'
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] Acquiring background assertion for com.crispytoast.TestS3Browser (pid:89591)
+16:10:27.477 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'acquiring background assertion' with timeout 10.00
+16:10:27.478 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65aee0> entering wait loop for 10.00s with expectations: `acquiring background assertion`
+16:10:27.479 TestS3BrowserUITests-Runner[86402:183351971] Got reply for background assertion for 89591, acquired: YES.
+16:10:27.488 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65aee0>
+16:10:27.489 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7e40> completed after 0.011s
+16:10:27.489 TestS3BrowserUITests-Runner[86402:183349755] cleaning up acquiring background assertion
+16:10:27.489 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting unsupported bundle IDs for automation sessions' with timeout 30.00
+16:10:27.489 TestS3BrowserUITests-Runner[86402:183349755] Requesting unsupported bundle IDs for automation sessions
+16:10:27.490 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65b120> entering wait loop for 30.00s with expectations: `getting unsupported bundle IDs for automation sessions`
+    t =     0.68s         Setting up automation session
+16:10:27.494 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65b120>
+16:10:27.494 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7bc0> completed after 0.005s
+16:10:27.494 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting unsupported bundle IDs for automation sessions
+16:10:27.494 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:27 +0000: Setting up automation session
+16:10:27.504 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991004a80> 2026-10-13 08:10:27 +0000: Setting up automation session
+16:10:27.505 xcodebuild[70415:183312397] Nothing to delete
+16:10:27.495 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'requesting automation session for com.crispytoast.TestS3Browser (pid:89591)' with timeout 60.00
+16:10:27.495 TestS3BrowserUITests-Runner[86402:183349755] Requesting automation session for pid 89591, automation framework path: /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework
+16:10:27.495 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65b570> entering wait loop for 60.00s with expectations: `requesting automation session for com.crispytoast.TestS3Browser (pid:89591)`
+objc[86402]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x112e44398) and /Library/Developer/CoreSimulator/Volumes/iOS_24A5423a/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x112f38310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+16:10:28.636 TestS3BrowserUITests-Runner[86402:183351961] Handling kAXPidStatusChangedNotification
+16:10:28.637 TestS3BrowserUITests-Runner[86402:183351961] Got kAXPidStatusChangedNotification for pid 88672: active
+16:10:28.653 TestS3BrowserUITests-Runner[86402:183349755] No application process found matching pid 88672, caching
+16:10:30.318 TestS3BrowserUITests-Runner[86402:183351985] Got endpoint for automation session with pid 89591
+16:10:30.318 TestS3BrowserUITests-Runner[86402:183351985] Exchanging capabilities for automation session connection to pid 89591
+16:10:30.320 TestS3BrowserUITests-Runner[86402:183351968] Got remote interface capabilities for automation session connection to pid 89591: <XCTCapabilities: 0x1076a2710>: {
+    "accept remote connection capability" = 1;
+    "containing transformer capability" = 1;
+    "disclosed child rows transformer capability" = 2;
+    "element sorting transformer capability" = 1;
+    "evaluate query capability" = 1;
+    "fetch element attributes capability" = 2;
+    "indexing transformer capability" = 4;
+    "main thread checker runtime issues" = 1;
+    "malloc stack logging" = 1;
+    "notify animations idle capability" = 1;
+    "notify main run loop idle capability" = 1;
+    "query runtime issue reporting" = 1;
+    "query runtime issue reporting/automation type mismatch" = 1;
+    "system provides kAXXCAttributeBannerIsStickyAttribute" = 1;
+}
+16:10:30.320 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65b570>
+16:10:30.320 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7a80> completed after 2.825s
+16:10:30.320 TestS3BrowserUITests-Runner[86402:183349755] cleaning up requesting automation session for com.crispytoast.TestS3Browser (pid:89591)
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] -[XCTRuntimeIssueDetectionManager runtimeIssueDetectionEnabled] runtimeIssueDetectionEnabled based on XCTDisableRuntimeIssues and runtime diagnostics policies: YES
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:27 +0000: Setting up automation session (2.82659s)
+16:10:30.321 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x79917bc0e0> 2026-10-13 08:10:27 +0000: Setting up automation session (2.82659s)
+16:10:30.321 xcodebuild[70415:183312397] Nothing to delete
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:30 +0000: Wait for com.crispytoast.TestS3Browser to idle
+    t =     3.51s         Wait for com.crispytoast.TestS3Browser to idle
+16:10:30.322 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7997d34b60> 2026-10-13 08:10:30 +0000: Wait for com.crispytoast.TestS3Browser to idle
+16:10:30.322 xcodebuild[70415:183312397] Nothing to delete
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen identifiers' with timeout 30.00
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43a070> entering wait loop for 30.00s with expectations: `getting screen identifiers`
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43a070>
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7ac0> completed after 0.000s
+16:10:30.321 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen identifiers
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43a2e0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43a2e0>
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a72c0> completed after 0.000s
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:30.322 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43b900> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43b900>
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7280> completed after 0.001s
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43bab0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43bab0>
+16:10:30.323 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a71c0> completed after 0.000s
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43a010> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43a010>
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a72c0> completed after 0.000s
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Waiting for com.crispytoast.TestS3Browser (PID 89591) quiescence...
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Requesting main run loop idle notification using automation session for com.crispytoast.TestS3Browser (pid:89591)
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Requesting animations idle notification using automation session for com.crispytoast.TestS3Browser (pid:89591)
+16:10:30.324 TestS3BrowserUITests-Runner[86402:183349755] Waiting on quiescence state variables
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0': fulfill=NO
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183352000] Got animations reply for com.crispytoast.TestS3Browser (PID 89591)
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0': fulfill=NO
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183349755] isQuiescent: self.eventLoopHasIdled: NO && self.animationsHaveFinished: NO
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1': fulfill=NO
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183349755] isQuiescent: self.eventLoopHasIdled: NO && self.animationsHaveFinished: NO
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183349755] KVO change: checked status of Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1': fulfill=NO
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183349755] Not fulfilling (Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0' OR Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1') because no subexpectations are fulfilled
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a43b210> entering wait loop for 60.00s with expectations: `(Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0' OR Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1')`
+16:10:30.325 TestS3BrowserUITests-Runner[86402:183352000] Animations are not active.
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183351968] com.crispytoast.TestS3Browser (pid:89591) animationsHaveFinished NO -> YES
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183351968] Posting KVO notifications for animationsHaveFinished
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183351968] isQuiescent: self.eventLoopHasIdled: NO && self.animationsHaveFinished: YES
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183351968] isQuiescent: self.eventLoopHasIdled: NO && self.animationsHaveFinished: YES
+16:10:30.326 TestS3BrowserUITests-Runner[86402:183351968] KVO change: checked status of Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1': fulfill=NO
+16:10:30.788 TestS3BrowserUITests-Runner[86402:183351968] Handling kAXUserTestingNotification
+16:10:30.788 TestS3BrowserUITests-Runner[86402:183351968] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    controllerClass = SBRootFolderController;
+    event = ViewDidDisappear;
+}
+16:10:30.870 TestS3BrowserUITests-Runner[86402:183351968] Handling kAXPidStatusChangedNotification
+16:10:30.870 TestS3BrowserUITests-Runner[86402:183351968] Got kAXPidStatusChangedNotification for pid 88672: active
+16:10:30.904 TestS3BrowserUITests-Runner[86402:183352000] Handling kAXUserTestingNotification
+16:10:30.904 TestS3BrowserUITests-Runner[86402:183352000] Received kAXUserTestingNotification from AX element pid: 89591, elementOrHash.elementID: 0.1: {
+    controllerClass = "_TtGC7SwiftUI19UIHostingControllerGVS_15ModifiedContentGVS_8LazyViewGS1_GS1_GS1_GS1_GS1_GS1_GVS_5GroupGVS_19_ConditionalContentV13TestS3Browser11ContentViewGVS_22ContentUnavailableViewGVS_5LabelVS_4TextVS_5Image_S9_GVS_9TupleViewTGVS_6ButtonS9__GS12_S9_______GVS_30_EnvironmentKeyWritingModifierCSo14NSUserDefaults__VS_14_TaskModifier2_GVS_21_ValueActionModifier2OS_10ScenePhase__VS_25_AppearanceActionModifier_GVS_13AlertModifierGS1_GS11_TGS12_S9__GS12_S9____VS_P10$1ca63e85815ActionsModifier_S9___GVS_P10$1ca62bb7c25SheetPresentationModifierVVS_33PresentationConditionalProjection4ItemVS5_12SettingsViewGVS_P10$1ca62bc2415NullSheetAnchorVVS_15SheetPreference3Key____VS_12RootModifier__";
+    event = ViewDidAppear;
+}
+16:10:30.906 TestS3BrowserUITests-Runner[86402:183352000] Handling kAXUserTestingNotification
+16:10:30.906 TestS3BrowserUITests-Runner[86402:183352000] Received kAXUserTestingNotification from AX element pid: 89591, elementOrHash.elementID: 0.1: {
+    controllerClass = "SwiftUI.UIKitNavigationController";
+    event = ViewDidAppear;
+}
+16:10:30.912 TestS3BrowserUITests-Runner[86402:183351985] Handling kAXUserTestingNotification
+16:10:30.912 TestS3BrowserUITests-Runner[86402:183351985] Received kAXUserTestingNotification from AX element pid: 89591, elementOrHash.elementID: 0.1: {
+    controllerClass = "_TtGC7SwiftUI32NavigationStackHostingControllerVS_7AnyView_";
+    event = ViewDidAppear;
+    navigationItemTitle = "Recent Files";
+}
+16:10:30.972 TestS3BrowserUITests-Runner[86402:183349755] No application process found matching pid 88672, caching
+16:10:31.038 TestS3BrowserUITests-Runner[86402:183351968] Got event loop idle reply for com.crispytoast.TestS3Browser (PID 89591)
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183351968] Event loop is idle.
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183351985] com.crispytoast.TestS3Browser (pid:89591) eventLoopHasIdled NO -> YES
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183352000] Posting KVO notifications for eventLoopHasIdled
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183352000] isQuiescent: self.eventLoopHasIdled: YES && self.animationsHaveFinished: YES
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183352000] isQuiescent: self.eventLoopHasIdled: YES && self.animationsHaveFinished: YES
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183352000] KVO change: checked status of Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1': fulfill=YES
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183352000] Fulfilling (Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0' OR Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1') because Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1' is fulfilled
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a43b210>
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a7040> completed after 0.713s
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] cleaning up (Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0' OR Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1')
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0'
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'foreground' of com.crispytoast.TestS3Browser (pid:89591) to be '0'
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1'
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] cleaning up Expect value of 'isQuiescent' of com.crispytoast.TestS3Browser (pid:89591) to be '1'
+16:10:31.039 TestS3BrowserUITests-Runner[86402:183349755] com.crispytoast.TestS3Browser has quiesced or quiescence timeout has elapsed.
+16:10:31.040 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:30 +0000: Wait for com.crispytoast.TestS3Browser to idle (0.718377s)
+16:10:31.043 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004a80> 2026-10-13 08:10:30 +0000: Wait for com.crispytoast.TestS3Browser to idle (0.718377s)
+16:10:31.043 xcodebuild[70415:183312397] Nothing to delete
+16:10:31.040 TestS3BrowserUITests-Runner[86402:183349755] Delaying 1s to mitigate rdar://problem/29883788 & <rdar://problem/23764033> UI tests failing in sim because splash screen is occluding the elements that the tests are trying to interact with
+16:10:31.040 TestS3BrowserUITests-Runner[86402:183351985] Monitor: tracking launch request for com.crispytoast.TestS3Browser (pid:89591)
+16:10:31.584 TestS3BrowserUITests-Runner[86402:183352000] Handling AXNotification 3031
+16:10:32.048 TestS3BrowserUITests-Runner[86402:183349755] application launched and quiesced
+16:10:32.049 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a63dab0> 2026-10-13 08:10:26 +0000: Launch com.crispytoast.TestS3Browser (5.18565s)
+16:10:32.050 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x79917be060> 2026-10-13 08:10:26 +0000: Launch com.crispytoast.TestS3Browser (5.18565s)
+16:10:32.050 xcodebuild[70415:183312397] Nothing to delete
+16:10:32.049 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a63da40> 2026-10-13 08:10:26 +0000: Open com.crispytoast.TestS3Browser (5.18749s)
+16:10:32.050 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004af0> 2026-10-13 08:10:26 +0000: Open com.crispytoast.TestS3Browser (5.18749s)
+16:10:32.050 xcodebuild[70415:183312397] Nothing to delete
+16:10:32.050 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:32 +0000: Waiting 2.0s for "audit-cache-first.txt" Any to exist
+    t =     5.24s Waiting 2.0s for "audit-cache-first.txt" Any to exist
+16:10:32.051 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991004b60> 2026-10-13 08:10:32 +0000: Waiting 2.0s for "audit-cache-first.txt" Any to exist
+16:10:32.051 xcodebuild[70415:183312397] Nothing to delete
+16:10:32.051 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a658de0> entering wait loop for 2.00s with expectations: `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+    t =     6.32s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+16:10:33.130 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0b60> 2026-10-13 08:10:33 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+16:10:33.131 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7997d34b60> 2026-10-13 08:10:33 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any`
+16:10:33.131 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.130 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0bd0> 2026-10-13 08:10:33 +0000: Checking existence of `"audit-cache-first.txt" Any`
+16:10:33.131 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x79917bdc00> 2026-10-13 08:10:33 +0000: Checking existence of `"audit-cache-first.txt" Any`
+16:10:33.131 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Executing query:
+↪︎ Descendants matching type Any
+    ↪︎ Elements matching predicate '"audit-cache-first.txt" IN identifiers' (First Match)
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'checking for continuity enablement' with timeout 30.00
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Error (com.apple.dt.xctest.ui-testing.error) 10401, userInfo keys: (null): Continuity display is unsupported on this device.
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a4c0> entering wait loop for 30.00s with expectations: `checking for continuity enablement`
+    t =     6.32s         Checking existence of `"audit-cache-first.txt" Any`
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a4c0>
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a66c0> completed after 0.000s
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] cleaning up checking for continuity enablement
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Should evaluate query remotely? XCTDisableRemoteQueryEvaluation(d-write): NO, hasAutomationSession: YES, supportsRemoteEvaluation: YES
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Getting matching snapshots for remotely evaluated query
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'evaluating UI query' with timeout 30.00
+16:10:33.131 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a670> entering wait loop for 30.00s with expectations: `evaluating UI query`
+16:10:33.458 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a670>
+16:10:33.458 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6880> completed after 0.327s
+16:10:33.458 TestS3BrowserUITests-Runner[86402:183349755] cleaning up evaluating UI query
+16:10:33.458 TestS3BrowserUITests-Runner[86402:183349755] results tree:
+App element pid: 89591
+  AX element pid: 89591, elementOrHash.elementID: 4390421504.4
+    AX element pid: 89591, elementOrHash.elementID: 4438641152.5
+      AX element pid: 89591, elementOrHash.elementID: 4438725632.6
+        AX element pid: 89591, elementOrHash.elementID: 4390420480.7
+          AX element pid: 89591, elementOrHash.elementID: 4575080320.8
+            AX element pid: 89591, elementOrHash.elementID: 4438645760.9
+              AX element pid: 89591, elementOrHash.elementID: 4437664960.18
+                AX element pid: 89591, elementOrHash.elementID: 4391368256.37
+                  AX element pid: 89591, elementOrHash.elementID: 4437672832.41
+                    AX element pid: 89591, elementOrHash.elementID: 4575083680.49
+                      AX element pid: 89591, elementOrHash.elementID: 4437753856.55
+                        AX element pid: 89591, elementOrHash.elementID: 4390074112.63
+                          AX element pid: 89591, elementOrHash.elementID: 4437962112.80
+                            AX element pid: 89591, elementOrHash.elementID: 4390326784.94
+                              AX element pid: 89591, elementOrHash.elementID: 4440292192.106
+                                Button, identifier: 'audit-cache-first.txt-audit-cache-first.txt-audit-cache-first.txt-audit-cache-first.txt-audit-cache-first.txt', label: 'audit-cache-first.txt, 0.0 KB, Jan 1, 1970 at 08:00, audit-bucket/audit-cache-first.txt'
+                                  StaticText, identifier: 'audit-cache-first.txt', label: 'audit-cache-first.txt'
+16:10:33.458 TestS3BrowserUITests-Runner[86402:183349755] matches: {(
+    StaticText, identifier: 'audit-cache-first.txt', label: 'audit-cache-first.txt'
+)}
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0bd0> 2026-10-13 08:10:33 +0000: Checking existence of `"audit-cache-first.txt" Any` (0.328143s)
+16:10:33.459 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7997d34bd0> 2026-10-13 08:10:33 +0000: Checking existence of `"audit-cache-first.txt" Any` (0.328143s)
+16:10:33.460 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0b60> 2026-10-13 08:10:33 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any` (0.32867s)
+16:10:33.461 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x79917bdc00> 2026-10-13 08:10:33 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any` (0.32867s)
+16:10:33.461 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183351985] cleaning up Expect predicate `existsNoRetry == 1` for object "audit-cache-first.txt" Any
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a658de0>
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6500> completed after 1.408s
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:32 +0000: Waiting 2.0s for "audit-cache-first.txt" Any to exist (1.40867s)
+    t =     6.65s Waiting 8.0s for "audit-refreshed.txt" Any to exist
+16:10:33.461 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x79917bd1f0> 2026-10-13 08:10:32 +0000: Waiting 2.0s for "audit-cache-first.txt" Any to exist (1.40867s)
+16:10:33.461 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:33 +0000: Waiting 8.0s for "audit-refreshed.txt" Any to exist
+16:10:33.461 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x79917bea70> 2026-10-13 08:10:33 +0000: Waiting 8.0s for "audit-refreshed.txt" Any to exist
+16:10:33.461 xcodebuild[70415:183312397] Nothing to delete
+16:10:33.459 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a850> entering wait loop for 8.00s with expectations: `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+    t =     7.72s     Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+16:10:34.529 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0b60> 2026-10-13 08:10:34 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+16:10:34.530 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991004b60> 2026-10-13 08:10:34 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any`
+16:10:34.530 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.529 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0d20> 2026-10-13 08:10:34 +0000: Checking existence of `"audit-refreshed.txt" Any`
+16:10:34.530 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991004bd0> 2026-10-13 08:10:34 +0000: Checking existence of `"audit-refreshed.txt" Any`
+16:10:34.530 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.529 TestS3BrowserUITests-Runner[86402:183349755] Executing query:
+↪︎ Descendants matching type Any
+    ↪︎ Elements matching predicate '"audit-refreshed.txt" IN identifiers' (First Match)
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'checking for continuity enablement' with timeout 30.00
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Error (com.apple.dt.xctest.ui-testing.error) 10401, userInfo keys: (null): Continuity display is unsupported on this device.
+    t =     7.72s         Checking existence of `"audit-refreshed.txt" Any`
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a3a0> entering wait loop for 30.00s with expectations: `checking for continuity enablement`
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a3a0>
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6480> completed after 0.000s
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] cleaning up checking for continuity enablement
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Should evaluate query remotely? XCTDisableRemoteQueryEvaluation(d-write): NO, hasAutomationSession: YES, supportsRemoteEvaluation: YES
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Getting matching snapshots for remotely evaluated query
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'evaluating UI query' with timeout 30.00
+16:10:34.530 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65ad30> entering wait loop for 30.00s with expectations: `evaluating UI query`
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65ad30>
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6b00> completed after 0.235s
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] cleaning up evaluating UI query
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] results tree:
+App element pid: 89591
+  AX element pid: 89591, elementOrHash.elementID: 4390421504.4
+    AX element pid: 89591, elementOrHash.elementID: 4438641152.5
+      AX element pid: 89591, elementOrHash.elementID: 4438725632.6
+        AX element pid: 89591, elementOrHash.elementID: 4390420480.7
+          AX element pid: 89591, elementOrHash.elementID: 4575080320.8
+            AX element pid: 89591, elementOrHash.elementID: 4438645760.9
+              AX element pid: 89591, elementOrHash.elementID: 4437664960.18
+                AX element pid: 89591, elementOrHash.elementID: 4391368256.37
+                  AX element pid: 89591, elementOrHash.elementID: 4437672832.41
+                    AX element pid: 89591, elementOrHash.elementID: 4575083680.49
+                      AX element pid: 89591, elementOrHash.elementID: 4437753856.55
+                        AX element pid: 89591, elementOrHash.elementID: 4575805440.64
+                          AX element pid: 89591, elementOrHash.elementID: 4437963904.82
+                            AX element pid: 89591, elementOrHash.elementID: 4390328320.96
+                              AX element pid: 89591, elementOrHash.elementID: 4570402240.107
+                                Button, identifier: 'audit-refreshed.txt-audit-refreshed.txt-audit-refreshed.txt-audit-refreshed.txt-audit-refreshed.txt', label: 'audit-refreshed.txt, 0.0 KB, Jan 1, 1970 at 08:00, audit-bucket/audit-refreshed.txt'
+                                  StaticText, identifier: 'audit-refreshed.txt', label: 'audit-refreshed.txt'
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] matches: {(
+    StaticText, identifier: 'audit-refreshed.txt', label: 'audit-refreshed.txt'
+)}
+16:10:34.765 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0d20> 2026-10-13 08:10:34 +0000: Checking existence of `"audit-refreshed.txt" Any` (0.236064s)
+16:10:34.766 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004c40> 2026-10-13 08:10:34 +0000: Checking existence of `"audit-refreshed.txt" Any` (0.236064s)
+16:10:34.766 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.766 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0b60> 2026-10-13 08:10:34 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any` (0.236623s)
+16:10:34.766 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004d20> 2026-10-13 08:10:34 +0000: Checking `Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any` (0.236623s)
+16:10:34.766 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.766 TestS3BrowserUITests-Runner[86402:183351961] cleaning up Expect predicate `existsNoRetry == 1` for object "audit-refreshed.txt" Any
+16:10:34.766 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a850>
+16:10:34.766 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6700> completed after 1.307s
+16:10:34.766 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:33 +0000: Waiting 8.0s for "audit-refreshed.txt" Any to exist (1.30672s)
+16:10:34.766 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004b60> 2026-10-13 08:10:33 +0000: Waiting 8.0s for "audit-refreshed.txt" Any to exist (1.30672s)
+16:10:34.766 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.767 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:34 +0000: Pressing Home button
+    t =     7.96s Pressing Home button
+16:10:34.767 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x7991004bd0> 2026-10-13 08:10:34 +0000: Pressing Home button
+16:10:34.767 xcodebuild[70415:183312397] Nothing to delete
+16:10:34.767 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'synthesizing device event' with timeout 30.00
+16:10:34.767 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a850> entering wait loop for 30.00s with expectations: `synthesizing device event`
+16:10:34.789 TestS3BrowserUITests-Runner[86402:183351962] Handling kAXUserTestingNotification
+16:10:34.789 TestS3BrowserUITests-Runner[86402:183351962] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    event = ButtonEventsCompleted;
+}
+16:10:35.030 TestS3BrowserUITests-Runner[86402:183351961] Handling kAXUserTestingNotification
+16:10:35.030 TestS3BrowserUITests-Runner[86402:183351961] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    event = ButtonEventsCompleted;
+}
+16:10:35.040 TestS3BrowserUITests-Runner[86402:183351962] Handling kAXPidStatusChangedNotification
+16:10:35.040 TestS3BrowserUITests-Runner[86402:183351962] Got kAXPidStatusChangedNotification for pid 89591: active
+16:10:35.069 TestS3BrowserUITests-Runner[86402:183351961] Handling kAXUserTestingNotification
+16:10:35.069 TestS3BrowserUITests-Runner[86402:183351961] Received kAXUserTestingNotification from AX element pid: 48305, elementOrHash.elementID: 0.1: {
+    controllerClass = SBRootFolderController;
+    event = ViewDidAppear;
+}
+16:10:35.237 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a850>
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6540> completed after 0.471s
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] cleaning up synthesizing device event
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> finished activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:34 +0000: Pressing Home button (0.471114s)
+16:10:35.238 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> didFinishActivity:<XCActivityRecord: 0x7991004d90> 2026-10-13 08:10:34 +0000: Pressing Home button (0.471114s)
+16:10:35.238 xcodebuild[70415:183312397] Nothing to delete
+    t =     8.43s Terminate com.crispytoast.TestS3Browser:89591
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] <XCTContext: 0x1076451d0> started activity <XCActivityRecord: 0x10a6a0380> 2026-10-13 08:10:35 +0000: Terminate com.crispytoast.TestS3Browser:89591
+16:10:35.238 xcodebuild[70415:183312397] _XCT_testCaseWithIdentifier:<XCTTestIdentifier leaf, method, swift ["LaunchAndCacheUITests", "testCachedContentPrecedesDelayedRefresh"]> willStartActivity:<XCActivityRecord: 0x79917bea70> 2026-10-13 08:10:35 +0000: Terminate com.crispytoast.TestS3Browser:89591
+16:10:35.238 xcodebuild[70415:183312397] Nothing to delete
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen identifiers' with timeout 30.00
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65abb0> entering wait loop for 30.00s with expectations: `getting screen identifiers`
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65abb0>
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6540> completed after 0.000s
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen identifiers
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65a940> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:35.238 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65a940>
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a4000> completed after 0.000s
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65aee0> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65aee0>
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6bc0> completed after 0.000s
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65ae50> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65ae50>
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a6b00> completed after 0.000s
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Creating future for 'getting screen bounds' with timeout 30.00
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65af40> entering wait loop for 30.00s with expectations: `getting screen bounds`
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Returning result XCTWaiterResultCompleted for synchronous waiter <XCTWaiter: 0x10a65af40>
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Wait <XCTWaiterWait: 0x10a5a4000> completed after 0.000s
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] cleaning up getting screen bounds
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183351960] Monitor: termination is being tracked for com.crispytoast.TestS3Browser (pid:89591)
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Using token to terminate <XCTRunnerIDESession: 0x1075ba120> via Xcode
+16:10:35.239 xcodebuild[70415:183312397] Test runner session received request for termination of application with token 1
+16:10:35.240 xcodebuild[70415:183312397] Terminating session for token 1 by canceling execution tracker <IDEExecutionOperationTracker: 0x79910042a0: Launch application com.crispytoast.TestS3Browser for UI testing.
+	subtrackers=(
+    "<IDEExecutionRunnableTracker: 0x799ded5020: subtrackers=none>"
+)>
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] Waiting for termination
+16:10:35.239 TestS3BrowserUITests-Runner[86402:183349755] <XCTWaiter: 0x10a65afa0> entering wait loop for 60.00s with expectations: `Expect predicate `running == 0` for object com.crispytoast.TestS3Browser (pid:89591)`
+16:10:35.240 TestS3BrowserUITests-Runner[86402:183351961] Automation session connection to pid 89591 interrupted
+16:10:35.249 xcodebuild[70415:183312397] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> got death notice for pid 89591 (exit code: (null), signal: 15), removing from SimulatorSessionMap
+16:10:35.249 xcodebuild[70415:183312397] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> checking to see if pid 86402 is valid: kill(pid, 0) = 0 (YES, it's still running)
+16:10:35.250 xcodebuild[70415:183312397] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a637900 on simulator was relinquished, 2 claims remain.
+16:10:35.250 xcodebuild[70415:183312397] 📱<DVTiPhoneSimulator (0x799a7f4200), iPhone 18 Pro, unknown class, 27.0 (24A5423a), 5B87AEFD-8266-4451-8795-8728177C5241> claim LaunchSessionClaim_0x799a637900 on simulator was relinquished, 2 claims remain.
+16:10:35.250 xcodebuild[70415:183312397] Ignoring exit of launch session <IDELaunchSession: 0x799a637900> because it does not match the launch session currently tracked for token 1
+16:10:35.250 xcodebuild[70415:183312397] Observed termination of tracker for token 1 for launch of com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app
+16:10:35.250 TestS3BrowserUITests-Runner[86402:183351960] Stop tracking process with token 1
+16:10:35.250 TestS3BrowserUITests-Runner[86402:183351960] Monitor: set (null) for token 1
+16:10:35.252 TestS3BrowserUITests-Runner[86402:183351961] -[XCTRunnerDaemonSession(XCTMessagingRole_UIApplicationStateUpdating) _XCT_applicationDidUpdateState:] com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/41CFCAE0-DD50-4B00-A15E-D9C0E7BA6368/TestS3Browser.app processName: TestS3Browser pid: 89591 state: not running
+16:10:35.253 TestS3BrowserUITests-Runner[86402:183349755] [AM:0] Processing state snapshot com.crispytoast.TestS3Browser@/Users/mike/Library/Developer/CoreSimulator/Devices/5B87AEFD-8266-4451-8795-8728177C5241/data/Containers/Bundle/Application/41CFCAE0-DD50-4B00-A15E-D9C0E7BA6368/TestS3Browser.app processName: TestS3Browser pid: 89591 state: not running
+16:10:35.253 TestS3BrowserUITests-Runner[86402:183351961] com.crispytoast.TestS3Browser (pid:89591) application state Running Foreground (4) -> Not Running (1)
+16:10:35.253 TestS3BrowserUITests-Runner[86402:183349755] Setting pid for 0x10a498580 89591 -> 0
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183351961] com.crispytoast.TestS3Browser (pid:89591) pid 89591 -> 0
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183351961] Monitor: retaining a lightweight application process with pid 89591 for crash detection
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183349755] <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> changing currentProcess from com.crispytoast.TestS3Browser (pid:0) to com.crispytoast.TestS3Browser (pid:0)
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183349755] Setting pid for 0x1075c3400 0 -> 0
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183351961] Monitor: set (null) for pid 89591
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183349755] App state updated for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app>: Not Running (1)
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183349755] Done setting pid for <XCUIApplicationImpl: 0x10a5a6040 com.crispytoast.TestS3Browser at /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/Build/Products/Release-iphonesimulator/TestS3Browser.app> to 0
+16:10:35.254 TestS3BrowserUITests-Runner[86402:183351960] com.crispytoast.TestS3Browser (pid:0) application state Unknown (0) -> Not Running (1)
+16:10:35.256 TestS3BrowserUITests-Runner[86402:183351960] Handling kAXPidStatusChangedNotification
+16:10:35.256 TestS3BrowserUITests-Runner[86402:183351960] Got kAXPidStatusChangedNotification for pid 89591: active
+16:10:35.362 TestS3BrowserUITests-Runner[86402:183349755] No application process found matching pid 89591, caching
+16:10:35.487 TestS3BrowserUITests-Runner[86402:183351960] Handling kAXPidStatusChangedNotification
+16:10:35.487 TestS3BrowserUITests-Runner[86402:183351960] Got kAXPidStatusChangedNotification for pid 31668: active
+16:10:35.493 TestS3BrowserUITests-Runner[86402:183351985] Handling kAXPidStatusChangedNotification
+16:10:35.493 TestS3BrowserUITests-Runner[86402:183351985] Got kAXPidStatusChangedNotification for pid 31136: active

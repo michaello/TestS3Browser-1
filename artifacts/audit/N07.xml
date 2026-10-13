@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="13" failures="0" skipped="0" time="0.004658083">
-    <testcase classname="AuditCoreTests.AuditN07" name="standardMigrationPreservesAppliedSettingsAndUnrelatedStores()" time="0.004103084" />
-    <testcase classname="AuditCoreTests.AuditN07" name="malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:)" time="0.004130708" />
-    <testcase classname="AuditCoreTests.AuditN07" name="failedRollbackIsSurfacedAndExplicitReplacementRecovers()" time="0.003980625" />
-    <testcase classname="AuditCoreTests.AuditN07" name="legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:)" time="0.004125542" />
-    <testcase classname="AuditCoreTests.AuditN07" name="missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults()" time="0.004098333" />
-    <testcase classname="AuditCoreTests.AuditN07" name="failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:)" time="0.003951417" />
-    <testcase classname="AuditCoreTests.AuditN07" name="appGroupLegacyMigratesWhenStandardHasNoRecord()" time="0.004094375" />
-    <testcase classname="AuditCoreTests.AuditN07" name="settingsOnlySaveVerifiesAndReusesCredentialReference()" time="0.004181417" />
-    <testcase classname="AuditCoreTests.AuditN07" name="replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension()" time="0.004087375" />
-    <testcase classname="AuditCoreTests.AuditN07" name="newPreferencesContainOnlySettingsAndOpaqueReference()" time="0.003953125" />
-    <testcase classname="AuditCoreTests.AuditN07" name="failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:)" time="0.004346209" />
-    <testcase classname="AuditCoreTests.AuditN07" name="extensionAndIntentsReadOnlyCompletedSharedReferences()" time="0.004104209" />
-    <testcase classname="AuditCoreTests.AuditN07" name="emptyStoresLoadAsUnconfiguredWithoutWriting()" time="0.003975042" />
+  <testsuite name="TestResults" errors="0" tests="13" failures="0" skipped="0" time="0.007690458">
+    <testcase classname="AuditCoreTests.AuditN07" name="legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:)" time="0.007144209" />
+    <testcase classname="AuditCoreTests.AuditN07" name="malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:)" time="0.007181583" />
+    <testcase classname="AuditCoreTests.AuditN07" name="appGroupLegacyMigratesWhenStandardHasNoRecord()" time="0.007175375" />
+    <testcase classname="AuditCoreTests.AuditN07" name="failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:)" time="0.007199292" />
+    <testcase classname="AuditCoreTests.AuditN07" name="failedRollbackIsSurfacedAndExplicitReplacementRecovers()" time="0.007185959" />
+    <testcase classname="AuditCoreTests.AuditN07" name="settingsOnlySaveVerifiesAndReusesCredentialReference()" time="0.007186917" />
+    <testcase classname="AuditCoreTests.AuditN07" name="replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension()" time="0.007178584" />
+    <testcase classname="AuditCoreTests.AuditN07" name="missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults()" time="0.007208792" />
+    <testcase classname="AuditCoreTests.AuditN07" name="failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:)" time="0.007213375" />
+    <testcase classname="AuditCoreTests.AuditN07" name="newPreferencesContainOnlySettingsAndOpaqueReference()" time="0.0071715" />
+    <testcase classname="AuditCoreTests.AuditN07" name="extensionAndIntentsReadOnlyCompletedSharedReferences()" time="0.007179042" />
+    <testcase classname="AuditCoreTests.AuditN07" name="emptyStoresLoadAsUnconfiguredWithoutWriting()" time="0.007181083" />
+    <testcase classname="AuditCoreTests.AuditN07" name="standardMigrationPreservesAppliedSettingsAndUnrelatedStores()" time="0.007186917" />
   </testsuite>
 </testsuites>

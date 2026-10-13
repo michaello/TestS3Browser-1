@@ -2,9 +2,9 @@
   "id": "N32",
   "expected_behavior": "Copy-based operations above the single-copy limit use supported multipart-copy semantics, preserve operation properties, delete a move source only after successful completion, and clean up failed/cancelled multipart work.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:03.984119+00:00",
+  "recorded_at": "2026-10-13T08:13:41.063029+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,38 +23,38 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N32MultipartCopyTests",
-      "name": "cleanupFailureIncludesUploadIDAndOriginalFailure()",
-      "time": "0.014871667"
-    },
-    {
-      "classname": "AuditCoreTests.N32MultipartCopyTests",
-      "name": "failedPartOrCompletionAbortsAndRetainsMoveSource()",
-      "time": "0.015780333"
-    },
-    {
-      "classname": "AuditCoreTests.N32MultipartCopyTests",
-      "name": "atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision()",
-      "time": "0.015741375"
-    },
-    {
-      "classname": "AuditCoreTests.N32MultipartCopyTests",
-      "name": "missingDestinationETagFailsBeforeCreatingMultipartUpload()",
-      "time": "0.000852208"
-    },
-    {
-      "classname": "AuditCoreTests.N32MultipartCopyTests",
       "name": "plansCoverEveryByteWithoutExceedingPartLimits()",
-      "time": "0.01451825"
+      "time": "0.017674"
     },
     {
       "classname": "AuditCoreTests.N32MultipartCopyTests",
       "name": "moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()",
-      "time": "0.000939375"
+      "time": "0.000686708"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "cleanupFailureIncludesUploadIDAndOriginalFailure()",
+      "time": "0.018029209"
     },
     {
       "classname": "AuditCoreTests.N32MultipartCopyTests",
       "name": "cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()",
-      "time": "0.01568975"
+      "time": "0.018130459"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "failedPartOrCompletionAbortsAndRetainsMoveSource()",
+      "time": "0.018206833"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision()",
+      "time": "0.018215375"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "missingDestinationETagFailsBeforeCreatingMultipartUpload()",
+      "time": "0.000981459"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.log",

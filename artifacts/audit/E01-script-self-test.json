@@ -7,13 +7,13 @@
         "-c",
         "print('fixture process executed')"
       ],
-      "pid": 81389,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-self-test-20261013-150810-417021.log",
-      "started_at_epoch": 1791875290.417044,
+      "pid": 18699,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-self-test-20261013-155925-374632.log",
+      "started_at_epoch": 1791878365.3746529,
       "timeout_seconds": 10,
       "status": "completed",
       "exit_code": 0,
-      "elapsed_seconds": 0.08150291442871094
+      "elapsed_seconds": 0.11241006851196289
     },
     {
       "command": [
@@ -21,13 +21,13 @@
         "-c",
         "raise SystemExit(7)"
       ],
-      "pid": 81516,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-negative-test-20261013-150810-498804.log",
-      "started_at_epoch": 1791875290.4988291,
+      "pid": 18796,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-negative-test-20261013-155925-488756.log",
+      "started_at_epoch": 1791878365.488797,
       "timeout_seconds": 10,
       "status": "failed",
       "exit_code": 7,
-      "elapsed_seconds": 0.06382989883422852
+      "elapsed_seconds": 0.11265397071838379
     },
     {
       "command": [
@@ -35,13 +35,13 @@
         "-c",
         "import time;time.sleep(5)"
       ],
-      "pid": 81615,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-timeout-test-20261013-150810-563529.log",
-      "started_at_epoch": 1791875290.563583,
+      "pid": 18938,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-timeout-test-20261013-155925-601730.log",
+      "started_at_epoch": 1791878365.601761,
       "timeout_seconds": 0.1,
       "status": "failed",
       "exit_code": 124,
-      "elapsed_seconds": 0.14038300514221191
+      "elapsed_seconds": 0.20194101333618164
     }
   ],
   "resource_negative_cases": [

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.436199625">
-    <testcase classname="AuditCoreTests.F22FileImportTests" name="cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending()" time="0.317610417" />
-    <testcase classname="AuditCoreTests.F22FileImportTests" name="genericFileNameIsPreservedAndLocalNameIsBounded()" time="0.303987458" />
-    <testcase classname="AuditCoreTests.F22FileImportTests" name="actualImageTypeSurvivesMisleadingProviderName(_:)" time="0.313230333" />
-    <testcase classname="AuditCoreTests.F22FileImportTests" name="moviesRetainPlayableOriginalBytesAndMovieType(mp4:)" time="0.435830958" />
-    <testcase classname="AuditCoreTests.F22FileImportTests" name="invalidMediaIsRejectedWithoutOwnedFiles()" time="0.322430583" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.267480583">
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="actualImageTypeSurvivesMisleadingProviderName(_:)" time="0.267124834" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending()" time="0.193239292" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="genericFileNameIsPreservedAndLocalNameIsBounded()" time="0.188716833" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="moviesRetainPlayableOriginalBytesAndMovieType(mp4:)" time="0.202121708" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="invalidMediaIsRejectedWithoutOwnedFiles()" time="0.195849" />
   </testsuite>
 </testsuites>

@@ -2,9 +2,9 @@
   "id": "N48",
   "expected_behavior": "Rejected folder names produce an actionable visible explanation without silently dismissing the operation or submitting an invalid key.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:32.078803+00:00",
+  "recorded_at": "2026-10-13T08:14:16.417208+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.N48FolderValidationTests",
       "name": "fullPrefixByteLimitAndRemoteFailureAreActionable()",
-      "time": "0.007455708"
-    },
-    {
-      "classname": "AuditCoreTests.N48FolderValidationTests",
-      "name": "correctedNameCanBeSubmittedWithExactSpecialBytes()",
-      "time": "0.000794709"
+      "time": "0.027406334"
     },
     {
       "classname": "AuditCoreTests.N48FolderValidationTests",
       "name": "invalidNamesKeepInputAndShowErrorWithoutSending(_:)",
-      "time": "0.000767084"
+      "time": "0.027584084"
+    },
+    {
+      "classname": "AuditCoreTests.N48FolderValidationTests",
+      "name": "correctedNameCanBeSubmittedWithExactSpecialBytes()",
+      "time": "0.027674041"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N48.log",

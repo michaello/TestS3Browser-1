@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.044729667">
-    <testcase classname="AuditCoreTests.N34ConfiguredPrefixTests" name="appliedConfiguration()" time="0.042310583" />
-    <testcase classname="AuditCoreTests.N34ConfiguredPrefixTests" name="freshPrefix()" time="0.0444425" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.006627375">
+    <testcase classname="AuditCoreTests.N34ConfiguredPrefixTests" name="freshPrefix()" time="0.0063245" />
+    <testcase classname="AuditCoreTests.N34ConfiguredPrefixTests" name="appliedConfiguration()" time="0.005642584" />
   </testsuite>
 </testsuites>

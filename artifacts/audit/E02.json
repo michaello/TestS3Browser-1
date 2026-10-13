@@ -1,0 +1,192 @@
+{
+  "id": "E02",
+  "passed": true,
+  "recorded_at": "2026-10-13T07:42:25.453617+00:00",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "symbolic-ref",
+        "--short",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "main",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "config",
+        "--get",
+        "branch.main.remote"
+      ],
+      "exit_code": 0,
+      "stdout": "origin",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "config",
+        "--get",
+        "branch.main.merge"
+      ],
+      "exit_code": 0,
+      "stdout": "refs/heads/main",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "diff",
+        "--name-only",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "artifacts/audit/E01-resolve-20261013-153807-823458.log",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "ls-files",
+        "--others",
+        "--exclude-standard"
+      ],
+      "exit_code": 0,
+      "stdout": "artifacts/audit/E02-initial-no-upstream.json\nartifacts/audit/E02.json",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "ls-remote",
+        "--exit-code",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exit_code": 0,
+      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170\trefs/heads/main",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "merge-base",
+        "--is-ancestor",
+        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "log",
+        "-1",
+        "--format=%H",
+        "HEAD",
+        "--",
+        "Sources",
+        "ShareExtension",
+        "WidgetExtension",
+        "Tests",
+        "TestS3BrowserIntegrationTests",
+        "TestS3BrowserUITests",
+        "TestS3Browser.xcodeproj",
+        "scripts",
+        "Package.swift",
+        "Info.plist",
+        "*.entitlements"
+      ],
+      "exit_code": 0,
+      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "merge-base",
+        "--is-ancestor",
+        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "rev-parse",
+        "HEAD:AUDIT_QUEUE.json"
+      ],
+      "exit_code": 0,
+      "stdout": "0a3d4e43d74e68cbdce351931daa712d582610c7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "rev-parse",
+        "e2e87002e6a78e7af197eb43e3f56c69d0dfd170:AUDIT_QUEUE.json"
+      ],
+      "exit_code": 0,
+      "stdout": "0a3d4e43d74e68cbdce351931daa712d582610c7",
+      "stderr": ""
+    }
+  ],
+  "assertions": [
+    "Source/build/test inputs are committed",
+    "The ledger is committed",
+    "Configured remote branch contains the local source commit and ledger commit",
+    "Remote ledger blob matches the committed local ledger",
+    "Source fingerprint stayed unchanged"
+  ],
+  "branch": "main",
+  "remote": "origin",
+  "remote_ref": "refs/heads/main",
+  "remote_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+  "delivered_source_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+  "delivered_ledger_commit": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+  "ledger_blob": "0a3d4e43d74e68cbdce351931daa712d582610c7",
+  "ledger_sha256": "34929be9d170b0028fdab3224e979612ac3dbabe26be5cf5e51e3aa75fac0cc4"
+}

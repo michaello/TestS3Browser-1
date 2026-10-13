@@ -2,9 +2,9 @@
   "id": "F05",
   "expected_behavior": "A failed bucket retains its last good data with an incomplete-refresh indication; zero-success scans cannot persist an empty replacement or report complete Stats totals.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:34.802286+00:00",
+  "recorded_at": "2026-10-13T08:12:01.096365+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F05MetadataCatalogTests",
-      "name": "paginationAndEmptyBuckets()",
-      "time": "0.007147"
+      "name": "partialRefresh()",
+      "time": "0.015765792"
     },
     {
       "classname": "AuditCoreTests.F05MetadataCatalogTests",
       "name": "emptyDiscoveryRetainsSnapshot()",
-      "time": "0.006649667"
-    },
-    {
-      "classname": "AuditCoreTests.F05MetadataCatalogTests",
-      "name": "partialRefresh()",
-      "time": "0.006796833"
-    },
-    {
-      "classname": "AuditCoreTests.F05MetadataCatalogTests",
-      "name": "allFailedRetainsPersisted()",
-      "time": "0.00784075"
-    },
-    {
-      "classname": "AuditCoreTests.F05MetadataCatalogTests",
-      "name": "boundedConcurrency()",
-      "time": "0.007948125"
+      "time": "0.015375792"
     },
     {
       "classname": "AuditCoreTests.F05MetadataCatalogTests",
       "name": "failedLaterPage()",
-      "time": "0.006789834"
+      "time": "0.015970458"
+    },
+    {
+      "classname": "AuditCoreTests.F05MetadataCatalogTests",
+      "name": "paginationAndEmptyBuckets()",
+      "time": "0.016369792"
+    },
+    {
+      "classname": "AuditCoreTests.F05MetadataCatalogTests",
+      "name": "boundedConcurrency()",
+      "time": "0.018451458"
+    },
+    {
+      "classname": "AuditCoreTests.F05MetadataCatalogTests",
+      "name": "allFailedRetainsPersisted()",
+      "time": "0.018133333"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F05.log",

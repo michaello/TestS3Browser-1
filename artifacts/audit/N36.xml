@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.008603">
-    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="completeFailureHasTerminalErrorSummaryAndNoShareFiles()" time="0.007005042" />
-    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()" time="0.00821775" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.008872125">
+    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="completeFailureHasTerminalErrorSummaryAndNoShareFiles()" time="0.006862375" />
+    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()" time="0.008617916" />
   </testsuite>
 </testsuites>

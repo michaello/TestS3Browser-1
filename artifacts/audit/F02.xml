@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.0009605">
-    <testcase classname="AuditCoreTests.F02BrowseStartupTests" name="rootIsListedOnce()" time="0.0005755" />
-    <testcase classname="AuditCoreTests.F02BrowseStartupTests" name="listingDoesNotWaitForDiscovery()" time="0.000678125" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.001411584">
+    <testcase classname="AuditCoreTests.F02BrowseStartupTests" name="listingDoesNotWaitForDiscovery()" time="0.001187125" />
+    <testcase classname="AuditCoreTests.F02BrowseStartupTests" name="rootIsListedOnce()" time="0.001084" />
   </testsuite>
 </testsuites>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.01544075">
-    <testcase classname="AuditCoreTests.AuditN26" name="unknownEarlierRuleCannotCertifyAnotherAsNext()" time="0.0068495" />
-    <testcase classname="AuditCoreTests.AuditN26" name="andFiltersRequireExactTagsAndStrictSizeBounds()" time="0.014879542" />
-    <testcase classname="AuditCoreTests.AuditN26" name="missingTagsDoNotHideKnownPrefixMismatch()" time="0.009931959" />
-    <testcase classname="AuditCoreTests.AuditN26" name="defaultMinimumAndCurrentStorageClassAffectTransitions()" time="0.0151915" />
-    <testcase classname="AuditCoreTests.AuditN26" name="replicationAndMinimumAgePreventPrematurePrediction()" time="0.013129666" />
-    <testcase classname="AuditCoreTests.AuditN26" name="invalidSizeBoundsAndByteDistinctTagsRemainSafe()" time="0.006613875" />
-    <testcase classname="AuditCoreTests.AuditN26" name="prefixAndStatusExcludeUnrelatedObjects()" time="0.014024708" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.018037375">
+    <testcase classname="AuditCoreTests.AuditN26" name="andFiltersRequireExactTagsAndStrictSizeBounds()" time="0.01695275" />
+    <testcase classname="AuditCoreTests.AuditN26" name="unknownEarlierRuleCannotCertifyAnotherAsNext()" time="0.014852208" />
+    <testcase classname="AuditCoreTests.AuditN26" name="invalidSizeBoundsAndByteDistinctTagsRemainSafe()" time="0.0133225" />
+    <testcase classname="AuditCoreTests.AuditN26" name="missingTagsDoNotHideKnownPrefixMismatch()" time="0.008775917" />
+    <testcase classname="AuditCoreTests.AuditN26" name="prefixAndStatusExcludeUnrelatedObjects()" time="0.016559541" />
+    <testcase classname="AuditCoreTests.AuditN26" name="defaultMinimumAndCurrentStorageClassAffectTransitions()" time="0.017697291" />
+    <testcase classname="AuditCoreTests.AuditN26" name="replicationAndMinimumAgePreventPrematurePrediction()" time="0.012596458" />
   </testsuite>
 </testsuites>

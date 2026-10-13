@@ -1,16 +1,16 @@
 Building for debugging...
-Build complete! (0.20 sec)
+Build complete! (0.22 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN24 started.
-􀟈  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() started.
-􀟈  Test delayedListingCannotRestoreASuccessfullyDeletedObject() started.
 􀟈  Test obsoleteAccountDeleteCannotChangeCurrentCaches() started.
+􀟈  Test delayedListingCannotRestoreASuccessfullyDeletedObject() started.
+􀟈  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() started.
 􀟈  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() started.
-􁁛  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() passed after 0.001 seconds.
 􁁛  Test obsoleteAccountDeleteCannotChangeCurrentCaches() passed after 0.001 seconds.
 􁁛  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() passed after 0.001 seconds.
-􁁛  Test delayedListingCannotRestoreASuccessfullyDeletedObject() passed after 0.001 seconds.
-􁁛  Suite AuditN24 passed after 0.001 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.001 seconds.
+􁁛  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() passed after 0.001 seconds.
+􁁛  Test delayedListingCannotRestoreASuccessfullyDeletedObject() passed after 0.002 seconds.
+􁁛  Suite AuditN24 passed after 0.002 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.002 seconds.

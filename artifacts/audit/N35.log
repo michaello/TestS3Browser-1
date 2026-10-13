@@ -1,14 +1,16 @@
 Building for debugging...
-Build complete! (0.21 sec)
+[Computing dependencies]
+[1 / 1]
+Build complete! (0.53 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N35ShareOutcomeTests started.
-􀟈  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() started.
 􀟈  Test totalProviderFailureCannotReportSuccessfulSmallerBatch() started.
+􀟈  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() started.
 􀟈  Test middleUploadFailureDoesNotDropOtherAttachmentOutcomes() started.
-􁁛  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() passed after 0.007 seconds.
-􁁛  Test totalProviderFailureCannotReportSuccessfulSmallerBatch() passed after 0.007 seconds.
-􁁛  Test middleUploadFailureDoesNotDropOtherAttachmentOutcomes() passed after 0.009 seconds.
-􁁛  Suite N35ShareOutcomeTests passed after 0.009 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.009 seconds.
+􁁛  Test totalProviderFailureCannotReportSuccessfulSmallerBatch() passed after 0.013 seconds.
+􁁛  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() passed after 0.027 seconds.
+􁁛  Test middleUploadFailureDoesNotDropOtherAttachmentOutcomes() passed after 0.030 seconds.
+􁁛  Suite N35ShareOutcomeTests passed after 0.030 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.030 seconds.

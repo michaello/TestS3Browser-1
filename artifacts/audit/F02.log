@@ -4,8 +4,8 @@ Build complete! (0.21 sec)
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F02BrowseStartupTests started.
-􀟈  Test "Restoring root does not perform an intermediate root request" started.
 􀟈  Test "Saved folder lists once while bucket discovery remains suspended" started.
+􀟈  Test "Restoring root does not perform an intermediate root request" started.
 􁁛  Test "Restoring root does not perform an intermediate root request" passed after 0.001 seconds.
 􁁛  Test "Saved folder lists once while bucket discovery remains suspended" passed after 0.001 seconds.
 􁁛  Suite F02BrowseStartupTests passed after 0.001 seconds.

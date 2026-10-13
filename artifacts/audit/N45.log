@@ -1,16 +1,16 @@
 Building for debugging...
-[Computing dependencies]
-[1 / 2] AuditCoreTests-product
-Build complete! (0.76 sec)
+[Using on-disk description]
+[1 / 1]
+Build complete! (0.67 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N45 HTML updates preserve document render state" started.
 􀟈  Test "Initial make and repeated identical updates load once and retain unrelated state" started.
-􀟈  Test "Byte-distinct Unicode identity and HTML content changes are not dropped" started.
 􀟈  Test "New identity or content loads exactly once and leaves other state untouched" started.
+􀟈  Test "Byte-distinct Unicode identity and HTML content changes are not dropped" started.
+􁁛  Test "Initial make and repeated identical updates load once and retain unrelated state" passed after 0.001 seconds.
 􁁛  Test "New identity or content loads exactly once and leaves other state untouched" passed after 0.001 seconds.
 􁁛  Test "Byte-distinct Unicode identity and HTML content changes are not dropped" passed after 0.001 seconds.
-􁁛  Test "Initial make and repeated identical updates load once and retain unrelated state" passed after 0.001 seconds.
 􁁛  Suite "N45 HTML updates preserve document render state" passed after 0.001 seconds.
 􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.

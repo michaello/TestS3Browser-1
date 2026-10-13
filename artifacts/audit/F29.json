@@ -2,9 +2,9 @@
   "id": "F29",
   "expected_behavior": "Editing Settings drafts sends no request per keystroke; Apply updates one configuration generation, and obsolete admin responses or same-bucket credential changes cannot leave stale results.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:19.467945+00:00",
+  "recorded_at": "2026-10-13T08:12:44.111317+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditF29",
-      "name": "typingDraftDoesNotPublishOrPersistUntilApply()",
-      "time": "0.000740167"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF29",
-      "name": "failedForcedRefreshRetainsGoodAdministrationData()",
-      "time": "0.005492209"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF29",
-      "name": "sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()",
-      "time": "0.005484042"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF29",
       "name": "obsoleteResponseCannotOverwriteTheCurrentAdministrationResults()",
-      "time": "0.005649833"
+      "time": "0.005714125"
     },
     {
       "classname": "AuditCoreTests.AuditF29",
-      "name": "collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()",
-      "time": "0.000820208"
+      "name": "typingDraftDoesNotPublishOrPersistUntilApply()",
+      "time": "0.000827542"
     },
     {
       "classname": "AuditCoreTests.AuditF29",
       "name": "failedApplyKeepsTheAppliedConfigurationAndEditableDraft()",
-      "time": "0.000878958"
+      "time": "0.000809625"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()",
+      "time": "0.00082575"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "failedForcedRefreshRetainsGoodAdministrationData()",
+      "time": "0.005533291"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()",
+      "time": "0.005596333"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.log",

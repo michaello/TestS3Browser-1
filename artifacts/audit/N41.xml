@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.05921425">
-    <testcase classname="AuditCoreTests.AuditN41" name="onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:)" time="0.05843225" />
-    <testcase classname="AuditCoreTests.AuditN41" name="networkAndMalformedResponsesCannotBecomeKnownAbsence()" time="0.054455291" />
-    <testcase classname="AuditCoreTests.AuditN41" name="loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry()" time="0.058854083" />
-    <testcase classname="AuditCoreTests.AuditN41" name="deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:)" time="0.054445084" />
-    <testcase classname="AuditCoreTests.AuditN41" name="cancellationCannotPublishAnAbsentConfiguration()" time="0.054365208" />
-    <testcase classname="AuditCoreTests.AuditN41" name="failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure()" time="0.058463459" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.01477675">
+    <testcase classname="AuditCoreTests.AuditN41" name="loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry()" time="0.014445208" />
+    <testcase classname="AuditCoreTests.AuditN41" name="deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:)" time="0.014029541" />
+    <testcase classname="AuditCoreTests.AuditN41" name="onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:)" time="0.0143675" />
+    <testcase classname="AuditCoreTests.AuditN41" name="cancellationCannotPublishAnAbsentConfiguration()" time="0.003189916" />
+    <testcase classname="AuditCoreTests.AuditN41" name="failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure()" time="0.014372541" />
+    <testcase classname="AuditCoreTests.AuditN41" name="networkAndMalformedResponsesCannotBecomeKnownAbsence()" time="0.01400575" />
   </testsuite>
 </testsuites>

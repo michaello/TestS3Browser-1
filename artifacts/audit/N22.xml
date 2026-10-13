@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.009415959">
-    <testcase classname="AuditCoreTests.AuditN22" name="unavailableTagDoesNotClearAnAvailableStarFilter()" time="0.006628583" />
-    <testcase classname="AuditCoreTests.AuditN22" name="removingLastStarResetsStarFilter()" time="0.006615334" />
-    <testcase classname="AuditCoreTests.AuditN22" name="existingFiltersRemainUntilExplicitlyCleared()" time="0.006599583" />
-    <testcase classname="AuditCoreTests.AuditN22" name="removingLastSelectedTagResetsTagFilter()" time="0.009116708" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.162975458">
+    <testcase classname="AuditCoreTests.AuditN22" name="removingLastStarResetsStarFilter()" time="0.156467834" />
+    <testcase classname="AuditCoreTests.AuditN22" name="existingFiltersRemainUntilExplicitlyCleared()" time="0.15483425" />
+    <testcase classname="AuditCoreTests.AuditN22" name="removingLastSelectedTagResetsTagFilter()" time="0.162651083" />
+    <testcase classname="AuditCoreTests.AuditN22" name="unavailableTagDoesNotClearAnAvailableStarFilter()" time="0.162675667" />
   </testsuite>
 </testsuites>

@@ -2,9 +2,9 @@
   "id": "F11",
   "expected_behavior": "Concurrent row, gallery, prefetch and export demand joins one original transfer per object identity; reusable results remain available and obsolete speculative work obeys byte/size/lifetime limits.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:49.380957+00:00",
+  "recorded_at": "2026-10-13T08:12:14.521824+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -19,32 +19,37 @@
     "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.xml"
   ],
   "exit_code": 0,
-  "test_count": 5,
+  "test_count": 6,
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F11MediaTransferTests",
-      "name": "videoPosterSingleFlight()",
-      "time": "0.000915583"
-    },
-    {
-      "classname": "AuditCoreTests.F11MediaTransferTests",
       "name": "bodyCeilingAndCancellation()",
-      "time": "0.000845125"
-    },
-    {
-      "classname": "AuditCoreTests.F11MediaTransferTests",
-      "name": "singleFlight()",
-      "time": "0.008302625"
-    },
-    {
-      "classname": "AuditCoreTests.F11MediaTransferTests",
-      "name": "speculativePolicy()",
-      "time": "0.023489959"
+      "time": "0.00335525"
     },
     {
       "classname": "AuditCoreTests.F11MediaTransferTests",
       "name": "videoPosterInvalidation()",
-      "time": "0.000932666"
+      "time": "0.003350625"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "speculativePolicy()",
+      "time": "0.020133542"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "singleFlightBehindOccupiedPermit()",
+      "time": "0.064003459"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "videoPosterSingleFlight()",
+      "time": "0.001682917"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "singleFlight()",
+      "time": "0.006854917"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.log",

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.018171833">
-    <testcase classname="AuditCoreTests.N10MultiDropTests" name="everySupportedPayloadIsUploadedAndRejectedItemsAreReported()" time="0.015324334" />
-    <testcase classname="AuditCoreTests.N10MultiDropTests" name="oneUploadFailureDoesNotDiscardOtherPayloads()" time="0.017791584" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.012967916">
+    <testcase classname="AuditCoreTests.N10MultiDropTests" name="everySupportedPayloadIsUploadedAndRejectedItemsAreReported()" time="0.012677666" />
+    <testcase classname="AuditCoreTests.N10MultiDropTests" name="oneUploadFailureDoesNotDiscardOtherPayloads()" time="0.011785458" />
   </testsuite>
 </testsuites>

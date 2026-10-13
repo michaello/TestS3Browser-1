@@ -2,9 +2,9 @@
   "id": "F18",
   "expected_behavior": "Unconverted exports preserve original byte hashes, extension and MIME type, including animated/metadata-bearing formats; requested conversions and Data URLs declare their actual output format.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:10.057294+00:00",
+  "recorded_at": "2026-10-13T08:12:32.521574+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F18OriginalExportTests",
-      "name": "originalGIF()",
-      "time": "0.012628625"
+      "name": "truthfulDataURLs(fixture:)",
+      "time": "0.005479084"
     },
     {
       "classname": "AuditCoreTests.F18OriginalExportTests",
-      "name": "truthfulDataURLs(fixture:)",
-      "time": "0.002142291"
+      "name": "originalGIF()",
+      "time": "0.060755667"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.log",

@@ -1,21 +1,21 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.25 sec)
+Build complete! (0.37 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditF26 started.
-􀟈  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() started.
-􀟈  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() started.
-􀟈  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() started.
 􀟈  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() started.
-􀟈  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() started.
 􀟈  Test renameAndMoveCarryAnnotationsToTheExactDestination() started.
-􁁛  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() passed after 0.008 seconds.
-􁁛  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() passed after 0.010 seconds.
-􁁛  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() passed after 0.010 seconds.
-􁁛  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() passed after 0.010 seconds.
-􁁛  Test renameAndMoveCarryAnnotationsToTheExactDestination() passed after 0.011 seconds.
-􁁛  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() passed after 0.012 seconds.
-􁁛  Suite AuditF26 passed after 0.012 seconds.
-􁁛  Test run with 6 tests in 1 suite passed after 0.012 seconds.
+􀟈  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() started.
+􀟈  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() started.
+􀟈  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() started.
+􀟈  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() started.
+􁁛  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() passed after 0.015 seconds.
+􁁛  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() passed after 0.015 seconds.
+􁁛  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() passed after 0.015 seconds.
+􁁛  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() passed after 0.015 seconds.
+􁁛  Test renameAndMoveCarryAnnotationsToTheExactDestination() passed after 0.015 seconds.
+􁁛  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() passed after 0.018 seconds.
+􁁛  Suite AuditF26 passed after 0.018 seconds.
+􁁛  Test run with 6 tests in 1 suite passed after 0.019 seconds.

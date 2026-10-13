@@ -1,19 +1,19 @@
 Building for debugging...
-[1 / 1]
+[1 / 3] AuditCoreTests-product
 Build complete! (0.32 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N09 actual custom tab selection semantics" started.
-􀟈  Test "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
 􀟈  Test "Native tab action and context selection retain their production state transitions" started.
-􀟈  Test case passing 1 argument selected → .stash to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
-􀟈  Test case passing 1 argument selected → .browse to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
-􀟈  Test case passing 1 argument selected → .stats to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
-􀟈  Test case passing 1 argument selected → .settings to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
 􀟈  Test case passing 1 argument selected → .apps to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
-􀟈  Test case passing 1 argument selected → .upload to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .stash to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
 􀟈  Test case passing 1 argument selected → .recent to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .browse to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .upload to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .settings to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .stats to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
 􁁛  Test "Native tab action and context selection retain their production state transitions" passed after 0.001 seconds.
 􁁛  Test "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" with 7 test cases passed after 0.001 seconds.
 􁁛  Suite "N09 actual custom tab selection semantics" passed after 0.001 seconds.

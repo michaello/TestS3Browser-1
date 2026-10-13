@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.023860958">
-    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="videoPosterSingleFlight()" time="0.000915583" />
-    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="bodyCeilingAndCancellation()" time="0.000845125" />
-    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="singleFlight()" time="0.008302625" />
-    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="speculativePolicy()" time="0.023489959" />
-    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="videoPosterInvalidation()" time="0.000932666" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.064278125">
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="bodyCeilingAndCancellation()" time="0.00335525" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="videoPosterInvalidation()" time="0.003350625" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="speculativePolicy()" time="0.020133542" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="singleFlightBehindOccupiedPermit()" time="0.064003459" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="videoPosterSingleFlight()" time="0.001682917" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="singleFlight()" time="0.006854917" />
   </testsuite>
 </testsuites>

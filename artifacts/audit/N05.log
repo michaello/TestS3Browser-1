@@ -1,39 +1,39 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.27 sec)
+[1 / 2] AuditCore-product
+Build complete! (0.28 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N05ObjectTransferTests started.
-􀟈  Test "Changed account or source after copy retains source" started.
-􀟈  Test "Missing source ETag never authorizes an unconditional delete" started.
-􀟈  Test "Keep both preserves exact prefix and rechecks new destination" started.
+􀟈  Test "Unicode normalization never shares replacement approval or revision identity" started.
 􀟈  Test "Copy source preserves reserved bytes, repeated slashes and version query" started.
-􀟈  Test "Unknown HEAD errors never authorize writes" started.
+􀟈  Test "Keep both preserves exact prefix and rechecks new destination" started.
 􀟈  Test "Failed copy never removes source" started.
-􀟈  Test "Cancellation after completed copy retains source and reports partial completion" started.
 􀟈  Test "Absent destination succeeds and copy preserves the source" started.
 􀟈  Test "Approval authorizes only the observed account, operation and destination revision" started.
-􀟈  Test "Unicode normalization never shares replacement approval or revision identity" started.
-􀟈  Test "Existing destination needs approval and declining performs no copy or delete" started.
-􀟈  Test case passing 1 argument accountChanged → true to "Changed account or source after copy retains source" started.
-􀟈  Test case passing 1 argument failure → .denied to "Unknown HEAD errors never authorize writes" started.
-􀟈  Test case passing 1 argument failure → .offline to "Unknown HEAD errors never authorize writes" started.
-􀟈  Test "Failed delete reports completed destination and retained source" started.
 􀟈  Test "App operations cannot both claim the same absent destination" started.
+􀟈  Test "Failed delete reports completed destination and retained source" started.
+􀟈  Test "Unknown HEAD errors never authorize writes" started.
+􀟈  Test "Cancellation after completed copy retains source and reports partial completion" started.
+􀟈  Test "Changed account or source after copy retains source" started.
+􀟈  Test "Missing source ETag never authorizes an unconditional delete" started.
+􀟈  Test case passing 1 argument failure → .denied to "Unknown HEAD errors never authorize writes" started.
 􀟈  Test case passing 1 argument accountChanged → false to "Changed account or source after copy retains source" started.
-􁁛  Test "Keep both preserves exact prefix and rechecks new destination" passed after 0.003 seconds.
-􁁛  Test "Absent destination succeeds and copy preserves the source" passed after 0.012 seconds.
-􁁛  Test "Unknown HEAD errors never authorize writes" with 2 test cases passed after 0.014 seconds.
-􁁛  Test "Unicode normalization never shares replacement approval or revision identity" passed after 0.015 seconds.
-􁁛  Test "Existing destination needs approval and declining performs no copy or delete" passed after 0.015 seconds.
-􁁛  Test "Failed copy never removes source" passed after 0.015 seconds.
-􁁛  Test "Missing source ETag never authorizes an unconditional delete" passed after 0.015 seconds.
-􁁛  Test "Changed account or source after copy retains source" with 2 test cases passed after 0.015 seconds.
-􁁛  Test "Failed delete reports completed destination and retained source" passed after 0.015 seconds.
-􁁛  Test "Copy source preserves reserved bytes, repeated slashes and version query" passed after 0.016 seconds.
-􁁛  Test "Cancellation after completed copy retains source and reports partial completion" passed after 0.016 seconds.
-􁁛  Test "Approval authorizes only the observed account, operation and destination revision" passed after 0.019 seconds.
-􁁛  Test "App operations cannot both claim the same absent destination" passed after 0.019 seconds.
-􁁛  Suite N05ObjectTransferTests passed after 0.020 seconds.
-􁁛  Test run with 13 tests in 1 suite passed after 0.020 seconds.
+􀟈  Test case passing 1 argument accountChanged → true to "Changed account or source after copy retains source" started.
+􀟈  Test case passing 1 argument failure → .offline to "Unknown HEAD errors never authorize writes" started.
+􀟈  Test "Existing destination needs approval and declining performs no copy or delete" started.
+􁁛  Test "Keep both preserves exact prefix and rechecks new destination" passed after 0.011 seconds.
+􁁛  Test "Absent destination succeeds and copy preserves the source" passed after 0.011 seconds.
+􁁛  Test "Unicode normalization never shares replacement approval or revision identity" passed after 0.012 seconds.
+􁁛  Test "Failed copy never removes source" passed after 0.011 seconds.
+􁁛  Test "Failed delete reports completed destination and retained source" passed after 0.012 seconds.
+􁁛  Test "Unknown HEAD errors never authorize writes" with 2 test cases passed after 0.012 seconds.
+􁁛  Test "Changed account or source after copy retains source" with 2 test cases passed after 0.012 seconds.
+􁁛  Test "Missing source ETag never authorizes an unconditional delete" passed after 0.012 seconds.
+􁁛  Test "Existing destination needs approval and declining performs no copy or delete" passed after 0.011 seconds.
+􁁛  Test "Copy source preserves reserved bytes, repeated slashes and version query" passed after 0.012 seconds.
+􁁛  Test "Cancellation after completed copy retains source and reports partial completion" passed after 0.012 seconds.
+􁁛  Test "Approval authorizes only the observed account, operation and destination revision" passed after 0.014 seconds.
+􁁛  Test "App operations cannot both claim the same absent destination" passed after 0.014 seconds.
+􁁛  Suite N05ObjectTransferTests passed after 0.015 seconds.
+􁁛  Test run with 13 tests in 1 suite passed after 0.015 seconds.

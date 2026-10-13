@@ -2,9 +2,9 @@
   "id": "N02",
   "expected_behavior": "After a failed tag read, Save cannot replace unknown remote tags; retry and successful editing preserve unrelated existing tags.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:20.290935+00:00",
+  "recorded_at": "2026-10-13T08:11:51.015688+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN02",
-      "name": "retryPreservesUneditedRemoteTags()",
-      "time": "0.006011333"
+      "name": "writeFailureRetainsDraftAndRemoteSnapshot()",
+      "time": "0.018543291"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
-      "name": "successfulEmptyReadAllowsFirstTag()",
-      "time": "0.006043958"
+      "name": "retryPreservesUneditedRemoteTags()",
+      "time": "0.018559084"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
       "name": "unknownAndFailedReadsCannotReplaceTags()",
-      "time": "0.006029667"
+      "time": "0.018564917"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
-      "name": "writeFailureRetainsDraftAndRemoteSnapshot()",
-      "time": "0.005974208"
+      "name": "successfulEmptyReadAllowsFirstTag()",
+      "time": "0.018573792"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
       "name": "oldReadCannotAuthorizeEditingAfterNewFailure()",
-      "time": "0.006174125"
+      "time": "0.023472958"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
       "name": "cancelledReadDoesNotBecomeEmptySuccess()",
-      "time": "0.000777417"
+      "time": "0.018565375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N02.log",

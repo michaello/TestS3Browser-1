@@ -4,9 +4,9 @@ Build complete! (0.21 sec)
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N39DestinationListingTests started.
-􀟈  Test "A response for an old destination cannot replace a newer validated destination" started.
 􀟈  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" started.
-􁁛  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" passed after 0.001 seconds.
-􁁛  Test "A response for an old destination cannot replace a newer validated destination" passed after 0.001 seconds.
-􁁛  Suite N39DestinationListingTests passed after 0.001 seconds.
-􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.
+􀟈  Test "A response for an old destination cannot replace a newer validated destination" started.
+􁁛  Test "A response for an old destination cannot replace a newer validated destination" passed after 0.002 seconds.
+􁁛  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" passed after 0.002 seconds.
+􁁛  Suite N39DestinationListingTests passed after 0.002 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.002 seconds.

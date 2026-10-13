@@ -1,12 +1,12 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.40 sec)
+Build complete! (0.34 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F01CachedRecentTests started.
-􀟈  Test "Cached rows render before delayed transport and remain visible after failure" started.
 􀟈  Test "An empty cold cache retains an explicit initial loading state" started.
+􀟈  Test "Cached rows render before delayed transport and remain visible after failure" started.
 􁁛  Test "An empty cold cache retains an explicit initial loading state" passed after 0.001 seconds.
 􁁛  Test "Cached rows render before delayed transport and remain visible after failure" passed after 0.001 seconds.
 􁁛  Suite F01CachedRecentTests passed after 0.001 seconds.

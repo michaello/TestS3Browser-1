@@ -42,7 +42,7 @@ SWIFT_SUITES = {
     "N36": ("N36PartialBatchExportTests", 2),
     "N44": ("N44MediaLeaseTests|N44BatchExportCleanupTests", 3),
     "F10": ("F10MediaPreviewTests", 2),
-    "F11": ("F11MediaTransferTests", 5),
+    "F11": ("F11MediaTransferTests", 6),
     "F12": ("F12MediaIdentityTests|F12ConfirmedMutationTests", 7),
     "F13": ("F13DecodedCacheTests", 1),
     "F14": ("F14GalleryWindowTests", 2),

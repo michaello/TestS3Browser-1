@@ -9,14 +9,24 @@
     "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit",
     "-scmProvider",
     "system",
-    "-resolvePackageDependencies",
-    "-onlyUsePackageVersionsFromResolvedFile",
+    "-configuration",
+    "Release",
+    "-destination",
+    "platform=iOS Simulator,id=5B87AEFD-8266-4451-8795-8728177C5241",
+    "-disableAutomaticPackageResolution",
     "-skipPackageUpdates",
-    "CODE_SIGNING_ALLOWED=NO"
+    "CODE_SIGNING_ALLOWED=NO",
+    "-parallel-testing-enabled",
+    "NO",
+    "-resultBundlePath",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-20261013-161211.xcresult",
+    "test-without-building"
   ],
-  "pid": 78274,
-  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-153807-823458.log",
-  "started_at_epoch": 1791877087.823492,
-  "timeout_seconds": 1200,
-  "status": "running"
+  "pid": 79418,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-simulator-tests-20261013-161211-583114.log",
+  "started_at_epoch": 1791879131.5831208,
+  "timeout_seconds": 1800,
+  "status": "completed",
+  "exit_code": 0,
+  "elapsed_seconds": 92.68320512771606
 }

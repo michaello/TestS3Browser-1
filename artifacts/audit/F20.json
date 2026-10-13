@@ -2,9 +2,9 @@
   "id": "F20",
   "expected_behavior": "Browse and destination pickers expose later pages; Stash includes the actual newest report when reports exceed 1,000 keys instead of reversing only the oldest first page.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:54.317673+00:00",
+  "recorded_at": "2026-10-13T08:12:18.449210+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,18 +23,18 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F20ListingPaginationTests",
+      "name": "newestReportBeyondFirstPage()",
+      "time": "0.003224541"
+    },
+    {
+      "classname": "AuditCoreTests.F20ListingPaginationTests",
       "name": "incrementalBrowse()",
-      "time": "0.003967708"
+      "time": "0.004086667"
     },
     {
       "classname": "AuditCoreTests.F20ListingPaginationTests",
       "name": "destinationFolders()",
-      "time": "0.004028375"
-    },
-    {
-      "classname": "AuditCoreTests.F20ListingPaginationTests",
-      "name": "newestReportBeyondFirstPage()",
-      "time": "0.003366625"
+      "time": "0.0040875"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F20.log",

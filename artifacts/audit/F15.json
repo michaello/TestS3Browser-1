@@ -2,9 +2,9 @@
   "id": "F15",
   "expected_behavior": "Large video/original transfers use file-backed or range-capable paths; preview, Open in and export reuse the same validated original without colliding basenames or a duplicate completed GET.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:07.676601+00:00",
+  "recorded_at": "2026-10-13T08:12:29.385019+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,22 +24,22 @@
     {
       "classname": "AuditCoreTests.F15OriginalFileTests",
       "name": "playerFileOwnership()",
-      "time": "0.017116"
+      "time": "0.005699292"
     },
     {
       "classname": "AuditCoreTests.F15OriginalFileTests",
       "name": "truncatedFailure()",
-      "time": "0.017428292"
+      "time": "0.004678959"
     },
     {
       "classname": "AuditCoreTests.F15OriginalFileTests",
       "name": "filesAndLeaseBudget()",
-      "time": "0.01811325"
+      "time": "0.006847375"
     },
     {
       "classname": "AuditCoreTests.F15OriginalFileTests",
       "name": "playerPermitOwnership()",
-      "time": "0.013008333"
+      "time": "0.003235584"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F15.log",

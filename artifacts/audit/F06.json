@@ -2,9 +2,9 @@
   "id": "F06",
   "expected_behavior": "Different filters, shortcut limits, bucket navigation and widget views cannot overwrite the canonical account-scoped catalog or another query snapshot.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:44.269479+00:00",
+  "recorded_at": "2026-10-13T08:12:09.740823+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,12 +24,12 @@
     {
       "classname": "AuditCoreTests.F06CanonicalCatalogTests",
       "name": "consumerIsolation()",
-      "time": "0.006057333"
+      "time": "0.007036583"
     },
     {
       "classname": "AuditCoreTests.F06CanonicalCatalogTests",
       "name": "exactIdentity()",
-      "time": "0.006062084"
+      "time": "0.000343375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.log",

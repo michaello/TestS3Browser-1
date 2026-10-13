@@ -1,0 +1,31 @@
+2026-10-13 16:10:21.001027+0800 TestS3Browser[80563:183335786] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:10:21.003600+0800 TestS3Browser[80563:183335786] [framework] CoreUI: CUICatalog: Failed to parse value of 'kMGArtworkGraphicsFeatureSetClass' from MGCopyAnswer: 'APPLE11'
+2026-10-13 16:10:21.386287+0800 TestS3Browser[80563:183335786] [Assert] _dictationButton not yet initialized when setting up for the large content viewer.
+2026-10-13 16:10:21.438347+0800 TestS3Browser[80563:183335786] [API] cannot add handler to 0 from 0 - dropping
+2026-10-13 16:10:21.443180+0800 TestS3Browser[80563:183335786] [XPCErrors] non-launching port is incompatible with service identifier "com.apple.PointerUI.pointeruid.default-service"
+2026-10-13 16:10:21.464123+0800 TestS3Browser[80563:183335786] [API] cannot add handler to 0 from 0 - dropping
+Test Suite 'All tests' started at 2026-10-13 16:10:21.595.
+Test Suite 'All tests' passed at 2026-10-13 16:10:21.596.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 2078
+↳ Target Platform: arm64-apple-ios17.0-simulator
+◇ Suite AppServiceIntegrationTests started.
+◇ Test appHostUsesSyntheticBoundaries() started.
+✔ Test appHostUsesSyntheticBoundaries() passed after 0.001 seconds.
+◇ Test cachedRecentRowsArePresentBeforeDelayedServiceResponse() started.
+✔ Test cachedRecentRowsArePresentBeforeDelayedServiceResponse() passed after 0.011 seconds.
+◇ Test actualServicePaginatesMoreThanOneThousandObjects() started.
+✔ Test actualServicePaginatesMoreThanOneThousandObjects() passed after 0.001 seconds.
+◇ Test failedRefreshPreservesCachedAndPersistedRows() started.
+✔ Test failedRefreshPreservesCachedAndPersistedRows() passed after 0.018 seconds.
+◇ Test staleFolderResponseCannotAppearInNewRoute() started.
+✔ Test staleFolderResponseCannotAppearInNewRoute() passed after 0.001 seconds.
+◇ Test realSDKLifecycleProjectionPreservesDatesAndAndFilter() started.
+✔ Test realSDKLifecycleProjectionPreservesDatesAndAndFilter() passed after 0.002 seconds.
+◇ Test nativeImageDecodeAndFileExportPreserveOriginalBytes() started.
+✔ Test nativeImageDecodeAndFileExportPreserveOriginalBytes() passed after 0.230 seconds.
+◇ Test galleryRetainsOnlyCurrentAndAdjacentImagesWithinByteBudget() started.
+✔ Test galleryRetainsOnlyCurrentAndAdjacentImagesWithinByteBudget() passed after 0.001 seconds.
+✔ Suite AppServiceIntegrationTests passed after 0.266 seconds.
+✔ Test run with 8 tests in 1 suite passed after 0.266 seconds.

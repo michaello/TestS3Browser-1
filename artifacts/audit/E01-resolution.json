@@ -18,13 +18,13 @@
         "-skipPackageUpdates",
         "CODE_SIGNING_ALLOWED=NO"
       ],
-      "pid": 62223,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-153150-829868.log",
-      "started_at_epoch": 1791876710.829897,
+      "pid": 78274,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-153807-823458.log",
+      "started_at_epoch": 1791877087.823492,
       "timeout_seconds": 1200,
-      "status": "failed",
-      "exit_code": 74,
-      "elapsed_seconds": 290.7249619960785
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 298.58201789855957
     }
   ],
   "environment": {
@@ -411,7 +411,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/1C65CF10-0026-4068-994E-EB3F31B03247/data",
-            "dataPathSize": 5080588288,
+            "dataPathSize": 5081255936,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/1C65CF10-0026-4068-994E-EB3F31B03247",
             "udid": "1C65CF10-0026-4068-994E-EB3F31B03247",
             "lastUsedAt": "2026-10-13T04:37:14Z",
@@ -459,7 +459,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA/data",
-            "dataPathSize": 3604242432,
+            "dataPathSize": 3604439040,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA",
             "udid": "90A88C9C-7E6D-4CBE-B0D5-E11A7E023BFA",
             "lastUsedAt": "2026-10-12T23:31:36Z",
@@ -483,19 +483,19 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/AF891273-7437-4271-87A4-5D7E82B4C360/data",
-            "dataPathSize": 2295492608,
+            "dataPathSize": 2330648576,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/AF891273-7437-4271-87A4-5D7E82B4C360",
             "udid": "AF891273-7437-4271-87A4-5D7E82B4C360",
             "lastUsedAt": "2026-10-13T05:48:52Z",
             "isAvailable": true,
-            "logPathSize": 708608,
+            "logPathSize": 774144,
             "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
             "state": "Booted",
             "name": "WorkoutProbe-iOS-26.5"
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/C4AC21A6-ABA4-492B-91DA-C44D39331FBF/data",
-            "dataPathSize": 9957486592,
+            "dataPathSize": 9957732352,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/C4AC21A6-ABA4-492B-91DA-C44D39331FBF",
             "udid": "C4AC21A6-ABA4-492B-91DA-C44D39331FBF",
             "lastUsedAt": "2026-10-13T04:21:19Z",
@@ -663,7 +663,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/D440FDEB-88E7-4927-9A44-3E25F7544188/data",
-            "dataPathSize": 2335903744,
+            "dataPathSize": 2336772096,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/D440FDEB-88E7-4927-9A44-3E25F7544188",
             "udid": "D440FDEB-88E7-4927-9A44-3E25F7544188",
             "lastUsedAt": "2026-10-12T09:56:09Z",
@@ -687,7 +687,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/57882042-314E-4686-BBFD-4A0C11887731/data",
-            "dataPathSize": 9856110592,
+            "dataPathSize": 9856659456,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/57882042-314E-4686-BBFD-4A0C11887731",
             "udid": "57882042-314E-4686-BBFD-4A0C11887731",
             "lastUsedAt": "2026-10-13T04:42:27Z",
@@ -723,7 +723,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/914521E1-EB2D-42C1-BE06-FED0D3175722/data",
-            "dataPathSize": 12601970688,
+            "dataPathSize": 12603310080,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/914521E1-EB2D-42C1-BE06-FED0D3175722",
             "udid": "914521E1-EB2D-42C1-BE06-FED0D3175722",
             "lastUsedAt": "2026-10-13T03:44:29Z",
@@ -891,7 +891,7 @@
           },
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/71959F17-A928-4F0D-9F11-210E3E940C9B/data",
-            "dataPathSize": 2548899840,
+            "dataPathSize": 2550648832,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/71959F17-A928-4F0D-9F11-210E3E940C9B",
             "udid": "71959F17-A928-4F0D-9F11-210E3E940C9B",
             "lastUsedAt": "2026-10-13T07:09:38Z",
@@ -988,7 +988,7 @@
             "dataPathSize": 3084767232,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/0BB7EC4C-89EE-4EBA-88FC-5FB57355D496",
             "udid": "0BB7EC4C-89EE-4EBA-88FC-5FB57355D496",
-            "lastUsedAt": "2026-10-13T07:20:29Z",
+            "lastUsedAt": "2026-10-13T07:34:38Z",
             "isAvailable": true,
             "logPathSize": 241664,
             "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
@@ -1176,7 +1176,7 @@
         "com.apple.CoreSimulator.SimRuntime.watchOS-26-5": [
           {
             "dataPath": "/Users/mike/Library/Developer/CoreSimulator/Devices/159932EC-EAF9-4E54-B56C-017163B8FCFF/data",
-            "dataPathSize": 1714606080,
+            "dataPathSize": 1715130368,
             "logPath": "/Users/mike/Library/Logs/CoreSimulator/159932EC-EAF9-4E54-B56C-017163B8FCFF",
             "udid": "159932EC-EAF9-4E54-B56C-017163B8FCFF",
             "lastUsedAt": "2026-10-13T04:37:14Z",
@@ -1272,9 +1272,9 @@
       }
     }
   },
-  "source_fingerprint": "e656eb070e62ac163a6cb8adbcb79d3cc99b77e5f8156437ccb90cf904b4668e",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "aws_sdk_revision": "37f1ef1c1c00a28b867dd761f20a2bd8a0f2a6b9",
   "aws_sdk_version": "1.5.66",
   "local_git_transport_mirror": "file:///Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-sdk-swift.git",
-  "failure": "Pinned package resolution failed: /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-153150-829868.log"
+  "resolution_passed": true
 }

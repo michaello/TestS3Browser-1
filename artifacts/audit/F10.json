@@ -2,9 +2,9 @@
   "id": "F10",
   "expected_behavior": "Row/grid previews return downsampled images under the transfer budget; video posters do not require a whole-movie download merely to render a small preview.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:48.170005+00:00",
+  "recorded_at": "2026-10-13T08:12:13.350227+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F10MediaPreviewTests",
-      "name": "actualDownsample()",
-      "time": "0.0653805"
+      "name": "actualVideoPoster()",
+      "time": "0.602988167"
     },
     {
       "classname": "AuditCoreTests.F10MediaPreviewTests",
-      "name": "actualVideoPoster()",
-      "time": "0.381564625"
+      "name": "actualDownsample()",
+      "time": "0.081519583"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.log",

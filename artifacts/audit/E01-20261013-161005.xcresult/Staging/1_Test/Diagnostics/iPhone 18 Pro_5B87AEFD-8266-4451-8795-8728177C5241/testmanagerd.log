@@ -1,0 +1,25 @@
+16:10:15.441 xcodebuild[70415:183313778] Sim iPhone 18 Pro: Unregistering for sim device notification with token 3
+16:10:15.441 xcodebuild[70415:183313778] Calling -[SimDevice getenv:error:] for TESTMANAGERD_SIM_SOCK
+16:10:15.443 xcodebuild[70415:183313778] Sim iPhone 18 Pro has testmanagerd socket at /private/var/tmp/com.apple.launchd.nePClGKYw2/com.apple.testmanagerd.unix-domain.socket
+16:10:15.443 xcodebuild[70415:183313778] Validating test connection socket path (/private/var/tmp/com.apple.launchd.nePClGKYw2/com.apple.testmanagerd.unix-domain.socket)
+16:10:15.443 xcodebuild[70415:183313778] Constructing transport for test connection socket
+16:10:15.443 xcodebuild[70415:183313778] Connected socket 26 to testmanagerd for Sim iPhone 18 Pro
+16:10:15.444 xcodebuild[70415:183313778] Initiating control session with IDE capabilities: <XCTCapabilities: 0x7996f74ce0>: {
+    "report crashes capability" = 3;
+}
+16:10:15.446 xcodebuild[70415:183313778] Got reply to control session initiation request (result:error): <XCTCapabilities: 0x7998ea4f00>: {
+    "authorize test session capability" = 1;
+    "automation mode" = 1;
+    "initiate daemon control session capability" = 4;
+    "initiate test runner session capability" = 2;
+    "record UI interaction capability" = 2;
+    "recording events as source code" = 1;
+    "request log archive capability" = 1;
+    "structured results configuration" = 1;
+    "supports delayed attachment transfers" = 1;
+}: (null)
+16:10:15.455 xcodebuild[70415:183313541] Requesting crash report collection for process names: xctest, TestS3BrowserUITests-Runner, backboardd, DTServiceHub, TestS3Browser, runningboardd, TestS3BrowserWidget, testmanagerd, DumpShareExtension, SpringBoard, debugserver, assertiond, FrontBoard
+16:10:21.495 xcodebuild[70415:183313804] Requesting authorization for pid 80563
+16:10:21.499 xcodebuild[70415:183313801] Got reply to authorization request for pid 80563 (result:error): 1: (null)
+16:10:23.567 xcodebuild[70415:183313804] Requesting authorization for pid 86402
+16:10:23.567 xcodebuild[70415:183333307] Got reply to authorization request for pid 86402 (result:error): 1: (null)

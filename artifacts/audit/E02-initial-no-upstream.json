@@ -1,0 +1,48 @@
+{
+  "id": "E02",
+  "passed": false,
+  "recorded_at": "2026-10-13T07:42:09.200592+00:00",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "e2e87002e6a78e7af197eb43e3f56c69d0dfd170",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "symbolic-ref",
+        "--short",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "main",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "config",
+        "--get",
+        "branch.main.remote"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "assertions": [],
+  "failure": "Git verification failed: config --get branch.main.remote: "
+}

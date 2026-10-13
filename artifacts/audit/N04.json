@@ -2,9 +2,9 @@
   "id": "N04",
   "expected_behavior": "List/search shortcut outputs retain bucket identity through download/delete; legacy key-only inputs remain supported for an explicit configured bucket without ambiguous cross-bucket routing.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:26.966769+00:00",
+  "recorded_at": "2026-10-13T08:11:55.685511+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N04ShortcutIdentityTests",
-      "name": "invalidInputs()",
-      "time": "0.00276175"
-    },
-    {
-      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
-      "name": "legacyInputs()",
-      "time": "0.001017208"
-    },
-    {
-      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
-      "name": "rejectsAmbiguousRouting()",
-      "time": "0.003564167"
+      "name": "exactUTF8Identity()",
+      "time": "0.000207833"
     },
     {
       "classname": "AuditCoreTests.N04ShortcutIdentityTests",
       "name": "chainedObjectsRetainBucket()",
-      "time": "0.00278125"
+      "time": "0.000224916"
     },
     {
       "classname": "AuditCoreTests.N04ShortcutIdentityTests",
-      "name": "exactUTF8Identity()",
-      "time": "0.001342958"
+      "name": "legacyInputs()",
+      "time": "0.000138291"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "rejectsAmbiguousRouting()",
+      "time": "0.000357334"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "invalidInputs()",
+      "time": "0.000399458"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.log",

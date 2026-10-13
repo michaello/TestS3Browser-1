@@ -2,9 +2,9 @@
   "id": "N22",
   "expected_behavior": "Removing the last matching star/tag cannot trap the screen without a visible clear-filter action; filter state and empty-state controls remain consistent.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:50.171481+00:00",
+  "recorded_at": "2026-10-13T08:13:17.207768+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,23 +23,23 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN22",
-      "name": "unavailableTagDoesNotClearAnAvailableStarFilter()",
-      "time": "0.006628583"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN22",
       "name": "removingLastStarResetsStarFilter()",
-      "time": "0.006615334"
+      "time": "0.156467834"
     },
     {
       "classname": "AuditCoreTests.AuditN22",
       "name": "existingFiltersRemainUntilExplicitlyCleared()",
-      "time": "0.006599583"
+      "time": "0.15483425"
     },
     {
       "classname": "AuditCoreTests.AuditN22",
       "name": "removingLastSelectedTagResetsTagFilter()",
-      "time": "0.009116708"
+      "time": "0.162651083"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN22",
+      "name": "unavailableTagDoesNotClearAnAvailableStarFilter()",
+      "time": "0.162675667"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N22.log",

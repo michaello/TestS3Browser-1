@@ -2,9 +2,9 @@
   "id": "F21",
   "expected_behavior": "Two image uploads with the same injected second generate distinct keys and preserve both objects in the fake S3 store.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:55.336979+00:00",
+  "recorded_at": "2026-10-13T08:12:19.684573+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,7 +24,7 @@
     {
       "classname": "AuditCoreTests.F21UniqueUploadKeyTests",
       "name": "sameSecondUploadsPreserveBothObjects()",
-      "time": "0.021230958"
+      "time": "0.018603667"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.log",

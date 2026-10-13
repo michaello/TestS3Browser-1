@@ -1,13 +1,13 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.33 sec)
+Build complete! (0.35 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N36PartialBatchExportTests started.
-􀟈  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() started.
 􀟈  Test missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses() started.
-􁁛  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() passed after 0.007 seconds.
+􀟈  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() started.
+􁁛  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() passed after 0.006 seconds.
 􁁛  Test missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses() passed after 0.008 seconds.
 􁁛  Suite N36PartialBatchExportTests passed after 0.008 seconds.
 􁁛  Test run with 2 tests in 1 suite passed after 0.008 seconds.

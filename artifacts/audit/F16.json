@@ -2,9 +2,9 @@
   "id": "F16",
   "expected_behavior": "Initial HTML viewing performs no hidden versions/tags/ACL fetches; secondary details load on demand and reuse fresh metadata without delaying visible content.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:08.987902+00:00",
+  "recorded_at": "2026-10-13T08:12:30.550777+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,22 +24,22 @@
     {
       "classname": "AuditCoreTests.F16DetailDemandTests",
       "name": "visiblePriority()",
-      "time": "0.003304584"
+      "time": "0.001230167"
     },
     {
       "classname": "AuditCoreTests.F16DetailDemandTests",
       "name": "demandAndFreshness()",
-      "time": "0.004054083"
+      "time": "0.001544916"
     },
     {
       "classname": "AuditCoreTests.F16DetailDemandTests",
       "name": "boundedAndInvalidated()",
-      "time": "0.008321917"
+      "time": "0.002654292"
     },
     {
       "classname": "AuditCoreTests.F16DetailDemandTests",
       "name": "failureAndRetry()",
-      "time": "0.003939208"
+      "time": "0.001562917"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.log",

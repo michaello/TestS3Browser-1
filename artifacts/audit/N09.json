@@ -2,9 +2,9 @@
   "id": "N09",
   "expected_behavior": "Exactly the selected custom tab exposes selected accessibility state and each tab keeps its meaningful label and action.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:28.345377+00:00",
+  "recorded_at": "2026-10-13T08:12:54.356971+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,12 +24,12 @@
     {
       "classname": "AuditCoreTests.N09TabAccessibilityTests",
       "name": "exactlyOneSelection(_:)",
-      "time": "0.000485291"
+      "time": "0.000947541"
     },
     {
       "classname": "AuditCoreTests.N09TabAccessibilityTests",
       "name": "actions()",
-      "time": "0.000266584"
+      "time": "0.00094375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.log",

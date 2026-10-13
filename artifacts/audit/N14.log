@@ -1,14 +1,15 @@
 Building for debugging...
-Build complete! (0.28 sec)
+[1 / 1]
+Build complete! (0.38 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N14 accumulated zoom and bounded image pan" started.
-􀟈  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" started.
-􀟈  Test "Magnification accumulates between gestures and panned image returning to 1x recenters" started.
 􀟈  Test "Double tap, reset and invalid dimensions keep finite bounded interaction state" started.
-􁁛  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" passed after 0.001 seconds.
+􀟈  Test "Magnification accumulates between gestures and panned image returning to 1x recenters" started.
+􀟈  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" started.
 􁁛  Test "Magnification accumulates between gestures and panned image returning to 1x recenters" passed after 0.001 seconds.
 􁁛  Test "Double tap, reset and invalid dimensions keep finite bounded interaction state" passed after 0.001 seconds.
+􁁛  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" passed after 0.001 seconds.
 􁁛  Suite "N14 accumulated zoom and bounded image pan" passed after 0.001 seconds.
 􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.

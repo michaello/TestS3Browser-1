@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.045966584">
-    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="linesAndExactQueries()" time="0.045509083" />
-    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="measuredRowReuse()" time="0.045497792" />
-    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="viewConstructionMeasurements()" time="0.045464417" />
-    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="galleryProjectionReuse()" time="0.04549875" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.041785125">
+    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="viewConstructionMeasurements()" time="0.041128667" />
+    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="linesAndExactQueries()" time="0.041094625" />
+    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="galleryProjectionReuse()" time="0.04110675" />
+    <testcase classname="AuditCoreTests.F34DerivedRowsCacheTests" name="measuredRowReuse()" time="0.041068875" />
   </testsuite>
 </testsuites>

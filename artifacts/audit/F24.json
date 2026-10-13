@@ -2,9 +2,9 @@
   "id": "F24",
   "expected_behavior": "Public/presigned/copy/navigation/name handling preserves exact key bytes, repeated slashes, #, ?, +, percent signs and Unicode; distinct byte spellings are not normalized into one identity.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:13.029429+00:00",
+  "recorded_at": "2026-10-13T08:12:35.591652+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F24ObjectAddressTests",
-      "name": "fileNamesAndNavigationNeverInterpretURLSyntax()",
-      "time": "0.000631708"
+      "name": "reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs()",
+      "time": "0.003255875"
     },
     {
       "classname": "AuditCoreTests.F24ObjectAddressTests",
       "name": "invalidExpirationCannotProduceSignedURL()",
-      "time": "0.000591375"
-    },
-    {
-      "classname": "AuditCoreTests.F24ObjectAddressTests",
-      "name": "publishedAWSSigV4ExampleMatches()",
-      "time": "0.0026835"
+      "time": "0.000331208"
     },
     {
       "classname": "AuditCoreTests.F24ObjectAddressTests",
       "name": "unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct()",
-      "time": "0.00075275"
+      "time": "0.000301166"
     },
     {
       "classname": "AuditCoreTests.F24ObjectAddressTests",
-      "name": "reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs()",
-      "time": "0.00182775"
+      "name": "publishedAWSSigV4ExampleMatches()",
+      "time": "0.004106667"
+    },
+    {
+      "classname": "AuditCoreTests.F24ObjectAddressTests",
+      "name": "fileNamesAndNavigationNeverInterpretURLSyntax()",
+      "time": "0.000338708"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F24.log",

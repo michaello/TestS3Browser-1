@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.000717">
-    <testcase classname="AuditCoreTests.F33FullCatalogSearchTests" name="olderMatch()" time="0.000280959" />
-    <testcase classname="AuditCoreTests.F33FullCatalogSearchTests" name="limits()" time="0.00043775" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.000790584">
+    <testcase classname="AuditCoreTests.F33FullCatalogSearchTests" name="olderMatch()" time="0.000322208" />
+    <testcase classname="AuditCoreTests.F33FullCatalogSearchTests" name="limits()" time="0.000461125" />
   </testsuite>
 </testsuites>

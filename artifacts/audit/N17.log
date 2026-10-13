@@ -1,5 +1,4 @@
 Building for debugging...
-[Computing dependencies]
 [1 / 1]
 Build complete! (0.55 sec)
 􀟈  Test run started.
@@ -7,6 +6,6 @@ Build complete! (0.55 sec)
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N17PartialFolderSearchTests started.
 􀟈  Test "A no-match first page keeps later search work available and finds a later matching file" started.
-􁁛  Test "A no-match first page keeps later search work available and finds a later matching file" passed after 0.002 seconds.
-􁁛  Suite N17PartialFolderSearchTests passed after 0.002 seconds.
-􁁛  Test run with 1 test in 1 suite passed after 0.002 seconds.
+􁁛  Test "A no-match first page keeps later search work available and finds a later matching file" passed after 0.001 seconds.
+􁁛  Suite N17PartialFolderSearchTests passed after 0.001 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.001 seconds.

@@ -1,0 +1,28 @@
+{
+  "cacheToFirstContentMilliseconds": 719.753125,
+  "viewConstructionScope": "SwiftUI view construction only; excludes layout, drawing and framework work after body returns.",
+  "confirmedUploadPayloadBytes": 0,
+  "launchToFirstContentMilliseconds": 735.20975,
+  "requestCount": 1,
+  "failedRequests": 1,
+  "refreshMilliseconds": [
+    3219.673667
+  ],
+  "unavailableMeasurements": [
+    "Native AVFoundation HTTP wire bytes and requests",
+    "Partial failed-upload bytes"
+  ],
+  "receivedBytes": 0,
+  "scrollingStalls": 0,
+  "peakResidentBytes": 419528704,
+  "maximumFrameGapMilliseconds": 671.2517083215062,
+  "byteMeasurementScope": "Consumed SDK object-download bytes and confirmed upload payload sizes; excludes HTTP overhead and retransmission.",
+  "duplicateBodyRequests": 0,
+  "viewConstruction": {
+    "recent": {
+      "totalMilliseconds": 7.0817109999996015,
+      "maximumMilliseconds": 4.970541999999966,
+      "count": 9
+    }
+  }
+}

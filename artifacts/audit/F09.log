@@ -1,23 +1,22 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.37 sec)
+Build complete! (0.21 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
-􀟈  Suite F09ServiceSessionTests started.
 􀟈  Suite F09MetadataNamespaceTests started.
-􀟈  Test "Exact Unicode queries and configuration routes retain byte identity" started.
+􀟈  Suite F09ServiceSessionTests started.
+􀟈  Test "A known active-account preview cannot be migrated into another account" started.
 􀟈  Test "Applying configuration changes namespace, route and request ownership together" started.
 􀟈  Test "A cancelled account response cannot publish even if transport ignores cancellation" started.
-􀟈  Test "A known active-account preview cannot be migrated into another account" started.
-􀟈  Test "An identical config is idempotent and preserves generation and cached choices" started.
 􀟈  Test "Legacy migration is claimed once and each account restores only its envelope" started.
-􁁛  Test "Exact Unicode queries and configuration routes retain byte identity" passed after 0.021 seconds.
-􁁛  Test "Applying configuration changes namespace, route and request ownership together" passed after 0.021 seconds.
-􁁛  Test "A known active-account preview cannot be migrated into another account" passed after 0.021 seconds.
-􁁛  Test "An identical config is idempotent and preserves generation and cached choices" passed after 0.021 seconds.
-􁁛  Test "Legacy migration is claimed once and each account restores only its envelope" passed after 0.021 seconds.
-􁁛  Suite F09MetadataNamespaceTests passed after 0.021 seconds.
-􁁛  Test "A cancelled account response cannot publish even if transport ignores cancellation" passed after 0.022 seconds.
-􁁛  Suite F09ServiceSessionTests passed after 0.022 seconds.
-􁁛  Test run with 6 tests in 2 suites passed after 0.022 seconds.
+􀟈  Test "An identical config is idempotent and preserves generation and cached choices" started.
+􀟈  Test "Exact Unicode queries and configuration routes retain byte identity" started.
+􁁛  Test "A known active-account preview cannot be migrated into another account" passed after 0.005 seconds.
+􁁛  Test "Applying configuration changes namespace, route and request ownership together" passed after 0.005 seconds.
+􁁛  Test "An identical config is idempotent and preserves generation and cached choices" passed after 0.007 seconds.
+􁁛  Test "Exact Unicode queries and configuration routes retain byte identity" passed after 0.007 seconds.
+􁁛  Test "Legacy migration is claimed once and each account restores only its envelope" passed after 0.007 seconds.
+􁁛  Suite F09MetadataNamespaceTests passed after 0.008 seconds.
+􁁛  Test "A cancelled account response cannot publish even if transport ignores cancellation" passed after 0.008 seconds.
+􁁛  Suite F09ServiceSessionTests passed after 0.008 seconds.
+􁁛  Test run with 6 tests in 2 suites passed after 0.008 seconds.

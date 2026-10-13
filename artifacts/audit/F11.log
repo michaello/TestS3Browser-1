@@ -1,18 +1,20 @@
 Building for debugging...
-Build complete! (0.21 sec)
+Build complete! (0.19 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "F11 original single-flight and transfer policy" started.
-􀟈  Test "Identical video poster consumers share rendering and individual cancellation keeps other consumers" started.
-􀟈  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" started.
-􀟈  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" started.
 􀟈  Test "Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement" started.
+􀟈  Test "A delayed body permit preserves single-flight and persistent-original reuse" started.
+􀟈  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" started.
 􀟈  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" started.
-􁁛  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" passed after 0.001 seconds.
+􀟈  Test "Identical video poster consumers share rendering and individual cancellation keeps other consumers" started.
+􀟈  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" started.
 􁁛  Test "Identical video poster consumers share rendering and individual cancellation keeps other consumers" passed after 0.001 seconds.
-􁁛  Test "Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement" passed after 0.001 seconds.
-􁁛  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" passed after 0.008 seconds.
-􁁛  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" passed after 0.023 seconds.
-􁁛  Suite "F11 original single-flight and transfer policy" passed after 0.023 seconds.
-􁁛  Test run with 5 tests in 1 suite passed after 0.023 seconds.
+􁁛  Test "Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement" passed after 0.003 seconds.
+􁁛  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" passed after 0.003 seconds.
+􁁛  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" passed after 0.006 seconds.
+􁁛  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" passed after 0.020 seconds.
+􁁛  Test "A delayed body permit preserves single-flight and persistent-original reuse" passed after 0.064 seconds.
+􁁛  Suite "F11 original single-flight and transfer policy" passed after 0.064 seconds.
+􁁛  Test run with 6 tests in 1 suite passed after 0.064 seconds.

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.008285583">
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="paginationAndEmptyBuckets()" time="0.007147" />
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="emptyDiscoveryRetainsSnapshot()" time="0.006649667" />
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="partialRefresh()" time="0.006796833" />
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="allFailedRetainsPersisted()" time="0.00784075" />
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="boundedConcurrency()" time="0.007948125" />
-    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="failedLaterPage()" time="0.006789834" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.018747875">
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="partialRefresh()" time="0.015765792" />
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="emptyDiscoveryRetainsSnapshot()" time="0.015375792" />
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="failedLaterPage()" time="0.015970458" />
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="paginationAndEmptyBuckets()" time="0.016369792" />
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="boundedConcurrency()" time="0.018451458" />
+    <testcase classname="AuditCoreTests.F05MetadataCatalogTests" name="allFailedRetainsPersisted()" time="0.018133333" />
   </testsuite>
 </testsuites>

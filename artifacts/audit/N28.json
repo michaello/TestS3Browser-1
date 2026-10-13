@@ -2,9 +2,9 @@
   "id": "N28",
   "expected_behavior": "Metrics configuration retrieval uses an actual configuration ID or the paginated list API; configured fixtures produce entries and errors remain distinct from no configuration.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:39:58.367952+00:00",
+  "recorded_at": "2026-10-13T08:13:33.062673+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,38 +23,38 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN28",
+      "name": "duplicateConfigurationKeepsStableDisplayIdentity()",
+      "time": "0.000813958"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
       "name": "cancelledRequestCannotPublishConfiguration()",
-      "time": "0.00073225"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "configuredPagesProduceEntriesAndOpaqueTokensAdvance()",
-      "time": "0.000331292"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "invalidConfigurationDoesNotMasqueradeAsUnconfigured()",
-      "time": "0.000553292"
+      "time": "0.005821583"
     },
     {
       "classname": "AuditCoreTests.AuditN28",
       "name": "laterPageFailureDoesNotReturnPartialAsComplete()",
-      "time": "0.000575625"
+      "time": "0.005503917"
     },
     {
       "classname": "AuditCoreTests.AuditN28",
-      "name": "duplicateConfigurationKeepsStableDisplayIdentity()",
-      "time": "0.000334416"
+      "name": "configuredPagesProduceEntriesAndOpaqueTokensAdvance()",
+      "time": "0.000790292"
     },
     {
       "classname": "AuditCoreTests.AuditN28",
       "name": "truncatedMissingOrRepeatedTokenFails()",
-      "time": "0.000580166"
+      "time": "0.005532792"
     },
     {
       "classname": "AuditCoreTests.AuditN28",
       "name": "emptyConfigurationIsOnlyASuccessfulEmptyResponse()",
-      "time": "0.000526583"
+      "time": "0.005543958"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "invalidConfigurationDoesNotMasqueradeAsUnconfigured()",
+      "time": "0.005493541"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.log",

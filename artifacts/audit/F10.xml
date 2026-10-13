@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.382112458">
-    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualDownsample()" time="0.0653805" />
-    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualVideoPoster()" time="0.381564625" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.603263541">
+    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualVideoPoster()" time="0.602988167" />
+    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualDownsample()" time="0.081519583" />
   </testsuite>
 </testsuites>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.002027333">
-    <testcase classname="AuditCoreTests.N16PartialFolderSortTests" name="partialSortNotice()" time="0.001753041" />
+  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.043231583">
+    <testcase classname="AuditCoreTests.N16PartialFolderSortTests" name="partialSortNotice()" time="0.042957625" />
   </testsuite>
 </testsuites>

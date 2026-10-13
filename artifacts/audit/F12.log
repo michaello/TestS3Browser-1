@@ -1,25 +1,24 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.36 sec)
+Build complete! (0.20 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
-􀟈  Suite "F12 acknowledged copy and delete invalidate exact media" started.
 􀟈  Suite "F12 exact media identities and invalidation" started.
+􀟈  Suite "F12 acknowledged copy and delete invalidate exact media" started.
 􀟈  Test "Unconfirmed copy ETag cannot acknowledge success or authorize source deletion" started.
-􀟈  Test "Confirmed deletion invalidates captured account only even after active account changes" started.
+􀟈  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" started.
+􀟈  Test "Account reset cancels late transfers instead of publishing their files" started.
 􀟈  Test "Copy returns the destination's confirmed ETag/version and builds its actual metadata" started.
 􀟈  Test "Source-delete failure still publishes completed destination and invalidates overwritten media" started.
 􀟈  Test "Cancellation after confirmed copy still acknowledges destination before retaining the source" started.
-􀟈  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" started.
-􀟈  Test "Account reset cancels late transfers instead of publishing their files" started.
-􁁛  Test "Copy returns the destination's confirmed ETag/version and builds its actual metadata" passed after 0.007 seconds.
-􁁛  Test "Unconfirmed copy ETag cannot acknowledge success or authorize source deletion" passed after 0.007 seconds.
-􁁛  Test "Account reset cancels late transfers instead of publishing their files" passed after 0.013 seconds.
-􁁛  Test "Cancellation after confirmed copy still acknowledges destination before retaining the source" passed after 0.019 seconds.
-􁁛  Test "Source-delete failure still publishes completed destination and invalidates overwritten media" passed after 0.020 seconds.
-􁁛  Test "Confirmed deletion invalidates captured account only even after active account changes" passed after 0.023 seconds.
-􁁛  Suite "F12 acknowledged copy and delete invalidate exact media" passed after 0.024 seconds.
-􁁛  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" passed after 0.034 seconds.
-􁁛  Suite "F12 exact media identities and invalidation" passed after 0.034 seconds.
-􁁛  Test run with 7 tests in 2 suites passed after 0.034 seconds.
+􀟈  Test "Confirmed deletion invalidates captured account only even after active account changes" started.
+􁁛  Test "Copy returns the destination's confirmed ETag/version and builds its actual metadata" passed after 0.001 seconds.
+􁁛  Test "Unconfirmed copy ETag cannot acknowledge success or authorize source deletion" passed after 0.001 seconds.
+􁁛  Test "Account reset cancels late transfers instead of publishing their files" passed after 0.004 seconds.
+􁁛  Test "Cancellation after confirmed copy still acknowledges destination before retaining the source" passed after 0.006 seconds.
+􁁛  Test "Source-delete failure still publishes completed destination and invalidates overwritten media" passed after 0.007 seconds.
+􁁛  Test "Confirmed deletion invalidates captured account only even after active account changes" passed after 0.009 seconds.
+􁁛  Suite "F12 acknowledged copy and delete invalidate exact media" passed after 0.009 seconds.
+􁁛  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" passed after 0.016 seconds.
+􁁛  Suite "F12 exact media identities and invalidation" passed after 0.016 seconds.
+􁁛  Test run with 7 tests in 2 suites passed after 0.017 seconds.

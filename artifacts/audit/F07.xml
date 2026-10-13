@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="8" failures="0" skipped="0" time="0.002742542">
-    <testcase classname="AuditCoreTests.F07PagedListingTests" name="stalePaginationError()" time="0.002277084" />
-    <testcase classname="AuditCoreTests.F07PagedListingTests" name="refreshInvalidatesPagination()" time="0.002261291" />
-    <testcase classname="AuditCoreTests.F07PagedListingTests" name="viewRequestOwnership()" time="0.000670666" />
-    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="navigationReplacement()" time="0.002349791" />
-    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="joinsDuplicates()" time="0.001457583" />
-    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="resetInvalidatesError()" time="0.002373542" />
-    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="pendingRefresh()" time="0.002173166" />
-    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="freshness()" time="0.001433792" />
+  <testsuite name="TestResults" errors="0" tests="8" failures="0" skipped="0" time="0.002630166">
+    <testcase classname="AuditCoreTests.F07PagedListingTests" name="viewRequestOwnership()" time="0.000949125" />
+    <testcase classname="AuditCoreTests.F07PagedListingTests" name="stalePaginationError()" time="0.002153708" />
+    <testcase classname="AuditCoreTests.F07PagedListingTests" name="refreshInvalidatesPagination()" time="0.002216667" />
+    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="freshness()" time="0.001467708" />
+    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="pendingRefresh()" time="0.002101833" />
+    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="resetInvalidatesError()" time="0.002339042" />
+    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="joinsDuplicates()" time="0.001484375" />
+    <testcase classname="AuditCoreTests.F07ResourceOwnershipTests" name="navigationReplacement()" time="0.002332291" />
   </testsuite>
 </testsuites>

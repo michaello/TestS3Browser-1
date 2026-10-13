@@ -1,5 +1,6 @@
 Building for debugging...
-Build complete! (0.19 sec)
+[1 / 6] AuditCore
+Build complete! (0.29 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
@@ -7,8 +8,8 @@ Build complete! (0.19 sec)
 􀟈  Test pastDateRulesContinueApplyingToNewMatchingObjects() started.
 􀟈  Test dateOnlySchedulesRemainVisibleAndCalculable() started.
 􀟈  Test daysAndDatesCoexistAcrossRulesAndExpireFirstWins() started.
-􁁛  Test pastDateRulesContinueApplyingToNewMatchingObjects() passed after 0.003 seconds.
-􁁛  Test dateOnlySchedulesRemainVisibleAndCalculable() passed after 0.003 seconds.
-􁁛  Test daysAndDatesCoexistAcrossRulesAndExpireFirstWins() passed after 0.004 seconds.
-􁁛  Suite AuditN29 passed after 0.004 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.004 seconds.
+􁁛  Test pastDateRulesContinueApplyingToNewMatchingObjects() passed after 0.006 seconds.
+􁁛  Test dateOnlySchedulesRemainVisibleAndCalculable() passed after 0.007 seconds.
+􁁛  Test daysAndDatesCoexistAcrossRulesAndExpireFirstWins() passed after 0.007 seconds.
+􁁛  Suite AuditN29 passed after 0.008 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.008 seconds.

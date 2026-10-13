@@ -36,9 +36,18 @@ private func fixtureBody(_ data: Data, expected: Int64? = nil) -> MediaDownloadB
     let reader = MediaDataReader(data)
     return MediaDownloadBody(expectedBytes: expected ?? Int64(data.count), read: { await reader.read() })
 }
-private func mediaEventually(_ predicate: @Sendable () async -> Bool) async throws {
-    for _ in 0..<20_000 { if await predicate() { return }; await Task.yield() }
-    throw MediaTransferError.invalidResponse
+private struct MediaFixtureReadinessTimeout: Error {
+    let file: String
+    let line: UInt
+}
+private func mediaEventually(file: StaticString = #fileID, line: UInt = #line,
+                             _ predicate: @Sendable () async -> Bool) async throws {
+    let deadline = ContinuousClock.now.advanced(by: .seconds(10))
+    while ContinuousClock.now < deadline {
+        if await predicate() { return }
+        try await Task.sleep(for: .milliseconds(1))
+    }
+    throw MediaFixtureReadinessTimeout(file: String(describing: file), line: line)
 }
 private func imageFixture(at url: URL, width: Int = 2048, height: Int = 1024, gif: Bool = false) throws {
     let context = try #require(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
@@ -121,13 +130,34 @@ struct F11MediaTransferTests {
 
     @Test("Concurrent row/gallery/export requests share one transfer and completed persistent original")
     func singleFlight() async throws {
+        try await checkSingleFlight(delayedByOccupiedPermit: false)
+    }
+
+    @Test("A delayed body permit preserves single-flight and persistent-original reuse")
+    func singleFlightBehindOccupiedPermit() async throws {
+        try await checkSingleFlight(delayedByOccupiedPermit: true)
+    }
+
+    private func checkSingleFlight(delayedByOccupiedPermit: Bool) async throws {
         let folder = try mediaTemp(); defer { try? FileManager.default.removeItem(at: folder) }
-        let store = MediaOriginalStore(directory: folder), gate = MediaFixtureGate(), counter = MediaFixtureCounter()
+        let limiter = BodyTransferLimiter(limit: 1)
+        let heldPermit = delayedByOccupiedPermit ? try await limiter.acquireLease() : nil
+        let store = MediaOriginalStore(directory: folder, limiter: limiter), gate = MediaFixtureGate(), counter = MediaFixtureCounter()
+        var started = counter.started.stream.makeAsyncIterator()
         let key = identity("same.png"), bytes = Data(repeating: 4, count: 128_001)
         let requests = (0..<6).map { _ in Task {
             try await store.file(for: key) { await counter.increment(); await gate.wait(); return fixtureBody(bytes) }
         } }
-        try await mediaEventually { await counter.calls == 1 }
+        if let heldPermit {
+            try await mediaEventually { await limiter.waitingCount == 1 }
+            #expect(await store.activeFlightCount == 1)
+            // Admission can legitimately wait longer than the old 17 ms, 20,000-yield
+            // fixture deadline. No SDK response exists until a body permit is available.
+            try await Task.sleep(for: .milliseconds(50))
+            #expect(await counter.calls == 0)
+            await limiter.releaseLease(heldPermit)
+        }
+        try #require(await started.next() != nil)
         await gate.release()
         var leases: [OriginalFileLease] = []
         for task in requests { leases.append(try await task.value) }
@@ -136,7 +166,7 @@ struct F11MediaTransferTests {
         #expect(await counter.calls == 1)
         #expect(try Data(contentsOf: leases[0].url) == bytes)
         for lease in leases { await store.release(lease) }
-        let reopened = MediaOriginalStore(directory: folder)
+        let reopened = MediaOriginalStore(directory: folder, limiter: limiter)
         let cached = try await reopened.file(for: key) { await counter.increment(); return fixtureBody(Data()) }
         #expect(try Data(contentsOf: cached.url) == bytes)
         #expect(await counter.calls == 1)

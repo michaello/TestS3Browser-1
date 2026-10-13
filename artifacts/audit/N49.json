@@ -2,9 +2,9 @@
   "id": "N49",
   "expected_behavior": "Share activation advertises the actual supported image/movie representations and does not offer unsupported arbitrary files as though they can be uploaded.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:32.217467+00:00",
+  "recorded_at": "2026-10-13T08:14:16.511981+00:00",
   "command": [
     "/opt/homebrew/opt/python@3.14/bin/python3.14",
     "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/check_extension_resources.py",

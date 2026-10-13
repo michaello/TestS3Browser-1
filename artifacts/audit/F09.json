@@ -2,9 +2,9 @@
   "id": "F09",
   "expected_behavior": "Applying configuration changes atomically selects the applied bucket/prefix and namespace, invalidates obsolete work, and cannot reuse a previous account's buckets or publish its results.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:38:30.968194+00:00",
+  "recorded_at": "2026-10-13T08:11:58.873736+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F09MetadataNamespaceTests",
-      "name": "migrationIsolation()",
-      "time": "0.021228417"
+      "name": "previewOwnerIsolation()",
+      "time": "0.005369083"
     },
     {
       "classname": "AuditCoreTests.F09MetadataNamespaceTests",
-      "name": "previewOwnerIsolation()",
-      "time": "0.021442875"
-    },
-    {
-      "classname": "AuditCoreTests.F09ServiceSessionTests",
-      "name": "idempotentConfiguration()",
-      "time": "0.021437917"
-    },
-    {
-      "classname": "AuditCoreTests.F09ServiceSessionTests",
-      "name": "unicodeIdentity()",
-      "time": "0.021472375"
+      "name": "migrationIsolation()",
+      "time": "0.007864875"
     },
     {
       "classname": "AuditCoreTests.F09ServiceSessionTests",
       "name": "atomicConfiguration()",
-      "time": "0.021469625"
+      "time": "0.005339958"
+    },
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "idempotentConfiguration()",
+      "time": "0.007810833"
+    },
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "unicodeIdentity()",
+      "time": "0.007757917"
     },
     {
       "classname": "AuditCoreTests.F09ServiceSessionTests",
       "name": "staleAccountResponse()",
-      "time": "0.02268275"
+      "time": "0.008264542"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.log",

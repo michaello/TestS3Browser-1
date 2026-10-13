@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.012954">
-    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="originalGIF()" time="0.012628625" />
-    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="truthfulDataURLs(fixture:)" time="0.002142291" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.060993625">
+    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="truthfulDataURLs(fixture:)" time="0.005479084" />
+    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="originalGIF()" time="0.060755667" />
   </testsuite>
 </testsuites>

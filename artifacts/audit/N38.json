@@ -2,9 +2,9 @@
   "id": "N38",
   "expected_behavior": "Failed HEAD/metadata requests leave loading and show an error/retry state; nil metadata is not a permanent spinner condition.",
   "passed": true,
-  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T07:40:12.701263+00:00",
+  "recorded_at": "2026-10-13T08:13:51.489634+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,18 +23,18 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N38MetadataFailureTests",
+      "name": "failureThenRetry()",
+      "time": "0.000577916"
+    },
+    {
+      "classname": "AuditCoreTests.N38MetadataFailureTests",
       "name": "obsoleteFailure()",
-      "time": "0.003103208"
+      "time": "0.00067675"
     },
     {
       "classname": "AuditCoreTests.N38MetadataFailureTests",
       "name": "emptyAndCancelled()",
-      "time": "0.002872833"
-    },
-    {
-      "classname": "AuditCoreTests.N38MetadataFailureTests",
-      "name": "failureThenRetry()",
-      "time": "0.002838833"
+      "time": "0.000563375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N38.log",

@@ -1,20 +1,21 @@
 Building for debugging...
-Build complete! (0.19 sec)
+[1 / 5] AuditCoreTests-product
+Build complete! (0.22 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditF29 started.
-􀟈  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() started.
-􀟈  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() started.
 􀟈  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() started.
+􀟈  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() started.
 􀟈  Test typingDraftDoesNotPublishOrPersistUntilApply() started.
 􀟈  Test failedForcedRefreshRetainsGoodAdministrationData() started.
 􀟈  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() started.
+􀟈  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() started.
 􁁛  Test typingDraftDoesNotPublishOrPersistUntilApply() passed after 0.001 seconds.
-􁁛  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() passed after 0.001 seconds.
 􁁛  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() passed after 0.001 seconds.
-􁁛  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() passed after 0.005 seconds.
+􁁛  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() passed after 0.001 seconds.
 􁁛  Test failedForcedRefreshRetainsGoodAdministrationData() passed after 0.005 seconds.
+􁁛  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() passed after 0.005 seconds.
 􁁛  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() passed after 0.005 seconds.
 􁁛  Suite AuditF29 passed after 0.005 seconds.
-􁁛  Test run with 6 tests in 1 suite passed after 0.005 seconds.
+􁁛  Test run with 6 tests in 1 suite passed after 0.006 seconds.

@@ -1,0 +1,699 @@
+{
+  "crt_checkout": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift",
+  "crt_revision": "2f4f02595a25a43f9ca9acdc9f4d4a8ff6e5d3ac",
+  "checked_at_epoch": 1791877499.835281,
+  "scope": "Remaining CRT modules excluding credential-agent-owned s2n, aws-c-io and nested verification-model",
+  "modules": [
+    {
+      "name": "aws-c-auth",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+      "pinned_commit": "cd9d6afcd42035d49bb2d0d3bef24b9faed57773",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "cd9d6afcd42035d49bb2d0d3bef24b9faed57773",
+      "missing_blobs": [],
+      "verified_blob_paths": 985,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "include/aws/auth/auth.h",
+        "expected_oid": "fcd50cd09279cf6154ebd0aa5b1c36727cf505dd",
+        "actual_oid": "fcd50cd09279cf6154ebd0aa5b1c36727cf505dd",
+        "bytes": 3205,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-cal",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+      "pinned_commit": "938d0fea30d8476a7cf260278d636404682a28d4",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "938d0fea30d8476a7cf260278d636404682a28d4",
+      "missing_blobs": [],
+      "verified_blob_paths": 89,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/produce_x_platform_fuzz_corpus/main.c",
+        "expected_oid": "af8c4c7b45bf629d396c5ecc61dd366a7e7ac677",
+        "actual_oid": "af8c4c7b45bf629d396c5ecc61dd366a7e7ac677",
+        "bytes": 7291,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-common",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+      "pinned_commit": "aaa2f11ed609e3f888efd9bf745e810b45b13a38",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "aaa2f11ed609e3f888efd9bf745e810b45b13a38",
+      "missing_blobs": [],
+      "verified_blob_paths": 955,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/system_info/print_system_info.c",
+        "expected_oid": "5197e5d853fdb95466bcbd9058c0db97c346df83",
+        "actual_oid": "5197e5d853fdb95466bcbd9058c0db97c346df83",
+        "bytes": 3108,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-compression",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+      "pinned_commit": "f951ab2b819fc6993b6e5e6cfef64b1a1554bfc8",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "f951ab2b819fc6993b6e5e6cfef64b1a1554bfc8",
+      "missing_blobs": [],
+      "verified_blob_paths": 52,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "include/aws/compression/compression.h",
+        "expected_oid": "f9be6df0bd8da3297a6904b4e66e76374558a553",
+        "actual_oid": "f9be6df0bd8da3297a6904b4e66e76374558a553",
+        "bytes": 1128,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-event-stream",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+      "pinned_commit": "9312b052583183b98526aaeb91e5c72ec3db9627",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "9312b052583183b98526aaeb91e5c72ec3db9627",
+      "missing_blobs": [],
+      "verified_blob_paths": 48,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/event_stream_pipe.c",
+        "expected_oid": "585efaf4c1cb24743e253b6b4c4af17c5983d0c5",
+        "actual_oid": "585efaf4c1cb24743e253b6b4c4af17c5983d0c5",
+        "bytes": 5021,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-http",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+      "pinned_commit": "3eedf1ef8c6874cd941dbde794a6ab3bd979e181",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "3eedf1ef8c6874cd941dbde794a6ab3bd979e181",
+      "missing_blobs": [],
+      "verified_blob_paths": 135,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/elasticurl/main.c",
+        "expected_oid": "bedcb7ba0b73d0a718ff5bd383e85f554c723048",
+        "actual_oid": "bedcb7ba0b73d0a718ff5bd383e85f554c723048",
+        "bytes": 28779,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-io",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-io",
+      "pinned_commit": "ba5cb6de2cf12bfb154f302f6dedddf81c0ce4cd",
+      "commands": [],
+      "status": "Excluded - owned by credential agent"
+    },
+    {
+      "name": "aws-c-mqtt",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+      "pinned_commit": "3ac506507679a86677f8875dcc07589b63907863",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "3ac506507679a86677f8875dcc07589b63907863",
+      "missing_blobs": [],
+      "verified_blob_paths": 123,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/elastipubsub/main.c",
+        "expected_oid": "1745fe9aaa3f5bea1f29bdca0ced24a60966b11d",
+        "actual_oid": "1745fe9aaa3f5bea1f29bdca0ced24a60966b11d",
+        "bytes": 28823,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-c-sdkutils",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+      "pinned_commit": "f678bda9e21f7217e4bbf35e0d1ea59540687933",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "f678bda9e21f7217e4bbf35e0d1ea59540687933",
+      "missing_blobs": [],
+      "verified_blob_paths": 91,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "include/aws/sdkutils/aws_profile.h",
+        "expected_oid": "801af07ec0f64cc44ca67083f2614593cac9c2fe",
+        "actual_oid": "801af07ec0f64cc44ca67083f2614593cac9c2fe",
+        "bytes": 7027,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "aws-checksums",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+      "pinned_commit": "9978ba2c33a7a259c1a6bd0f62abe26827d03b85",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+            "ls-tree",
+            "-rz",
+            "-r",
+            "HEAD"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+            "cat-file",
+            "--batch-check"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+            "status",
+            "--porcelain"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "git",
+            "-C",
+            "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums",
+            "fsck",
+            "--full",
+            "--no-reflogs",
+            "--no-dangling"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "actual_commit": "9978ba2c33a7a259c1a6bd0f62abe26827d03b85",
+      "missing_blobs": [],
+      "verified_blob_paths": 43,
+      "missing_worktree_paths": [],
+      "worktree_status": "",
+      "fsck_output": "",
+      "actual_source_blob": {
+        "path": "bin/benchmark/main.c",
+        "expected_oid": "87648bdda16c5e49261fb2954490b7daa5c070b6",
+        "actual_oid": "87648bdda16c5e49261fb2954490b7daa5c070b6",
+        "bytes": 6622,
+        "matches": true
+      },
+      "status": "Verified populated - skipped"
+    },
+    {
+      "name": "s2n",
+      "path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/s2n",
+      "pinned_commit": "92f7827c8487eb2a99b443aec6ee7d1df031b1bf",
+      "commands": [],
+      "status": "Excluded - owned by credential agent"
+    }
+  ],
+  "network_fetches": 0,
+  "checkouts_modified": false
+}
