@@ -27,7 +27,8 @@ final class S3Service {
     }
     var error: String? { configurationError ?? session.listings.error(for: session.route) }
     var availableBuckets: [String] { session.bucketChoices.value(for: session.configuration.account) ?? [] }
-    internal(set) var recentFiles: [S3Object] = []
+    private(set) var recentRevision = UUID()
+    internal(set) var recentFiles: [S3Object] = [] { didSet { recentRevision = UUID() } }
     let recentRequest = RequestOwnership()
     var recentSelectionFilter: FileTypeFilter = .all
     var recentSelectionLimit = 50
@@ -105,7 +106,9 @@ final class S3Service {
             prefetchedData.removeAll()
             recentFiles.removeAll()
             restoreMetadataSnapshot()
-            // The legacy cache has no account identity. Invalidate it on account/config apply.
+            ScreensAppIndexCache.shared.reset()
+            DetailMetadataCache.shared.reset()
+            // Invalidate all pending media publications when account/config changes.
             await ImageCacheActor.shared.clearCache()
         }
         try Task.checkCancellation()
@@ -198,8 +201,32 @@ final class S3Service {
         let generation = session.generation
         let transport = try await metadataTransport(generation: generation)
         guard session.route == query else { throw CancellationError() }
-        _ = try await session.listings.load(query, policy: force ? .force : .automatic) {
-            try await MetadataCatalogScanner.listing(query, transport: transport)
+        try await session.browse.reload(query, force: force) { token in
+            try await transport.page(bucket: query.bucket, prefix: query.prefix.isEmpty ? nil : query.prefix,
+                delimiter: query.delimiter, token: token)
+        }
+        if session.isCurrent(generation), session.confirmRoute(query) {
+            do { try BrowseLocationStore(defaults: snapshotDefaults ?? .standard).save(query, configuration: session.configuration) }
+            catch { logger.error("Browse location save failed: \(error.localizedDescription)") }
+        }
+    }
+
+    func restoredBrowseLocation(legacyBucket: String, legacyPrefix: String) -> ListingQuery {
+        BrowseLocationStore(defaults: snapshotDefaults ?? .standard).resolve(session.configuration,
+            legacyBucket: legacyBucket, legacyPrefix: legacyPrefix)
+    }
+
+    var hasMoreObjects: Bool { session.browse.query == session.route && session.browse.hasMore }
+    var isLoadingMoreObjects: Bool { session.browse.isLoadingMore }
+    var browsePaginationError: String? { session.browse.query == session.route ? session.browse.error : nil }
+
+    func loadMoreObjects() async throws {
+        let query = session.route, generation = session.generation
+        let transport = try await metadataTransport(generation: generation)
+        guard session.route == query, session.browse.query == query else { throw CancellationError() }
+        try await session.browse.loadMore { token in
+            try await transport.page(bucket: query.bucket, prefix: query.prefix.isEmpty ? nil : query.prefix,
+                delimiter: query.delimiter, token: token)
         }
     }
 
@@ -242,8 +269,7 @@ final class S3Service {
         try await listObjects()
     }
 
-    /// Clears the in-memory recent files list. recentFiles is private(set), so callers
-    /// outside S3Service go through this to empty it (for example the Clear All button).
+    /// Prepares one Recent cache rebuild while retaining the last successful rows.
     @MainActor
     func clearRecentFiles() {
         // Reset freshness, retaining the last successful rows until rebuilding succeeds.
@@ -259,6 +285,7 @@ final class S3Service {
     /// - Throws: S3ServiceError if the client is not initialized or AWS SDK errors
     func deleteObject(key: String, bucket: String? = nil) async throws {
         let generation = session.generation
+        let account = session.configuration.account
         let targetBucket = bucket ?? currentBucket
         try await initializeClient()
         guard session.isCurrent(generation) else { throw CancellationError() }
@@ -273,25 +300,11 @@ final class S3Service {
             )
 
             _ = try await client.deleteObject(input: input)
-
+            await ConfirmedMediaMutation.apply(identity: MediaObjectIdentity(account: account, bucket: targetBucket, key: key),
+                isCurrent: { session.isCurrent(generation) }, invalidate: { identity in
+                    await invalidateMedia(key: identity.key, bucket: identity.bucket, account: identity.account)
+                }, publish: { recordSuccessfulDelete(key: key, bucket: targetBucket, generation: generation) })
             guard session.isCurrent(generation) else { throw CancellationError() }
-            // Mutations update every affected local snapshot without rescanning the account.
-            for (query, cached) in session.listings.snapshots where query.bucket.utf8.elementsEqual(targetBucket.utf8) {
-                let page = cached.value
-                session.listings.seed(MetadataListingPage(files: page.files.filter { !$0.key.utf8.elementsEqual(key.utf8) },
-                    folders: page.folders, nextToken: page.nextToken), for: query, refreshedAt: cached.refreshedAt)
-                if session.listings.isLoading(query) { session.listings.invalidate(query) }
-            }
-            let account = session.configuration.account
-            if var cached = session.catalogs.value(for: account) {
-                cached.records.removeAll { $0.key.utf8.elementsEqual(key.utf8) && $0.bucket.utf8.elementsEqual(targetBucket.utf8) }
-                session.catalogs.seed(cached, for: account, refreshedAt: cached.refreshedAt)
-                if session.catalogs.isLoading(account) { session.catalogs.invalidate(account) }
-            }
-                recentFiles.removeAll { object in
-                    object.key.utf8.elementsEqual(key.utf8) && (object.bucket ?? targetBucket).utf8.elementsEqual(targetBucket.utf8)
-                }
-                persistRecentFiles()
         } catch {
             self.logger.error("Failed to delete object '\(key)' from '\(targetBucket)': \(error.localizedDescription)")
             throw error
@@ -303,6 +316,11 @@ final class S3Service {
     }
 
     func fetchFiles(prefix: String, bucket: String, force: Bool = false) async throws -> [S3Object] {
+        try await fetchFileMetadata(prefix: prefix, bucket: bucket, force: force)
+            .sorted { $0.modified > $1.modified }.map(\.s3Object)
+    }
+
+    func fetchFileMetadata(prefix: String, bucket: String, force: Bool = false) async throws -> [MetadataRecord] {
         let generation = session.generation
         let query = ListingQuery(account: session.configuration.account, bucket: bucket, prefix: prefix, delimiter: nil)
         let transport = try await metadataTransport(generation: generation)
@@ -310,7 +328,7 @@ final class S3Service {
             try await MetadataCatalogScanner.listing(query, transport: transport)
         }
         guard session.isCurrent(generation) else { throw CancellationError() }
-        return page.files.sorted { $0.modified > $1.modified }.map(\.s3Object)
+        return page.files
     }
 }
 

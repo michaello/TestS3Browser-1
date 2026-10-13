@@ -1,20 +1,18 @@
 Building for debugging...
-[Provisioning 4 / 4]
-[1 / 1]
-Build complete! (0.77 sec)
+Build complete! (0.23 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F35FileUploadQueueTests started.
-􀟈  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() started.
 􀟈  Test failedUploadRetainsFileAndRetryUsesSameDestination() started.
-􀟈  Test cancellationOfActiveUploadCleansOwnedFile() started.
 􀟈  Test successfulUploadReadsOwnedFileAndCleansPayload() started.
 􀟈  Test fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue() started.
-􁁛  Test successfulUploadReadsOwnedFileAndCleansPayload() passed after 0.029 seconds.
-􁁛  Test cancellationOfActiveUploadCleansOwnedFile() passed after 0.031 seconds.
-􁁛  Test failedUploadRetainsFileAndRetryUsesSameDestination() passed after 0.032 seconds.
-􁁛  Test fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue() passed after 0.033 seconds.
-􁁛  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() passed after 0.033 seconds.
-􁁛  Suite F35FileUploadQueueTests passed after 0.033 seconds.
-􁁛  Test run with 5 tests in 1 suite passed after 0.033 seconds.
+􀟈  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() started.
+􀟈  Test cancellationOfActiveUploadCleansOwnedFile() started.
+􁁛  Test successfulUploadReadsOwnedFileAndCleansPayload() passed after 0.008 seconds.
+􁁛  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() passed after 0.009 seconds.
+􁁛  Test cancellationOfActiveUploadCleansOwnedFile() passed after 0.009 seconds.
+􁁛  Test fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue() passed after 0.009 seconds.
+􁁛  Test failedUploadRetainsFileAndRetryUsesSameDestination() passed after 0.010 seconds.
+􁁛  Suite F35FileUploadQueueTests passed after 0.010 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.010 seconds.

@@ -1,0 +1,12 @@
+Building for debugging...
+Build complete! (0.24 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F30ListPresentationTests started.
+􀟈  Test "Initial failure and a successful empty snapshot remain distinct from loading" started.
+􀟈  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" started.
+􁁛  Test "Initial failure and a successful empty snapshot remain distinct from loading" passed after 0.001 seconds.
+􁁛  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" passed after 0.004 seconds.
+􁁛  Suite F30ListPresentationTests passed after 0.005 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.005 seconds.

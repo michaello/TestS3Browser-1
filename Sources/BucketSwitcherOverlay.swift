@@ -1,13 +1,13 @@
 import SwiftUI
 
 /// Bottom-sheet overlay listing all available buckets with cached object counts.
-/// Fetches counts once per open; tapping a bucket switches the active one and dismisses.
+/// Reuses timestamped counts; tapping a bucket switches the active one and dismisses.
 struct BucketSwitcherOverlay: View {
     let s3Service: S3Service
     let onSelect: (String) -> Void
     let onDismiss: () -> Void
 
-    @State private var bucketCounts: [String: (count: Int, truncated: Bool)] = [:]
+    @State private var bucketCounts: [String: BucketCountEstimate] = [:]
     @State private var isFetching = false
 
     var body: some View {
@@ -57,10 +57,13 @@ struct BucketSwitcherOverlay: View {
                                         .foregroundStyle(.primary)
                                         .lineLimit(1)
 
-                                    if let info = bucketCounts[bucket] {
-                                        Text(info.truncated ? "\(info.count)+ objects" : "\(info.count) object\(info.count == 1 ? "" : "s")")
+                                    if let info = bucketCounts[bucket], let count = info.count {
+                                        Text(info.truncated ? "\(count)+ objects" : "\(count) object\(count == 1 ? "" : "s")")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
+                                        if info.error != nil { Text("Count refresh unavailable").font(.caption).foregroundStyle(.secondary) }
+                                    } else if bucketCounts[bucket]?.error != nil {
+                                        Text("Count unavailable").font(.caption).foregroundStyle(.secondary)
                                     } else if isFetching {
                                         Text("Loading…")
                                             .font(.caption)
@@ -96,18 +99,16 @@ struct BucketSwitcherOverlay: View {
 
     private func fetchCounts() async {
         guard !isFetching else { return }
-        isFetching = true
-        await withTaskGroup(of: (String, Int, Bool).self) { group in
-            for bucket in s3Service.availableBuckets {
-                group.addTask {
-                    let (count, truncated) = await s3Service.quickObjectCount(bucket: bucket)
-                    return (bucket, count, truncated)
-                }
-            }
-            for await (bucket, count, truncated) in group {
-                bucketCounts[bucket] = (count, truncated)
-            }
+        let generation = s3Service.session.generation
+        let account = s3Service.session.configuration.account
+        for bucket in s3Service.availableBuckets {
+            bucketCounts[bucket] = s3Service.session.counts.cached(account: account, bucket: bucket,
+                catalog: s3Service.session.catalogs.value(for: account))
         }
+        isFetching = true
+        let counts = await s3Service.fetchBucketCounts()
+        guard s3Service.session.isCurrent(generation) else { isFetching = false;return }
+        bucketCounts = counts
         isFetching = false
     }
 }

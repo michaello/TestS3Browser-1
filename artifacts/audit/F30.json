@@ -1,0 +1,38 @@
+{
+  "id": "F30",
+  "expected_behavior": "Initial failure, successful empty data, refreshing cached data and failed cached refresh are distinct states; every empty failure provides retry without hiding usable last-good rows.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:20.690775+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F30ListPresentationTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F30ListPresentationTests",
+      "name": "initialAndEmptyStates()",
+      "time": "0.000841166"
+    },
+    {
+      "classname": "AuditCoreTests.F30ListPresentationTests",
+      "name": "cachedRefreshStates()",
+      "time": "0.004790334"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

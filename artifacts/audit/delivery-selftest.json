@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "assertions": [
+    "Pushed source and matching ledger pass",
+    "Dirty source fails",
+    "Unpushed source fails",
+    "Pushed updated source passes",
+    "Dirty ledger fails",
+    "Pushed ledger passes"
+  ],
+  "scope": "Actual temporary local Git repositories/remotes; no credentials or configured project remote writes"
+}

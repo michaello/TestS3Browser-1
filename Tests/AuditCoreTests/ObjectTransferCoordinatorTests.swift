@@ -6,6 +6,8 @@ import Testing
 final class TransferFixture: ObjectTransferTransport {
     enum Failure: Error { case denied, offline, copyFailed, deleteFailed }
     var revision = TransferObjectRevision(etag: "\"source\"", versionID: "v1", lastModified: Date(timeIntervalSince1970: 123), size: 17)
+    var receipt = ObjectCopyReceipt(revision: TransferObjectRevision(etag: "\"destination\"", versionID: "copied-v2",
+        lastModified: Date(timeIntervalSince1970: 124), size: 17), contentType: "text/plain")
     var destination: TransferObjectPresence = .absent
     var headFailure: Failure?
     var copyFailure: Failure?
@@ -32,13 +34,15 @@ final class TransferFixture: ObjectTransferTransport {
         return destination
     }
 
-    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision) async throws {
+    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision,
+              destinationPresence: TransferObjectPresence) async throws -> ObjectCopyReceipt {
         if let copyFailure { throw copyFailure }
         #expect(sourceRevision == revision)
         copyStarted?()
         if let copyGate { for await _ in copyGate { break } }
         copies.append(request)
         afterCopy?()
+        return receipt
     }
 
     func delete(_ source: TransferObjectLocation, revision: TransferObjectRevision) async throws {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.000889208">
+    <testcase classname="AuditCoreTests.AuditN21" name="exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot()" time="0.000522708" />
+    <testcase classname="AuditCoreTests.AuditN21" name="confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges()" time="0.000558125" />
+    <testcase classname="AuditCoreTests.AuditN21" name="selectionCannotMutateAnAlreadyPresentedConfirmation()" time="0.000351833" />
+  </testsuite>
+</testsuites>

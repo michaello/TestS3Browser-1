@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.009250458">
+    <testcase classname="AuditCoreTests.N37DumpDeleteFeedbackTests" name="cancelledBeforeStartCannotDeleteOrPublishFailure()" time="0.008846666" />
+    <testcase classname="AuditCoreTests.N37DumpDeleteFeedbackTests" name="duplicateMutationCannotStartDuringActiveRequest()" time="0.008991625" />
+    <testcase classname="AuditCoreTests.N37DumpDeleteFeedbackTests" name="failedDeleteRetainsRowAndRetryPublishesSuccess()" time="0.008618333" />
+  </testsuite>
+</testsuites>

@@ -15,9 +15,10 @@ private actor MediaFixtureGate {
     func release() { open = true; let pending = waiters; waiters.removeAll(); pending.forEach { $0.resume() } }
 }
 private actor MediaFixtureCounter {
+    nonisolated let started = AsyncStream<Void>.makeStream()
     private(set) var calls = 0
     private(set) var events: [String] = []
-    func increment(_ event: String = "fetch") { calls += 1; events.append(event) }
+    func increment(_ event: String = "fetch") { calls += 1; events.append(event); started.continuation.yield(()) }
 }
 private actor MediaFixtureProgress {
     private(set) var values: [Int64] = []
@@ -84,6 +85,40 @@ struct F10MediaPreviewTests {
 
 @Suite("F11 original single-flight and transfer policy", .timeLimit(.minutes(1)))
 struct F11MediaTransferTests {
+    @Test("Identical video poster consumers share rendering and individual cancellation keeps other consumers")
+    func videoPosterSingleFlight() async throws {
+        let requests = MediaPreviewRequests<Int>(), gate = MediaFixtureGate(), count = MediaFixtureCounter()
+        let key = MediaPreviewRequestKey(object: identity("video.mov"), pixels: 360)
+        let consumers = (0..<6).map { _ in Task {
+            try await requests.value(for: key) { await count.increment(); await gate.wait(); return 7 }
+        } }
+        try await mediaEventually { await requests.consumerCount == 6 }
+        consumers[0].cancel()
+        await #expect(throws: CancellationError.self) { try await consumers[0].value }
+        #expect(await requests.consumerCount == 5)
+        await gate.release()
+        for task in consumers.dropFirst() { #expect(try await task.value == 7) }
+        #expect(await count.calls == 1)
+        #expect(await requests.consumerCount == 0)
+    }
+
+    @Test("Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement")
+    func videoPosterInvalidation() async throws {
+        let requests = MediaPreviewRequests<Int>(), oldGate = MediaFixtureGate(), newGate = MediaFixtureGate()
+        let key = MediaPreviewRequestKey(object: identity("video.mov"), pixels: 360)
+        let old = Task { try await requests.value(for: key) { await oldGate.wait(); return 1 } }
+        try await mediaEventually { await requests.consumerCount == 1 }
+        await requests.invalidate(account: "a", bucket: "b", key: "video.mov")
+        await #expect(throws: CancellationError.self) { try await old.value }
+        let replacement = Task { try await requests.value(for: key) { await newGate.wait(); return 2 } }
+        try await mediaEventually { await requests.consumerCount == 1 }
+        await oldGate.release()
+        #expect(await requests.consumerCount == 1)
+        await newGate.release()
+        #expect(try await replacement.value == 2)
+        #expect(await requests.consumerCount == 0)
+    }
+
     @Test("Concurrent row/gallery/export requests share one transfer and completed persistent original")
     func singleFlight() async throws {
         let folder = try mediaTemp(); defer { try? FileManager.default.removeItem(at: folder) }
@@ -197,8 +232,9 @@ struct F12MediaIdentityTests {
     func accountReset() async throws {
         let folder = try mediaTemp(); defer { try? FileManager.default.removeItem(at: folder) }
         let store = MediaOriginalStore(directory: folder), gate = MediaFixtureGate(), counter = MediaFixtureCounter()
+        var started = counter.started.stream.makeAsyncIterator()
         let task = Task { try await store.file(for: identity("old")) { await counter.increment(); await gate.wait(); return fixtureBody(Data([1])) } }
-        try await mediaEventually { await counter.calls == 1 }
+        _ = await started.next()
         try await store.clear(); await gate.release()
         await #expect(throws: CancellationError.self) { try await task.value }
         try await mediaEventually { await store.activeFlightCount == 0 }

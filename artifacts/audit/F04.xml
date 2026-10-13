@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.006966666">
+    <testcase classname="AuditCoreTests.F04SharedCatalogQueryTests" name="duplicateConsumersJoin()" time="0.006124375" />
+    <testcase classname="AuditCoreTests.F04SharedCatalogQueryTests" name="sharedScanAndLocalFilters()" time="0.006079875" />
+  </testsuite>
+</testsuites>

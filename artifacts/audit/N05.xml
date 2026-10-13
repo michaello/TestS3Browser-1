@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="13" failures="0" skipped="0" time="0.012332917">
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="cancelledAfterCopy()" time="0.011238125" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="changedAfterCopy(_:)" time="0.01019825" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="missingSourceETag()" time="0.010830167" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="concurrentDestination()" time="0.011975958" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="absentCopy()" time="0.007983541" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="keepBoth()" time="0.000805792" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="collisionWithoutApproval()" time="0.010217959" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="failedDelete()" time="0.010213917" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="exactUnicodeApproval()" time="0.010220834" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="scopedApproval()" time="0.011765708" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="unknownHeadFailure(_:)" time="0.0102485" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="failedCopy()" time="0.010183792" />
-    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="encodedSource()" time="0.011174541" />
+  <testsuite name="TestResults" errors="0" tests="13" failures="0" skipped="0" time="0.020251042">
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="keepBoth()" time="0.003118125" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="failedCopy()" time="0.015813417" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="unknownHeadFailure(_:)" time="0.014442541" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="failedDelete()" time="0.015799708" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="cancelledAfterCopy()" time="0.016366584" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="scopedApproval()" time="0.019737333" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="changedAfterCopy(_:)" time="0.015984791" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="exactUnicodeApproval()" time="0.015720375" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="encodedSource()" time="0.016336875" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="absentCopy()" time="0.012478333" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="concurrentDestination()" time="0.019705458" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="missingSourceETag()" time="0.015921709" />
+    <testcase classname="AuditCoreTests.N05ObjectTransferTests" name="collisionWithoutApproval()" time="0.015733791" />
   </testsuite>
 </testsuites>

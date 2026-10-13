@@ -1,0 +1,47 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project /Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj -scheme TestS3Browser -derivedDataPath /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit -scmProvider system -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -skipPackageUpdates CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+Creating working copy of package ‘aws-crt-swift’
+
+Checking out 0.54.0 of package ‘aws-crt-swift’
+Couldn’t update repository submodules:
+    Submodule 'aws-common-runtime/aws-c-auth' (https://github.com/awslabs/aws-c-auth.git) registered for path 'aws-common-runtime/aws-c-auth'
+    Submodule 'aws-common-runtime/aws-c-cal' (https://github.com/awslabs/aws-c-cal) registered for path 'aws-common-runtime/aws-c-cal'
+    Submodule 'aws-common-runtime/aws-c-common' (https://github.com/awslabs/aws-c-common.git) registered for path 'aws-common-runtime/aws-c-common'
+    Submodule 'aws-common-runtime/aws-c-compression' (https://github.com/awslabs/aws-c-compression.git) registered for path 'aws-common-runtime/aws-c-compression'
+    Submodule 'aws-common-runtime/aws-c-event-stream' (https://github.com/awslabs/aws-c-event-stream) registered for path 'aws-common-runtime/aws-c-event-stream'
+    Submodule 'aws-common-runtime/aws-c-http' (https://github.com/awslabs/aws-c-http.git) registered for path 'aws-common-runtime/aws-c-http'
+    Submodule 'aws-common-runtime/aws-c-io' (https://github.com/awslabs/aws-c-io.git) registered for path 'aws-common-runtime/aws-c-io'
+    Submodule 'aws-common-runtime/aws-c-mqtt' (https://github.com/awslabs/aws-c-mqtt.git) registered for path 'aws-common-runtime/aws-c-mqtt'
+    Submodule 'aws-common-runtime/aws-c-sdkutils' (https://github.com/awslabs/aws-c-sdkutils) registered for path 'aws-common-runtime/aws-c-sdkutils'
+    Submodule 'aws-common-runtime/aws-checksums' (https://github.com/awslabs/aws-checksums) registered for path 'aws-common-runtime/aws-checksums'
+    Submodule 'aws-common-runtime/s2n' (https://github.com/aws/s2n-tls.git) registered for path 'aws-common-runtime/s2n'
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-auth'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-compression'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-event-stream'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-cal'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-common'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-mqtt'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-sdkutils'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-checksums'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/s2n'...
+    fatal: transport 'file' not allowed
+    fatal: clone of 'https://github.com/aws/s2n-tls.git' into submodule path '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/s2n' failed
+    Failed to clone 'aws-common-runtime/s2n'. Retry scheduled
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/s2n'...
+    fatal: transport 'file' not allowed
+    fatal: clone of 'https://github.com/aws/s2n-tls.git' into submodule path '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/s2n' failed
+    Failed to clone 'aws-common-runtime/s2n' a second time, aborting
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-http'...
+    Cloning into '/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/SourcePackages/checkouts/aws-crt-swift/aws-common-runtime/aws-c-io'...
+fatalError
+2026-10-13 15:36:41.456 xcodebuild[62223:178548723] Writing error result bundle to /var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/ResultBundle_2026-13-10_15-36-0041.xcresult
+xcodebuild: error: Could not resolve package dependencies:
+  fatalError
+  Couldn’t update repository submodules:
+

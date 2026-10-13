@@ -2,8 +2,7 @@ import SwiftUI
 import os.log
 
 /// Phone-mode reports living in the phone-stash bucket under reports/YYYY/MM/DD/.
-/// Loaded with one ListObjectsV2 call scoped to the reports/ prefix, so it is fast
-/// regardless of how large the other buckets are. Newest report shows first.
+/// The complete reports/ listing is cached independently from other buckets.
 struct StashView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "StashView")
     let s3Service: S3Service
@@ -25,6 +24,10 @@ struct StashView: View {
     @State private var deleteErrorMessage = ""
 
     var body: some View {
+        AuditTelemetry.shared.measureViewConstruction(.stash) { measuredContent }
+    }
+
+    private var measuredContent: some View {
         NavigationStack(path: $navigationPath) {
             Group {
                 if isLoading && reports.isEmpty {
@@ -35,6 +38,8 @@ struct StashView: View {
                         Label("Couldn't load reports", systemImage: "exclamationmark.triangle")
                     } description: {
                         Text(error)
+                    } actions: {
+                        Button("Retry") { Task { await load(force: true) } }
                     }
                 } else if reports.isEmpty {
                     ContentUnavailableView {
@@ -63,6 +68,13 @@ struct StashView: View {
                 }
             }
             .navigationTitle("Stash")
+            .safeAreaInset(edge: .top) {
+                if isLoading && !reports.isEmpty { ProgressView("Refreshing reports...") }
+                if let error, !reports.isEmpty {
+                    Text(error).font(.caption).foregroundStyle(.secondary)
+                    Button("Retry Refresh") { Task { await load(force: true) } }.disabled(isLoading)
+                }
+            }
             .navigationDestination(for: S3Object.self) { report in
                 FileDetailView(object: report, service: s3Service)
             }

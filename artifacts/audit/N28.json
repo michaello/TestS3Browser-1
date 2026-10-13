@@ -2,9 +2,9 @@
   "id": "N28",
   "expected_behavior": "Metrics configuration retrieval uses an actual configuration ID or the paginated list API; configured fixtures produce entries and errors remain distinct from no configuration.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:19.008223+00:00",
+  "recorded_at": "2026-10-13T07:39:58.367952+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,37 +24,37 @@
     {
       "classname": "AuditCoreTests.AuditN28",
       "name": "cancelledRequestCannotPublishConfiguration()",
-      "time": "0.012139334"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "duplicateConfigurationKeepsStableDisplayIdentity()",
-      "time": "0.010477416"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "invalidConfigurationDoesNotMasqueradeAsUnconfigured()",
-      "time": "0.011337875"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "truncatedMissingOrRepeatedTokenFails()",
-      "time": "0.011436417"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "emptyConfigurationIsOnlyASuccessfulEmptyResponse()",
-      "time": "0.011365375"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN28",
-      "name": "laterPageFailureDoesNotReturnPartialAsComplete()",
-      "time": "0.011344167"
+      "time": "0.00073225"
     },
     {
       "classname": "AuditCoreTests.AuditN28",
       "name": "configuredPagesProduceEntriesAndOpaqueTokensAdvance()",
-      "time": "0.010475791"
+      "time": "0.000331292"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "invalidConfigurationDoesNotMasqueradeAsUnconfigured()",
+      "time": "0.000553292"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "laterPageFailureDoesNotReturnPartialAsComplete()",
+      "time": "0.000575625"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "duplicateConfigurationKeepsStableDisplayIdentity()",
+      "time": "0.000334416"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "truncatedMissingOrRepeatedTokenFails()",
+      "time": "0.000580166"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "emptyConfigurationIsOnlyASuccessfulEmptyResponse()",
+      "time": "0.000526583"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.log",

@@ -151,29 +151,40 @@ struct MediaDownloadBody: Sendable {
     let expectedBytes: Int64?
     let read: @Sendable () async throws -> Data?
     var close: @Sendable () -> Void = {}
+    var completion: @Sendable (_ receivedBytes: Int64, _ succeeded: Bool) async -> Void = { _, _ in }
 }
 
 actor MediaFileIO {
     static let shared = MediaFileIO()
     func write(_ body: MediaDownloadBody, to url: URL, maximumBytes: Int64?,
                progress: @Sendable (Int64) -> Void) async throws -> Int64 {
-        FileManager.default.createFile(atPath: url.path, contents: nil)
-        let handle = try FileHandle(forWritingTo: url)
-        defer { try? handle.close(); body.close() }
-        return try await withTaskCancellationHandler {
-            var bytes: Int64 = 0
-            while let chunk = try await body.read(), !chunk.isEmpty {
+        var bytes: Int64 = 0
+        defer { body.close() }
+        do {
+            FileManager.default.createFile(atPath: url.path, contents: nil)
+            let handle = try FileHandle(forWritingTo: url)
+            defer { try? handle.close() }
+            let written = try await withTaskCancellationHandler {
+                while let chunk = try await body.read(), !chunk.isEmpty {
+                    guard Int64(chunk.count) <= Int64.max - bytes else { throw MediaTransferError.invalidProgress }
+                    // Count bytes returned by the SDK reader even if cancellation or a disk
+                    // failure prevents this chunk from becoming a completed cached original.
+                    bytes += Int64(chunk.count)
+                    try Task.checkCancellation()
+                    if let maximumBytes, bytes > maximumBytes { throw MediaTransferError.invalidProgress }
+                    try handle.write(contentsOf: chunk)
+                    progress(bytes)
+                }
                 try Task.checkCancellation()
-                guard Int64(chunk.count) <= Int64.max - bytes else { throw MediaTransferError.invalidProgress }
-                bytes += Int64(chunk.count)
-                if let maximumBytes, bytes > maximumBytes { throw MediaTransferError.invalidProgress }
-                try handle.write(contentsOf: chunk)
-                progress(bytes)
-            }
-            try Task.checkCancellation()
-            if let expected = body.expectedBytes, expected != bytes { throw MediaTransferError.sizeMismatch }
-            return bytes
-        } onCancel: { body.close() }
+                if let expected = body.expectedBytes, expected != bytes { throw MediaTransferError.sizeMismatch }
+                return bytes
+            } onCancel: { body.close() }
+            await body.completion(bytes, true)
+            return written
+        } catch {
+            await body.completion(bytes, false)
+            throw error
+        }
     }
     func data(at url: URL) throws -> Data { try Data(contentsOf: url, options: .mappedIfSafe) }
     func dataURL(at url: URL, mimeType: String) throws -> String {

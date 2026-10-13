@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.017233458">
-    <testcase classname="AuditCoreTests.F19MediaPathTests" name="longKeys()" time="0.016952417" />
+  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.0175775">
+    <testcase classname="AuditCoreTests.F19MediaPathTests" name="longKeys()" time="0.017316166" />
   </testsuite>
 </testsuites>

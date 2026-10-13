@@ -1,0 +1,36 @@
+Building for debugging...
+Build complete! (0.21 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN42 started.
+􀟈  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() started.
+􀟈  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() started.
+􀟈  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() started.
+􀟈  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() started.
+􀟈  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() started.
+􀟈  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() started.
+􀟈  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() started.
+􀟈  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() started.
+􀟈  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() started.
+􀟈  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() started.
+􀟈  Test cachedAppPublicationCannotEraseANewerShareUpload() started.
+􀟈  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() started.
+􀟈  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() started.
+􀟈  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() started.
+􁁛  Test cachedAppPublicationCannotEraseANewerShareUpload() passed after 0.022 seconds.
+􁁛  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() passed after 0.022 seconds.
+􁁛  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() passed after 0.022 seconds.
+􁁛  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() passed after 0.022 seconds.
+􁁛  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() passed after 0.022 seconds.
+􁁛  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() passed after 0.023 seconds.
+􁁛  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() passed after 0.023 seconds.
+􁁛  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() passed after 0.034 seconds.
+􁁛  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() passed after 0.034 seconds.
+􁁛  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() passed after 0.034 seconds.
+􁁛  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() passed after 0.034 seconds.
+􁁛  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() passed after 0.034 seconds.
+􁁛  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() passed after 0.034 seconds.
+􁁛  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() passed after 0.034 seconds.
+􁁛  Suite AuditN42 passed after 0.034 seconds.
+􁁛  Test run with 14 tests in 1 suite passed after 0.034 seconds.

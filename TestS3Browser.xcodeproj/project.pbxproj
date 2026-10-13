@@ -7,6 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA2A156F1F88C409EB2FEB42 /* ConfirmedMediaMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A08118BB0CE5A586A6AE71 /* ConfirmedMediaMutation.swift */; };
+		F2B46EC7D8F5FA522714E364 /* S3Service+MetadataSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192B6B6EB5A700451DEC7304 /* S3Service+MetadataSnapshots.swift */; };
+		1852428907F75FD442145AB0 /* S3MetadataTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B2D00184DE6A410F4F6EB2 /* S3MetadataTransport.swift */; };
+		37E577D5B10B237DC1DB1245 /* CopyEncryptionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4192DB81F7588CA2D4CD3E /* CopyEncryptionPolicy.swift */; };
+		C6F578F4E2C61BD8B7CB4952 /* CopyEncryptionConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F08F601846708726D444C /* CopyEncryptionConfirmation.swift */; };
+		A757640FF5869260B54C2510 /* S3TransferKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18B2D73DA662746D6B38C0 /* S3TransferKeys.swift */; };
+		550BF1245D6C88602A922776 /* RecentUploadSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF141FE0CA0F5179560FDBC /* RecentUploadSnapshot.swift */; };
+		C2FF2A6B5FB3320380299619 /* S3FileUploadSigning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A714AEA33A269F9CE68C2F1C /* S3FileUploadSigning.swift */; };
+		E6A54C789695B61860BA18AB /* ShareAttachmentPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CA6BCDDD6F55FFDC50BF08 /* ShareAttachmentPipeline.swift */; };
+		0418432299AE51D03EB31157 /* CancellableFilePromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ED3C0FBF18FEAD9075F6C8 /* CancellableFilePromise.swift */; };
+		6EE6A69829292FC2F792FAA5 /* S3TransferKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F18B2D73DA662746D6B38C0 /* S3TransferKeys.swift */; };
+		F96C35B2B5709F3C3A7480B4 /* S3ObjectAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F18AE6CFB690CD43AC5021C /* S3ObjectAddress.swift */; };
+		1EC607BEA641C91F41981E98 /* ImageUploadRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC8D0F4A4AD0DE475D21AE7 /* ImageUploadRepresentation.swift */; };
+		BAD8329A90737F4CD3D02236 /* ImportedUploadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A8EB460FDD75A9E99AFE55 /* ImportedUploadFile.swift */; };
+		F63030C232EE9DE1C1A3EBAB /* RecentUploadSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF141FE0CA0F5179560FDBC /* RecentUploadSnapshot.swift */; };
+		4020F2C79F83AC0BD83E035D /* RecentUploadDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F66AFE09EA7BE763B69EE22 /* RecentUploadDelivery.swift */; };
+		F822CFDC69FFA4B33DA9CB7F /* UploadPreparation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7E32543151E5753F18ABBE /* UploadPreparation.swift */; };
+		5221177AADDBAE32F771A5DC /* MetadataSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD1A9A8DE6E4A5F84C23BC0 /* MetadataSnapshotStore.swift */; };
+		9FC1D6B916B780926046BC15 /* MetadataCatalogModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CFA1A1797A2D9395A97716 /* MetadataCatalogModels.swift */; };
+		97A5B4A8509BFB7DF16DE4CA /* ScreensIndexServiceTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CB02A9FB7B74C7817D4C16 /* ScreensIndexServiceTransport.swift */; };
+		AEE10E9CEA7ECC20CD89E1D5 /* NewFolderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615A964DAC7A4E66BD5C211A /* NewFolderSheet.swift */; };
+		53B28A61AE38C53FBC073FBB /* TabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883B5B26CF99F576E6FBDE02 /* TabBarButton.swift */; };
+		7F7E0DCCA74BE72F5514F55C /* ShareAttachmentPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CA6BCDDD6F55FFDC50BF08 /* ShareAttachmentPipeline.swift */; };
+		BEB552965D042D365BD41C23 /* ScreensAppIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BDAA95FEBA64521F8AE526 /* ScreensAppIndex.swift */; };
+		9D6A77FEEA024076ADAEA199 /* S3FileUploadSigning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A714AEA33A269F9CE68C2F1C /* S3FileUploadSigning.swift */; };
+		4FAE7C5506E66E25394B9733 /* RecentUploadSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF141FE0CA0F5179560FDBC /* RecentUploadSnapshot.swift */; };
+		09A14392EA60BCFBF9AA63C7 /* RecentUploadDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F66AFE09EA7BE763B69EE22 /* RecentUploadDelivery.swift */; };
+		B059A1EF3831644585E7B2B8 /* MutationFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF153AD59F22012814391 /* MutationFeedback.swift */; };
+		650F2FC63E08F225D00DB07A /* MetadataMutationProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCAB723F54D3CEE73DF4B33 /* MetadataMutationProjection.swift */; };
+		2E13B185E179007F15A21F22 /* MetadataCatalogModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CFA1A1797A2D9395A97716 /* MetadataCatalogModels.swift */; };
+		7F77A2A3914D0D6FCC38B851 /* MediaZoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8167EB8DAAE52C46983CE30D /* MediaZoomState.swift */; };
+		FA303592991CD7D53DCE829B /* MediaPreviewRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA48FD04B27C15BD4704447 /* MediaPreviewRequests.swift */; };
+		4AAD79B5A7F1D6F36F3C22BA /* ListPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D5C1E68C87426B01B4F2B1 /* ListPresentation.swift */; };
+		D86CE9DFF4E72D109EA9AB66 /* FileCardPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15CA0AFC6F4A1839CBA5CFD /* FileCardPresentation.swift */; };
+		7067E329EAFC1F7CB3CAFB80 /* DetailMetadataLoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76EA1899AC1FF5CB401734 /* DetailMetadataLoadState.swift */; };
+		69FFB9610A980AF121D0C972 /* DestinationSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26807675975C98B950E11E7E /* DestinationSelection.swift */; };
+		6A24E7656E7EE51EA3C3A041 /* DerivedRowsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A556E57205327697DC33105 /* DerivedRowsCache.swift */; };
+		4C679DD2B2C1BBFBF5539A3C /* CancellableFilePromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ED3C0FBF18FEAD9075F6C8 /* CancellableFilePromise.swift */; };
+		8E047AA9A0117EC23613D105 /* BulkObjectDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A88E566A36A1F8FF130F58 /* BulkObjectDeletion.swift */; };
+		BC6DE0C5F0766770F1ADD3A5 /* BucketCountCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D52CC90AA3AD769EA9CD290 /* BucketCountCache.swift */; };
+		7AB94F1796AE1C1EA83F41C8 /* BucketAdministrationRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B16B6F321E4AF06EA706EB5 /* BucketAdministrationRead.swift */; };
+		1F400F4F0E7255E667E86E70 /* BrowseLocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DB9D98BBF1C6F84DE75870 /* BrowseLocationStore.swift */; };
 		BA50B9D8C8A2A13BD0FECD0D /* DetailMetadataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80E38D56AF2080A9C272D0 /* DetailMetadataCache.swift */; };
 		8BBA8496FE30A43D61803A95 /* S3Service+MultipartCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724761A4C6FAC54322D242F /* S3Service+MultipartCopy.swift */; };
 		5A3DB411A93C960ECB6CA0F5 /* MultipartObjectCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66755CC34BA717A1DD5795F0 /* MultipartObjectCopy.swift */; };
@@ -148,6 +190,35 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		70A08118BB0CE5A586A6AE71 /* ConfirmedMediaMutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/ConfirmedMediaMutation.swift"; sourceTree = "<group>"; };
+		192B6B6EB5A700451DEC7304 /* S3Service+MetadataSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/S3Service+MetadataSnapshots.swift"; sourceTree = "<group>"; };
+		48B2D00184DE6A410F4F6EB2 /* S3MetadataTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/S3MetadataTransport.swift"; sourceTree = "<group>"; };
+		7A4192DB81F7588CA2D4CD3E /* CopyEncryptionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/CopyEncryptionPolicy.swift"; sourceTree = "<group>"; };
+		DC9F08F601846708726D444C /* CopyEncryptionConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CopyEncryptionConfirmation.swift"; sourceTree = "<group>"; };
+		9F18B2D73DA662746D6B38C0 /* S3TransferKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/S3TransferKeys.swift"; sourceTree = "<group>"; };
+		69CB02A9FB7B74C7817D4C16 /* ScreensIndexServiceTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/ScreensIndexServiceTransport.swift"; sourceTree = "<group>"; };
+		615A964DAC7A4E66BD5C211A /* NewFolderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewFolderSheet.swift"; sourceTree = "<group>"; };
+		883B5B26CF99F576E6FBDE02 /* TabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/TabBarButton.swift"; sourceTree = "<group>"; };
+		50CA6BCDDD6F55FFDC50BF08 /* ShareAttachmentPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/ShareAttachmentPipeline.swift"; sourceTree = "<group>"; };
+		53BDAA95FEBA64521F8AE526 /* ScreensAppIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/ScreensAppIndex.swift"; sourceTree = "<group>"; };
+		A714AEA33A269F9CE68C2F1C /* S3FileUploadSigning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/S3FileUploadSigning.swift"; sourceTree = "<group>"; };
+		5FF141FE0CA0F5179560FDBC /* RecentUploadSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/RecentUploadSnapshot.swift"; sourceTree = "<group>"; };
+		6F66AFE09EA7BE763B69EE22 /* RecentUploadDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/RecentUploadDelivery.swift"; sourceTree = "<group>"; };
+		F1FCF153AD59F22012814391 /* MutationFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MutationFeedback.swift"; sourceTree = "<group>"; };
+		CBCAB723F54D3CEE73DF4B33 /* MetadataMutationProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MetadataMutationProjection.swift"; sourceTree = "<group>"; };
+		E3CFA1A1797A2D9395A97716 /* MetadataCatalogModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MetadataCatalogModels.swift"; sourceTree = "<group>"; };
+		8167EB8DAAE52C46983CE30D /* MediaZoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MediaZoomState.swift"; sourceTree = "<group>"; };
+		FBA48FD04B27C15BD4704447 /* MediaPreviewRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MediaPreviewRequests.swift"; sourceTree = "<group>"; };
+		59D5C1E68C87426B01B4F2B1 /* ListPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/ListPresentation.swift"; sourceTree = "<group>"; };
+		B15CA0AFC6F4A1839CBA5CFD /* FileCardPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/FileCardPresentation.swift"; sourceTree = "<group>"; };
+		EB76EA1899AC1FF5CB401734 /* DetailMetadataLoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/DetailMetadataLoadState.swift"; sourceTree = "<group>"; };
+		26807675975C98B950E11E7E /* DestinationSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/DestinationSelection.swift"; sourceTree = "<group>"; };
+		9A556E57205327697DC33105 /* DerivedRowsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/DerivedRowsCache.swift"; sourceTree = "<group>"; };
+		54ED3C0FBF18FEAD9075F6C8 /* CancellableFilePromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/CancellableFilePromise.swift"; sourceTree = "<group>"; };
+		15A88E566A36A1F8FF130F58 /* BulkObjectDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/BulkObjectDeletion.swift"; sourceTree = "<group>"; };
+		5D52CC90AA3AD769EA9CD290 /* BucketCountCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/BucketCountCache.swift"; sourceTree = "<group>"; };
+		3B16B6F321E4AF06EA706EB5 /* BucketAdministrationRead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/BucketAdministrationRead.swift"; sourceTree = "<group>"; };
+		36DB9D98BBF1C6F84DE75870 /* BrowseLocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/BrowseLocationStore.swift"; sourceTree = "<group>"; };
 		6D80E38D56AF2080A9C272D0 /* DetailMetadataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/DetailMetadataCache.swift"; sourceTree = "<group>"; };
 		1724761A4C6FAC54322D242F /* S3Service+MultipartCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/S3Service+MultipartCopy.swift"; sourceTree = "<group>"; };
 		66755CC34BA717A1DD5795F0 /* MultipartObjectCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core/MultipartObjectCopy.swift"; sourceTree = "<group>"; };
@@ -285,6 +356,35 @@
 		F730FE2DE85746E6AF0EC6A0 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				70A08118BB0CE5A586A6AE71 /* ConfirmedMediaMutation.swift */,
+				192B6B6EB5A700451DEC7304 /* S3Service+MetadataSnapshots.swift */,
+				48B2D00184DE6A410F4F6EB2 /* S3MetadataTransport.swift */,
+				7A4192DB81F7588CA2D4CD3E /* CopyEncryptionPolicy.swift */,
+				DC9F08F601846708726D444C /* CopyEncryptionConfirmation.swift */,
+				9F18B2D73DA662746D6B38C0 /* S3TransferKeys.swift */,
+				69CB02A9FB7B74C7817D4C16 /* ScreensIndexServiceTransport.swift */,
+				615A964DAC7A4E66BD5C211A /* NewFolderSheet.swift */,
+				883B5B26CF99F576E6FBDE02 /* TabBarButton.swift */,
+				50CA6BCDDD6F55FFDC50BF08 /* ShareAttachmentPipeline.swift */,
+				53BDAA95FEBA64521F8AE526 /* ScreensAppIndex.swift */,
+				A714AEA33A269F9CE68C2F1C /* S3FileUploadSigning.swift */,
+				5FF141FE0CA0F5179560FDBC /* RecentUploadSnapshot.swift */,
+				6F66AFE09EA7BE763B69EE22 /* RecentUploadDelivery.swift */,
+				F1FCF153AD59F22012814391 /* MutationFeedback.swift */,
+				CBCAB723F54D3CEE73DF4B33 /* MetadataMutationProjection.swift */,
+				E3CFA1A1797A2D9395A97716 /* MetadataCatalogModels.swift */,
+				8167EB8DAAE52C46983CE30D /* MediaZoomState.swift */,
+				FBA48FD04B27C15BD4704447 /* MediaPreviewRequests.swift */,
+				59D5C1E68C87426B01B4F2B1 /* ListPresentation.swift */,
+				B15CA0AFC6F4A1839CBA5CFD /* FileCardPresentation.swift */,
+				EB76EA1899AC1FF5CB401734 /* DetailMetadataLoadState.swift */,
+				26807675975C98B950E11E7E /* DestinationSelection.swift */,
+				9A556E57205327697DC33105 /* DerivedRowsCache.swift */,
+				54ED3C0FBF18FEAD9075F6C8 /* CancellableFilePromise.swift */,
+				15A88E566A36A1F8FF130F58 /* BulkObjectDeletion.swift */,
+				5D52CC90AA3AD769EA9CD290 /* BucketCountCache.swift */,
+				3B16B6F321E4AF06EA706EB5 /* BucketAdministrationRead.swift */,
+				36DB9D98BBF1C6F84DE75870 /* BrowseLocationStore.swift */,
 				6D80E38D56AF2080A9C272D0 /* DetailMetadataCache.swift */,
 				1724761A4C6FAC54322D242F /* S3Service+MultipartCopy.swift */,
 				66755CC34BA717A1DD5795F0 /* MultipartObjectCopy.swift */,
@@ -608,6 +708,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA2A156F1F88C409EB2FEB42 /* ConfirmedMediaMutation.swift in Sources */,
+				F2B46EC7D8F5FA522714E364 /* S3Service+MetadataSnapshots.swift in Sources */,
+				1852428907F75FD442145AB0 /* S3MetadataTransport.swift in Sources */,
+				37E577D5B10B237DC1DB1245 /* CopyEncryptionPolicy.swift in Sources */,
+				C6F578F4E2C61BD8B7CB4952 /* CopyEncryptionConfirmation.swift in Sources */,
+				A757640FF5869260B54C2510 /* S3TransferKeys.swift in Sources */,
+				97A5B4A8509BFB7DF16DE4CA /* ScreensIndexServiceTransport.swift in Sources */,
+				AEE10E9CEA7ECC20CD89E1D5 /* NewFolderSheet.swift in Sources */,
+				53B28A61AE38C53FBC073FBB /* TabBarButton.swift in Sources */,
+				7F7E0DCCA74BE72F5514F55C /* ShareAttachmentPipeline.swift in Sources */,
+				BEB552965D042D365BD41C23 /* ScreensAppIndex.swift in Sources */,
+				9D6A77FEEA024076ADAEA199 /* S3FileUploadSigning.swift in Sources */,
+				4FAE7C5506E66E25394B9733 /* RecentUploadSnapshot.swift in Sources */,
+				09A14392EA60BCFBF9AA63C7 /* RecentUploadDelivery.swift in Sources */,
+				B059A1EF3831644585E7B2B8 /* MutationFeedback.swift in Sources */,
+				650F2FC63E08F225D00DB07A /* MetadataMutationProjection.swift in Sources */,
+				2E13B185E179007F15A21F22 /* MetadataCatalogModels.swift in Sources */,
+				7F77A2A3914D0D6FCC38B851 /* MediaZoomState.swift in Sources */,
+				FA303592991CD7D53DCE829B /* MediaPreviewRequests.swift in Sources */,
+				4AAD79B5A7F1D6F36F3C22BA /* ListPresentation.swift in Sources */,
+				D86CE9DFF4E72D109EA9AB66 /* FileCardPresentation.swift in Sources */,
+				7067E329EAFC1F7CB3CAFB80 /* DetailMetadataLoadState.swift in Sources */,
+				69FFB9610A980AF121D0C972 /* DestinationSelection.swift in Sources */,
+				6A24E7656E7EE51EA3C3A041 /* DerivedRowsCache.swift in Sources */,
+				4C679DD2B2C1BBFBF5539A3C /* CancellableFilePromise.swift in Sources */,
+				8E047AA9A0117EC23613D105 /* BulkObjectDeletion.swift in Sources */,
+				BC6DE0C5F0766770F1ADD3A5 /* BucketCountCache.swift in Sources */,
+				7AB94F1796AE1C1EA83F41C8 /* BucketAdministrationRead.swift in Sources */,
+				1F400F4F0E7255E667E86E70 /* BrowseLocationStore.swift in Sources */,
 				BA50B9D8C8A2A13BD0FECD0D /* DetailMetadataCache.swift in Sources */,
 				8BBA8496FE30A43D61803A95 /* S3Service+MultipartCopy.swift in Sources */,
 				5A3DB411A93C960ECB6CA0F5 /* MultipartObjectCopy.swift in Sources */,
@@ -704,6 +833,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2FF2A6B5FB3320380299619 /* S3FileUploadSigning.swift in Sources */,
+				E6A54C789695B61860BA18AB /* ShareAttachmentPipeline.swift in Sources */,
+				0418432299AE51D03EB31157 /* CancellableFilePromise.swift in Sources */,
+				6EE6A69829292FC2F792FAA5 /* S3TransferKeys.swift in Sources */,
+				F96C35B2B5709F3C3A7480B4 /* S3ObjectAddress.swift in Sources */,
+				1EC607BEA641C91F41981E98 /* ImageUploadRepresentation.swift in Sources */,
+				BAD8329A90737F4CD3D02236 /* ImportedUploadFile.swift in Sources */,
+				F63030C232EE9DE1C1A3EBAB /* RecentUploadSnapshot.swift in Sources */,
+				4020F2C79F83AC0BD83E035D /* RecentUploadDelivery.swift in Sources */,
+				F822CFDC69FFA4B33DA9CB7F /* UploadPreparation.swift in Sources */,
+				5221177AADDBAE32F771A5DC /* MetadataSnapshotStore.swift in Sources */,
+				9FC1D6B916B780926046BC15 /* MetadataCatalogModels.swift in Sources */,
 				FCBE28FEC3D2A1A455808799 /* SecureConfigurationRepository.swift in Sources */,
 				12E40BB2218C11909EA02449 /* AppleKeychainCredentialStore.swift in Sources */,
 				198C777C85C629B2CD82E6EA /* SharedConfig.swift in Sources */,
@@ -715,6 +856,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				550BF1245D6C88602A922776 /* RecentUploadSnapshot.swift in Sources */,
 				WGT001 /* TestS3BrowserWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

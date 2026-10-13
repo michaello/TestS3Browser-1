@@ -1,0 +1,11 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project /Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj -scheme TestS3Browser -derivedDataPath /Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit -scmProvider system -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -skipPackageUpdates CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+Creating working copy of package ‘aws-crt-swift’
+
+Checking out 0.54.0 of package ‘aws-crt-swift’

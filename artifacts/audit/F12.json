@@ -2,9 +2,9 @@
   "id": "F12",
   "expected_behavior": "Equal keys in different accounts/buckets and different ETag/version identities never share an image/file result; gallery requests pass the object's bucket and mutations invalidate the affected identity.",
   "passed": true,
-  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:36.946279+00:00",
+  "recorded_at": "2026-10-13T07:38:50.694890+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -14,22 +14,47 @@
     "--disable-xctest",
     "--enable-swift-testing",
     "--filter",
-    "F12MediaIdentityTests",
+    "F12MediaIdentityTests|F12ConfirmedMutationTests",
     "--xunit-output",
     "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.xml"
   ],
   "exit_code": 0,
-  "test_count": 2,
+  "test_count": 7,
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F12MediaIdentityTests",
       "name": "accountReset()",
-      "time": "0.004088625"
+      "time": "0.013454083"
     },
     {
       "classname": "AuditCoreTests.F12MediaIdentityTests",
       "name": "exactIdentity()",
-      "time": "0.018898292"
+      "time": "0.03462775"
+    },
+    {
+      "classname": "AuditCoreTests.F12ConfirmedMutationTests",
+      "name": "exactDestinationReceipt()",
+      "time": "0.007550583"
+    },
+    {
+      "classname": "AuditCoreTests.F12ConfirmedMutationTests",
+      "name": "missingCopyReceiptETag()",
+      "time": "0.007653209"
+    },
+    {
+      "classname": "AuditCoreTests.F12ConfirmedMutationTests",
+      "name": "cancellationAfterCopy()",
+      "time": "0.01959225"
+    },
+    {
+      "classname": "AuditCoreTests.F12ConfirmedMutationTests",
+      "name": "partialMoveRetainsSourceAndReplacesDestinationCache()",
+      "time": "0.020650542"
+    },
+    {
+      "classname": "AuditCoreTests.F12ConfirmedMutationTests",
+      "name": "deletionAfterAccountChange()",
+      "time": "0.023978125"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.log",

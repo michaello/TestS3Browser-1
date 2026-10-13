@@ -1,6 +1,6 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.62 sec)
+Build complete! (0.32 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
@@ -8,6 +8,6 @@ Build complete! (0.62 sec)
 􀟈  Test "Old decoded publication is rejected after reset while new generation can populate" started.
 􀟈  Test "A suspended thumbnail original cannot repopulate disk after clear; fresh request succeeds" started.
 􁁛  Test "Old decoded publication is rejected after reset while new generation can populate" passed after 0.001 seconds.
-􁁛  Test "A suspended thumbnail original cannot repopulate disk after clear; fresh request succeeds" passed after 0.009 seconds.
-􁁛  Suite "N25 cache reset rejects suspended thumbnails" passed after 0.009 seconds.
-􁁛  Test run with 2 tests in 1 suite passed after 0.009 seconds.
+􁁛  Test "A suspended thumbnail original cannot repopulate disk after clear; fresh request succeeds" passed after 0.005 seconds.
+􁁛  Suite "N25 cache reset rejects suspended thumbnails" passed after 0.005 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.006 seconds.

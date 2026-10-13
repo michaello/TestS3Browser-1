@@ -1,0 +1,27 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.26 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F31SharePipelineTests started.
+􀟈  Suite F31FilePromiseTests started.
+􀟈  Test fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked() started.
+􀟈  Test cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments() started.
+􀟈  Test attachmentsAreLoadedSentAndCleanedOneAtATime() started.
+􀟈  Test cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation() started.
+􀟈  Test differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile() started.
+􀟈  Test cancelledBeforeStartNeverRequestsRepresentation() started.
+􀟈  Test duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile() started.
+􀟈  Test cancelledProviderProgressResolvesAndLateFileIsDisposed() started.
+􁁛  Test differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile() passed after 0.010 seconds.
+􁁛  Test duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile() passed after 0.010 seconds.
+􁁛  Test cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments() passed after 0.022 seconds.
+􁁛  Test cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation() passed after 0.025 seconds.
+􁁛  Test fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked() passed after 0.027 seconds.
+􁁛  Test cancelledBeforeStartNeverRequestsRepresentation() passed after 0.027 seconds.
+􁁛  Test cancelledProviderProgressResolvesAndLateFileIsDisposed() passed after 0.028 seconds.
+􁁛  Suite F31FilePromiseTests passed after 0.028 seconds.
+􁁛  Test attachmentsAreLoadedSentAndCleanedOneAtATime() passed after 0.062 seconds.
+􁁛  Suite F31SharePipelineTests passed after 0.062 seconds.
+􁁛  Test run with 8 tests in 2 suites passed after 0.062 seconds.

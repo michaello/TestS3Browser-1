@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.040008542">
-    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="reusesDerivedLines()" time="0.034117583" />
-    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="lineEndings(fixture:)" time="0.039666667" />
-    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="unicodeBytes()" time="0.0396695" />
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.007912417">
+    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="reusesDerivedLines()" time="0.007574083" />
+    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="lineEndings(fixture:)" time="0.007667" />
+    <testcase classname="AuditCoreTests.N47NumberedTextTests" name="unicodeBytes()" time="0.007553333" />
   </testsuite>
 </testsuites>

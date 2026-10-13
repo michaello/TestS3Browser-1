@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.026806083">
-    <testcase classname="AuditCoreTests.F36PerformanceTests" name="unmeasuredValuesStayUnknownAndScrollingStallsAreScoped()" time="0.000585291" />
-    <testcase classname="AuditCoreTests.F36PerformanceTests" name="aggregateEventsAreBoundedAndDoNotExportIdentities()" time="0.000612166" />
-    <testcase classname="AuditCoreTests.F36PerformanceTests" name="fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader()" time="0.026529125" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.029904041">
+    <testcase classname="AuditCoreTests.F36MediaBodyObservationTests" name="truncatedBody()" time="0.008129542" />
+    <testcase classname="AuditCoreTests.F36MediaBodyObservationTests" name="successfulBody()" time="0.00823825" />
+    <testcase classname="AuditCoreTests.F36MediaBodyObservationTests" name="unreadBodyCleanup()" time="0.008352208" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="aggregateEventsAreBoundedAndDoNotExportIdentities()" time="0.003029542" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader()" time="0.029444667" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes()" time="0.003007042" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="unmeasuredValuesStayUnknownAndScrollingStallsAreScoped()" time="0.003045375" />
   </testsuite>
 </testsuites>

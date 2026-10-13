@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.010073125">
-    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="delayedRepresentationRetainsOriginalBucketAndPrefix()" time="0.000497125" />
-    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="changedAccountCancelsBeforeMutation()" time="0.000505417" />
-    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="cancelledInputCannotStartUpload()" time="0.007593959" />
-    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="accountScopeHasUnambiguousFieldsAndNoCredentialText()" time="0.007576958" />
-    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="providerFailureAndMissingRepresentationDoNotMutate()" time="0.007555875" />
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.00679775">
+    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="accountScopeHasUnambiguousFieldsAndNoCredentialText()" time="0.006495791" />
+    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="changedAccountCancelsBeforeMutation()" time="0.000775125" />
+    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="cancelledInputCannotStartUpload()" time="0.006505375" />
+    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="delayedRepresentationRetainsOriginalBucketAndPrefix()" time="0.006451708" />
+    <testcase classname="AuditCoreTests.N01UploadPreparationTests" name="providerFailureAndMissingRepresentationDoNotMutate()" time="0.00649975" />
   </testsuite>
 </testsuites>

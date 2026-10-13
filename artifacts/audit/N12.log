@@ -1,0 +1,20 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.36 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN12 started.
+􀟈  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() started.
+􀟈  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() started.
+􀟈  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() started.
+􀟈  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "sheet-after-dismissal" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "queued" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "root" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􁁛  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() passed after 0.001 seconds.
+􁁛  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() passed after 0.001 seconds.
+􁁛  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() passed after 0.001 seconds.
+􁁛  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) with 3 test cases passed after 0.001 seconds.
+􁁛  Suite AuditN12 passed after 0.001 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.001 seconds.

@@ -1,0 +1,68 @@
+{
+  "id": "F31",
+  "expected_behavior": "Share attachment loading/uploading is a bounded file-backed pipeline with serialized result collection and owned cancellation; whole batches are not retained as Data in memory.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:23.067136+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F31SharePipelineTests|F31FilePromiseTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 8,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F31FilePromiseTests",
+      "name": "cancelledProviderProgressResolvesAndLateFileIsDisposed()",
+      "time": "0.028466"
+    },
+    {
+      "classname": "AuditCoreTests.F31FilePromiseTests",
+      "name": "differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile()",
+      "time": "0.010221125"
+    },
+    {
+      "classname": "AuditCoreTests.F31FilePromiseTests",
+      "name": "duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile()",
+      "time": "0.010719708"
+    },
+    {
+      "classname": "AuditCoreTests.F31FilePromiseTests",
+      "name": "cancelledBeforeStartNeverRequestsRepresentation()",
+      "time": "0.027225"
+    },
+    {
+      "classname": "AuditCoreTests.F31SharePipelineTests",
+      "name": "fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked()",
+      "time": "0.027218959"
+    },
+    {
+      "classname": "AuditCoreTests.F31SharePipelineTests",
+      "name": "attachmentsAreLoadedSentAndCleanedOneAtATime()",
+      "time": "0.062003209"
+    },
+    {
+      "classname": "AuditCoreTests.F31SharePipelineTests",
+      "name": "cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments()",
+      "time": "0.022883417"
+    },
+    {
+      "classname": "AuditCoreTests.F31SharePipelineTests",
+      "name": "cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation()",
+      "time": "0.02544375"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

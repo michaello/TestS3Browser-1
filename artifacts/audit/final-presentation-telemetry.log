@@ -1,0 +1,56 @@
+Building for debugging...
+[1 / 1]
+[2 / 13] AuditCore
+[4 / 15] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[12 / 17] AuditCoreTests-product
+[29 / 34] AuditCoreTests-product
+[33 / 36] AuditCoreTests-product
+[35 / 39] AuditCoreTests-product
+Build complete! (6.80 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F36PerformanceTests started.
+􀟈  Suite F34DerivedRowsCacheTests started.
+􀟈  Suite F30ListPresentationTests started.
+􀟈  Suite F08ConcurrencyBoundaryTests started.
+􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
+􀟈  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() started.
+􀟈  Test "Gallery projections are reused for index changes and rebuild only for source changes" started.
+􀟈  Test "Initial failure and a successful empty snapshot remain distinct from loading" started.
+􀟈  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" started.
+􀟈  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() started.
+􀟈  Test "Construction metrics use bounded surface names and measure only the builder" started.
+􀟈  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" started.
+􀟈  Test "An old account completion cannot publish into newly isolated observed state" started.
+􀟈  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" started.
+􀟈  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" started.
+􀟈  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" started.
+􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.001 seconds.
+􁁛  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" passed after 0.014 seconds.
+􁁛  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() passed after 0.018 seconds.
+􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.018 seconds.
+􁁛  Test "Initial failure and a successful empty snapshot remain distinct from loading" passed after 0.018 seconds.
+􁁛  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" passed after 0.018 seconds.
+􁁛  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" passed after 0.018 seconds.
+􁁛  Test "Gallery projections are reused for index changes and rebuild only for source changes" passed after 0.018 seconds.
+􁁛  Test "Construction metrics use bounded surface names and measure only the builder" passed after 0.018 seconds.
+􁁛  Suite F34DerivedRowsCacheTests passed after 0.019 seconds.
+􁁛  Test "An old account completion cannot publish into newly isolated observed state" passed after 0.020 seconds.
+􁁛  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" passed after 0.020 seconds.
+􁁛  Suite F30ListPresentationTests passed after 0.020 seconds.
+􁁛  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" passed after 0.031 seconds.
+􁁛  Suite F08ConcurrencyBoundaryTests passed after 0.032 seconds.
+􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.041 seconds.
+􁁛  Suite F36PerformanceTests passed after 0.041 seconds.
+􁁛  Test run with 13 tests in 4 suites passed after 0.041 seconds.

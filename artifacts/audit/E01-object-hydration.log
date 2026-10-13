@@ -1,0 +1,92 @@
+{"batch": 1, "remaining_missing_blobs": 3792, "exit_code": 0}
+{"batch": 2, "remaining_missing_blobs": 3760, "exit_code": 0}
+{"batch": 3, "remaining_missing_blobs": 3728, "exit_code": 0}
+{"batch": 4, "remaining_missing_blobs": 3696, "exit_code": 0}
+{"batch": 5, "remaining_missing_blobs": 3664, "exit_code": 0}
+{"batch": 6, "remaining_missing_blobs": 3632, "exit_code": 0}
+{"batch": 7, "remaining_missing_blobs": 3600, "exit_code": 0}
+{"batch": 8, "remaining_missing_blobs": 3568, "exit_code": 0}
+{"batch": 9, "remaining_missing_blobs": 3536, "exit_code": 0}
+{"batch": 10, "remaining_missing_blobs": 3504, "exit_code": 0}
+{"batch": 11, "remaining_missing_blobs": 3472, "exit_code": 0}
+{"batch": 12, "remaining_missing_blobs": 3440, "exit_code": 0}
+{"batch": 13, "remaining_missing_blobs": 3408, "exit_code": 0}
+{"batch": 14, "remaining_missing_blobs": 3376, "exit_code": 0}
+{"batch": 15, "remaining_missing_blobs": 3344, "exit_code": 0}
+{"batch": 16, "remaining_missing_blobs": 3312, "exit_code": 0}
+{"batch": 17, "remaining_missing_blobs": 3280, "exit_code": 0}
+{"batch": 18, "remaining_missing_blobs": 3248, "exit_code": 0}
+{"batch": 19, "remaining_missing_blobs": 3216, "exit_code": 0}
+{"batch": 20, "remaining_missing_blobs": 3184, "exit_code": 0}
+{"batch": 21, "remaining_missing_blobs": 3152, "exit_code": 0}
+{"batch": 22, "remaining_missing_blobs": 3120, "exit_code": 0}
+{"batch": 23, "remaining_missing_blobs": 3088, "exit_code": 0}
+{"batch": 24, "remaining_missing_blobs": 3056, "exit_code": 0}
+{"batch": 25, "remaining_missing_blobs": 3024, "exit_code": 0}
+{"batch": 26, "remaining_missing_blobs": 2992, "exit_code": 0}
+{"batch": 27, "remaining_missing_blobs": 2960, "exit_code": 0}
+{"batch": 28, "remaining_missing_blobs": 2928, "exit_code": 0}
+{"batch": 29, "remaining_missing_blobs": 2896, "exit_code": 0}
+{"batch": 30, "remaining_missing_blobs": 2864, "exit_code": 0}
+{"batch": 31, "remaining_missing_blobs": 2832, "exit_code": 0}
+{"batch": 32, "remaining_missing_blobs": 2800, "exit_code": 0}
+{"batch": 33, "remaining_missing_blobs": 2768, "exit_code": 0}
+{"batch": 34, "remaining_missing_blobs": 2736, "exit_code": 0}
+{"batch": 35, "remaining_missing_blobs": 2704, "exit_code": 0}
+{"batch": 36, "remaining_missing_blobs": 2672, "exit_code": 0}
+{"batch": 37, "remaining_missing_blobs": 2640, "exit_code": 0}
+{"batch": 38, "remaining_missing_blobs": 2608, "exit_code": 0}
+{"batch": 39, "remaining_missing_blobs": 2576, "exit_code": 0}
+{"batch": 40, "remaining_missing_blobs": 2544, "exit_code": 0}
+{"batch": 41, "remaining_missing_blobs": 2512, "exit_code": 0}
+{"batch": 42, "remaining_missing_blobs": 2480, "exit_code": 0}
+{"batch": 43, "remaining_missing_blobs": 2448, "exit_code": 0}
+{"batch": 44, "remaining_missing_blobs": 2416, "exit_code": 0}
+{"batch": 45, "remaining_missing_blobs": 2384, "exit_code": 0}
+{"batch": 46, "remaining_missing_blobs": 2352, "exit_code": 0}
+{"batch": 47, "remaining_missing_blobs": 2320, "exit_code": 0}
+{"batch": 48, "remaining_missing_blobs": 2288, "exit_code": 0}
+{"batch": 49, "remaining_missing_blobs": 2256, "exit_code": 0}
+{"batch": 50, "remaining_missing_blobs": 2224, "exit_code": 0}
+{"batch": 51, "remaining_missing_blobs": 2192, "exit_code": 0}
+{"batch": 52, "remaining_missing_blobs": 2160, "exit_code": 0}
+{"batch": 53, "remaining_missing_blobs": 2128, "exit_code": 0}
+{"batch": 54, "remaining_missing_blobs": 2096, "exit_code": 0}
+{"batch": 55, "remaining_missing_blobs": 2064, "exit_code": 0}
+{"batch": 56, "remaining_missing_blobs": 2032, "exit_code": 0}
+{"batch": 57, "remaining_missing_blobs": 2000, "exit_code": 0}
+{"batch": 58, "remaining_missing_blobs": 1968, "exit_code": 0}
+{"batch": 59, "remaining_missing_blobs": 1936, "exit_code": 0}
+{"batch": 60, "remaining_missing_blobs": 1904, "exit_code": 0}
+{"batch": 61, "remaining_missing_blobs": 1872, "exit_code": 0}
+{"batch": 62, "remaining_missing_blobs": 1840, "exit_code": 0}
+{"batch": 63, "remaining_missing_blobs": 1808, "exit_code": 0}
+{"batch": 64, "remaining_missing_blobs": 1776, "exit_code": 0}
+{"batch": 65, "remaining_missing_blobs": 1744, "exit_code": 0}
+{"batch": 66, "remaining_missing_blobs": 1712, "exit_code": 0}
+{"batch": 67, "remaining_missing_blobs": 1680, "exit_code": 0}
+{"batch": 68, "remaining_missing_blobs": 1648, "exit_code": 0}
+{"batch": 69, "remaining_missing_blobs": 1616, "exit_code": 0}
+{"batch": 70, "remaining_missing_blobs": 1584, "exit_code": 0}
+{"batch": 71, "remaining_missing_blobs": 1552, "exit_code": 0}
+{"batch": 72, "remaining_missing_blobs": 1520, "exit_code": 0}
+{"batch": 73, "remaining_missing_blobs": 1488, "exit_code": 0}
+{"batch": 74, "remaining_missing_blobs": 1456, "exit_code": 0}
+{"batch": 75, "remaining_missing_blobs": 1424, "exit_code": 0}
+{"batch": 76, "remaining_missing_blobs": 1392, "exit_code": 0}
+{"batch": 77, "remaining_missing_blobs": 1360, "exit_code": 0}
+{"batch": 78, "remaining_missing_blobs": 1328, "exit_code": 0}
+{"batch": 79, "remaining_missing_blobs": 1296, "exit_code": 0}
+{"batch": 80, "remaining_missing_blobs": 1296, "exit_code": 124}
+{
+  "revision": "37f1ef1c1c00a28b867dd761f20a2bd8a0f2a6b9",
+  "tree": "4fa749af6da7172e98b0fe836bdab7f375091040",
+  "mirror_path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-sdk-swift.git",
+  "verified_blob_paths": 4248,
+  "strategy": "Fetch exact pinned Git blob objects in resumable bounded batches",
+  "passed": false,
+  "initial_missing_blobs": 3824,
+  "remaining_missing_blobs": 1296,
+  "failure": "Exact-object batch failed; successful previous objects retained: /Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-object-batch-080.log",
+  "elapsed_seconds": 900.5192229169916
+}

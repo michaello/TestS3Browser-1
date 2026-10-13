@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.009301667">
+    <testcase classname="AuditCoreTests.N35ShareOutcomeTests" name="totalProviderFailureCannotReportSuccessfulSmallerBatch()" time="0.007393709" />
+    <testcase classname="AuditCoreTests.N35ShareOutcomeTests" name="middleUploadFailureDoesNotDropOtherAttachmentOutcomes()" time="0.009025416" />
+    <testcase classname="AuditCoreTests.N35ShareOutcomeTests" name="providerAndUnsupportedFailuresRemainInOriginalAttemptedCount()" time="0.007347083" />
+  </testsuite>
+</testsuites>

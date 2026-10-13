@@ -1,21 +1,21 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.89 sec)
+Build complete! (0.47 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F05MetadataCatalogTests started.
-􀟈  Test "Zero successful buckets cannot replace or persist an empty snapshot" started.
 􀟈  Test "A failed bucket retains its previous complete rows and totals are incomplete" started.
+􀟈  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" started.
 􀟈  Test "A disappearing bucket list does not erase last-good metadata" started.
 􀟈  Test "Bucket scan concurrency stays at the declared limit of three" started.
-􀟈  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" started.
+􀟈  Test "Zero successful buckets cannot replace or persist an empty snapshot" started.
 􀟈  Test "All pages contribute to newest results and empty buckets remain in stats" started.
 􁁛  Test "A disappearing bucket list does not erase last-good metadata" passed after 0.006 seconds.
+􁁛  Test "A failed bucket retains its previous complete rows and totals are incomplete" passed after 0.006 seconds.
 􁁛  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" passed after 0.006 seconds.
 􁁛  Test "All pages contribute to newest results and empty buckets remain in stats" passed after 0.007 seconds.
-􁁛  Test "A failed bucket retains its previous complete rows and totals are incomplete" passed after 0.007 seconds.
-􁁛  Test "Zero successful buckets cannot replace or persist an empty snapshot" passed after 0.008 seconds.
-􁁛  Test "Bucket scan concurrency stays at the declared limit of three" passed after 0.008 seconds.
+􁁛  Test "Zero successful buckets cannot replace or persist an empty snapshot" passed after 0.007 seconds.
+􁁛  Test "Bucket scan concurrency stays at the declared limit of three" passed after 0.007 seconds.
 􁁛  Suite F05MetadataCatalogTests passed after 0.008 seconds.
 􁁛  Test run with 6 tests in 1 suite passed after 0.008 seconds.

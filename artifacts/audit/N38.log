@@ -1,0 +1,14 @@
+Building for debugging...
+Build complete! (0.35 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N38 terminal metadata read presentation" started.
+􀟈  Test "Nil successful metadata is an explicit empty terminal state" started.
+􀟈  Test "Older failures cannot replace a newer successful HEAD or clear its request ownership" started.
+􀟈  Test "Failed HEAD ends loading with retry; successful retry replaces failure" started.
+􁁛  Test "Failed HEAD ends loading with retry; successful retry replaces failure" passed after 0.002 seconds.
+􁁛  Test "Nil successful metadata is an explicit empty terminal state" passed after 0.002 seconds.
+􁁛  Test "Older failures cannot replace a newer successful HEAD or clear its request ownership" passed after 0.003 seconds.
+􁁛  Suite "N38 terminal metadata read presentation" passed after 0.003 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.003 seconds.

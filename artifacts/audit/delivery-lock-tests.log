@@ -1,0 +1,50 @@
+Building for debugging...
+[Computing dependencies]
+[2 / 13] AuditCoreTests-product
+[19 / 30] AuditCoreTests-product
+/Users/mike/Developer/test-projects/TestS3Browser-1/Tests/AuditCoreTests/ObjectTransferCoordinatorTests.swift:80:25: warning: expression of type 'ObjectCopyReceipt' is unused [#NoUsage]
+ 78 |         gate.continuation.finish()
+ 79 |         started.continuation.finish()
+ 80 |         try await first.value
+    |                         `- warning: expression of type 'ObjectCopyReceipt' is unused [#NoUsage]
+ 81 |         #expect(fixture.copies.count == 1)
+ 82 |         #expect(fixture.deletes.isEmpty)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[22 / 28] AuditCoreTests-product
+[24 / 28] AuditCoreTests-product
+Build complete! (7.55 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN42 started.
+􀟈  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() started.
+􀟈  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() started.
+􀟈  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() started.
+􀟈  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() started.
+􀟈  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() started.
+􀟈  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() started.
+􀟈  Test cachedAppPublicationCannotEraseANewerShareUpload() started.
+􀟈  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() started.
+􀟈  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() started.
+􀟈  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() started.
+􀟈  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() started.
+􀟈  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() started.
+􀟈  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() started.
+􀟈  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() started.
+􁁛  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() passed after 0.030 seconds.
+􁁛  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() passed after 0.030 seconds.
+􁁛  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() passed after 0.040 seconds.
+􁁛  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() passed after 0.040 seconds.
+􁁛  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() passed after 0.040 seconds.
+􁁛  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() passed after 0.040 seconds.
+􁁛  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() passed after 0.040 seconds.
+􁁛  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() passed after 0.046 seconds.
+􁁛  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() passed after 0.046 seconds.
+􁁛  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() passed after 0.046 seconds.
+􁁛  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() passed after 0.046 seconds.
+􁁛  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() passed after 0.046 seconds.
+􁁛  Test cachedAppPublicationCannotEraseANewerShareUpload() passed after 0.046 seconds.
+􁁛  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() passed after 0.046 seconds.
+􁁛  Suite AuditN42 passed after 0.046 seconds.
+􁁛  Test run with 14 tests in 1 suite passed after 0.047 seconds.

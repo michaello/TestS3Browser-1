@@ -1,17 +1,17 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.47 sec)
+[1 / 5] AuditCore
+Build complete! (0.37 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN23 started.
-􀟈  Test explicitPruningClearsOnlyTheRequestedScope() started.
 􀟈  Test namespacesAndAccountsHaveIndependentSeenHistory() started.
 􀟈  Test historyRoundTripPreservesExactBytesAndAdditivePages() started.
+􀟈  Test explicitPruningClearsOnlyTheRequestedScope() started.
 􀟈  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() started.
 􁁛  Test namespacesAndAccountsHaveIndependentSeenHistory() passed after 0.001 seconds.
+􁁛  Test historyRoundTripPreservesExactBytesAndAdditivePages() passed after 0.001 seconds.
 􁁛  Test explicitPruningClearsOnlyTheRequestedScope() passed after 0.001 seconds.
 􁁛  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() passed after 0.001 seconds.
-􁁛  Test historyRoundTripPreservesExactBytesAndAdditivePages() passed after 0.001 seconds.
 􁁛  Suite AuditN23 passed after 0.001 seconds.
 􁁛  Test run with 4 tests in 1 suite passed after 0.001 seconds.

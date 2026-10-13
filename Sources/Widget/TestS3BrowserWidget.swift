@@ -5,17 +5,11 @@ private let appGroupSuite = "group.com.crispytoast.TestS3Browser"
 private let recentUploadsKey = "recentUploads"
 
 // Mirrors S3Object's Codable shape stored by S3Service.
-struct WidgetUpload: Codable, Identifiable {
-    let key: String
-    let size: Int64
-    let lastModified: Date
-    let etag: String?
-    let bucket: String?
+typealias WidgetUpload = RecentUploadPreview
 
-    var id: String { bucket.map { "\($0)/\(key)" } ?? key }
-
+extension WidgetUpload {
     var fileName: String {
-        URL(string: key)?.lastPathComponent ?? key
+        key.lastIndex(of: "/").map { String(key[key.index(after: $0)...]) } ?? key
     }
 
     var isImage: Bool {
@@ -61,11 +55,14 @@ struct RecentUploadsProvider: TimelineProvider {
     }
 
     private func loadUploads() -> [WidgetUpload] {
-        guard
-            let defaults = UserDefaults(suiteName: appGroupSuite),
-            let data = defaults.data(forKey: recentUploadsKey),
-            let uploads = try? JSONDecoder().decode([WidgetUpload].self, from: data)
-        else { return [] }
+        guard let defaults = UserDefaults(suiteName: appGroupSuite) else { return [] }
+        if let data = defaults.data(forKey: "s3WidgetRecent.v1") {
+            guard let snapshot = try? JSONDecoder().decode(RecentUploadWidgetSnapshot.self, from: data),
+                  snapshot.version == 1 else { return [] }
+            return Array(snapshot.uploads.prefix(3))
+        }
+        guard let data = defaults.data(forKey: recentUploadsKey),
+              let uploads = try? JSONDecoder().decode([WidgetUpload].self, from: data) else { return [] }
         return Array(uploads.prefix(3))
     }
 }

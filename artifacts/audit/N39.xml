@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.001740875">
+    <testcase classname="AuditCoreTests.N39DestinationListingTests" name="failedDestination()" time="0.001352042" />
+    <testcase classname="AuditCoreTests.N39DestinationListingTests" name="staleDestination()" time="0.001504959" />
+  </testsuite>
+</testsuites>

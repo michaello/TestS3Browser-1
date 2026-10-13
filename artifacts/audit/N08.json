@@ -1,0 +1,43 @@
+{
+  "id": "N08",
+  "expected_behavior": "Grid filenames, sizes and tag chips use semantic/scaled typography and an adaptable layout; semantic/layout checks cover accessibility text sizes with runtime limits stated.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:27.001304+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N08FileCardAccessibilityTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N08FileCardAccessibilityTests",
+      "name": "adaptiveCategories(_:)",
+      "time": "0.206180334"
+    },
+    {
+      "classname": "AuditCoreTests.N08FileCardAccessibilityTests",
+      "name": "semanticFonts()",
+      "time": "0.206286041"
+    },
+    {
+      "classname": "AuditCoreTests.N08FileCardAccessibilityTests",
+      "name": "actualLabelLayout()",
+      "time": "0.207207"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

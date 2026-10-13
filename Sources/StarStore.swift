@@ -10,6 +10,7 @@ final class StarStore {
     var starredKeys: Set<LocalObjectIdentity> { state.stars }
     var legacyCount: Int { state.legacyStarKeys.count }
     var storageError: String? { state.storageError }
+    var revision: Int { state.revision }
     private init() {}
     func toggle(_ identity: LocalObjectIdentity) { state.toggleStar(identity) }
     func isStarred(_ identity: LocalObjectIdentity) -> Bool { state.stars.contains(identity) }

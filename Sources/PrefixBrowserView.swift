@@ -8,6 +8,9 @@ import os.log
 /// state (items, loading, error) is owned locally so this doesn't interfere with
 /// BucketBrowserView's shared s3Service.currentPrefix / s3Service.items.
 struct PrefixBrowserView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var rowProjection = DerivedRowsCache<[S3Item]>()
+    @State private var rowsRevision = UUID()
     let s3Service: S3Service
     let prefix: String
     let bucket: String
@@ -15,7 +18,7 @@ struct PrefixBrowserView: View {
 
     private let logger = Logger(subsystem: "com.s3browser", category: "PrefixBrowserView")
 
-    @State private var items: [S3Item] = []
+    @State private var items: [S3Item] = [] { didSet { rowsRevision = UUID() } }
     @State private var listingState = PagedListingState()
     private var isLoading: Bool { listingState.isLoading }
     private var isLoadingMore: Bool { listingState.isLoadingMore }
@@ -52,13 +55,12 @@ struct PrefixBrowserView: View {
     @State private var showMoveCopyError = false
     @State private var moveCopyErrorMessage = ""
     @State private var transferConflict: ObjectTransferConflict?
+    @State private var copyEncryptionPrompt: CopyEncryptionPrompt?
+    @State private var transferEncryptionDecision: CopyEncryptionDecision = .automatic
     @State private var pendingMoveCopyRequest: ObjectTransferRequest?
 
     // New folder state
     @State private var showNewFolderAlert = false
-    @State private var newFolderName = ""
-    @State private var showNewFolderError = false
-    @State private var newFolderErrorMessage = ""
 
     // Upload state
     @State private var showUploadMenu = false
@@ -83,6 +85,12 @@ struct PrefixBrowserView: View {
     }
 
     private var displayedItems: [S3Item] {
+        let key = DerivedRowsKey(revision: rowsRevision,
+            fields: [s3Service.session.configuration.account, bucket, prefix, searchText, String(describing: sortOption)])
+        return rowProjection.value(for: key) { deriveDisplayedItems() }
+    }
+
+    private func deriveDisplayedItems() -> [S3Item] {
         let filtered: [S3Item] = searchText.isEmpty ? items : items.filter { item in
             item.displayName.localizedCaseInsensitiveContains(searchText)
         }
@@ -99,25 +107,32 @@ struct PrefixBrowserView: View {
     }
 
     var body: some View {
+        AuditTelemetry.shared.measureViewConstruction(.prefix) { measuredContent }
+    }
+
+    private var measuredContent: some View {
         Group {
             if isLoading && items.isEmpty {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let msg = errorMessage {
-                ContentUnavailableView(
-                    "Failed to Load",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(msg)
-                )
+            } else if let msg = errorMessage, items.isEmpty {
+                ContentUnavailableView {
+                    Label("Failed to Load", systemImage: "exclamationmark.triangle")
+                } description: { Text(msg) } actions: {
+                    Button("Retry") { Task { await load(force: true) } }
+                }
             } else if !searchText.isEmpty && displayedItems.isEmpty {
-                ContentUnavailableView.search(text: searchText)
+                VStack {
+                    ContentUnavailableView.search(text: searchText)
+                    paginationControls
+                }
             } else if items.isEmpty {
                 ContentUnavailableView(
                     "Empty Folder",
                     systemImage: "folder",
                     description: Text("No files or folders here")
                 )
-            } else if viewStyle == .grid {
+            } else if viewStyle == .grid && !FileCardPresentation.prefersList(requestedGrid: true, isAccessibilitySize: dynamicTypeSize.isAccessibilitySize) {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: cardSize), spacing: 10)], spacing: 10) {
                         ForEach(displayedItems) { item in
@@ -172,6 +187,15 @@ struct PrefixBrowserView: View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search in \(title)")
+        .safeAreaInset(edge: .top) {
+            if let notice = listingState.partialQueryNotice {
+                Text(notice).font(.caption).foregroundStyle(.secondary).padding(.horizontal)
+            }
+            if let error = errorMessage, !items.isEmpty {
+                Text(error).font(.caption).foregroundStyle(.secondary).padding(.horizontal)
+                Button("Retry Refresh") { Task { await load(force: true) } }.disabled(isLoading)
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if isSelecting {
@@ -259,7 +283,7 @@ struct PrefixBrowserView: View {
                 sourceObject: object,
                 mode: moveCopyMode
             ) { destPrefix in
-                await performMoveCopy(object: object, destPrefix: destPrefix)
+                performMoveCopy(object: object, destPrefix: destPrefix)
             }
         }
         .alert("Operation Failed", isPresented: $showMoveCopyError) {
@@ -277,31 +301,10 @@ struct PrefixBrowserView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
-        .alert("New Folder", isPresented: $showNewFolderAlert) {
-            TextField("Folder name", text: $newFolderName)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-            Button("Create") {
-                let name = newFolderName.trimmingCharacters(in: .whitespaces)
-                guard !name.isEmpty, !name.contains("/") else { return }
-                Task {
-                    do {
-                        try await s3Service.createFolder(named: name, prefix: prefix, bucket: bucket)
-                        await load(force: true)
-                    } catch {
-                        newFolderErrorMessage = error.localizedDescription
-                        showNewFolderError = true
-                    }
-                }
+        .sheet(isPresented: $showNewFolderAlert) {
+            NewFolderSheet(service: s3Service, context: UploadContext(service: s3Service, bucket: bucket, prefix: prefix)) {
+                await load(force: true)
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Enter a name for the new folder.")
-        }
-        .alert("Create Failed", isPresented: $showNewFolderError) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(newFolderErrorMessage)
         }
         .alert("Rename File", isPresented: .init(
             get: { renameTarget != nil },
@@ -326,9 +329,20 @@ struct PrefixBrowserView: View {
             Text(renameErrorMessage)
         }
         .objectTransferConfirmation(conflict: $transferConflict) { request, approval in
-            await performTransfer(request, approval: approval)
+            await performTransfer(request, approval: approval, encryptionDecision: transferEncryptionDecision)
         }
+        .copyEncryptionConfirmation(prompt: $copyEncryptionPrompt)
         .task { await load() }
+    }
+
+    @ViewBuilder
+    private var paginationControls: some View {
+        if nextToken != nil {
+            Button("Load more") { Task { await loadMore() } }
+                .buttonStyle(.bordered)
+                .disabled(isLoading || isLoadingMore)
+            if isLoadingMore { ProgressView() }
+        }
     }
 
     // MARK: - Grid cell
@@ -553,7 +567,7 @@ struct PrefixBrowserView: View {
 
     // MARK: - Move / Copy
 
-    private func performMoveCopy(object: S3Object, destPrefix: String) async {
+    private func performMoveCopy(object: S3Object, destPrefix: String) {
         let destination = destPrefix + S3TransferKeys.fileName(of: object.key)
         let request = s3Service.makeObjectTransferRequest(kind: moveCopyMode == .move ? .move : .copy,
             key: object.key, to: destination, sourceBucket: bucket, destBucket: bucket)
@@ -568,11 +582,17 @@ struct PrefixBrowserView: View {
     }
 
     @MainActor
-    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async {
+    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil,
+                                 encryptionDecision: CopyEncryptionDecision = .automatic) async {
         do {
-            try await s3Service.performObjectTransfer(request, approval: approval)
+            try await s3Service.performObjectTransfer(request, approval: approval, encryptionDecision: encryptionDecision)
             await load(force: true)
+        } catch let requirement as CopyEncryptionRequirement {
+            copyEncryptionPrompt = CopyEncryptionPrompt(requirement: requirement) { decision in
+                Task { await performTransfer(request, approval: approval, encryptionDecision: decision) }
+            }
         } catch ObjectTransferError.confirmationRequired(let conflict) {
+            transferEncryptionDecision = encryptionDecision
             transferConflict = conflict
         } catch {
             logger.error("Object transfer failed: \(error.localizedDescription)")
@@ -632,7 +652,6 @@ struct PrefixBrowserView: View {
             }
             Divider()
             Button {
-                newFolderName = ""
                 showNewFolderAlert = true
             } label: {
                 Label("New Folder", systemImage: "folder.badge.plus")
@@ -856,18 +875,9 @@ struct PrefixGridItem: View {
                 }
             }
 
-            VStack(alignment: .center, spacing: 2) {
-                Text(item.displayName)
-                    .font(cardSize > 100 ? .caption : .system(size: 9))
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-                if case .file(let object) = item {
-                    Text(object.formattedSize)
-                        .font(.system(size: cardSize > 100 ? 10 : 8))
-                        .foregroundStyle(.secondary)
-                }
-            }
+            FileCardLabels(name: item.displayName, detail: {
+                if case .file(let object) = item { object.formattedSize } else { nil }
+            }())
         }
         .frame(maxWidth: .infinity)
         .task { await loadThumbnail() }

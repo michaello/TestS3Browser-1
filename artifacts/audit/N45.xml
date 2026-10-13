@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.000484667">
-    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="unchangedUpdatesDoNotReload()" time="0.000138666" />
-    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="changedDocumentsLoad()" time="0.000109" />
-    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="byteExactChanges()" time="0.000217333" />
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.000478292">
+    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="unchangedUpdatesDoNotReload()" time="0.000206167" />
+    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="changedDocumentsLoad()" time="0.000119667" />
+    <testcase classname="AuditCoreTests.N45HTMLDocumentTests" name="byteExactChanges()" time="0.000115542" />
   </testsuite>
 </testsuites>

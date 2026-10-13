@@ -2,9 +2,9 @@
   "id": "F13",
   "expected_behavior": "After thumbnail churn, the newest full image is not immediately evicted while unreachable old entries remain pinned; eviction metadata and decoded-byte accounting stay consistent.",
   "passed": true,
-  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:38.273350+00:00",
+  "recorded_at": "2026-10-13T07:39:04.023929+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,7 +24,7 @@
     {
       "classname": "AuditCoreTests.F13DecodedCacheTests",
       "name": "variantChurn()",
-      "time": "0.002145083"
+      "time": "0.002070167"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F13.log",

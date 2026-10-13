@@ -1,0 +1,14 @@
+Building for debugging...
+Build complete! (0.20 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N40 explicit Apps manifest failure states" started.
+􀟈  Test "A failed manifest retains its known cached entry and marks the mixed index incomplete" started.
+􀟈  Test "All GET/decode failures are unavailable with retry, never a successful empty Apps index" started.
+􀟈  Test "A genuinely empty listing is complete, while all-failure refresh keeps saved entries" started.
+􁁛  Test "A failed manifest retains its known cached entry and marks the mixed index incomplete" passed after 0.005 seconds.
+􁁛  Test "A genuinely empty listing is complete, while all-failure refresh keeps saved entries" passed after 0.007 seconds.
+􁁛  Test "All GET/decode failures are unavailable with retry, never a successful empty Apps index" passed after 0.008 seconds.
+􁁛  Suite "N40 explicit Apps manifest failure states" passed after 0.008 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.008 seconds.

@@ -1,0 +1,49 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[16 / 48]
+[17 / 48]
+[24 / 48] AuditCore
+[31 / 55] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[38 / 52] AuditCore
+[41 / 52] AuditCoreTests-product
+[59 / 70] AuditCoreTests-product
+[63 / 69] AuditCoreTests-product
+[65 / 69] AuditCoreTests-product
+Build complete! (12.03 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F34DerivedRowsCacheTests started.
+􀟈  Suite F08ConcurrencyBoundaryTests started.
+􀟈  Suite F30ListPresentationTests started.
+􀟈  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" started.
+􀟈  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" started.
+􀟈  Test "Gallery projections are reused for index changes and rebuild only for source changes" started.
+􀟈  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" started.
+􀟈  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" started.
+􀟈  Test "An old account completion cannot publish into newly isolated observed state" started.
+􀟈  Test "Initial failure and a successful empty snapshot remain distinct from loading" started.
+􀟈  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" started.
+􁁛  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" passed after 0.033 seconds.
+􁁛  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" passed after 0.055 seconds.
+􁁛  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" passed after 0.055 seconds.
+􁁛  Test "Gallery projections are reused for index changes and rebuild only for source changes" passed after 0.055 seconds.
+􁁛  Test "Initial failure and a successful empty snapshot remain distinct from loading" passed after 0.055 seconds.
+􁁛  Suite F34DerivedRowsCacheTests passed after 0.055 seconds.
+􁁛  Test "An old account completion cannot publish into newly isolated observed state" passed after 0.064 seconds.
+􁁛  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" passed after 0.066 seconds.
+􁁛  Suite F30ListPresentationTests passed after 0.066 seconds.
+􁁛  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" passed after 0.091 seconds.
+􁁛  Suite F08ConcurrencyBoundaryTests passed after 0.091 seconds.
+􁁛  Test run with 8 tests in 3 suites passed after 0.092 seconds.

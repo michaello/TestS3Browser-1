@@ -9,6 +9,7 @@ struct RecentFileRow: View {
     var isNew: Bool = false
     var tag: String? = nil
     @State private var thumbnail: UIImage?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFileRow")
 
@@ -41,14 +42,15 @@ struct RecentFileRow: View {
                 .frame(width: 40, height: 40)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
+                    (dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6)) : AnyLayout(HStackLayout(spacing: 6))) {
                         Text(object.fileName)
                             .font(.headline)
-                            .lineLimit(1)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                            .fixedSize(horizontal: false, vertical: true)
 
                         if object.lastModified.isRecent {
                             Text("Recent")
-                                .font(.system(size: 9, weight: .semibold))
+                                .font(.caption2.weight(.semibold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
@@ -57,7 +59,7 @@ struct RecentFileRow: View {
 
                         if isNew {
                             Text("New")
-                                .font(.system(size: 9, weight: .semibold))
+                                .font(.caption2.weight(.semibold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
@@ -66,7 +68,7 @@ struct RecentFileRow: View {
 
                         if object.key.hasPrefix("dump/") {
                             Text("Uploaded")
-                                .font(.system(size: 9, weight: .semibold))
+                                .font(.caption2.weight(.semibold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
@@ -78,7 +80,7 @@ struct RecentFileRow: View {
                         }
                     }
 
-                    HStack(spacing: 8) {
+                    (dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4)) : AnyLayout(HStackLayout(spacing: 8))) {
                         Text(object.formattedSize)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -96,7 +98,8 @@ struct RecentFileRow: View {
             Text(object.bucket.map { "\($0)/\(object.key)" } ?? object.key)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineLimit(2)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+                .fixedSize(horizontal: false, vertical: true)
                 .truncationMode(.middle)
         }
         .padding(.vertical, 4)

@@ -3,14 +3,33 @@ import os.log
 
 /// Displays files uploaded from the phone (dump/ prefix in S3)
 struct DumpFilesView: View {
+    @State private var rowProjection = DerivedRowsCache<[S3Object]>()
+    @State private var galleryProjection = DerivedRowsCache<[S3Object]>()
     private let logger = Logger(subsystem: "com.s3browser", category: "DumpFilesView")
     let s3Service: S3Service
-    @State private var dumpFiles: [S3Object] = []
+    private var dumpQuery: ListingQuery {
+        ListingQuery(account: s3Service.session.configuration.account, bucket: s3Service.currentBucket, prefix: "dump/", delimiter: nil)
+    }
+    private var dumpFiles: [S3Object] {
+        rowProjection.value(for: projectionKey) {
+            (s3Service.session.listings.value(for: dumpQuery)?.files ?? []).sorted { $0.modified > $1.modified }.map(\.s3Object)
+        }
+    }
+    private var projectionKey: DerivedRowsKey {
+        DerivedRowsKey(revision: s3Service.session.listings.revision(for: dumpQuery),
+            fields: [dumpQuery.account, dumpQuery.bucket, dumpQuery.prefix])
+    }
+    private var listPresentation: ListPresentation {
+        .resolve(hasSnapshot: s3Service.session.listings.value(for: dumpQuery) != nil,
+            rowCount: dumpFiles.count, isLoading: isLoading, error: loadError)
+    }
     @State private var loadRequest = RequestOwnership()
     private var isLoading: Bool { loadRequest.isLoading }
     @State private var hasLoadedOnce = false
     @State private var loadError: String?
     @State private var showingUpload = false
+    @State private var deletion = MutationFeedback()
+    @State private var failedDelete: S3Object?
     @AppStorage("s3DumpViewMode") private var viewModeRaw: String = "grid"
 
     enum ViewMode {
@@ -24,26 +43,41 @@ struct DumpFilesView: View {
 
     /// Only image files for gallery navigation
     private var imageFiles: [S3Object] {
-        dumpFiles.filter { $0.fileType == .image }
+        galleryProjection.value(for: projectionKey) { dumpFiles.filter { $0.fileType == .image } }
     }
 
     var body: some View {
+        AuditTelemetry.shared.measureViewConstruction(.dump) { measuredContent }
+    }
+
+    private var measuredContent: some View {
         NavigationStack {
             contentView
                 .navigationTitle("Upload")
+                .safeAreaInset(edge: .top) {
+                    if isLoading && !dumpFiles.isEmpty { ProgressView("Refreshing uploads...") }
+                    if let error = loadError, !dumpFiles.isEmpty {
+                        Text(error).font(.caption).foregroundStyle(.secondary)
+                        Button("Retry Refresh") { Task { await refreshDumpFiles(force: true) } }.disabled(isLoading)
+                    }
+                }
                 .toolbar { toolbarContent }
-                .sheet(isPresented: $showingUpload, onDismiss: {
-                    Task { await refreshDumpFiles(force: true) }
-                }) {
+                .sheet(isPresented: $showingUpload) {
                     DropUploadView(s3Service: s3Service)
                 }
         }
-        .task { await initialLoad() }
+        .task(id: dumpQuery) { await initialLoad() }
+        .alert("Delete Failed", isPresented: Binding(
+            get: { deletion.errorMessage != nil }, set: { if !$0 { deletion.clearError() } }
+        )) {
+            Button("Retry") { if let file = failedDelete { Task { await deleteFile(file) } } }
+            Button("Dismiss", role: .cancel) { deletion.clearError() }
+        } message: { Text(deletion.errorMessage ?? "") }
     }
 
     @ViewBuilder
     private var contentView: some View {
-        if isLoading && !hasLoadedOnce {
+        if listPresentation == .initialLoading {
             VStack(spacing: 8) {
                 ProgressView()
                 Text("Loading uploads...")
@@ -52,11 +86,11 @@ struct DumpFilesView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if let error = loadError, dumpFiles.isEmpty {
-            ContentUnavailableView(
-                "Load Failed",
-                systemImage: "exclamationmark.triangle",
-                description: Text(error)
-            )
+            ContentUnavailableView {
+                Label("Load Failed", systemImage: "exclamationmark.triangle")
+            } description: { Text(error) } actions: {
+                Button("Retry") { Task { await refreshDumpFiles(force: true) } }
+            }
         } else if dumpFiles.isEmpty && hasLoadedOnce {
             ScrollView {
                 ContentUnavailableView(
@@ -115,6 +149,7 @@ struct DumpFilesView: View {
         } label: {
             Label("Delete", systemImage: "trash")
         }
+        .disabled(deletion.isRunning)
 
         Button {
             UIPasteboard.general.string = file.key
@@ -170,10 +205,9 @@ struct DumpFilesView: View {
         loadError = nil
 
         do {
-            let files = try await s3Service.fetchDumpFiles(force: force)
+            _ = try await s3Service.fetchDumpFiles(force: force)
             guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
             await MainActor.run {
-                dumpFiles = files
                 hasLoadedOnce = true
             }
         } catch is CancellationError {
@@ -189,15 +223,13 @@ struct DumpFilesView: View {
     }
 
     private func deleteFile(_ file: S3Object) async {
-        do {
-            try await s3Service.deleteObject(key: file.key)
+        let bucket = file.bucket ?? s3Service.currentBucket
+        let succeeded = await deletion.perform(action: {
+            try await s3Service.deleteObject(key: file.key, bucket: bucket)
+        }, didSucceed: {
             logger.info("Deleted dump file: \(file.key)")
-            await MainActor.run {
-                dumpFiles.removeAll { $0.id == file.id }
-            }
-        } catch {
-            logger.error("Failed to delete file \(file.key): \(error.localizedDescription)")
-        }
+        })
+        failedDelete = succeeded ? nil : file
     }
 }
 

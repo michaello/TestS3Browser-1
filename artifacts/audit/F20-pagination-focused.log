@@ -1,0 +1,76 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[22 / 46] AuditCore
+[23 / 47] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[33 / 44] AuditCoreTests-product
+[50 / 61] AuditCoreTests-product
+[54 / 60] AuditCoreTests-product
+[56 / 60] AuditCoreTests-product
+Build complete! (6.41 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F20ListingPaginationTests started.
+􀟈  Suite F27ConfirmedNavigationTests started.
+􀟈  Suite N39DestinationListingTests started.
+􀟈  Suite F02BrowseStartupTests started.
+􀟈  Suite F07PagedListingTests started.
+􀟈  Suite N17PartialFolderSearchTests started.
+􀟈  Suite F03TabRetentionTests started.
+􀟈  Suite N16PartialFolderSortTests started.
+􀟈  Test "Browse publishes the first thousand rows before explicitly loading the next page" started.
+􀟈  Test "A folder picker exposes destinations after the first thousand prefixes" started.
+􀟈  Test "Stash sorts only after scanning every report page, including the newest report" started.
+􀟈  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" started.
+􀟈  Test "Legacy route migration and saved navigation cannot cross accounts" started.
+􀟈  Test "A failed new folder cannot commit another route's cached rows" started.
+􀟈  Test "A response for an old destination cannot replace a newer validated destination" started.
+􀟈  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" started.
+􀟈  Test "Saved folder lists once while bucket discovery remains suspended" started.
+􀟈  Test "Stale pagination cannot append into refreshed rows or discard the new token" started.
+􀟈  Test "Request completion cannot clear a newer view request's loading flag" started.
+􀟈  Test "Restoring root does not perform an intermediate root request" started.
+􀟈  Test "A no-match first page keeps later search work available and finds a later matching file" started.
+􀟈  Test "Initial selection creates only its own screen, including a restored non-Browse tab" started.
+􀟈  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" started.
+􀟈  Test "An account configuration reset releases hidden account-specific screen state" started.
+􀟈  Test "An incomplete first-page sort explicitly reports its scope until the newest later row loads" started.
+􀟈  Test "Stale page errors cannot overwrite a refreshed resource's error state" started.
+􁁛  Test "Stash sorts only after scanning every report page, including the newest report" passed after 0.007 seconds.
+􁁛  Test "Legacy route migration and saved navigation cannot cross accounts" passed after 0.023 seconds.
+􁁛  Test "A failed new folder cannot commit another route's cached rows" passed after 0.023 seconds.
+􁁛  Test "Request completion cannot clear a newer view request's loading flag" passed after 0.023 seconds.
+􁁛  Test "Restoring root does not perform an intermediate root request" passed after 0.023 seconds.
+􁁛  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" passed after 0.023 seconds.
+􁁛  Suite F27ConfirmedNavigationTests passed after 0.023 seconds.
+􁁛  Test "Initial selection creates only its own screen, including a restored non-Browse tab" passed after 0.023 seconds.
+􁁛  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" passed after 0.023 seconds.
+􁁛  Test "An account configuration reset releases hidden account-specific screen state" passed after 0.023 seconds.
+􁁛  Suite F03TabRetentionTests passed after 0.023 seconds.
+􁁛  Test "Browse publishes the first thousand rows before explicitly loading the next page" passed after 0.023 seconds.
+􁁛  Test "A folder picker exposes destinations after the first thousand prefixes" passed after 0.023 seconds.
+􁁛  Suite F20ListingPaginationTests passed after 0.024 seconds.
+􁁛  Test "A no-match first page keeps later search work available and finds a later matching file" passed after 0.024 seconds.
+􁁛  Test "An incomplete first-page sort explicitly reports its scope until the newest later row loads" passed after 0.023 seconds.
+􁁛  Suite N17PartialFolderSearchTests passed after 0.024 seconds.
+􁁛  Suite N16PartialFolderSortTests passed after 0.024 seconds.
+􁁛  Test "Saved folder lists once while bucket discovery remains suspended" passed after 0.024 seconds.
+􁁛  Suite F02BrowseStartupTests passed after 0.024 seconds.
+􁁛  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" passed after 0.024 seconds.
+􁁛  Test "A response for an old destination cannot replace a newer validated destination" passed after 0.024 seconds.
+􁁛  Suite N39DestinationListingTests passed after 0.025 seconds.
+􁁛  Test "Stale pagination cannot append into refreshed rows or discard the new token" passed after 0.025 seconds.
+􁁛  Test "Stale page errors cannot overwrite a refreshed resource's error state" passed after 0.025 seconds.
+􁁛  Suite F07PagedListingTests passed after 0.025 seconds.
+􁁛  Test run with 18 tests in 8 suites passed after 0.025 seconds.

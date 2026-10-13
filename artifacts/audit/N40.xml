@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.008544959">
+    <testcase classname="AuditCoreTests.N40ManifestFailureTests" name="allFailuresThenRetry()" time="0.008262583" />
+    <testcase classname="AuditCoreTests.N40ManifestFailureTests" name="partialFailureRetainsKnownEntry()" time="0.005666125" />
+    <testcase classname="AuditCoreTests.N40ManifestFailureTests" name="emptyAndCachedFailureAreDistinct()" time="0.00742625" />
+  </testsuite>
+</testsuites>

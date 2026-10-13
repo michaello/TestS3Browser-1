@@ -2,9 +2,9 @@
   "id": "N02",
   "expected_behavior": "After a failed tag read, Save cannot replace unknown remote tags; retry and successful editing preserve unrelated existing tags.",
   "passed": true,
-  "source_fingerprint": "64c39a8af09f6279640179058869bbaff8aa383049c62dfedf0c970853792ff4",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T04:41:35.372790+00:00",
+  "recorded_at": "2026-10-13T07:38:20.290935+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN02",
-      "name": "successfulEmptyReadAllowsFirstTag()",
-      "time": "0.096659292"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN02",
       "name": "retryPreservesUneditedRemoteTags()",
-      "time": "0.096732125"
+      "time": "0.006011333"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
-      "name": "oldReadCannotAuthorizeEditingAfterNewFailure()",
-      "time": "0.142050792"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN02",
-      "name": "writeFailureRetainsDraftAndRemoteSnapshot()",
-      "time": "0.096677"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN02",
-      "name": "cancelledReadDoesNotBecomeEmptySuccess()",
-      "time": "0.096682708"
+      "name": "successfulEmptyReadAllowsFirstTag()",
+      "time": "0.006043958"
     },
     {
       "classname": "AuditCoreTests.AuditN02",
       "name": "unknownAndFailedReadsCannotReplaceTags()",
-      "time": "0.096654291"
+      "time": "0.006029667"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN02",
+      "name": "writeFailureRetainsDraftAndRemoteSnapshot()",
+      "time": "0.005974208"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN02",
+      "name": "oldReadCannotAuthorizeEditingAfterNewFailure()",
+      "time": "0.006174125"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN02",
+      "name": "cancelledReadDoesNotBecomeEmptySuccess()",
+      "time": "0.000777417"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N02.log",

@@ -6,7 +6,8 @@ struct TagChip: View {
 
     var body: some View {
         Text(tag)
-            .font(.system(size: 9, weight: .semibold))
+            .font(FileCardPresentation.tagFont.weight(.semibold))
+            .fixedSize(horizontal: false, vertical: true)
             .foregroundStyle(.white)
             .padding(.horizontal, 5)
             .padding(.vertical, 2)

@@ -1,0 +1,38 @@
+{
+  "id": "F06",
+  "expected_behavior": "Different filters, shortcut limits, bucket navigation and widget views cannot overwrite the canonical account-scoped catalog or another query snapshot.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:38:44.269479+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F06CanonicalCatalogTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F06CanonicalCatalogTests",
+      "name": "consumerIsolation()",
+      "time": "0.006057333"
+    },
+    {
+      "classname": "AuditCoreTests.F06CanonicalCatalogTests",
+      "name": "exactIdentity()",
+      "time": "0.006062084"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

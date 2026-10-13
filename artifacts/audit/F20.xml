@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.004309875">
+    <testcase classname="AuditCoreTests.F20ListingPaginationTests" name="incrementalBrowse()" time="0.003967708" />
+    <testcase classname="AuditCoreTests.F20ListingPaginationTests" name="destinationFolders()" time="0.004028375" />
+    <testcase classname="AuditCoreTests.F20ListingPaginationTests" name="newestReportBeyondFirstPage()" time="0.003366625" />
+  </testsuite>
+</testsuites>

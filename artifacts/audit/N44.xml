@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.008469125">
-    <testcase classname="AuditCoreTests.N44MediaLeaseTests" name="stagingCleanup()" time="0.008209625" />
-    <testcase classname="AuditCoreTests.N44BatchExportCleanupTests" name="failedStagingReleasesOriginalAndLeavesNoExportLease()" time="0.007717625" />
-    <testcase classname="AuditCoreTests.N44BatchExportCleanupTests" name="activityCompletionAndCancelledShareBothReleaseAllFiles()" time="0.004924542" />
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.0094515">
+    <testcase classname="AuditCoreTests.N44BatchExportCleanupTests" name="failedStagingReleasesOriginalAndLeavesNoExportLease()" time="0.008678" />
+    <testcase classname="AuditCoreTests.N44BatchExportCleanupTests" name="activityCompletionAndCancelledShareBothReleaseAllFiles()" time="0.005786708" />
+    <testcase classname="AuditCoreTests.N44MediaLeaseTests" name="stagingCleanup()" time="0.0091645" />
   </testsuite>
 </testsuites>

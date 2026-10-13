@@ -1,0 +1,24 @@
+{
+  "command": [
+    "xcodebuild",
+    "-project",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/TestS3Browser.xcodeproj",
+    "-scheme",
+    "TestS3Browser",
+    "-derivedDataPath",
+    "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit",
+    "-scmProvider",
+    "system",
+    "-resolvePackageDependencies",
+    "-onlyUsePackageVersionsFromResolvedFile",
+    "-skipPackageUpdates",
+    "CODE_SIGNING_ALLOWED=NO"
+  ],
+  "pid": 83152,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-resolve-20261013-150811-725875.log",
+  "started_at_epoch": 1791875291.725905,
+  "timeout_seconds": 1200,
+  "status": "failed",
+  "exit_code": 124,
+  "elapsed_seconds": 1200.0245621204376
+}

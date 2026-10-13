@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.003388959">
+    <testcase classname="AuditCoreTests.N38MetadataFailureTests" name="obsoleteFailure()" time="0.003103208" />
+    <testcase classname="AuditCoreTests.N38MetadataFailureTests" name="emptyAndCancelled()" time="0.002872833" />
+    <testcase classname="AuditCoreTests.N38MetadataFailureTests" name="failureThenRetry()" time="0.002838833" />
+  </testsuite>
+</testsuites>

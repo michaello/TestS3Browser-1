@@ -2,9 +2,9 @@
   "id": "F11",
   "expected_behavior": "Concurrent row, gallery, prefetch and export demand joins one original transfer per object identity; reusable results remain available and obsolete speculative work obeys byte/size/lifetime limits.",
   "passed": true,
-  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:34.824529+00:00",
+  "recorded_at": "2026-10-13T07:38:49.380957+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -19,22 +19,32 @@
     "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.xml"
   ],
   "exit_code": 0,
-  "test_count": 3,
+  "test_count": 5,
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F11MediaTransferTests",
-      "name": "speculativePolicy()",
-      "time": "0.026614167"
+      "name": "videoPosterSingleFlight()",
+      "time": "0.000915583"
     },
     {
       "classname": "AuditCoreTests.F11MediaTransferTests",
       "name": "bodyCeilingAndCancellation()",
-      "time": "0.003645958"
+      "time": "0.000845125"
     },
     {
       "classname": "AuditCoreTests.F11MediaTransferTests",
       "name": "singleFlight()",
-      "time": "0.012015416"
+      "time": "0.008302625"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "speculativePolicy()",
+      "time": "0.023489959"
+    },
+    {
+      "classname": "AuditCoreTests.F11MediaTransferTests",
+      "name": "videoPosterInvalidation()",
+      "time": "0.000932666"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.log",

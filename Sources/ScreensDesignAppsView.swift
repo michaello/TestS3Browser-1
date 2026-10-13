@@ -2,104 +2,69 @@ import SwiftUI
 
 private let screensDesignPrefix = "screensdesign/apps/"
 
-private struct ScreensDesignApp: Decodable, Identifiable {
-    struct Video: Decodable, Identifiable {
-        let key: String
-        let label: String
-        let frames: Int
-
-        var id: String { key }
-    }
-
-    let slug: String
-    let name: String
-    let videos: [Video]
-    let sourceURL: String?
-
-    var id: String { slug }
-    var frameCount: Int { videos.reduce(0) { $0 + $1.frames } }
-    var source: URL? {
-        URL(string: sourceURL ?? "https://screensdesign.com/apps/\(slug)/")
-    }
-}
-
 /// A product index over the selected, private ScreensDesign frames in S3.
 struct ScreensDesignAppsView: View {
     let s3Service: S3Service
 
-    @State private var apps: [ScreensDesignApp] = []
-    @State private var isLoading = false
-    @State private var errorMessage: String?
+    @State private var index = ScreensAppIndexCache.shared
+    private var identity: MediaObjectIdentity {
+        MediaObjectIdentity(account: s3Service.session.configuration.account, bucket: s3Service.currentBucket, key: screensDesignPrefix)
+    }
+    private var entries: [ScreensAppEntry] { index.value(for: identity)?.entries ?? [] }
 
     var body: some View {
         NavigationStack {
             Group {
-                if isLoading && apps.isEmpty {
+                if entries.isEmpty && (!index.hasLoaded(identity) || index.isLoading(identity)) {
                     ProgressView("Loading apps...")
-                } else if let errorMessage {
+                } else if let errorMessage = index.error(identity), entries.isEmpty {
                     ContentUnavailableView("Apps unavailable", systemImage: "exclamationmark.triangle", description: Text(errorMessage))
-                } else if apps.isEmpty {
+                    Button("Retry") { Task { await load(force: true) } }
+                } else if entries.isEmpty {
                     ContentUnavailableView("No apps uploaded", systemImage: "square.grid.2x2", description: Text("ScreensDesign apps in this bucket will appear here."))
+                    Button("Refresh") { Task { await load(force: true) } }
                 } else {
-                    List(apps) { app in
+                    List {
+                        if let snapshot = index.value(for: identity), !snapshot.isComplete || index.error(identity) != nil {
+                            Section {
+                                Text(index.error(identity) ?? "Index incomplete. \(snapshot.failures.count) app manifests could not be refreshed.")
+                                    .font(.caption).foregroundStyle(.secondary)
+                                Button("Retry") { Task { await load(force: true) } }
+                            }
+                        }
+                        ForEach(entries) { entry in
                         NavigationLink {
-                            ScreensDesignAppDetailView(app: app, s3Service: s3Service)
+                            ScreensDesignAppDetailView(app: entry.app, s3Service: s3Service)
                         } label: {
                             HStack(spacing: 12) {
-                                ScreensDesignCoverView(app: app, s3Service: s3Service)
+                                ScreensDesignCoverView(app: entry.app, cover: entry.cover, s3Service: s3Service)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(app.name).font(.headline)
-                                    Text("\(app.frameCount) in-app frames · \(app.videos.count) recordings")
+                                    Text(entry.app.name).font(.headline)
+                                    Text("\(entry.app.frameCount) in-app frames · \(entry.app.videos.count) recordings")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
                             }
                             .padding(.vertical, 3)
                         }
+                        }
                     }
-                    .refreshable { await load() }
+                    .refreshable { await load(force: true) }
                 }
             }
             .navigationTitle("Apps")
         }
-        .task(id: s3Service.currentBucket) { await load() }
+        .task(id: identity) { await load() }
     }
 
-    private func load() async {
-        isLoading = true
-        errorMessage = nil
-        do {
-            var folders: [S3Folder] = []
-            var token: String?
-            repeat {
-                let page = try await s3Service.listPrefix(screensDesignPrefix, continuationToken: token)
-                folders += page.items.compactMap {
-                    if case .folder(let folder) = $0 { return folder }
-                    return nil
-                }
-                token = page.nextToken
-            } while token != nil
-
-            var loaded: [ScreensDesignApp] = []
-            for folder in folders {
-                do {
-                    let data = try await s3Service.downloadObject(key: "\(folder.prefix)app.json")
-                    loaded.append(try JSONDecoder().decode(ScreensDesignApp.self, from: data))
-                } catch {
-                    // An incomplete app upload should not hide the other apps.
-                    continue
-                }
-            }
-            apps = loaded.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
+    private func load(force: Bool = false) async {
+        await index.load(identity, force: force, transport: ScreensIndexServiceTransport(service: s3Service))
     }
 }
 
 private struct ScreensDesignCoverView: View {
     let app: ScreensDesignApp
+    let cover: MetadataRecord?
     let s3Service: S3Service
     @State private var thumbnail: UIImage?
 
@@ -121,19 +86,19 @@ private struct ScreensDesignCoverView: View {
         .clipShape(RoundedRectangle(cornerRadius: 7))
         .task(id: firstFrameKey.map {
             MediaObjectIdentity(account: S3AccountScope.identifier(region: s3Service.config.region, accessKey: s3Service.config.accessKey),
-                                bucket: s3Service.currentBucket, key: $0).digest
+                                bucket: cover?.bucket ?? s3Service.currentBucket, key: $0, etag: cover?.etag).digest
         }) {
             guard let key = firstFrameKey else { return }
             thumbnail = nil
             let generation = s3Service.session.generation
-            guard let metadata = try? await s3Service.headObject(key: key) else { return }
-            let object = S3Object(
-                key: key,
-                size: Int64(metadata.contentLength ?? 0),
-                lastModified: metadata.lastModified ?? .now,
-                etag: metadata.etag,
-                bucket: s3Service.currentBucket
-            )
+            let object: S3Object
+            if let cover { object = cover.s3Object }
+            else {
+                let unknown = S3Object(key: key, size: -1, lastModified: .distantPast, etag: nil, bucket: s3Service.currentBucket)
+                guard case .metadata(let metadata) = try? await DetailMetadataCache.shared.load(.metadata, object: unknown, service: s3Service) else { return }
+                object = S3Object(key: key, size: Int64(metadata.contentLength ?? -1), lastModified: metadata.lastModified ?? .distantPast,
+                                  etag: metadata.etag, bucket: unknown.bucket)
+            }
             let image = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service)
             guard !Task.isCancelled, s3Service.session.isCurrent(generation) else { return }
             thumbnail = image

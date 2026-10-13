@@ -28,13 +28,13 @@ extension S3Service {
     }
 
     func persistRecentFiles() {
-        let account = session.configuration.account
-        if let snapshot = session.catalogs.value(for: account),
-           let defaults = snapshotDefaults {
-            do { try MetadataSnapshotStore(defaults: defaults).save(snapshot, account: account) }
-            catch { logger.error("Recent snapshot save failed: \(error.localizedDescription)") }
-        }
         writeWidgetPreview()
+    }
+
+    func recordSuccessfulDelete(key: String, bucket: String, generation: UUID) {
+        guard session.isCurrent(generation) else { return }
+        publishMutation(MetadataMutation(account: session.configuration.account, replacement: nil,
+            removed: LocalObjectIdentity(account: session.configuration.account, bucket: bucket, key: key)))
     }
 
     /// Call only after the captured account generation completes its remote mutation.
@@ -45,68 +45,41 @@ extension S3Service {
         updateMetadata(record, removedSource: nil)
     }
 
-    func recordObjectTransfer(_ request: ObjectTransferRequest, generation: UUID) {
+    func recordObjectTransfer(_ request: ObjectTransferRequest, receipt: ObjectCopyReceipt,
+                              removedSource: Bool, generation: UUID) {
         guard session.isCurrent(generation) else { return }
-        if request.kind != .copy {
+        if removedSource {
             ObjectAnnotationState.shared.relocate(
                 from: LocalObjectIdentity(account: session.configuration.account, bucket: request.source.bucket, key: request.source.key),
                 to: LocalObjectIdentity(account: session.configuration.account, bucket: request.destination.bucket, key: request.destination.key))
         }
-        let allRecords = (session.catalogs.value(for: session.configuration.account)?.records ?? []) +
-            session.listings.snapshots.values.flatMap { $0.value.files } +
-            recentFiles.map { MetadataRecord(bucket: $0.bucket ?? request.source.bucket,
-                key: $0.key, size: $0.size, modified: $0.lastModified, etag: $0.etag) }
-        guard let source = allRecords.first(where: {
-            $0.bucket.utf8.elementsEqual(request.source.bucket.utf8) && $0.key.utf8.elementsEqual(request.source.key.utf8)
-        }) else {
-            session.catalogs.invalidate(session.configuration.account)
-            for query in session.listings.snapshots.keys { session.listings.invalidate(query) }
-            return
-        }
-        let destination = MetadataRecord(bucket: request.destination.bucket, key: request.destination.key,
-            size: source.size, modified: Date(), etag: source.etag, contentType: source.contentType)
-        updateMetadata(destination, removedSource: request.kind == .copy ? nil : request.source)
+        let destination = receipt.metadata(bucket: request.destination.bucket, key: request.destination.key)
+        updateMetadata(destination, removedSource: removedSource ? request.source : nil)
     }
 
     private func updateMetadata(_ record: MetadataRecord, removedSource: TransferObjectLocation?) {
-        func matches(_ candidate: MetadataRecord, bucket: String, key: String) -> Bool {
-            candidate.bucket.utf8.elementsEqual(bucket.utf8) && candidate.key.utf8.elementsEqual(key.utf8)
-        }
         let account = session.configuration.account
-        var catalog = session.catalogs.value(for: account) ?? MetadataCatalogSnapshot(records: [],
-            failedBuckets: [MetadataBucketFailure(bucket: "account catalog", message: "Awaiting a complete refresh")], refreshedAt: nil)
-        catalog.records.removeAll { candidate in
-            matches(candidate, bucket: record.bucket, key: record.key) ||
-                removedSource.map { matches(candidate, bucket: $0.bucket, key: $0.key) } == true
+        publishMutation(MetadataMutation(account: account, replacement: record,
+            removed: removedSource.map { LocalObjectIdentity(account: account, bucket: $0.bucket, key: $0.key) }))
+    }
+
+    private func publishMutation(_ mutation: MetadataMutation) {
+        let account = session.configuration.account
+        if let defaults = snapshotDefaults {
+            do {
+                try RecentUploadDelivery.recordMutation(account: account,
+                    removed: mutation.removed.map { ($0.bucket, $0.key) }, replacement: mutation.replacement,
+                    defaults: defaults, lockURL: recentDeliveryLockURL())
+            } catch { logger.error("Recent mutation journal update failed: \(error.localizedDescription)") }
         }
-        catalog.records.append(record)
-        if !catalog.buckets.contains(where: { $0.utf8.elementsEqual(record.bucket.utf8) }) { catalog.buckets.append(record.bucket) }
-        session.catalogs.seed(catalog, for: account, refreshedAt: catalog.refreshedAt)
-        if session.catalogs.isLoading(account) { session.catalogs.invalidate(account) }
-        for (query, cached) in session.listings.snapshots {
-            let old = cached.value
-            var files = old.files.filter { candidate in
-                !matches(candidate, bucket: record.bucket, key: record.key) &&
-                    removedSource.map { !matches(candidate, bucket: $0.bucket, key: $0.key) } != false
-            }
-            var folders = old.folders
-            if query.bucket.utf8.elementsEqual(record.bucket.utf8), record.key.utf8.starts(with: query.prefix.utf8) {
-                if query.delimiter == nil || S3TransferKeys.parentPrefix(of: record.key).utf8.elementsEqual(query.prefix.utf8) {
-                    files.append(record)
-                } else {
-                    let remaining = String(decoding: record.key.utf8.dropFirst(query.prefix.utf8.count), as: UTF8.self)
-                    if let slash = remaining.firstIndex(of: "/") {
-                        let folder = query.prefix + String(remaining[...slash])
-                        if !folders.contains(where: { $0.utf8.elementsEqual(folder.utf8) }) { folders.append(folder) }
-                    }
-                }
-            }
-            session.listings.seed(MetadataListingPage(files: files, folders: folders, nextToken: old.nextToken),
-                                  for: query, refreshedAt: cached.refreshedAt)
-            if session.listings.isLoading(query) { session.listings.invalidate(query) }
+        let catalog = MetadataMutationProjection.apply(mutation, currentAccount: account,
+            catalogs: session.catalogs, listings: session.listings)
+        if let catalog {
+            recentFiles = (try? MetadataCatalogQuery.select(catalog, limit: recentSelectionLimit,
+                matching: { recentSelectionFilter.matches($0.s3Object.fileType) }))?.map(\.s3Object) ?? []
+        } else if let removed = mutation.removed {
+            recentFiles.removeAll { $0.key.utf8.elementsEqual(removed.key.utf8) && ($0.bucket ?? currentBucket).utf8.elementsEqual(removed.bucket.utf8) }
         }
-        recentFiles = (try? MetadataCatalogQuery.select(catalog, limit: recentSelectionLimit,
-            matching: { recentSelectionFilter.matches($0.s3Object.fileType) }))?.map(\.s3Object) ?? []
         persistRecentFiles()
     }
 
@@ -115,12 +88,26 @@ extension S3Service {
     }
 
     private func writeWidgetPreview() {
-        let canonical = session.catalogs.value(for: session.configuration.account)
-            .flatMap { try? MetadataCatalogQuery.select($0, limit: 50) }?.map(\.s3Object) ?? []
-        guard let data = try? JSONEncoder().encode(canonical),
-              let defaults = snapshotDefaults else { return }
-        defaults.set(data, forKey: "recentUploads")
-        defaults.set(session.configuration.account, forKey: "recentUploadsAccount.v1")
-        if publishWidget { WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget") }
+        let snapshot = session.catalogs.value(for: session.configuration.account) ??
+            MetadataCatalogSnapshot(records: [], failedBuckets: [], refreshedAt: nil)
+        guard let defaults = snapshotDefaults else { return }
+        do {
+            let delivery = try RecentUploadDelivery.publish(snapshot, account: session.configuration.account,
+                defaults: defaults, lockURL: recentDeliveryLockURL()) {
+                if publishWidget { WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget") }
+            }
+            if delivery.importedUploads {
+                session.catalogs.seed(delivery.snapshot, for: session.configuration.account, refreshedAt: delivery.snapshot.refreshedAt)
+                selectRecentFiles(limit: recentSelectionLimit, typeFilter: recentSelectionFilter)
+            }
+        } catch { logger.error("Recent widget snapshot delivery failed: \(error.localizedDescription)") }
+    }
+
+    private func recentDeliveryLockURL() throws -> URL {
+        // App-hosted tests use isolated synthetic defaults and never the App Group.
+        if !publishWidget {
+            return FileManager.default.temporaryDirectory.appendingPathComponent("s3browser-fixture-recent.lock")
+        }
+        return try SharedConfig.recentDeliveryLockURL()
     }
 }

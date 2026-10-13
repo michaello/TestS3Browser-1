@@ -1,0 +1,43 @@
+{
+  "id": "N19",
+  "expected_behavior": "A second bulk-delete activation during the first cannot start duplicate destructive requests or create an inconsistent terminal selection state.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:45.298687+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditN19",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditN19",
+      "name": "partialFailureRetainsOnlyTheFailedIdentitiesForRetry()",
+      "time": "0.005652209"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN19",
+      "name": "secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection()",
+      "time": "0.000679416"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN19",
+      "name": "cancelledOldAccountCannotChangeTheReplacementSelection()",
+      "time": "0.000712333"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

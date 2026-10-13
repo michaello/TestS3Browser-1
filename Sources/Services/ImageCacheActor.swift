@@ -9,6 +9,7 @@ actor ImageCacheActor {
     private struct ImageKey: Hashable { let object: MediaObjectIdentity; let pixels: Int }
     private var decoded = ByteCostLRU<ImageKey, UIImage>(limit: MediaLimits().decodedBytes)
     private var epochs = MediaCacheEpoch()
+    private let posters = MediaPreviewRequests<UIImage>()
 
     func getThumbnail(for identity: MediaObjectIdentity) -> UIImage? {
         decoded.value(for: ImageKey(object: identity, pixels: 360))
@@ -33,10 +34,14 @@ actor ImageCacheActor {
             if object.fileType == .video {
                 // AVURLAsset issues range requests; rendering one poster never downloads the
                 // entire movie through downloadObject. Hold the common body permit while it works.
-                guard let url = await MainActor.run(body: { service.generatePresignedURL(for: object.key, bucket: identity.bucket).flatMap(URL.init(string:)) }) else { return nil }
-                image = try await BodyTransferLimiter.shared.withPermit {
-                    let cgImage = try await VideoPosterRenderer.shared.image(at: url, maximumPixels: pixels)
-                    return UIImage(cgImage: cgImage)
+                image = try await posters.value(for: MediaPreviewRequestKey(object: identity, pixels: pixels)) {
+                    guard let url = await MainActor.run(body: { service.generatePresignedURL(for: object.key, bucket: identity.bucket).flatMap(URL.init(string:)) }) else {
+                        throw MediaTransferError.missingBody
+                    }
+                    return try await BodyTransferLimiter.shared.withPermit {
+                        let cgImage = try await VideoPosterRenderer.shared.image(at: url, maximumPixels: pixels)
+                        return UIImage(cgImage: cgImage)
+                    }
                 }
             } else {
                 guard object.fileType == .image else { return nil }
@@ -62,14 +67,16 @@ actor ImageCacheActor {
             return image
         } catch { return nil }
     }
-    func invalidate(account: String, bucket: String, key: String) {
+    func invalidate(account: String, bucket: String, key: String) async {
         // Cancelled original transfers cannot repopulate a removed decoded generation.
         epochs.invalidate(account: account, bucket: bucket, key: key)
         for entry in decoded.keys where entry.object.matches(account: account, bucket: bucket, key: key) { decoded.remove(entry) }
+        await posters.invalidate(account: account, bucket: bucket, key: key)
     }
     func clearCache() async {
         epochs.reset()
         decoded.removeAll()
+        await posters.reset()
         try? await MediaOriginalStore.shared.clear()
     }
     func clearDiskCache() async { try? await MediaOriginalStore.shared.clear() }

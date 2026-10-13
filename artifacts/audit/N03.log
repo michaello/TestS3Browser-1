@@ -1,17 +1,16 @@
 Building for debugging...
-[1 / 4] AuditCore
-Build complete! (0.27 sec)
+Build complete! (0.23 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N03 fresh Delete shortcut transport lifecycle" started.
-􀟈  Test "Cancellation after initialization prevents the remote deletion" started.
-􀟈  Test "Fresh transport initializes exactly once and deletes the requested fixture object" started.
-􀟈  Test "Deletion failure propagates without a false success" started.
 􀟈  Test "Initialization failure propagates and never deletes" started.
-􁁛  Test "Fresh transport initializes exactly once and deletes the requested fixture object" passed after 0.003 seconds.
-􁁛  Test "Deletion failure propagates without a false success" passed after 0.003 seconds.
-􁁛  Test "Initialization failure propagates and never deletes" passed after 0.003 seconds.
-􁁛  Test "Cancellation after initialization prevents the remote deletion" passed after 0.003 seconds.
-􁁛  Suite "N03 fresh Delete shortcut transport lifecycle" passed after 0.003 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.004 seconds.
+􀟈  Test "Deletion failure propagates without a false success" started.
+􀟈  Test "Fresh transport initializes exactly once and deletes the requested fixture object" started.
+􀟈  Test "Cancellation after initialization prevents the remote deletion" started.
+􁁛  Test "Fresh transport initializes exactly once and deletes the requested fixture object" passed after 0.001 seconds.
+􁁛  Test "Deletion failure propagates without a false success" passed after 0.001 seconds.
+􁁛  Test "Initialization failure propagates and never deletes" passed after 0.001 seconds.
+􁁛  Test "Cancellation after initialization prevents the remote deletion" passed after 0.001 seconds.
+􁁛  Suite "N03 fresh Delete shortcut transport lifecycle" passed after 0.001 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.001 seconds.

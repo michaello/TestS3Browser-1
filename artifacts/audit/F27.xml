@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.022481959">
+    <testcase classname="AuditCoreTests.F27ConfirmedNavigationTests" name="failedRoute()" time="0.021979584" />
+    <testcase classname="AuditCoreTests.F27ConfirmedNavigationTests" name="accountIsolation()" time="0.019438042" />
+    <testcase classname="AuditCoreTests.F27ConfirmedNavigationTests" name="successfulRoutes()" time="0.019415791" />
+  </testsuite>
+</testsuites>

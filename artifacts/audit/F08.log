@@ -1,0 +1,16 @@
+Building for debugging...
+Build complete! (0.21 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F08ConcurrencyBoundaryTests started.
+􀟈  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" started.
+􀟈  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" started.
+􀟈  Test "An old account completion cannot publish into newly isolated observed state" started.
+􀟈  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" started.
+􁁛  Test "An old account completion cannot publish into newly isolated observed state" passed after 0.002 seconds.
+􁁛  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" passed after 0.010 seconds.
+􁁛  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" passed after 0.016 seconds.
+􁁛  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" passed after 0.022 seconds.
+􁁛  Suite F08ConcurrencyBoundaryTests passed after 0.022 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.023 seconds.

@@ -1,0 +1,17 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.33 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "F16 requested detail scheduling and shared freshness" started.
+􀟈  Test "Initial HTML schedules content only; standard metadata follows visible content" started.
+􀟈  Test "Concurrent demand coalesces; eviction and mutation reject obsolete secondary responses" started.
+􀟈  Test "Hidden sections do no I/O; requested object and bucket sections reuse fresh exact identities" started.
+􀟈  Test "Failure keeps successful metadata; explicit retry bypasses automatic failure throttle" started.
+􁁛  Test "Initial HTML schedules content only; standard metadata follows visible content" passed after 0.003 seconds.
+􁁛  Test "Failure keeps successful metadata; explicit retry bypasses automatic failure throttle" passed after 0.003 seconds.
+􁁛  Test "Hidden sections do no I/O; requested object and bucket sections reuse fresh exact identities" passed after 0.004 seconds.
+􁁛  Test "Concurrent demand coalesces; eviction and mutation reject obsolete secondary responses" passed after 0.008 seconds.
+􁁛  Suite "F16 requested detail scheduling and shared freshness" passed after 0.008 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.008 seconds.

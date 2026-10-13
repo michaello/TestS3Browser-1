@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.0192255">
-    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="accountReset()" time="0.004088625" />
-    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="exactIdentity()" time="0.018898292" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.03497575">
+    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="accountReset()" time="0.013454083" />
+    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="exactIdentity()" time="0.03462775" />
+    <testcase classname="AuditCoreTests.F12ConfirmedMutationTests" name="exactDestinationReceipt()" time="0.007550583" />
+    <testcase classname="AuditCoreTests.F12ConfirmedMutationTests" name="missingCopyReceiptETag()" time="0.007653209" />
+    <testcase classname="AuditCoreTests.F12ConfirmedMutationTests" name="cancellationAfterCopy()" time="0.01959225" />
+    <testcase classname="AuditCoreTests.F12ConfirmedMutationTests" name="partialMoveRetainsSourceAndReplacesDestinationCache()" time="0.020650542" />
+    <testcase classname="AuditCoreTests.F12ConfirmedMutationTests" name="deletionAfterAccountChange()" time="0.023978125" />
   </testsuite>
 </testsuites>

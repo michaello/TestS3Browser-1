@@ -1,17 +1,16 @@
 Building for debugging...
-[Computing dependencies]
 [Using on-disk description]
 [1 / 1]
-Build complete! (586.51 sec)
+Build complete! (0.52 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N06BoundedBatchExportTests started.
-􀟈  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() started.
 􀟈  Test cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles() started.
 􀟈  Test loaderReceivesCapturedAccountBucketKeyAndRevision() started.
-􁁛  Test loaderReceivesCapturedAccountBucketKeyAndRevision() passed after 0.236 seconds.
-􁁛  Test cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles() passed after 0.317 seconds.
-􁁛  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() passed after 1.441 seconds.
-􁁛  Suite N06BoundedBatchExportTests passed after 1.443 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 1.443 seconds.
+􀟈  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() started.
+􁁛  Test loaderReceivesCapturedAccountBucketKeyAndRevision() passed after 0.093 seconds.
+􁁛  Test cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles() passed after 0.134 seconds.
+􁁛  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() passed after 0.204 seconds.
+􁁛  Suite N06BoundedBatchExportTests passed after 0.204 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.208 seconds.

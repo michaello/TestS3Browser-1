@@ -28,6 +28,7 @@ final class ResourceLoader<Key: Hashable & Sendable, Value: Sendable> {
     struct Snapshot: Sendable {
         var value: Value
         var refreshedAt: Date?
+        let revision = UUID()
     }
 
     private final class Flight {
@@ -51,6 +52,7 @@ final class ResourceLoader<Key: Hashable & Sendable, Value: Sendable> {
     func value(for key: Key) -> Value? { snapshots[key]?.value }
     func isLoading(_ key: Key) -> Bool { active[key] != nil }
     func error(for key: Key) -> String? { errors[key] }
+    func revision(for key: Key) -> UUID? { snapshots[key]?.revision }
 
     func seed(_ value: Value, for key: Key, refreshedAt: Date?) {
         snapshots[key] = Snapshot(value: value, refreshedAt: refreshedAt)

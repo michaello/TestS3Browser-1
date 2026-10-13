@@ -1,15 +1,15 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.35 sec)
+[1 / 8] AuditCore
+Build complete! (0.28 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN20 started.
-􀟈  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() started.
 􀟈  Test priorInFlightRequestCannotUndoTheRebuild() started.
 􀟈  Test successfulRebuildPublishesOneReplacement() started.
-􁁛  Test successfulRebuildPublishesOneReplacement() passed after 0.001 seconds.
-􁁛  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() passed after 0.001 seconds.
-􁁛  Test priorInFlightRequestCannotUndoTheRebuild() passed after 0.001 seconds.
-􁁛  Suite AuditN20 passed after 0.001 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.
+􀟈  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() started.
+􁁛  Test successfulRebuildPublishesOneReplacement() passed after 0.005 seconds.
+􁁛  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() passed after 0.010 seconds.
+􁁛  Test priorInFlightRequestCannotUndoTheRebuild() passed after 0.011 seconds.
+􁁛  Suite AuditN20 passed after 0.011 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.011 seconds.

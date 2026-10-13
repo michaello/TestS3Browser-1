@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.055409334">
-    <testcase classname="AuditCoreTests.F14GalleryWindowTests" name="obsoleteAndFailure()" time="0.003475292" />
-    <testcase classname="AuditCoreTests.F14GalleryWindowTests" name="longSwipe()" time="0.0550845" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.015380208">
+    <testcase classname="AuditCoreTests.F14GalleryWindowTests" name="obsoleteAndFailure()" time="0.001108167" />
+    <testcase classname="AuditCoreTests.F14GalleryWindowTests" name="longSwipe()" time="0.0150705" />
   </testsuite>
 </testsuites>

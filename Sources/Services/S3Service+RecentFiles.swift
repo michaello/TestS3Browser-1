@@ -62,14 +62,14 @@ extension S3Service {
         }
         guard session.isCurrent(generation) else { throw CancellationError() }
         persistRecentFiles()
-        return snapshot
+        return session.catalogs.value(for: account) ?? snapshot
     }
 
     /// Reports are paginated through the same account/query-owned resource loader.
     func fetchStashReports(bucket: String = "phone-stash", limit: Int = 100, force: Bool = false) async throws -> [S3Object] {
         let count = try RecentShortcutCount(limit)
         guard count.value > 0 else { return [] }
-        let files = try await fetchFiles(prefix: "reports/", bucket: bucket, force: force)
-        return Array(files.sorted { $1.key.utf8.lexicographicallyPrecedes($0.key.utf8) }.prefix(count.value))
+        let files = try await fetchFileMetadata(prefix: "reports/", bucket: bucket, force: force)
+        return try MetadataCatalogQuery.newestReports(files, limit: count.value).map(\.s3Object)
     }
 }

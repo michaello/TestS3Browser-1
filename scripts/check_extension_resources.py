@@ -19,7 +19,7 @@ MANIFESTS = {
     "TestS3BrowserWidget": ROOT / "WidgetExtension/PrivacyInfo.xcprivacy",
 }
 REASONS = {
-    "TestS3Browser": {"UserDefaults": {"CA92.1", "1C8F.1"}},
+    "TestS3Browser": {"UserDefaults": {"CA92.1", "1C8F.1"}, "FileTimestamp": {"C617.1"}},
     "DumpShareExtension": {"UserDefaults": {"1C8F.1"}},
     "TestS3BrowserWidget": {"UserDefaults": {"1C8F.1"}},
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.007069291">
-    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="writeFailureAndRetry()" time="0.000430292" />
-    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="refreshFailure()" time="0.000423875" />
-    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="successfulRestore()" time="0.006689458" />
-    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="cancelAfterWrite()" time="0.00197175" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.010357958">
+    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="successfulRestore()" time="0.01007275" />
+    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="refreshFailure()" time="0.002823792" />
+    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="cancelAfterWrite()" time="0.003455667" />
+    <testcase classname="AuditCoreTests.N13VersionRestoreTests" name="writeFailureAndRetry()" time="0.002792625" />
   </testsuite>
 </testsuites>

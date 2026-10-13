@@ -1,17 +1,16 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.47 sec)
+Build complete! (0.22 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N44BatchExportCleanupTests started.
 􀟈  Suite "N44 export staging lifetime" started.
+􀟈  Test failedStagingReleasesOriginalAndLeavesNoExportLease() started.
 􀟈  Test activityCompletionAndCancelledShareBothReleaseAllFiles() started.
 􀟈  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" started.
-􀟈  Test failedStagingReleasesOriginalAndLeavesNoExportLease() started.
-􁁛  Test activityCompletionAndCancelledShareBothReleaseAllFiles() passed after 0.004 seconds.
-􁁛  Test failedStagingReleasesOriginalAndLeavesNoExportLease() passed after 0.007 seconds.
-􁁛  Suite N44BatchExportCleanupTests passed after 0.007 seconds.
-􁁛  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" passed after 0.008 seconds.
-􁁛  Suite "N44 export staging lifetime" passed after 0.008 seconds.
-􁁛  Test run with 3 tests in 2 suites passed after 0.008 seconds.
+􁁛  Test activityCompletionAndCancelledShareBothReleaseAllFiles() passed after 0.005 seconds.
+􁁛  Test failedStagingReleasesOriginalAndLeavesNoExportLease() passed after 0.008 seconds.
+􁁛  Suite N44BatchExportCleanupTests passed after 0.008 seconds.
+􁁛  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" passed after 0.009 seconds.
+􁁛  Suite "N44 export staging lifetime" passed after 0.009 seconds.
+􁁛  Test run with 3 tests in 2 suites passed after 0.009 seconds.

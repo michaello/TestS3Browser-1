@@ -46,7 +46,7 @@ struct RecentFileGridItem: View {
                         HStack(spacing: 4) {
                             if object.lastModified.isRecent {
                                 Text("Recent")
-                                    .font(.system(size: 9, weight: .semibold))
+                                    .font(.caption2.weight(.semibold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 5)
                                     .padding(.vertical, 2)
@@ -54,7 +54,7 @@ struct RecentFileGridItem: View {
                             }
                             if isNew {
                                 Text("New")
-                                    .font(.system(size: 9, weight: .semibold))
+                                    .font(.caption2.weight(.semibold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 5)
                                     .padding(.vertical, 2)
@@ -72,15 +72,7 @@ struct RecentFileGridItem: View {
             .cornerRadius(8)
 
             VStack(alignment: .center, spacing: 2) {
-                Text(object.fileName)
-                    .font(cardSize > 100 ? .caption : .system(size: 10))
-                    .fontWeight(.semibold)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.center)
-
-                Text("\(object.formattedSize) · \(object.lastModified.relativeFormattedCompact())")
-                    .font(.system(size: cardSize > 100 ? 10 : 8))
-                    .foregroundStyle(.secondary)
+                FileCardLabels(name: object.fileName, detail: "\(object.formattedSize) · \(object.lastModified.relativeFormattedCompact())")
 
                 if let tag {
                     TagChip(tag: tag)

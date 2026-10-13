@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.0129755">
-    <testcase classname="AuditCoreTests.AuditN27" name="dayEligibilityUsesNextUTCMidnight(fixture:)" time="0.012622583" />
-    <testcase classname="AuditCoreTests.AuditN27" name="invalidAndConflictingSchedulesAreUnknown()" time="0.008998209" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.004996417">
+    <testcase classname="AuditCoreTests.AuditN27" name="invalidAndConflictingSchedulesAreUnknown()" time="0.000125625" />
+    <testcase classname="AuditCoreTests.AuditN27" name="dayEligibilityUsesNextUTCMidnight(fixture:)" time="0.004685667" />
   </testsuite>
 </testsuites>

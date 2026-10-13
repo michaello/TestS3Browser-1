@@ -1,0 +1,33 @@
+{
+  "id": "N17",
+  "expected_behavior": "A no-match search on an incomplete folder retains access to remaining pages/search work; a matching later-page file remains discoverable.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:42.834794+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N17PartialFolderSearchTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 1,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N17PartialFolderSearchTests",
+      "name": "noMatchCanLoadMore()",
+      "time": "0.002367875"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

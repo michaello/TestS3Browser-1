@@ -1,26 +1,5 @@
 import Foundation
 
-enum S3TransferKeys {
-    static func identifier(bucket: String?, key: String) -> String {
-        let bucketField = bucket.map { "1" + Data($0.utf8).base64EncodedString() } ?? "0"
-        return bucketField + "." + Data(key.utf8).base64EncodedString()
-    }
-
-    static func parentPrefix(of key: String) -> String {
-        key.lastIndex(of: "/").map { String(key[...$0]) } ?? ""
-    }
-
-    static func fileName(of key: String) -> String {
-        key.lastIndex(of: "/").map { String(key[key.index(after: $0)...]) } ?? key
-    }
-
-    static func isSameDestination(sourceBucket: String, sourceKey: String,
-                                  destinationBucket: String, destinationPrefix: String) -> Bool {
-        sourceBucket.utf8.elementsEqual(destinationBucket.utf8) &&
-        sourceKey.utf8.elementsEqual((destinationPrefix + fileName(of: sourceKey)).utf8)
-    }
-}
-
 /// A captured account and exact bucket/key pair. S3 keys are never path-normalized.
 struct TransferObjectLocation: Hashable, Sendable {
     let accountScope: String
@@ -89,6 +68,15 @@ enum TransferObjectPresence: Equatable, Sendable {
     case present(TransferObjectRevision)
 }
 
+struct ObjectCopyReceipt: Equatable, Sendable {
+    let revision: TransferObjectRevision
+    var contentType: String? = nil
+    func metadata(bucket: String, key: String, now: Date = Date()) -> MetadataRecord {
+        MetadataRecord(bucket: bucket, key: key, size: revision.size.map(Int64.init) ?? -1,
+            modified: revision.lastModified ?? now, etag: revision.etag, contentType: contentType)
+    }
+}
+
 /// Approval is tied to the full operation, account and observed destination revision.
 struct ObjectReplacementApproval: Equatable, Sendable {
     let request: ObjectTransferRequest
@@ -136,7 +124,8 @@ enum ObjectTransferError: LocalizedError, Equatable {
 protocol ObjectTransferTransport {
     func validateContext() throws
     func head(_ location: TransferObjectLocation) async throws -> TransferObjectPresence
-    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision) async throws
+    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision,
+              destinationPresence: TransferObjectPresence) async throws -> ObjectCopyReceipt
     func delete(_ source: TransferObjectLocation, revision: TransferObjectRevision) async throws
 }
 
@@ -148,7 +137,9 @@ struct ObjectTransferCoordinator {
     let transport: any ObjectTransferTransport
     private static var activeDestinations: Set<TransferObjectLocation> = []
 
-    func execute(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async throws {
+    @discardableResult
+    func execute(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil,
+                 didCopy: (ObjectCopyReceipt) async -> Void = { _ in }) async throws -> ObjectCopyReceipt {
         guard request.source != request.destination else { throw ObjectTransferError.sameObject }
         guard !request.destination.key.isEmpty, request.destination.key.utf8.count <= 1_024 else {
             throw ObjectTransferError.invalidDestination
@@ -176,9 +167,13 @@ struct ObjectTransferCoordinator {
         }
         try transport.validateContext()
         try Task.checkCancellation()
-        try await transport.copy(request, sourceRevision: sourceRevision)
+        let receipt = try await transport.copy(request, sourceRevision: sourceRevision, destinationPresence: destination)
+        try CopyEncryptionPolicy.requireCopyETag(receipt.revision.etag)
+        // A confirmed destination remains a real mutation even if cancellation, account
+        // changes or a subsequent DELETE prevent the requested move from completing.
+        await didCopy(receipt)
 
-        guard request.kind != .copy else { return }
+        guard request.kind != .copy else { return receipt }
         do {
             try Task.checkCancellation()
             try transport.validateContext()
@@ -191,6 +186,7 @@ struct ObjectTransferCoordinator {
                 throw ObjectTransferError.sourceCannotBeConditionallyDeleted
             }
             try await transport.delete(request.source, revision: sourceRevision)
+            return receipt
         } catch {
             // A completed destination is not rolled back. Preserve the source on uncertainty.
             throw ObjectTransferError.sourceRetainedAfterCopy(error.localizedDescription)

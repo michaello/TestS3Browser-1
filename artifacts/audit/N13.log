@@ -1,17 +1,17 @@
-Another instance of SwiftPM (PID: 87424) is already running using '/Users/mike/Developer/test-projects/TestS3Browser-1/.build', waiting until that process has finished execution...Building for debugging...
+Building for debugging...
 [1 / 1]
-Build complete! (0.56 sec)
+Build complete! (0.35 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite "N13 restore refresh and visible terminal failures" started.
+􀟈  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" started.
 􀟈  Test "Write failure produces a visible error without stale success and remains retryable" started.
 􀟈  Test "Refresh failure cannot report restore flow complete" started.
 􀟈  Test "Cancellation following successful remote write still invalidates but publishes no success" started.
-􀟈  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" started.
-􁁛  Test "Write failure produces a visible error without stale success and remains retryable" passed after 0.001 seconds.
-􁁛  Test "Refresh failure cannot report restore flow complete" passed after 0.001 seconds.
-􁁛  Test "Cancellation following successful remote write still invalidates but publishes no success" passed after 0.001 seconds.
-􁁛  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" passed after 0.006 seconds.
-􁁛  Suite "N13 restore refresh and visible terminal failures" passed after 0.006 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.007 seconds.
+􁁛  Test "Write failure produces a visible error without stale success and remains retryable" passed after 0.002 seconds.
+􁁛  Test "Refresh failure cannot report restore flow complete" passed after 0.002 seconds.
+􁁛  Test "Cancellation following successful remote write still invalidates but publishes no success" passed after 0.003 seconds.
+􁁛  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" passed after 0.010 seconds.
+􁁛  Suite "N13 restore refresh and visible terminal failures" passed after 0.010 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.010 seconds.

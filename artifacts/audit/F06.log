@@ -1,0 +1,13 @@
+Building for debugging...
+[1 / 8] AuditCore
+Build complete! (0.24 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F06CanonicalCatalogTests started.
+􀟈  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" started.
+􀟈  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" started.
+􁁛  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" passed after 0.006 seconds.
+􁁛  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" passed after 0.006 seconds.
+􁁛  Suite F06CanonicalCatalogTests passed after 0.006 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.006 seconds.

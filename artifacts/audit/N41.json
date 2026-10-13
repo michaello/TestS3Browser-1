@@ -1,0 +1,58 @@
+{
+  "id": "N41",
+  "expected_behavior": "Bucket admin results distinguish known absence from denied/network/unknown failure instead of reporting absent policy/rules/security configuration on error.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:40:16.800671+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditN41",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 6,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:)",
+      "time": "0.05843225"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "networkAndMalformedResponsesCannotBecomeKnownAbsence()",
+      "time": "0.054455291"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry()",
+      "time": "0.058854083"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:)",
+      "time": "0.054445084"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "cancellationCannotPublishAnAbsentConfiguration()",
+      "time": "0.054365208"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN41",
+      "name": "failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure()",
+      "time": "0.058463459"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

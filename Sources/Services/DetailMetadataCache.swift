@@ -36,7 +36,7 @@ final class DetailMetadataCache {
             case .permissions:
                 value = .permissions(try await service.getObjectAcl(key: identity.key, bucket: identity.bucket))
             case .lifecycle:
-                value = .lifecycle(await service.fetchLifecycleRules(bucket: identity.bucket))
+                value = .lifecycle(try await service.fetchLifecycleRules(bucket: identity.bucket))
             }
             guard service.session.isCurrent(generation) else { throw CancellationError() }
             return value
@@ -52,4 +52,5 @@ final class DetailMetadataCache {
     func invalidate(account: String, bucket: String, key: String) {
         cache.invalidate(account: account, bucket: bucket, key: key)
     }
+    func reset() { cache.reset(); activeGeneration = nil }
 }

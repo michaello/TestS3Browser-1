@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.00146525">
+    <testcase classname="AuditCoreTests.AuditN24" name="delayedListingCannotRestoreASuccessfullyDeletedObject()" time="0.00119575" />
+    <testcase classname="AuditCoreTests.AuditN24" name="deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot()" time="0.000648541" />
+    <testcase classname="AuditCoreTests.AuditN24" name="obsoleteAccountDeleteCannotChangeCurrentCaches()" time="0.000712541" />
+    <testcase classname="AuditCoreTests.AuditN24" name="byteDistinctKeysAndBucketsAreNotEvictedAsAliases()" time="0.000693292" />
+  </testsuite>
+</testsuites>

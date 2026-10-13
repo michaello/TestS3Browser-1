@@ -2,9 +2,9 @@
   "id": "N27",
   "expected_behavior": "Lifecycle day calculations follow S3 midnight-UTC eligibility semantics and give the same result under different host time zones.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:17.108585+00:00",
+  "recorded_at": "2026-10-13T07:39:57.204242+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN27",
-      "name": "dayEligibilityUsesNextUTCMidnight(fixture:)",
-      "time": "0.012622583"
+      "name": "invalidAndConflictingSchedulesAreUnknown()",
+      "time": "0.000125625"
     },
     {
       "classname": "AuditCoreTests.AuditN27",
-      "name": "invalidAndConflictingSchedulesAreUnknown()",
-      "time": "0.008998209"
+      "name": "dayEligibilityUsesNextUTCMidnight(fixture:)",
+      "time": "0.004685667"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27.log",

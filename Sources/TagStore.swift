@@ -9,6 +9,7 @@ final class TagStore {
     var tags: [LocalObjectIdentity: String] { state.tags }
     var legacyCount: Int { state.legacyTags.count }
     var storageError: String? { state.storageError }
+    var revision: Int { state.revision }
     private init() {}
     func allTags(in account: String) -> [String] { state.tags(in: account) }
     func setTag(_ tag: String?, for identity: LocalObjectIdentity) { state.setTag(tag, for: identity) }

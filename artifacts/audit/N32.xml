@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.014342334">
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()" time="0.014048167" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="plansCoverEveryByteWithoutExceedingPartLimits()" time="0.008494333" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="failedPartOrCompletionAbortsAndRetainsMoveSource()" time="0.014052834" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cleanupFailureIncludesUploadIDAndOriginalFailure()" time="0.013786916" />
-    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()" time="0.008476209" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.016227125">
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cleanupFailureIncludesUploadIDAndOriginalFailure()" time="0.014871667" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="failedPartOrCompletionAbortsAndRetainsMoveSource()" time="0.015780333" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision()" time="0.015741375" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="missingDestinationETagFailsBeforeCreatingMultipartUpload()" time="0.000852208" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="plansCoverEveryByteWithoutExceedingPartLimits()" time="0.01451825" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()" time="0.000939375" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()" time="0.01568975" />
   </testsuite>
 </testsuites>

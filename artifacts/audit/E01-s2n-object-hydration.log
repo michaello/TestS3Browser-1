@@ -1,0 +1,50 @@
+{"batch": 1, "remaining_missing_blobs": 7880, "exit_code": 0}
+{"batch": 2, "remaining_missing_blobs": 7624, "exit_code": 0}
+{"batch": 3, "remaining_missing_blobs": 7368, "exit_code": 0}
+{"batch": 4, "remaining_missing_blobs": 7112, "exit_code": 0}
+{"batch": 5, "remaining_missing_blobs": 6856, "exit_code": 0}
+{"batch": 6, "remaining_missing_blobs": 6600, "exit_code": 0}
+{"batch": 7, "remaining_missing_blobs": 6344, "exit_code": 0}
+{"batch": 8, "remaining_missing_blobs": 6088, "exit_code": 0}
+{"batch": 9, "remaining_missing_blobs": 5832, "exit_code": 0}
+{"batch": 10, "remaining_missing_blobs": 5576, "exit_code": 0}
+{"batch": 11, "remaining_missing_blobs": 5320, "exit_code": 0}
+{"batch": 12, "remaining_missing_blobs": 5064, "exit_code": 0}
+{"batch": 13, "remaining_missing_blobs": 4808, "exit_code": 0}
+{"batch": 14, "remaining_missing_blobs": 4552, "exit_code": 0}
+{"batch": 15, "remaining_missing_blobs": 4296, "exit_code": 0}
+{"batch": 16, "remaining_missing_blobs": 4040, "exit_code": 0}
+{"batch": 17, "remaining_missing_blobs": 3784, "exit_code": 0}
+{"batch": 18, "remaining_missing_blobs": 3528, "exit_code": 0}
+{"batch": 19, "remaining_missing_blobs": 3272, "exit_code": 0}
+{"batch": 20, "remaining_missing_blobs": 3016, "exit_code": 0}
+{"batch": 21, "remaining_missing_blobs": 2760, "exit_code": 0}
+{"batch": 22, "remaining_missing_blobs": 2504, "exit_code": 0}
+{"batch": 23, "remaining_missing_blobs": 2248, "exit_code": 0}
+{"batch": 24, "remaining_missing_blobs": 1992, "exit_code": 0}
+{"batch": 25, "remaining_missing_blobs": 1736, "exit_code": 0}
+{"batch": 26, "remaining_missing_blobs": 1480, "exit_code": 0}
+{"batch": 27, "remaining_missing_blobs": 1224, "exit_code": 0}
+{"batch": 28, "remaining_missing_blobs": 968, "exit_code": 0}
+{"batch": 29, "remaining_missing_blobs": 712, "exit_code": 0}
+{"batch": 30, "remaining_missing_blobs": 456, "exit_code": 0}
+{"batch": 31, "remaining_missing_blobs": 200, "exit_code": 0}
+{"batch": 32, "remaining_missing_blobs": 0, "exit_code": 0}
+{
+  "revision": "92f7827c8487eb2a99b443aec6ee7d1df031b1bf",
+  "tree": "3549f916624e73a08615c9294a8886ed369bcf4a",
+  "mirror_path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/s2n-tls.git",
+  "verified_blob_paths": 8394,
+  "pid": 5816,
+  "status": "completed",
+  "started_at_epoch": 1791876284.371496,
+  "timeout_seconds": 630,
+  "strategy": "Fetch exact pinned Git blob objects in resumable bounded batches",
+  "passed": true,
+  "initial_missing_blobs": 8136,
+  "remaining_missing_blobs": 0,
+  "git_fsck_exit_code": 0,
+  "all_paths_contents_and_executable_modes_match": true,
+  "version_tag": "gitlink-92f7827c",
+  "elapsed_seconds": 187.6018420420005
+}

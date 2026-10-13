@@ -1,18 +1,28 @@
 {
   "measurement_environment" : "macOS production-core fixture",
   "metrics" : {
-    "cacheToFirstContentMilliseconds" : 0.036375000000000005,
+    "byteMeasurementScope" : "Consumed SDK object-download bytes and confirmed upload payload sizes; excludes HTTP overhead and retransmission.",
+    "cacheToFirstContentMilliseconds" : 0.031875000000000001,
+    "confirmedUploadPayloadBytes" : 0,
     "duplicateBodyRequests" : 0,
     "failedRequests" : 0,
-    "launchToFirstContentMilliseconds" : 0.045749999999999999,
+    "launchToFirstContentMilliseconds" : 0.042208999999999997,
     "maximumFrameGapMilliseconds" : 16,
-    "peakResidentBytes" : 98648064,
+    "peakResidentBytes" : 123600896,
     "receivedBytes" : 512,
     "refreshMilliseconds" : [
-      233.53133400000002
+      334.52754199999998
     ],
     "requestCount" : 1,
-    "scrollingStalls" : 0
+    "scrollingStalls" : 0,
+    "unavailableMeasurements" : [
+      "Native AVFoundation HTTP wire bytes and requests",
+      "Partial failed-upload bytes"
+    ],
+    "viewConstruction" : {
+
+    },
+    "viewConstructionScope" : "SwiftUI view construction only; excludes layout, drawing and framework work after body returns."
   },
   "scope" : "Actual monotonic cache\/refresh durations and process peak memory; joined fake transport bytes\/counts. Frame gap is a deterministic fixture, not a simulator scrolling measurement."
 }

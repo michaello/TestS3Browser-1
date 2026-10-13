@@ -18,6 +18,9 @@ private final class MultipartFixture: MultipartCopyTransport, ObjectTransferTran
     var abortFails = false
     var cancelAtPart: Int?
     var contextValid = true
+    var expectedDestination: TransferObjectPresence = .absent
+    var completedCondition: MultipartDestinationCondition?
+    var destinationChanged = false
 
     func validateContext() throws { if !contextValid { throw Failure.denied } }
     func create(properties: MultipartCopyProperties) async throws -> String {
@@ -30,11 +33,14 @@ private final class MultipartFixture: MultipartCopyTransport, ObjectTransferTran
         if part.number == cancelAtPart { withUnsafeCurrentTask { $0?.cancel() } }
         return "etag-\(part.number)"
     }
-    func complete(uploadID: String, parts: [MultipartCopiedPart]) async throws {
+    func complete(uploadID: String, parts: [MultipartCopiedPart], condition: MultipartDestinationCondition) async throws -> TransferObjectRevision {
         events.append("complete")
+        completedCondition = condition
+        if destinationChanged { throw Failure.denied }
         #expect(parts.map(\.number) == self.parts.map(\.number))
         #expect(parts.map(\.etag) == self.parts.map { "etag-\($0.number)" })
         if completionFails { throw Failure.complete }
+        return .init(etag: "completed-multipart-etag", versionID: "completed-v2", lastModified: .now, size: Int(bytes))
     }
     func abort(uploadID: String) async throws {
         #expect(!Task.isCancelled)
@@ -42,10 +48,13 @@ private final class MultipartFixture: MultipartCopyTransport, ObjectTransferTran
         if abortFails { throw Failure.abort }
     }
     func head(_ location: TransferObjectLocation) async throws -> TransferObjectPresence {
-        location.key == "source" ? .present(.init(etag: "etag", versionID: "version", lastModified: .distantPast, size: Int(bytes))) : .absent
+        location.key == "source" ? .present(.init(etag: "etag", versionID: "version", lastModified: .distantPast, size: Int(bytes))) : expectedDestination
     }
-    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision) async throws {
-        try await MultipartObjectCopy.perform(bytes: bytes, properties: properties, transport: self)
+    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision,
+              destinationPresence: TransferObjectPresence) async throws -> ObjectCopyReceipt {
+        let revision = try await MultipartObjectCopy.perform(bytes: bytes, properties: properties,
+            destination: destinationPresence, transport: self)
+        return ObjectCopyReceipt(revision: revision, contentType: properties.headers["contentType"])
     }
     func delete(_ source: TransferObjectLocation, revision: TransferObjectRevision) async throws { events.append("delete") }
     func request() -> ObjectTransferRequest {
@@ -56,6 +65,31 @@ private final class MultipartFixture: MultipartCopyTransport, ObjectTransferTran
 
 @MainActor
 struct N32MultipartCopyTests {
+    @Test func atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision() async throws {
+        for existed in [false, true] {
+            let fixture = MultipartFixture()
+            let revision = TransferObjectRevision(etag: "approved-etag", versionID: nil, lastModified: .distantPast, size: 1)
+            fixture.expectedDestination = existed ? .present(revision) : .absent
+            fixture.destinationChanged = true
+            let request = fixture.request()
+            let approval = existed ? ObjectReplacementApproval(request: request, destinationRevision: revision) : nil
+            await #expect(throws: (any Error).self) {
+                try await ObjectTransferCoordinator(transport: fixture).execute(request, approval: approval)
+            }
+            #expect(fixture.completedCondition == (existed ? .matchingETag("approved-etag") : .absent))
+            #expect(fixture.events.last == "abort")
+            #expect(!fixture.events.contains("delete"))
+        }
+    }
+
+    @Test func missingDestinationETagFailsBeforeCreatingMultipartUpload() async {
+        let fixture = MultipartFixture()
+        await #expect(throws: MultipartCopyError.self) {
+            try await MultipartObjectCopy.perform(bytes: fixture.bytes, properties: fixture.properties,
+                destination: .present(.init(etag: nil, versionID: nil, lastModified: nil, size: 1)), transport: fixture)
+        }
+        #expect(fixture.events.isEmpty)
+    }
     @Test func plansCoverEveryByteWithoutExceedingPartLimits() throws {
         for bytes: Int64 in [5_000_000_001, 5 * 1024 * 1024 * 1024 + 1, MultipartCopyPlan.maximumPartBytes * 10_000] {
             let plan = try MultipartCopyPlan(bytes: bytes)
@@ -77,7 +111,11 @@ struct N32MultipartCopyTests {
 
     @Test func moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() async throws {
         let fixture = MultipartFixture()
-        try await ObjectTransferCoordinator(transport: fixture).execute(fixture.request())
+        let receipt = try await ObjectTransferCoordinator(transport: fixture).execute(fixture.request())
+        #expect(receipt.revision.etag == "completed-multipart-etag")
+        #expect(receipt.revision.etag != "etag")
+        #expect(receipt.revision.versionID == "completed-v2")
+        #expect(receipt.revision.size == Int(fixture.bytes))
         #expect(fixture.copiedProperties == fixture.properties)
         #expect(fixture.events.suffix(2) == ["complete", "delete"])
         #expect(!fixture.events.contains("abort"))

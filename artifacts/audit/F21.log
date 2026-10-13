@@ -1,11 +1,10 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.53 sec)
+Build complete! (0.20 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F21UniqueUploadKeyTests started.
 􀟈  Test sameSecondUploadsPreserveBothObjects() started.
-􁁛  Test sameSecondUploadsPreserveBothObjects() passed after 0.018 seconds.
-􁁛  Suite F21UniqueUploadKeyTests passed after 0.019 seconds.
-􁁛  Test run with 1 test in 1 suite passed after 0.019 seconds.
+􁁛  Test sameSecondUploadsPreserveBothObjects() passed after 0.021 seconds.
+􁁛  Suite F21UniqueUploadKeyTests passed after 0.021 seconds.
+􁁛  Test run with 1 test in 1 suite passed after 0.021 seconds.

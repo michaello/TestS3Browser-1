@@ -1,0 +1,70 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[5 / 25] AuditCore
+[7 / 27] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[16 / 27] AuditCoreTests-product
+[18 / 29] AuditCoreTests-product
+[24 / 28] AuditCoreTests-product
+Build complete! (5.36 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N32MultipartCopyTests started.
+􀟈  Suite N31CopyPropertyTests started.
+􀟈  Suite N31EncryptionPolicyTests started.
+􀟈  Test failedPartOrCompletionAbortsAndRetainsMoveSource() started.
+􀟈  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() started.
+􀟈  Test crossOwnerCopyRetainsSourceOwnersGrant() started.
+􀟈  Test missingDestinationETagFailsBeforeCreatingMultipartUpload() started.
+􀟈  Test cleanupFailureIncludesUploadIDAndOriginalFailure() started.
+􀟈  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() started.
+􀟈  Test plansCoverEveryByteWithoutExceedingPartLimits() started.
+􀟈  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() started.
+􀟈  Test customAndPublicGrantsRemainExplicitForBothCopyModes() started.
+􀟈  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() started.
+􀟈  Test multipartTagValuesAreEncodedWithoutChangingBytes() started.
+􀟈  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() started.
+􀟈  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() started.
+􀟈  Test atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision() started.
+􀟈  Test encryptionConsentNeverAuthorizesDestinationReplacement() started.
+􀟈  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() started.
+􀟈  Test emptyOrMissingCopyAcknowledgementRetainsSource() started.
+􀟈  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() started.
+􀟈  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() started.
+􀟈  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() started.
+􀟈  Test invalidJSONOrBase64CannotConstructAnApprovedContext() started.
+􁁛  Test customAndPublicGrantsRemainExplicitForBothCopyModes() passed after 0.001 seconds.
+􁁛  Test crossOwnerCopyRetainsSourceOwnersGrant() passed after 0.001 seconds.
+􁁛  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() passed after 0.001 seconds.
+􁁛  Test multipartTagValuesAreEncodedWithoutChangingBytes() passed after 0.001 seconds.
+􁁛  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() passed after 0.001 seconds.
+􁁛  Suite N31CopyPropertyTests passed after 0.001 seconds.
+􁁛  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() passed after 0.001 seconds.
+􁁛  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() passed after 0.001 seconds.
+􁁛  Test missingDestinationETagFailsBeforeCreatingMultipartUpload() passed after 0.016 seconds.
+􁁛  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() passed after 0.017 seconds.
+􁁛  Test encryptionConsentNeverAuthorizesDestinationReplacement() passed after 0.017 seconds.
+􁁛  Test plansCoverEveryByteWithoutExceedingPartLimits() passed after 0.018 seconds.
+􁁛  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() passed after 0.019 seconds.
+􁁛  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() passed after 0.019 seconds.
+􁁛  Test invalidJSONOrBase64CannotConstructAnApprovedContext() passed after 0.019 seconds.
+􁁛  Test emptyOrMissingCopyAcknowledgementRetainsSource() passed after 0.019 seconds.
+􁁛  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() passed after 0.019 seconds.
+􁁛  Test cleanupFailureIncludesUploadIDAndOriginalFailure() passed after 0.019 seconds.
+􁁛  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() passed after 0.019 seconds.
+􁁛  Suite N31EncryptionPolicyTests passed after 0.019 seconds.
+􁁛  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() passed after 0.019 seconds.
+􁁛  Test atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision() passed after 0.019 seconds.
+􁁛  Test failedPartOrCompletionAbortsAndRetainsMoveSource() passed after 0.020 seconds.
+􁁛  Suite N32MultipartCopyTests passed after 0.020 seconds.
+􁁛  Test run with 21 tests in 3 suites passed after 0.020 seconds.

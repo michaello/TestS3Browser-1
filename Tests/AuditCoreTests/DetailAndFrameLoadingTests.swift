@@ -120,6 +120,50 @@ private func framePage(_ key: String, token: String?) -> MetadataListingPage {
     MetadataListingPage(files: [MetadataRecord(bucket: "bucket", key: key, size: 1, modified: .distantPast, etag: "1")], folders: [], nextToken: token)
 }
 
+@Suite("N38 terminal metadata read presentation", .timeLimit(.minutes(1)))
+@MainActor
+struct N38MetadataFailureTests {
+    @Test("Failed HEAD ends loading with retry; successful retry replaces failure")
+    func failureThenRetry() async {
+        let state = DetailMetadataLoadState<String>()
+        #expect(state.phase == .idle)
+        await state.load { throw ResourceLoadError.failed("HEAD unavailable") }
+        #expect(state.isLoading == false)
+        #expect(state.error == "HEAD unavailable")
+        #expect(state.value == nil)
+        await state.load { "metadata" }
+        #expect(state.phase == .loaded)
+        #expect(state.error == nil)
+        #expect(state.value == "metadata")
+    }
+
+    @Test("Nil successful metadata is an explicit empty terminal state")
+    func emptyAndCancelled() async {
+        let state = DetailMetadataLoadState<String>()
+        await state.load { nil }
+        #expect(state.phase == .empty)
+        #expect(state.isLoading == false)
+        await state.load { throw CancellationError() }
+        #expect(state.phase == .idle)
+        #expect(state.isLoading == false)
+        #expect(state.error == nil)
+    }
+
+    @Test("Older failures cannot replace a newer successful HEAD or clear its request ownership")
+    func obsoleteFailure() async {
+        let state = DetailMetadataLoadState<String>(), gate = DetailTestGate<String>()
+        var started = gate.started.stream.makeAsyncIterator()
+        let old = Task { await state.load { try await gate.wait() } }
+        _ = await started.next()
+        #expect(state.isLoading)
+        await state.load { "new metadata" }
+        gate.fail(); await old.value
+        #expect(state.value == "new metadata")
+        #expect(state.phase == .loaded)
+        #expect(state.error == nil)
+    }
+}
+
 @Suite("F23 frame refresh owns rows and continuation", .timeLimit(.minutes(1)))
 @MainActor
 struct F23FramesRefreshTests {

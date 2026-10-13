@@ -1,23 +1,22 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.83 sec)
+Build complete! (0.21 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN28 started.
-􀟈  Test truncatedMissingOrRepeatedTokenFails() started.
-􀟈  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() started.
-􀟈  Test cancelledRequestCannotPublishConfiguration() started.
-􀟈  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() started.
-􀟈  Test duplicateConfigurationKeepsStableDisplayIdentity() started.
 􀟈  Test invalidConfigurationDoesNotMasqueradeAsUnconfigured() started.
 􀟈  Test laterPageFailureDoesNotReturnPartialAsComplete() started.
-􁁛  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() passed after 0.010 seconds.
-􁁛  Test duplicateConfigurationKeepsStableDisplayIdentity() passed after 0.010 seconds.
-􁁛  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() passed after 0.011 seconds.
-􁁛  Test invalidConfigurationDoesNotMasqueradeAsUnconfigured() passed after 0.011 seconds.
-􁁛  Test truncatedMissingOrRepeatedTokenFails() passed after 0.011 seconds.
-􁁛  Test laterPageFailureDoesNotReturnPartialAsComplete() passed after 0.011 seconds.
-􁁛  Test cancelledRequestCannotPublishConfiguration() passed after 0.012 seconds.
-􁁛  Suite AuditN28 passed after 0.012 seconds.
-􁁛  Test run with 7 tests in 1 suite passed after 0.012 seconds.
+􀟈  Test truncatedMissingOrRepeatedTokenFails() started.
+􀟈  Test duplicateConfigurationKeepsStableDisplayIdentity() started.
+􀟈  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() started.
+􀟈  Test cancelledRequestCannotPublishConfiguration() started.
+􀟈  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() started.
+􁁛  Test duplicateConfigurationKeepsStableDisplayIdentity() passed after 0.001 seconds.
+􁁛  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() passed after 0.001 seconds.
+􁁛  Test invalidConfigurationDoesNotMasqueradeAsUnconfigured() passed after 0.001 seconds.
+􁁛  Test laterPageFailureDoesNotReturnPartialAsComplete() passed after 0.001 seconds.
+􁁛  Test truncatedMissingOrRepeatedTokenFails() passed after 0.001 seconds.
+􁁛  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() passed after 0.001 seconds.
+􁁛  Test cancelledRequestCannotPublishConfiguration() passed after 0.001 seconds.
+􁁛  Suite AuditN28 passed after 0.001 seconds.
+􁁛  Test run with 7 tests in 1 suite passed after 0.001 seconds.

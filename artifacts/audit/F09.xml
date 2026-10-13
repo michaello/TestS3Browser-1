@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.008066541">
-    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="staleAccountResponse()" time="0.007793" />
-    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="atomicConfiguration()" time="0.007156791" />
-    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="idempotentConfiguration()" time="0.00083225" />
-    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="unicodeIdentity()" time="0.00718575" />
-    <testcase classname="AuditCoreTests.F09MetadataNamespaceTests" name="migrationIsolation()" time="0.007322375" />
-    <testcase classname="AuditCoreTests.F09MetadataNamespaceTests" name="previewOwnerIsolation()" time="0.007062958" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.022995625">
+    <testcase classname="AuditCoreTests.F09MetadataNamespaceTests" name="migrationIsolation()" time="0.021228417" />
+    <testcase classname="AuditCoreTests.F09MetadataNamespaceTests" name="previewOwnerIsolation()" time="0.021442875" />
+    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="idempotentConfiguration()" time="0.021437917" />
+    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="unicodeIdentity()" time="0.021472375" />
+    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="atomicConfiguration()" time="0.021469625" />
+    <testcase classname="AuditCoreTests.F09ServiceSessionTests" name="staleAccountResponse()" time="0.02268275" />
   </testsuite>
 </testsuites>

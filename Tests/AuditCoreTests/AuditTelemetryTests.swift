@@ -30,6 +30,7 @@ struct F36PerformanceTests {
         let telemetry = AuditTelemetry()
         #expect(telemetry.snapshot.peakResidentBytes == nil)
         #expect(telemetry.snapshot.cacheToFirstContentMilliseconds == nil)
+        #expect(telemetry.snapshot.maximumOwnedBodyTransfers == nil)
         telemetry.frameGap(seconds: 0.1)
         #expect(telemetry.snapshot.scrollingStalls == 0)
         telemetry.setScrolling(true)
@@ -38,6 +39,21 @@ struct F36PerformanceTests {
         telemetry.residentMemory(peakBytes: 100)
         telemetry.residentMemory(peakBytes: 90)
         #expect(telemetry.snapshot.peakResidentBytes == 100)
+    }
+
+    @Test func uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() throws {
+        let telemetry = AuditTelemetry()
+        let upload = telemetry.beginRequest(identity: Data("dummy-upload".utf8), body: true)
+        telemetry.recordOwnedBodyTransfers(current: 3, peak: 4)
+        telemetry.recordOwnedBodyTransfers(current: 1, peak: 2)
+        telemetry.finishRequest(upload, bytes: 0, succeeded: true, confirmedUploadBytes: 123)
+        telemetry.finishRequest(upload, bytes: 0, succeeded: true, confirmedUploadBytes: 123)
+        #expect(telemetry.snapshot.receivedBytes == 0)
+        #expect(telemetry.snapshot.confirmedUploadPayloadBytes == 123)
+        #expect(telemetry.snapshot.maximumOwnedBodyTransfers == 4)
+        #expect(telemetry.snapshot.unavailableMeasurements.contains("Native AVFoundation HTTP wire bytes and requests"))
+        let text = String(decoding: try telemetry.encodedSnapshot(), as: UTF8.self)
+        #expect(!text.contains("dummy-upload"))
     }
 
     @Test func fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() async throws {

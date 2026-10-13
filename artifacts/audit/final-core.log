@@ -1,0 +1,974 @@
+Building for debugging...
+Build complete! (0.21 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N38 terminal metadata read presentation" started.
+􀟈  Suite F09ServiceSessionTests started.
+􀟈  Suite F20ListingPaginationTests started.
+􀟈  Suite N44BatchExportCleanupTests started.
+􀟈  Suite AuditF29 started.
+􀟈  Suite AuditN27 started.
+􀟈  Suite "N40 explicit Apps manifest failure states" started.
+􀟈  Suite AuditN28 started.
+􀟈  Suite N06BoundedBatchExportTests started.
+􀟈  Suite AuditN12 started.
+􀟈  Suite N31EncryptionPolicyTests started.
+􀟈  Suite F21UniqueUploadKeyTests started.
+􀟈  Suite F31SharePipelineTests started.
+􀟈  Suite AuditN21 started.
+􀟈  Suite "N04 bucket-qualified Shortcuts identities" started.
+􀟈  Suite N35ShareOutcomeTests started.
+􀟈  Suite AuditN29 started.
+􀟈  Suite "F19 bounded hashed local paths" started.
+􀟈  Suite N32MultipartCopyTests started.
+􀟈  Suite AuditN26 started.
+􀟈  Suite N34ConfiguredPrefixTests started.
+􀟈  Suite F22FileImportTests started.
+􀟈  Suite "F15 file-backed original reuse and lease-safe disk budget" started.
+􀟈  Suite F08ConcurrencyBoundaryTests started.
+􀟈  Suite "N13 restore refresh and visible terminal failures" started.
+􀟈  Suite F04SharedCatalogQueryTests started.
+􀟈  Suite "F16 requested detail scheduling and shared freshness" started.
+􀟈  Suite F36PerformanceTests started.
+􀟈  Suite N30CopySourceEncodingTests started.
+􀟈  Suite F17UploadProgressTests started.
+􀟈  Suite F32BucketCountCacheTests started.
+􀟈  Suite "N03 fresh Delete shortcut transport lifecycle" started.
+􀟈  Suite F03TabRetentionTests started.
+􀟈  Suite N10MultiDropTests started.
+􀟈  Suite AuditN22 started.
+􀟈  Suite N16PartialFolderSortTests started.
+􀟈  Suite N31CopyPropertyTests started.
+􀟈  Suite N46ACLAccessSummaryTests started.
+􀟈  Suite N11InvalidImageUploadTests started.
+􀟈  Suite "N08 semantic card text and accessible list layout" started.
+􀟈  Suite "F11 original single-flight and transfer policy" started.
+􀟈  Suite AuditN19 started.
+􀟈  Suite F33FullCatalogSearchTests started.
+􀟈  Suite "F12 exact media identities and invalidation" started.
+􀟈  Suite AuditF26 started.
+􀟈  Suite "F10 bounded decoded preview production paths" started.
+􀟈  Suite "F18 original export hashes and truthful Data URL formats" started.
+􀟈  Suite AuditN23 started.
+􀟈  Suite AuditN07 started.
+􀟈  Suite F09MetadataNamespaceTests started.
+􀟈  Suite "F12 acknowledged copy and delete invalidate exact media" started.
+􀟈  Suite F07ResourceOwnershipTests started.
+􀟈  Suite AuditN02 started.
+􀟈  Suite "N15 Shortcuts count validation before scanning" started.
+􀟈  Suite N39DestinationListingTests started.
+􀟈  Suite N48FolderValidationTests started.
+􀟈  Suite "N47 numbered text retains original lines" started.
+􀟈  Suite N36PartialBatchExportTests started.
+􀟈  Suite N01UploadPreparationTests started.
+􀟈  Suite "F36 actual consumed SDK body telemetry" started.
+􀟈  Suite N18TransferDismissalTests started.
+􀟈  Suite "N09 actual custom tab selection semantics" started.
+􀟈  Suite N37DumpDeleteFeedbackTests started.
+􀟈  Suite "N25 cache reset rejects suspended thumbnails" started.
+􀟈  Suite F24ObjectAddressTests started.
+􀟈  Suite "N44 export staging lifetime" started.
+􀟈  Suite F02BrowseStartupTests started.
+􀟈  Suite F25SameObjectTransferTests started.
+􀟈  Suite F01CachedRecentTests started.
+􀟈  Suite "N14 accumulated zoom and bounded image pan" started.
+􀟈  Suite F35FileUploadQueueTests started.
+􀟈  Suite AuditN20 started.
+􀟈  Suite F27ConfirmedNavigationTests started.
+􀟈  Suite AuditN24 started.
+􀟈  Suite AuditN42 started.
+􀟈  Suite F34DerivedRowsCacheTests started.
+􀟈  Suite N17PartialFolderSearchTests started.
+􀟈  Suite N33ObjectVersionHistoryTests started.
+􀟈  Suite AuditN41 started.
+􀟈  Suite F30ListPresentationTests started.
+􀟈  Test "Failed HEAD ends loading with retry; successful retry replaces failure" started.
+􀟈  Test "Older failures cannot replace a newer successful HEAD or clear its request ownership" started.
+􀟈  Suite F06CanonicalCatalogTests started.
+􀟈  Test "Browse publishes the first thousand rows before explicitly loading the next page" started.
+􀟈  Suite F07PagedListingTests started.
+􀟈  Test "Stash sorts only after scanning every report page, including the newest report" started.
+􀟈  Test "A folder picker exposes destinations after the first thousand prefixes" started.
+􀟈  Test "Exact Unicode queries and configuration routes retain byte identity" started.
+􀟈  Test failedStagingReleasesOriginalAndLeavesNoExportLease() started.
+􀟈  Test activityCompletionAndCancelledShareBothReleaseAllFiles() started.
+􀟈  Suite "F28 cached bounded progressive Apps index" started.
+􀟈  Test "Applying configuration changes namespace, route and request ownership together" started.
+􀟈  Suite F31FilePromiseTests started.
+􀟈  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() started.
+􀟈  Suite "F13 cost-aware decoded eviction" started.
+􀟈  Test failedForcedRefreshRetainsGoodAdministrationData() started.
+􀟈  Suite "F14 gallery working window and request lifetime" started.
+􀟈  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() started.
+􀟈  Test typingDraftDoesNotPublishOrPersistUntilApply() started.
+􀟈  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() started.
+􀟈  Test dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Suite "N45 HTML updates preserve document render state" started.
+􀟈  Suite N05ObjectTransferTests started.
+􀟈  Test "A genuinely empty listing is complete, while all-failure refresh keeps saved entries" started.
+􀟈  Test "A failed manifest retains its known cached entry and marks the mixed index incomplete" started.
+􀟈  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() started.
+􀟈  Test "All GET/decode failures are unavailable with retry, never a successful empty Apps index" started.
+􀟈  Test invalidAndConflictingSchedulesAreUnknown() started.
+􀟈  Suite "F23 frame refresh owns rows and continuation" started.
+􀟈  Test duplicateConfigurationKeepsStableDisplayIdentity() started.
+􀟈  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() started.
+􀟈  Test truncatedMissingOrRepeatedTokenFails() started.
+􀟈  Test loaderReceivesCapturedAccountBucketKeyAndRevision() started.
+􀟈  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test laterPageFailureDoesNotReturnPartialAsComplete() started.
+􀟈  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() started.
+􀟈  Test cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles() started.
+􀟈  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() started.
+􀟈  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() started.
+􀟈  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() started.
+􀟈  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() started.
+􀟈  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() started.
+􀟈  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() started.
+􀟈  Test emptyOrMissingCopyAcknowledgementRetainsSource() started.
+􀟈  Test "An identical config is idempotent and preserves generation and cached choices" started.
+􀟈  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() started.
+􀟈  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() started.
+􀟈  Test sameSecondUploadsPreserveBothObjects() started.
+􀟈  Test "A cancelled account response cannot publish even if transport ignores cancellation" started.
+􀟈  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() started.
+􀟈  Test attachmentsAreLoadedSentAndCleanedOneAtATime() started.
+􀟈  Test invalidJSONOrBase64CannotConstructAnApprovedContext() started.
+􀟈  Test selectionCannotMutateAnAlreadyPresentedConfirmation() started.
+􀟈  Test exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot() started.
+􀟈  Test confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges() started.
+􀟈  Test daysAndDatesCoexistAcrossRulesAndExpireFirstWins() started.
+􀟈  Test invalidConfigurationDoesNotMasqueradeAsUnconfigured() started.
+􀟈  Test dateOnlySchedulesRemainVisibleAndCalculable() started.
+􀟈  Test totalProviderFailureCannotReportSuccessfulSmallerBatch() started.
+􀟈  Test "List/search identities round-trip into download/delete in the object's bucket" started.
+􀟈  Test encryptionConsentNeverAuthorizesDestinationReplacement() started.
+􀟈  Test "Legacy keys use their explicit bucket or the configured default" started.
+􀟈  Test "An old-account entity and conflicting explicit overrides fail before transport" started.
+􀟈  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() started.
+􀟈  Test "Canonically equivalent Unicode and delimiter-like fields remain distinct exact S3 identities" started.
+􀟈  Test "Missing bucket/key and malformed persisted references are rejected" started.
+􀟈  Test middleUploadFailureDoesNotDropOtherAttachmentOutcomes() started.
+􀟈  Test pastDateRulesContinueApplyingToNewMatchingObjects() started.
+􀟈  Test "Nil successful metadata is an explicit empty terminal state" started.
+􀟈  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() started.
+􀟈  Test cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation() started.
+􀟈  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() started.
+􀟈  Test cleanupFailureIncludesUploadIDAndOriginalFailure() started.
+􀟈  Test missingDestinationETagFailsBeforeCreatingMultipartUpload() started.
+􀟈  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() started.
+􀟈  Test failedPartOrCompletionAbortsAndRetainsMoveSource() started.
+􀟈  Test defaultMinimumAndCurrentStorageClassAffectTransitions() started.
+􀟈  Test andFiltersRequireExactTagsAndStrictSizeBounds() started.
+􀟈  Suite F05MetadataCatalogTests started.
+􀟈  Test cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments() started.
+􀟈  Test invalidSizeBoundsAndByteDistinctTagsRemainSafe() started.
+􀟈  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" started.
+􀟈  Test missingTagsDoNotHideKnownPrefixMismatch() started.
+􀟈  Test "Applying configured bucket or prefix changes overrides an old saved route" started.
+􀟈  Test replicationAndMinimumAgePreventPrematurePrediction() started.
+􀟈  Test moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test prefixAndStatusExcludeUnrelatedObjects() started.
+􀟈  Test fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked() started.
+􀟈  Test cancelledRequestCannotPublishConfiguration() started.
+􀟈  Test actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision() started.
+􀟈  Test genericFileNameIsPreservedAndLocalNameIsBounded() started.
+􀟈  Test plansCoverEveryByteWithoutExceedingPartLimits() started.
+􀟈  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" started.
+􀟈  Test "An old account completion cannot publish into newly isolated observed state" started.
+􀟈  Test unknownEarlierRuleCannotCertifyAnotherAsNext() started.
+􀟈  Test invalidMediaIsRejectedWithoutOwnedFiles() started.
+􀟈  Test "Cancellation following successful remote write still invalidates but publishes no success" started.
+􀟈  Test "Write failure produces a visible error without stale success and remains retryable" started.
+􀟈  Test "Simultaneous consumers join one catalog refresh" started.
+􀟈  Test "Old presentation cleanup cannot release a newer stream and deinit releases final permit" started.
+􀟈  Test "Truncated streams fail and remove their partial files" started.
+􀟈  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" started.
+􀟈  Test "Hidden sections do no I/O; requested object and bucket sections reuse fresh exact identities" started.
+􀟈  Test literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects() started.
+􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test keyAndVersionAreEncodedExactlyOnce() started.
+􀟈  Test cancellationStopsOwnedTimer() started.
+􀟈  Test "Concurrent demand coalesces; eviction and mutation reject obsolete secondary responses" started.
+􀟈  Test "Initial HTML schedules content only; standard metadata follows visible content" started.
+􀟈  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" started.
+􀟈  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" started.
+􀟈  Test "Initialization failure propagates and never deletes" started.
+􀟈  Test unicodeNormalizationDoesNotChangeCopyHeader() started.
+􀟈  Test "Player resource owner retains an evicted file through presentation changes" started.
+􀟈  Test "Stale count scans run at most three at a time and a denial remains unavailable" started.
+􀟈  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() started.
+􀟈  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" started.
+􀟈  Test cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending() started.
+􀟈  Test "Fresh transport initializes exactly once and deletes the requested fixture object" started.
+􀟈  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" started.
+􀟈  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" started.
+􀟈  Test oneUploadFailureDoesNotDiscardOtherPayloads() started.
+􀟈  Test existingFiltersRemainUntilExplicitlyCleared() started.
+􀟈  Test "Failure keeps successful metadata; explicit retry bypasses automatic failure throttle" started.
+􀟈  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" started.
+􀟈  Test removingLastStarResetsStarFilter() started.
+􀟈  Test everySupportedPayloadIsUploadedAndRejectedItemsAreReported() started.
+􀟈  Test removingLastSelectedTagResetsTagFilter() started.
+􀟈  Test customAndPublicGrantsRemainExplicitForBothCopyModes() started.
+􀟈  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() started.
+􀟈  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() started.
+􀟈  Test "An account configuration reset releases hidden account-specific screen state" started.
+􀟈  Test absentCallbackStartsNoTimer() started.
+􀟈  Test unknownOrEmptyACLRemainsUnknown() started.
+􀟈  Test "Deletion failure propagates without a false success" started.
+􀟈  Test ownerOnlyACLDoesNotClaimBucketPolicyPrivacy() started.
+􀟈  Test "Cancellation after initialization prevents the remote deletion" started.
+􀟈  Test anotherCanonicalAccountCannotBeLabeledPrivate() started.
+􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
+􀟈  Test publicReadAndPublicAdministrativeGrantHaveDifferentSummaries() started.
+􀟈  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" started.
+􀟈  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" started.
+􀟈  Test imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test failureStopsTimerWithoutSuccessOrLateCallbacks() started.
+􀟈  Test "Identical video poster consumers share rendering and individual cancellation keeps other consumers" started.
+􀟈  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" started.
+􀟈  Test partialFailureRetainsOnlyTheFailedIdentitiesForRetry() started.
+􀟈  Test "Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement" started.
+􀟈  Test cancelledOldAccountCannotChangeTheReplacementSelection() started.
+􀟈  Test "Card filename, metadata and chip styles are actual SwiftUI semantic fonts" started.
+􀟈  Test "An incomplete first-page sort explicitly reports its scope until the newest later row loads" started.
+􀟈  Test "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection() started.
+􀟈  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() started.
+􀟈  Test multipartTagValuesAreEncodedWithoutChangingBytes() started.
+􀟈  Test "Account reset cancels late transfers instead of publishing their files" started.
+􀟈  Test "AVFoundation poster renderer extracts bounded frame from asset URL without original loader" started.
+􀟈  Test "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test unavailableTagDoesNotClearAnAvailableStarFilter() started.
+􀟈  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() started.
+􀟈  Test "Animated GIF export preserves all bytes/frames and Data URL declares original signature" started.
+􀟈  Test "Search includes an older match beyond the newest fifty and returns its bucket" started.
+􀟈  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test "Actual shared label view grows vertically for long names at accessibility sizes" started.
+􀟈  Test "Fresh first-page counts retain their truncation indication without a new request" started.
+􀟈  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() started.
+􀟈  Test explicitPruningClearsOnlyTheRequestedScope() started.
+􀟈  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test extensionAndIntentsReadOnlyCompletedSharedReferences() started.
+􀟈  Test historyRoundTripPreservesExactBytesAndAdditivePages() started.
+􀟈  Test emptyStoresLoadAsUnconfiguredWithoutWriting() started.
+􀟈  Test newPreferencesContainOnlySettingsAndOpaqueReference() started.
+􀟈  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() started.
+􀟈  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() started.
+􀟈  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() started.
+􀟈  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() started.
+􀟈  Test namespacesAndAccountsHaveIndependentSeenHistory() started.
+􀟈  Test "ImageIO thumbnails do not decode or return original dimensions and respect single-image bytes" started.
+􀟈  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() started.
+􀟈  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() started.
+􀟈  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() started.
+􀟈  Test "Legacy migration is claimed once and each account restores only its envelope" started.
+􀟈  Test renameAndMoveCarryAnnotationsToTheExactDestination() started.
+􀟈  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() started.
+􀟈  Test "A known active-account preview cannot be migrated into another account" started.
+􀟈  Test "Confirmed deletion invalidates captured account only even after active account changes" started.
+􀟈  Test "Source-delete failure still publishes completed destination and invalidates overwritten media" started.
+􀟈  Test "Limits apply after matching and negative limits fail" started.
+􀟈  Test "Unconfirmed copy ETag cannot acknowledge success or authorize source deletion" started.
+􀟈  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" started.
+􀟈  Test settingsOnlySaveVerifiesAndReusesCredentialReference() started.
+􀟈  Test "Automatic refresh obeys 60 seconds and explicit refresh bypasses freshness" started.
+􀟈  Test appGroupLegacyMigratesWhenStandardHasNoRecord() started.
+􀟈  Test successEndsTimerBeforeTerminalCallback() started.
+􀟈  Test cancelledReadDoesNotBecomeEmptySuccess() started.
+􀟈  Test "190-byte,308-byte,UUID-plus-long basename and Unicode keys write and persist safely" started.
+􀟈  Test "Cancellation after confirmed copy still acknowledges destination before retaining the source" started.
+􀟈  Test oldReadCannotAuthorizeEditingAfterNewFailure() started.
+􀟈  Test "An old account error cannot clear newer work or publish its message" started.
+􀟈  Test nonImagesAreRejectedBeforeUpload() started.
+􀟈  Test unknownAndFailedReadsCannotReplaceTags() started.
+􀟈  Test "A response for an old destination cannot replace a newer validated destination" started.
+􀟈  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" started.
+􀟈  Test "Refresh failure cannot report restore flow complete" started.
+􀟈  Test correctedNameCanBeSubmittedWithExactSpecialBytes() started.
+􀟈  Test "Preview derivation preserves exact Unicode source bytes" started.
+􀟈  Test writeFailureRetainsDraftAndRemoteSnapshot() started.
+􀟈  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test crossOwnerCopyRetainsSourceOwnersGrant() started.
+􀟈  Test byteDistinctPrincipalIsNeverMergedWithOwner() started.
+􀟈  Test "Copy returns the destination's confirmed ETag/version and builds its actual metadata" started.
+􀟈  Test "Out-of-order folders and their loading flags remain request-owned" started.
+􀟈  Test missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses() started.
+􀟈  Test "Truncated body records consumed partial bytes and a failed request exactly once" started.
+􀟈  Test retryPreservesUneditedRemoteTags() started.
+􀟈  Test "An explicit refresh during work schedules a replacement and both waiters receive it" started.
+􀟈  Test "Successful streamed body records real consumed bytes and owned permit peak" started.
+􀟈  Test "Identical requests join without taking another resource's loading flag" started.
+􀟈  Test cancelledInputCannotStartUpload() started.
+􀟈  Test providerFailureAndMissingRepresentationDoNotMutate() started.
+􀟈  Test "Destination creation failure finishes telemetry and closes unread SDK body" started.
+􀟈  Test cancelledRemoteTaskCannotBeginCopyOrDelete() started.
+􀟈  Test invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
+􀟈  Test changedAccountCancelsBeforeMutation() started.
+􀟈  Test confirmationHandsOffExactDestinationOnlyOnceAndDismissalDoesNotClaimRollback() started.
+􀟈  Test "A short valid result and transport failure retain their meaning" started.
+􀟈  Test "Changed source updates rows while unchanged progress-style updates reuse derivation" started.
+􀟈  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct() started.
+􀟈  Test "Cancellation after fetching prevents a successful stale result" started.
+􀟈  Test fullPrefixByteLimitAndRemoteFailureAreActionable() started.
+􀟈  Test publishedAWSSigV4ExampleMatches() started.
+􀟈  Test accountScopeHasUnambiguousFieldsAndNoCredentialText() started.
+􀟈  Test failedDeleteRetainsRowAndRetryPublishesSuccess() started.
+􀟈  Test reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs() started.
+􀟈  Test "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" started.
+􀟈  Test duplicateMutationCannotStartDuringActiveRequest() started.
+􀟈  Test "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test "Old decoded publication is rejected after reset while new generation can populate" started.
+􀟈  Test "Generic same-object operations fail before any transport call" started.
+􀟈  Test "Picker identifies root, nested and repeated-slash same destinations" started.
+􀟈  Test "Canonically equivalent Unicode keys remain different S3 objects" started.
+􀟈  Test "Saved folder lists once while bucket discovery remains suspended" started.
+􀟈  Test "Restoring root does not perform an intermediate root request" started.
+􀟈  Test "Double tap, reset and invalid dimensions keep finite bounded interaction state" started.
+􀟈  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" started.
+􀟈  Test "An empty cold cache retains an explicit initial loading state" started.
+􀟈  Test "Cached rows render before delayed transport and remain visible after failure" started.
+􀟈  Test "Magnification accumulates between gestures and panned image returning to 1x recenters" started.
+􀟈  Test cancelledBeforeStartCannotDeleteOrPublishFailure() started.
+􀟈  Test cancellationOfActiveUploadCleansOwnedFile() started.
+􀟈  Test fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue() started.
+􀟈  Test priorInFlightRequestCannotUndoTheRebuild() started.
+􀟈  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() started.
+􀟈  Test invalidExpirationCannotProduceSignedURL() started.
+􀟈  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() started.
+􀟈  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" started.
+􀟈  Test successfulRebuildPublishesOneReplacement() started.
+􀟈  Test fileNamesAndNavigationNeverInterpretURLSyntax() started.
+􀟈  Test "Negative counts fail before service or collection work" started.
+􀟈  Test delayedListingCannotRestoreASuccessfullyDeletedObject() started.
+􀟈  Test "Legacy route migration and saved navigation cannot cross accounts" started.
+􀟈  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() started.
+􀟈  Test obsoleteAccountDeleteCannotChangeCurrentCaches() started.
+􀟈  Test "A failed new folder cannot commit another route's cached rows" started.
+􀟈  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" started.
+􀟈  Test "Construction metrics use bounded surface names and measure only the builder" started.
+􀟈  Test "Zero produces an empty result without constructing or scanning a service" started.
+􀟈  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() started.
+􀟈  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() started.
+􀟈  Test successfulUploadReadsOwnedFileAndCleansPayload() started.
+􀟈  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() started.
+􀟈  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() started.
+􀟈  Test "A no-match first page keeps later search work available and finds a later matching file" started.
+􀟈  Test successfulEmptyReadAllowsFirstTag() started.
+􀟈  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() started.
+􀟈  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" started.
+􀟈  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() started.
+􀟈  Test failedUploadRetainsFileAndRetryUsesSameDestination() started.
+􀟈  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() started.
+􀟈  Test cachedAppPublicationCannotEraseANewerShareUpload() started.
+􀟈  Test cancellingPickerCannotHandOffQueuedWork() started.
+􀟈  Test cancellationCannotPublishAnAbsentConfiguration() started.
+􀟈  Test "Gallery projections are reused for index changes and rebuild only for source changes" started.
+􀟈  Test "Initial selection creates only its own screen, including a restored non-Browse tab" started.
+􀟈  Test cancellationStopsBeforeFetchingAnotherPage() started.
+􀟈  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() started.
+􀟈  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() started.
+􀟈  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() started.
+􀟈  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() started.
+􀟈  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() started.
+􀟈  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() started.
+􀟈  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() started.
+􀟈  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() started.
+􀟈  Test "A suspended thumbnail original cannot repopulate disk after clear; fresh request succeeds" started.
+􀟈  Test failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure() started.
+􀟈  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() started.
+􀟈  Test "Native tab action and context selection retain their production state transitions" started.
+􀟈  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 1 argument fixture → ("2014-01-15T10:30:00Z", 3, "2014-01-19T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument fixture → ("2026-03-08T09:30:00Z", 1, "2026-03-10T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument origin → "root" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "sheet-after-dismissal" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "queued" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() started.
+􀟈  Test "Type selections and Stats reuse one fully paginated account scan" started.
+􀟈  Test case passing 1 argument fixture → ("2026-10-01T23:59:59Z", 0, "2026-10-02T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test delayedRepresentationRetainsOriginalBucketAndPrefix() started.
+􀟈  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() started.
+􀟈  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() started.
+􀟈  Test case passing 1 argument fixture → ("2026-10-01T00:00:00Z", 0, "2026-10-02T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() started.
+􀟈  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() started.
+􀟈  Test case passing 1 argument mp4 → false to moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test case passing 1 argument mp4 → true to moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test case passing 1 argument type → public.png to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test case passing 1 argument type → public.jpeg to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test case passing 1 argument type → public.heic to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" started.
+􀟈  Test "Initial failure and a successful empty snapshot remain distinct from loading" started.
+􀟈  Test case passing 1 argument type → public.png to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → public.jpeg to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → com.compuserve.gif to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → public.heic to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument category → .xSmall to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .small to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .medium to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .large to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .xLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .xxLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .xxxLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility1 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility2 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility3 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility4 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility5 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument fixture → ("image/png", 10 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test case passing 1 argument fixture → ("image/jpeg", 6 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test case passing 1 argument fixture → ("image/gif", 14 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test case passing 1 argument fixture → ("image/webp", 20 bytes) to "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" started.
+􀟈  Test case passing 1 argument fault → .reject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .writeThenReject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument failStandard → false to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test case passing 1 argument failStandard → true to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test case passing 1 argument futureSchema → false to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test case passing 1 argument futureSchema → true to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test case passing 1 argument fault → .reject to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .readback to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument input → "" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
+􀟈  Test case passing 1 argument input → "   
+" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
+􀟈  Test case passing 1 argument input → "a/b" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
+􀟈  Test case passing 1 argument input → "null􀟈  Test case passing 1 argument input → "路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径路径" to invalidNamesKeepInputAndShowErrorWithoutSending(_:) started.
+􀟈  Test case passing 1 argument fixture → ("", [""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument fixture → ("one", ["one"]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument fixture → ("one\n\nthree\n", ["one", "", "three", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument fixture → ("one\r\n\r\nthree\r\n", ["one", "", "three", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument value → 1 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument fixture → ("one\r\n\ntwo\n\r\n", ["one", "", "two", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument kind → .copy to "Generic same-object operations fail before any transport call" started.
+􀟈  Test case passing 1 argument value → 10 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument kind → .move to "Generic same-object operations fail before any transport call" started.
+􀟈  Test case passing 1 argument selected → .browse to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument kind → .rename to "Generic same-object operations fail before any transport call" started.
+􀟈  Test case passing 1 argument value → 1000 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument fixture → ("\n\n", ["", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument selected → .apps to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument value → 9223372036854775807 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument selected → .recent to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .stash to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .stats to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument fixture → ("\r\n\r\n", ["", "", ""]) to "LF, CRLF, mixed, blank and trailing lines preserve numbering" started.
+􀟈  Test case passing 1 argument selected → .upload to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument selected → .settings to "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" started.
+􀟈  Test case passing 1 argument value → -9223372036854775808 to "Negative counts fail before service or collection work" started.
+􀟈  Test case passing 1 argument value → -1 to "Negative counts fail before service or collection work" started.
+􀟈  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" started.
+􀟈  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" started.
+􀟈  Test "Stale page errors cannot overwrite a refreshed resource's error state" started.
+􀟈  Test "Stale pagination cannot append into refreshed rows or discard the new token" started.
+􀟈  Test "Request completion cannot clear a newer view request's loading flag" started.
+􀟈  Test case passing 1 argument resource → .policy to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test case passing 1 argument resource → .replication to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" started.
+􀟈  Test "Launch reads scoped saved index before network and fresh revisits make no requests" started.
+􀟈  Test "Four manifest workers publish usable apps before delayed remaining manifests complete" started.
+􀟈  Test case passing 1 argument resource → .cors to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" started.
+􀟈  Test duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile() started.
+􀟈  Test case passing 1 argument resource → .lifecycle to onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) started.
+􀟈  Test differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile() started.
+􀟈  Test "Unchanged ETags reuse decoded manifests and cover metadata; only changed manifest downloads" started.
+􀟈  Test cancelledBeforeStartNeverRequestsRepresentation() started.
+􀟈  Test "Thumbnail churn cannot orphan bookkeeping or immediately evict newest full entry" started.
+􀟈  Test cancelledProviderProgressResolvesAndLateFileIsDisposed() started.
+􀟈  Test "Obsolete preload and decode failure always clear loading and cannot publish stale images" started.
+􀟈  Test "Long swipe sessions retain only current and at most two adjacent images within bytes" started.
+􀟈  Test "Byte-distinct Unicode identity and HTML content changes are not dropped" started.
+􀟈  Test "New identity or content loads exactly once and leaves other state untouched" started.
+􀟈  Test "Changed account or source after copy retains source" started.
+􀟈  Test "Missing source ETag never authorizes an unconditional delete" started.
+􀟈  Test "Unknown HEAD errors never authorize writes" started.
+􀟈  Test "Approval authorizes only the observed account, operation and destination revision" started.
+􀟈  Test "Failed copy never removes source" started.
+􀟈  Test "Cancellation after completed copy retains source and reports partial completion" started.
+􀟈  Test "Initial make and repeated identical updates load once and retain unrelated state" started.
+􀟈  Test "Keep both preserves exact prefix and rechecks new destination" started.
+􀟈  Test "Existing destination needs approval and declining performs no copy or delete" started.
+􀟈  Test "Absent destination succeeds and copy preserves the source" started.
+􀟈  Test "Unicode normalization never shares replacement approval or revision identity" started.
+􀟈  Test "Failed delete reports completed destination and retained source" started.
+􀟈  Test "App operations cannot both claim the same absent destination" started.
+􀟈  Test "Copy source preserves reserved bytes, repeated slashes and version query" started.
+􀟈  Test case passing 2 arguments resource → .policy, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .policy, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .policy, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .policy, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test "Failed replacement preserves frames and an explicit refresh can retry immediately" started.
+􀟈  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test "Changing frame account or prefix rejects a non-cooperative old page" started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .cors, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .cors, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .policy, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .cors, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .replication, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .cors, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .cors, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "AccessDenied" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "PermanentRedirect" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "NoSuchBucket" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􁁛  Test invalidAndConflictingSchedulesAreUnknown() passed after 0.014 seconds.
+􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "UnknownFailure" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􀟈  Test case passing 2 arguments resource → .lifecycle, failure → "NotFound" to deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) started.
+􁁛  Test "Canonically equivalent Unicode and delimiter-like fields remain distinct exact S3 identities" passed after 0.014 seconds.
+􁁛  Test "Missing bucket/key and malformed persisted references are rejected" passed after 0.014 seconds.
+􁁛  Test "An old-account entity and conflicting explicit overrides fail before transport" passed after 0.014 seconds.
+􀟈  Test "Zero successful buckets cannot replace or persist an empty snapshot" started.
+􀟈  Test "All pages contribute to newest results and empty buckets remain in stats" started.
+􀟈  Test "Bucket scan concurrency stays at the declared limit of three" started.
+􀟈  Test "A failed bucket retains its previous complete rows and totals are incomplete" started.
+􀟈  Test "A disappearing bucket list does not erase last-good metadata" started.
+􁁛  Test "Legacy keys use their explicit bucket or the configured default" passed after 0.014 seconds.
+􀟈  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" started.
+􁁛  Test literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects() passed after 0.014 seconds.
+􁁛  Test keyAndVersionAreEncodedExactlyOnce() passed after 0.014 seconds.
+􁁛  Test unicodeNormalizationDoesNotChangeCopyHeader() passed after 0.014 seconds.
+􁁛  Test customAndPublicGrantsRemainExplicitForBothCopyModes() passed after 0.014 seconds.
+􁁛  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() passed after 0.014 seconds.
+􁁛  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() passed after 0.014 seconds.
+􁁛  Test unknownOrEmptyACLRemainsUnknown() passed after 0.014 seconds.
+􁁛  Test ownerOnlyACLDoesNotClaimBucketPolicyPrivacy() passed after 0.014 seconds.
+􁁛  Test anotherCanonicalAccountCannotBeLabeledPrivate() passed after 0.014 seconds.
+􁁛  Test publicReadAndPublicAdministrativeGrantHaveDifferentSummaries() passed after 0.014 seconds.
+􁁛  Test dayEligibilityUsesNextUTCMidnight(fixture:) with 4 test cases passed after 0.015 seconds.
+􁁛  Test missingTagsDoNotHideKnownPrefixMismatch() passed after 0.015 seconds.
+􁁛  Test unknownEarlierRuleCannotCertifyAnotherAsNext() passed after 0.015 seconds.
+􁁛  Test multipartTagValuesAreEncodedWithoutChangingBytes() passed after 0.014 seconds.
+􁁛  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() passed after 0.014 seconds.
+􁁛  Test "Search includes an older match beyond the newest fifty and returns its bucket" passed after 0.016 seconds.
+􁁛  Test explicitPruningClearsOnlyTheRequestedScope() passed after 0.016 seconds.
+􁁛  Test namespacesAndAccountsHaveIndependentSeenHistory() passed after 0.016 seconds.
+􁁛  Test historyRoundTripPreservesExactBytesAndAdditivePages() passed after 0.016 seconds.
+􁁛  Test "Limits apply after matching and negative limits fail" passed after 0.016 seconds.
+􁁛  Test byteDistinctPrincipalIsNeverMergedWithOwner() passed after 0.015 seconds.
+􁁛  Test crossOwnerCopyRetainsSourceOwnersGrant() passed after 0.016 seconds.
+􁁛  Test unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct() passed after 0.015 seconds.
+􁁛  Test pastDateRulesContinueApplyingToNewMatchingObjects() passed after 0.017 seconds.
+􁁛  Test "Double tap, reset and invalid dimensions keep finite bounded interaction state" passed after 0.016 seconds.
+􁁛  Test "Pan clamps to aspect-fitted scaled image bounds and recomputes on viewport resize" passed after 0.016 seconds.
+􁁛  Test "Magnification accumulates between gestures and panned image returning to 1x recenters" passed after 0.016 seconds.
+􁁛  Test invalidExpirationCannotProduceSignedURL() passed after 0.016 seconds.
+􁁛  Test nonImagesAreRejectedBeforeUpload() passed after 0.016 seconds.
+􁁛  Test fileNamesAndNavigationNeverInterpretURLSyntax() passed after 0.016 seconds.
+􁁛  Test reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs() passed after 0.016 seconds.
+􁁛  Test publishedAWSSigV4ExampleMatches() passed after 0.016 seconds.
+􀟈  Test case passing 1 argument accountChanged → false to "Changed account or source after copy retains source" started.
+􀟈  Test case passing 1 argument failure → .denied to "Unknown HEAD errors never authorize writes" started.
+􀟈  Test case passing 1 argument accountChanged → true to "Changed account or source after copy retains source" started.
+􀟈  Test case passing 1 argument failure → .offline to "Unknown HEAD errors never authorize writes" started.
+􁁛  Test "Stash sorts only after scanning every report page, including the newest report" passed after 0.019 seconds.
+􁁛  Test configuredPagesProduceEntriesAndOpaqueTokensAdvance() passed after 0.019 seconds.
+􁁛  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() passed after 0.019 seconds.
+􁁛  Test duplicateConfigurationKeepsStableDisplayIdentity() passed after 0.019 seconds.
+􁁛  Test dateOnlySchedulesRemainVisibleAndCalculable() passed after 0.019 seconds.
+􁁛  Test invalidSizeBoundsAndByteDistinctTagsRemainSafe() passed after 0.019 seconds.
+􁁛  Test "Byte-distinct Unicode identity and HTML content changes are not dropped" passed after 0.006 seconds.
+􁁛  Test "New identity or content loads exactly once and leaves other state untouched" passed after 0.006 seconds.
+􁁛  Test "Initial make and repeated identical updates load once and retain unrelated state" passed after 0.006 seconds.
+􁁛  Test totalProviderFailureCannotReportSuccessfulSmallerBatch() passed after 0.020 seconds.
+􁁛  Test "List/search identities round-trip into download/delete in the object's bucket" passed after 0.020 seconds.
+􁁛  Suite AuditN27 passed after 0.022 seconds.
+􁁛  Suite N30CopySourceEncodingTests passed after 0.022 seconds.
+􁁛  Suite N31CopyPropertyTests passed after 0.022 seconds.
+􁁛  Suite N46ACLAccessSummaryTests passed after 0.022 seconds.
+􁁛  Suite AuditN23 passed after 0.022 seconds.
+􁁛  Suite F33FullCatalogSearchTests passed after 0.022 seconds.
+􁁛  Suite F24ObjectAddressTests passed after 0.022 seconds.
+􁁛  Suite "N14 accumulated zoom and bounded image pan" passed after 0.022 seconds.
+􁁛  Test replicationAndMinimumAgePreventPrematurePrediction() passed after 0.020 seconds.
+􁁛  Test "Thumbnail churn cannot orphan bookkeeping or immediately evict newest full entry" passed after 0.007 seconds.
+􁁛  Suite "N45 HTML updates preserve document render state" passed after 0.021 seconds.
+􁁛  Suite "N04 bucket-qualified Shortcuts identities" passed after 0.022 seconds.
+􁁛  Test "Old decoded publication is rejected after reset while new generation can populate" passed after 0.018 seconds.
+􁁛  Suite "F13 cost-aware decoded eviction" passed after 0.022 seconds.
+􁁛  Test "Old presentation cleanup cannot release a newer stream and deinit releases final permit" passed after 0.021 seconds.
+􁁛  Test prefixAndStatusExcludeUnrelatedObjects() passed after 0.022 seconds.
+􁁛  Test "Identical video poster consumers share rendering and individual cancellation keeps other consumers" passed after 0.021 seconds.
+􁁛  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" passed after 0.021 seconds.
+􁁛  Test "Invalidation cancels obsolete poster consumers and late callback cannot satisfy replacement" passed after 0.021 seconds.
+􁁛  Test daysAndDatesCoexistAcrossRulesAndExpireFirstWins() passed after 0.023 seconds.
+􁁛  Suite AuditN29 passed after 0.024 seconds.
+􁁛  Test "PNG/JPEG/GIF/WebP Data URLs follow actual original signature and round-trip bytes" with 4 test cases passed after 0.024 seconds.
+􁁛  Test andFiltersRequireExactTagsAndStrictSizeBounds() passed after 0.026 seconds.
+􁁛  Test middleUploadFailureDoesNotDropOtherAttachmentOutcomes() passed after 0.026 seconds.
+􁁛  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() passed after 0.026 seconds.
+􁁛  Test selectionCannotMutateAnAlreadyPresentedConfirmation() passed after 0.027 seconds.
+􁁛  Test defaultMinimumAndCurrentStorageClassAffectTransitions() passed after 0.027 seconds.
+􁁛  Suite AuditN26 passed after 0.028 seconds.
+􁁛  Test "Share completion/cancellation release is idempotent and failure leaves no staging files" passed after 0.026 seconds.
+􁁛  Suite "N44 export staging lifetime" passed after 0.029 seconds.
+􁁛  Test "Truncated streams fail and remove their partial files" passed after 0.031 seconds.
+􁁛  Test "Account reset cancels late transfers instead of publishing their files" passed after 0.031 seconds.
+􁁛  Test "Player resource owner retains an evicted file through presentation changes" passed after 0.032 seconds.
+􁁛  Test providerAndUnsupportedFailuresRemainInOriginalAttemptedCount() passed after 0.034 seconds.
+􁁛  Suite N35ShareOutcomeTests passed after 0.035 seconds.
+􁁛  Test "Fresh transport initializes exactly once and deletes the requested fixture object" passed after 0.034 seconds.
+􁁛  Test oneUploadFailureDoesNotDiscardOtherPayloads() passed after 0.035 seconds.
+􁁛  Test everySupportedPayloadIsUploadedAndRejectedItemsAreReported() passed after 0.035 seconds.
+􁁛  Suite N10MultiDropTests passed after 0.037 seconds.
+􁁛  Test "Animated GIF export preserves all bytes/frames and Data URL declares original signature" passed after 0.035 seconds.
+􁁛  Suite "F18 original export hashes and truthful Data URL formats" passed after 0.037 seconds.
+􁁛  Test "A suspended thumbnail original cannot repopulate disk after clear; fresh request succeeds" passed after 0.035 seconds.
+􁁛  Test cancelledReadDoesNotBecomeEmptySuccess() passed after 0.036 seconds.
+􁁛  Test unknownAndFailedReadsCannotReplaceTags() passed after 0.036 seconds.
+􁁛  Test correctedNameCanBeSubmittedWithExactSpecialBytes() passed after 0.036 seconds.
+􁁛  Suite "N25 cache reset rejects suspended thumbnails" passed after 0.039 seconds.
+􁁛  Test writeFailureRetainsDraftAndRemoteSnapshot() passed after 0.036 seconds.
+􁁛  Test "Chunked original reuses preview/open/export bytes and active leases survive disk pressure" passed after 0.037 seconds.
+􁁛  Suite "F15 file-backed original reuse and lease-safe disk budget" passed after 0.039 seconds.
+􁁛  Test retryPreservesUneditedRemoteTags() passed after 0.036 seconds.
+􁁛  Test invalidNamesKeepInputAndShowErrorWithoutSending(_:) with 5 test cases passed after 0.036 seconds.
+􁁛  Test fullPrefixByteLimitAndRemoteFailureAreActionable() passed after 0.037 seconds.
+􁁛  Test failedDeleteRetainsRowAndRetryPublishesSuccess() passed after 0.036 seconds.
+􁁛  Suite N48FolderValidationTests passed after 0.040 seconds.
+􁁛  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" passed after 0.038 seconds.
+􁁛  Test sameSecondUploadsPreserveBothObjects() passed after 0.039 seconds.
+􁁛  Suite F21UniqueUploadKeyTests passed after 0.041 seconds.
+􁁛  Test "Supported positive boundaries forward their exact limit and bound results" with 4 test cases passed after 0.037 seconds.
+􁁛  Test "Zero produces an empty result without constructing or scanning a service" passed after 0.038 seconds.
+􁁛  Test successfulEmptyReadAllowsFirstTag() passed after 0.038 seconds.
+􁁛  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() passed after 0.040 seconds.
+􁁛  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() passed after 0.040 seconds.
+􁁛  Test "Failed HEAD ends loading with retry; successful retry replaces failure" passed after 0.043 seconds.
+􁁛  Test "Nil successful metadata is an explicit empty terminal state" passed after 0.044 seconds.
+􁁛  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" passed after 0.047 seconds.
+􁁛  Test "ImageIO thumbnails do not decode or return original dimensions and respect single-image bytes" passed after 0.048 seconds.
+􁁛  Test "190-byte,308-byte,UUID-plus-long basename and Unicode keys write and persist safely" passed after 0.049 seconds.
+􁁛  Suite "F19 bounded hashed local paths" passed after 0.051 seconds.
+􁁛  Test "Account/bucket/key/ETag/version and Unicode variants never collide on disk" passed after 0.052 seconds.
+􁁛  Suite "F12 exact media identities and invalidation" passed after 0.055 seconds.
+􁁛  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" passed after 0.057 seconds.
+􁁛  Suite "F11 original single-flight and transfer policy" passed after 0.059 seconds.
+􁁛  Test imageBytesAndActualTypeArePreserved(_:) with 4 test cases passed after 0.136 seconds.
+􁁛  Suite N11InvalidImageUploadTests passed after 0.138 seconds.
+􁁛  Test "Write failure produces a visible error without stale success and remains retryable" passed after 0.174 seconds.
+􁁛  Test absentCallbackStartsNoTimer() passed after 0.175 seconds.
+􁁛  Test laterPageFailureDoesNotReturnPartialAsComplete() passed after 0.176 seconds.
+􁁛  Test emptyConfigurationIsOnlyASuccessfulEmptyResponse() passed after 0.177 seconds.
+􁁛  Test "Refresh failure cannot report restore flow complete" passed after 0.186 seconds.
+􁁛  Test "Copy returns the destination's confirmed ETag/version and builds its actual metadata" passed after 0.185 seconds.
+􁁛  Test duplicateCallbackDoesNotResumeTwiceOrDeleteAdoptedFile() passed after 0.175 seconds.
+􁁛  Test differentFileFromDuplicateCallbackIsDisposedWithoutRemovingAdoptedFile() passed after 0.176 seconds.
+􁁛  Test "Keep both preserves exact prefix and rechecks new destination" passed after 0.176 seconds.
+􁁛  Test "Absent destination succeeds and copy preserves the source" passed after 0.176 seconds.
+􁁛  Test missingDestinationETagFailsBeforeCreatingMultipartUpload() passed after 0.195 seconds.
+􁁛  Test encryptionConsentNeverAuthorizesDestinationReplacement() passed after 0.198 seconds.
+􁁛  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() passed after 0.206 seconds.
+􁁛  Test invalidConfigurationDoesNotMasqueradeAsUnconfigured() passed after 0.206 seconds.
+􁁛  Test "Initialization failure propagates and never deletes" passed after 0.207 seconds.
+􁁛  Test fileSigningHashesActualChunksAndKeepsHTTPBodyFileBacked() passed after 0.208 seconds.
+􁁛  Test "Deletion failure propagates without a false success" passed after 0.211 seconds.
+􁁛  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() passed after 0.212 seconds.
+􁁛  Test changedAccountCancelsBeforeMutation() passed after 0.275 seconds.
+􁁛  Test "A short valid result and transport failure retain their meaning" passed after 0.281 seconds.
+􁁛  Test "Generic same-object operations fail before any transport call" with 3 test cases passed after 0.281 seconds.
+􁁛  Test "Negative counts fail before service or collection work" with 2 test cases passed after 0.282 seconds.
+􁁛  Test cancellationCannotPublishAnAbsentConfiguration() passed after 0.305 seconds.
+􁁛  Test "Exact Unicode queries and configuration routes retain byte identity" passed after 0.326 seconds.
+􁁛  Test deniedWrongBucketAndUnknownServiceFailuresRemainErrors(_:_:) with 20 test cases passed after 0.323 seconds.
+􁁛  Test delayedRepresentationRetainsOriginalBucketAndPrefix() passed after 0.328 seconds.
+􁁛  Test genericFileNameIsPreservedAndLocalNameIsBounded() passed after 0.334 seconds.
+􁁛  Test "Applying configuration changes namespace, route and request ownership together" passed after 0.335 seconds.
+􁁛  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() passed after 0.335 seconds.
+􁁛  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() passed after 0.335 seconds.
+􁁛  Test emptyOrMissingCopyAcknowledgementRetainsSource() passed after 0.335 seconds.
+􁁛  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() passed after 0.335 seconds.
+􁁛  Test truncatedMissingOrRepeatedTokenFails() passed after 0.335 seconds.
+􁁛  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() passed after 0.335 seconds.
+􁁛  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) with 3 test cases passed after 0.335 seconds.
+􁁛  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() passed after 0.336 seconds.
+􁁛  Test actualImageTypeSurvivesMisleadingProviderName(_:) with 3 test cases passed after 0.337 seconds.
+􁁛  Test "Unconfirmed copy ETag cannot acknowledge success or authorize source deletion" passed after 0.335 seconds.
+􁁛  Test typingDraftDoesNotPublishOrPersistUntilApply() passed after 0.338 seconds.
+􁁛  Test "Changed account or source after copy retains source" with 2 test cases passed after 0.326 seconds.
+􁁛  Test "Unknown HEAD errors never authorize writes" with 2 test cases passed after 0.326 seconds.
+􁁛  Test "Missing source ETag never authorizes an unconditional delete" passed after 0.326 seconds.
+􁁛  Test "Failed copy never removes source" passed after 0.326 seconds.
+􁁛  Test "Failed delete reports completed destination and retained source" passed after 0.326 seconds.
+􁁛  Test "Unicode normalization never shares replacement approval or revision identity" passed after 0.326 seconds.
+􁁛  Test "An identical config is idempotent and preserves generation and cached choices" passed after 0.341 seconds.
+􁁛  Test invalidJSONOrBase64CannotConstructAnApprovedContext() passed after 0.340 seconds.
+􁁛  Test "Existing destination needs approval and declining performs no copy or delete" passed after 0.326 seconds.
+􁁛  Test cancellationAfterRepresentationLoadingCleansBeforeRemoteMutation() passed after 0.341 seconds.
+􁁛  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() passed after 0.342 seconds.
+􁁛  Test "Applying configured bucket or prefix changes overrides an old saved route" passed after 0.342 seconds.
+􁁛  Test cancellationRetainsKnownSuccessAndDoesNotLoadPendingAttachments() passed after 0.342 seconds.
+􁁛  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" passed after 0.342 seconds.
+􁁛  Suite N34ConfiguredPrefixTests passed after 0.343 seconds.
+􁁛  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() passed after 0.342 seconds.
+􁁛  Suite AuditN12 passed after 0.344 seconds.
+􁁛  Test plansCoverEveryByteWithoutExceedingPartLimits() passed after 0.342 seconds.
+􁁛  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" passed after 0.342 seconds.
+􁁛  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() passed after 0.342 seconds.
+􁁛  Test existingFiltersRemainUntilExplicitlyCleared() passed after 0.342 seconds.
+􁁛  Test removingLastStarResetsStarFilter() passed after 0.342 seconds.
+􁁛  Test removingLastSelectedTagResetsTagFilter() passed after 0.342 seconds.
+􁁛  Test "An account configuration reset releases hidden account-specific screen state" passed after 0.342 seconds.
+􁁛  Test "Card filename, metadata and chip styles are actual SwiftUI semantic fonts" passed after 0.342 seconds.
+􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.343 seconds.
+􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.342 seconds.
+􁁛  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() passed after 0.344 seconds.
+􁁛  Test unavailableTagDoesNotClearAnAvailableStarFilter() passed after 0.342 seconds.
+􁁛  Suite N31EncryptionPolicyTests passed after 0.345 seconds.
+􁁛  Suite AuditN22 passed after 0.345 seconds.
+􁁛  Test "Every accessibility category gets full filename wrapping and list alternative" with 12 test cases passed after 0.343 seconds.
+􁁛  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) with 4 test cases passed after 0.342 seconds.
+􁁛  Test "Actual shared label view grows vertically for long names at accessibility sizes" passed after 0.344 seconds.
+􁁛  Suite "N08 semantic card text and accessible list layout" passed after 0.346 seconds.
+􁁛  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() passed after 0.344 seconds.
+􁁛  Test extensionAndIntentsReadOnlyCompletedSharedReferences() passed after 0.344 seconds.
+􁁛  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) with 2 test cases passed after 0.344 seconds.
+􁁛  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() passed after 0.344 seconds.
+􁁛  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() passed after 0.344 seconds.
+􁁛  Test appGroupLegacyMigratesWhenStandardHasNoRecord() passed after 0.344 seconds.
+􁁛  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() passed after 0.344 seconds.
+􁁛  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() passed after 0.344 seconds.
+􁁛  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) with 2 test cases passed after 0.344 seconds.
+􁁛  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() passed after 0.344 seconds.
+􁁛  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() passed after 0.344 seconds.
+􁁛  Test providerFailureAndMissingRepresentationDoNotMutate() passed after 0.344 seconds.
+􁁛  Test "Preview derivation preserves exact Unicode source bytes" passed after 0.344 seconds.
+􁁛  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) with 4 test cases passed after 0.344 seconds.
+􁁛  Test emptyStoresLoadAsUnconfiguredWithoutWriting() passed after 0.345 seconds.
+􁁛  Test settingsOnlySaveVerifiesAndReusesCredentialReference() passed after 0.344 seconds.
+􁁛  Test "Picker identifies root, nested and repeated-slash same destinations" passed after 0.344 seconds.
+􁁛  Test "Exactly the current tab exposes selected trait/value while labels and identifiers remain meaningful" with 7 test cases passed after 0.344 seconds.
+􁁛  Test "Canonically equivalent Unicode keys remain different S3 objects" passed after 0.344 seconds.
+􁁛  Test renameAndMoveCarryAnnotationsToTheExactDestination() passed after 0.344 seconds.
+􁁛  Test "Restoring root does not perform an intermediate root request" passed after 0.344 seconds.
+􁁛  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() passed after 0.345 seconds.
+􁁛  Test "An empty cold cache retains an explicit initial loading state" passed after 0.344 seconds.
+􁁛  Test "Legacy migration is claimed once and each account restores only its envelope" passed after 0.345 seconds.
+􁁛  Test cancelledBeforeStartCannotDeleteOrPublishFailure() passed after 0.344 seconds.
+􁁛  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() passed after 0.344 seconds.
+􁁛  Test successfulRebuildPublishesOneReplacement() passed after 0.344 seconds.
+􁁛  Test "A failed new folder cannot commit another route's cached rows" passed after 0.344 seconds.
+􁁛  Test newPreferencesContainOnlySettingsAndOpaqueReference() passed after 0.345 seconds.
+􁁛  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" passed after 0.344 seconds.
+􁁛  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() passed after 0.344 seconds.
+􁁛  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" passed after 0.344 seconds.
+􁁛  Test "Construction metrics use bounded surface names and measure only the builder" passed after 0.344 seconds.
+􁁛  Test coordinationFailuresCannotPublishOrReloadUncoordinatedState() passed after 0.344 seconds.
+􁁛  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() passed after 0.345 seconds.
+􁁛  Test competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget() passed after 0.344 seconds.
+􁁛  Test obsoleteAccountDeleteCannotChangeCurrentCaches() passed after 0.344 seconds.
+􁁛  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" passed after 0.344 seconds.
+􁁛  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() passed after 0.344 seconds.
+􁁛  Test cachedAppPublicationCannotEraseANewerShareUpload() passed after 0.344 seconds.
+􁁛  Test cancellingPickerCannotHandOffQueuedWork() passed after 0.344 seconds.
+􁁛  Test accountScopeHasUnambiguousFieldsAndNoCredentialText() passed after 0.344 seconds.
+􁁛  Test failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock() passed after 0.344 seconds.
+􁁛  Test acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload() passed after 0.344 seconds.
+􁁛  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() passed after 0.344 seconds.
+􁁛  Test failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp() passed after 0.344 seconds.
+􁁛  Test confirmationHandsOffExactDestinationOnlyOnceAndDismissalDoesNotClaimRollback() passed after 0.344 seconds.
+􁁛  Test "A known active-account preview cannot be migrated into another account" passed after 0.345 seconds.
+􁁛  Test "Changed source updates rows while unchanged progress-style updates reuse derivation" passed after 0.344 seconds.
+􁁛  Test "Gallery projections are reused for index changes and rebuild only for source changes" passed after 0.344 seconds.
+􁁛  Test "Initial selection creates only its own screen, including a restored non-Browse tab" passed after 0.344 seconds.
+􁁛  Suite F25SameObjectTransferTests passed after 0.348 seconds.
+􁁛  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() passed after 0.344 seconds.
+􁁛  Test pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity() passed after 0.344 seconds.
+􁁛  Test "Native tab action and context selection retain their production state transitions" passed after 0.344 seconds.
+􁁛  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() passed after 0.344 seconds.
+􁁛  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() passed after 0.344 seconds.
+􁁛  Test "Legacy route migration and saved navigation cannot cross accounts" passed after 0.344 seconds.
+􁁛  Test filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization() passed after 0.344 seconds.
+􁁛  Suite F09MetadataNamespaceTests passed after 0.348 seconds.
+􁁛  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() passed after 0.344 seconds.
+􁁛  Suite F03TabRetentionTests passed after 0.348 seconds.
+􁁛  Test networkAndMalformedResponsesCannotBecomeKnownAbsence() passed after 0.344 seconds.
+􁁛  Suite AuditN07 passed after 0.348 seconds.
+􁁛  Test "A folder picker exposes destinations after the first thousand prefixes" passed after 0.347 seconds.
+􁁛  Suite AuditF26 passed after 0.348 seconds.
+􁁛  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" passed after 0.334 seconds.
+􁁛  Suite F27ConfirmedNavigationTests passed after 0.348 seconds.
+􁁛  Test "Initial failure and a successful empty snapshot remain distinct from loading" passed after 0.343 seconds.
+􁁛  Suite "N09 actual custom tab selection semantics" passed after 0.348 seconds.
+􁁛  Test "Cancellation following successful remote write still invalidates but publishes no success" passed after 0.347 seconds.
+􁁛  Test scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt() passed after 0.343 seconds.
+􁁛  Test "Request completion cannot clear a newer view request's loading flag" passed after 0.334 seconds.
+􁁛  Test "LF, CRLF, mixed, blank and trailing lines preserve numbering" with 7 test cases passed after 0.345 seconds.
+􁁛  Suite "N47 numbered text retains original lines" passed after 0.349 seconds.
+􁁛  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" passed after 0.334 seconds.
+􁁛  Suite F06CanonicalCatalogTests passed after 0.349 seconds.
+􁁛  Suite F34DerivedRowsCacheTests passed after 0.349 seconds.
+􁁛  Test synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry() passed after 0.345 seconds.
+􁁛  Test "Browse publishes the first thousand rows before explicitly loading the next page" passed after 0.348 seconds.
+􁁛  Suite AuditN42 passed after 0.349 seconds.
+􁁛  Suite F20ListingPaginationTests passed after 0.349 seconds.
+􁁛  Test "Copy source preserves reserved bytes, repeated slashes and version query" passed after 0.334 seconds.
+􁁛  Test "A disappearing bucket list does not erase last-good metadata" passed after 0.334 seconds.
+􁁛  Test cleanupFailureIncludesUploadIDAndOriginalFailure() passed after 0.350 seconds.
+􁁛  Test "Cancellation after initialization prevents the remote deletion" passed after 0.349 seconds.
+􁁛  Suite "N03 fresh Delete shortcut transport lifecycle" passed after 0.351 seconds.
+􁁛  Test failedForcedRefreshRetainsGoodAdministrationData() passed after 0.350 seconds.
+􁁛  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() passed after 0.350 seconds.
+􁁛  Test oldReadCannotAuthorizeEditingAfterNewFailure() passed after 0.349 seconds.
+􁁛  Test cancelledRemoteTaskCannotBeginCopyOrDelete() passed after 0.348 seconds.
+􁁛  Test cancelledInputCannotStartUpload() passed after 0.348 seconds.
+􁁛  Suite AuditN02 passed after 0.351 seconds.
+􁁛  Test "Cancellation after fetching prevents a successful stale result" passed after 0.348 seconds.
+􁁛  Test duplicateMutationCannotStartDuringActiveRequest() passed after 0.348 seconds.
+􁁛  Suite N18TransferDismissalTests passed after 0.351 seconds.
+􁁛  Suite N01UploadPreparationTests passed after 0.351 seconds.
+􁁛  Suite N37DumpDeleteFeedbackTests passed after 0.351 seconds.
+􁁛  Suite "N15 Shortcuts count validation before scanning" passed after 0.352 seconds.
+􁁛  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() passed after 0.348 seconds.
+􁁛  Test cancellationStopsBeforeFetchingAnotherPage() passed after 0.348 seconds.
+􁁛  Suite N33ObjectVersionHistoryTests passed after 0.352 seconds.
+􁁛  Test onlyTheExactOperationAbsenceCodeReturnsAnAbsentResult(_:) with 4 test cases passed after 0.348 seconds.
+􁁛  Test "A failed manifest retains its known cached entry and marks the mixed index incomplete" passed after 0.351 seconds.
+􁁛  Test "Cancellation after confirmed copy still acknowledges destination before retaining the source" passed after 0.350 seconds.
+􁁛  Test "Successful streamed body records real consumed bytes and owned permit peak" passed after 0.350 seconds.
+􁁛  Test "Truncated body records consumed partial bytes and a failed request exactly once" passed after 0.350 seconds.
+􁁛  Test completeFailureHasTerminalErrorSummaryAndNoShareFiles() passed after 0.349 seconds.
+􁁛  Test cancelledBeforeStartNeverRequestsRepresentation() passed after 0.339 seconds.
+􁁛  Test "A failed bucket retains its previous complete rows and totals are incomplete" passed after 0.339 seconds.
+􁁛  Test "All pages contribute to newest results and empty buckets remain in stats" passed after 0.339 seconds.
+􁁛  Test "Cancellation after completed copy retains source and reports partial completion" passed after 0.339 seconds.
+􁁛  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" passed after 0.338 seconds.
+􁁛  Test "Stale cover revision is refreshed without re-downloading an unchanged manifest" passed after 0.340 seconds.
+􁁛  Test moviesRetainPlayableOriginalBytesAndMovieType(mp4:) with 2 test cases passed after 0.354 seconds.
+􁁛  Test cancelledRequestCannotPublishConfiguration() passed after 0.355 seconds.
+􁁛  Suite AuditN28 passed after 0.356 seconds.
+􁁛  Test "An incomplete first-page sort explicitly reports its scope until the newest later row loads" passed after 0.354 seconds.
+􁁛  Suite N16PartialFolderSortTests passed after 0.357 seconds.
+􁁛  Test "A no-match first page keeps later search work available and finds a later matching file" passed after 0.353 seconds.
+􁁛  Suite N17PartialFolderSearchTests passed after 0.357 seconds.
+􁁛  Test failedRefreshRetainsGoodRulesWhilePublishingARetryableFailure() passed after 0.353 seconds.
+􁁛  Test "Older failures cannot replace a newer successful HEAD or clear its request ownership" passed after 0.356 seconds.
+􁁛  Suite "N38 terminal metadata read presentation" passed after 0.358 seconds.
+􁁛  Test "Initial HTML schedules content only; standard metadata follows visible content" passed after 0.356 seconds.
+􁁛  Test failedStagingReleasesOriginalAndLeavesNoExportLease() passed after 0.357 seconds.
+􁁛  Test loaderReceivesCapturedAccountBucketKeyAndRevision() passed after 0.357 seconds.
+􁁛  Test invalidMediaIsRejectedWithoutOwnedFiles() passed after 0.357 seconds.
+􁁛  Test cancelledProviderProgressResolvesAndLateFileIsDisposed() passed after 0.344 seconds.
+􁁛  Test "Approval authorizes only the observed account, operation and destination revision" passed after 0.344 seconds.
+􁁛  Suite F31FilePromiseTests passed after 0.359 seconds.
+􁁛  Test "Source-delete failure still publishes completed destination and invalidates overwritten media" passed after 0.356 seconds.
+􁁛  Test "Obsolete preload and decode failure always clear loading and cannot publish stale images" passed after 0.345 seconds.
+􁁛  Test "Successful restore invalidates original and refreshes visible bytes/metadata/version state" passed after 0.358 seconds.
+􁁛  Suite "N13 restore refresh and visible terminal failures" passed after 0.360 seconds.
+􁁛  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() passed after 0.359 seconds.
+􁁛  Test "Type selections and Stats reuse one fully paginated account scan" passed after 0.357 seconds.
+􁁛  Test "Destination creation failure finishes telemetry and closes unread SDK body" passed after 0.359 seconds.
+􁁛  Suite "F36 actual consumed SDK body telemetry" passed after 0.362 seconds.
+􁁛  Test "App operations cannot both claim the same absent destination" passed after 0.347 seconds.
+􁁛  Suite N05ObjectTransferTests passed after 0.362 seconds.
+􁁛  Test atomicCompletionPreservesObservedAbsenceOrApprovedDestinationRevision() passed after 0.361 seconds.
+􁁛  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" passed after 0.361 seconds.
+􁁛  Test failedPartOrCompletionAbortsAndRetainsMoveSource() passed after 0.361 seconds.
+􁁛  Suite N32MultipartCopyTests passed after 0.363 seconds.
+􁁛  Test "A cancelled account response cannot publish even if transport ignores cancellation" passed after 0.362 seconds.
+􁁛  Suite F09ServiceSessionTests passed after 0.364 seconds.
+􁁛  Test "Automatic refresh obeys 60 seconds and explicit refresh bypasses freshness" passed after 0.360 seconds.
+􁁛  Test exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot() passed after 0.362 seconds.
+􁁛  Test "Identical requests join without taking another resource's loading flag" passed after 0.360 seconds.
+􁁛  Test confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges() passed after 0.362 seconds.
+􁁛  Test "Saved folder lists once while bucket discovery remains suspended" passed after 0.360 seconds.
+􁁛  Suite F02BrowseStartupTests passed after 0.363 seconds.
+􁁛  Test loadedAbsentAndFailedStatesStayDistinctAndFailureCanRetry() passed after 0.359 seconds.
+􁁛  Suite AuditN21 passed after 0.363 seconds.
+􁁛  Suite AuditN41 passed after 0.363 seconds.
+􁁛  Test successfulUploadReadsOwnedFileAndCleansPayload() passed after 0.360 seconds.
+􁁛  Test "Zero successful buckets cannot replace or persist an empty snapshot" passed after 0.349 seconds.
+􁁛  Test "Unchanged ETags reuse decoded manifests and cover metadata; only changed manifest downloads" passed after 0.349 seconds.
+􁁛  Test "An old account completion cannot publish into newly isolated observed state" passed after 0.363 seconds.
+􁁛  Test "A failed destination cannot show the previous folder's rows or authorize confirmation" passed after 0.362 seconds.
+􁁛  Test "Cached rows render before delayed transport and remain visible after failure" passed after 0.362 seconds.
+􁁛  Test delayedListingCannotRestoreASuccessfullyDeletedObject() passed after 0.362 seconds.
+􁁛  Suite F01CachedRecentTests passed after 0.365 seconds.
+􁁛  Suite AuditN24 passed after 0.365 seconds.
+􁁛  Test "Failure keeps successful metadata; explicit retry bypasses automatic failure throttle" passed after 0.364 seconds.
+􁁛  Test "Confirmed deletion invalidates captured account only even after active account changes" passed after 0.363 seconds.
+􁁛  Suite "F12 acknowledged copy and delete invalidate exact media" passed after 0.366 seconds.
+􁁛  Test "Failed replacement preserves frames and an explicit refresh can retry immediately" passed after 0.351 seconds.
+􁁛  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() passed after 0.365 seconds.
+􁁛  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" passed after 0.365 seconds.
+􁁛  Suite AuditF29 passed after 0.367 seconds.
+􁁛  Test cancelledOldAccountCannotChangeTheReplacementSelection() passed after 0.365 seconds.
+􁁛  Test secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection() passed after 0.365 seconds.
+􁁛  Test "Hidden sections do no I/O; requested object and bucket sections reuse fresh exact identities" passed after 0.366 seconds.
+􁁛  Test cancellationOfActiveUploadCleansOwnedFile() passed after 0.364 seconds.
+􁁛  Test fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue() passed after 0.364 seconds.
+􁁛  Test cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending() passed after 0.367 seconds.
+􁁛  Suite F22FileImportTests passed after 0.368 seconds.
+􁁛  Test "Simultaneous consumers join one catalog refresh" passed after 0.367 seconds.
+􁁛  Suite F04SharedCatalogQueryTests passed after 0.369 seconds.
+􁁛  Test priorInFlightRequestCannotUndoTheRebuild() passed after 0.365 seconds.
+􁁛  Test "A response for an old destination cannot replace a newer validated destination" passed after 0.366 seconds.
+􁁛  Suite AuditN20 passed after 0.369 seconds.
+􁁛  Suite N39DestinationListingTests passed after 0.369 seconds.
+􁁛  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" passed after 0.363 seconds.
+􁁛  Suite F30ListPresentationTests passed after 0.369 seconds.
+􁁛  Test "A genuinely empty listing is complete, while all-failure refresh keeps saved entries" passed after 0.368 seconds.
+􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.368 seconds.
+􁁛  Suite F36PerformanceTests passed after 0.370 seconds.
+􁁛  Test missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses() passed after 0.367 seconds.
+􁁛  Suite N36PartialBatchExportTests passed after 0.370 seconds.
+􁁛  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" passed after 0.369 seconds.
+􁁛  Test "An explicit refresh during work schedules a replacement and both waiters receive it" passed after 0.368 seconds.
+􁁛  Test cancelledQueuedJobNeverStartsAndOtherJobsContinue() passed after 0.368 seconds.
+􁁛  Test cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles() passed after 0.371 seconds.
+􁁛  Test "Stale page errors cannot overwrite a refreshed resource's error state" passed after 0.358 seconds.
+􁁛  Test "Stale pagination cannot append into refreshed rows or discard the new token" passed after 0.358 seconds.
+􁁛  Suite F07PagedListingTests passed after 0.373 seconds.
+􁁛  Test failedUploadRetainsFileAndRetryUsesSameDestination() passed after 0.369 seconds.
+􁁛  Suite F35FileUploadQueueTests passed after 0.373 seconds.
+􁁛  Test "Changing frame account or prefix rejects a non-cooperative old page" passed after 0.358 seconds.
+􁁛  Test "Generation reset prevents suspended app manifests from repopulating memory or saved index" passed after 0.358 seconds.
+􁁛  Test "An old account error cannot clear newer work or publish its message" passed after 0.371 seconds.
+􁁛  Test partialFailureRetainsOnlyTheFailedIdentitiesForRetry() passed after 0.372 seconds.
+􁁛  Suite AuditN19 passed after 0.374 seconds.
+􁁛  Test "Fresh first-page counts retain their truncation indication without a new request" passed after 0.372 seconds.
+􁁛  Test "Out-of-order folders and their loading flags remain request-owned" passed after 0.371 seconds.
+􁁛  Suite F07ResourceOwnershipTests passed after 0.374 seconds.
+􁁛  Test "Bucket scan concurrency stays at the declared limit of three" passed after 0.359 seconds.
+􁁛  Suite F05MetadataCatalogTests passed after 0.373 seconds.
+􁁛  Test "AVFoundation poster renderer extracts bounded frame from asset URL without original loader" passed after 0.372 seconds.
+􁁛  Suite "F10 bounded decoded preview production paths" passed after 0.374 seconds.
+􁁛  Test "All GET/decode failures are unavailable with retry, never a successful empty Apps index" passed after 0.374 seconds.
+􁁛  Suite "N40 explicit Apps manifest failure states" passed after 0.375 seconds.
+􁁛  Test activityCompletionAndCancelledShareBothReleaseAllFiles() passed after 0.374 seconds.
+􁁛  Suite N44BatchExportCleanupTests passed after 0.376 seconds.
+􁁛  Test "Launch reads scoped saved index before network and fresh revisits make no requests" passed after 0.361 seconds.
+􁁛  Test "Refreshing during delayed page two retains page one until replacement and rejects old token" passed after 0.361 seconds.
+􁁛  Suite "F23 frame refresh owns rows and continuation" passed after 0.377 seconds.
+􁁛  Test "Four manifest workers publish usable apps before delayed remaining manifests complete" passed after 0.363 seconds.
+􁁛  Suite "F28 cached bounded progressive Apps index" passed after 0.377 seconds.
+􁁛  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" passed after 0.377 seconds.
+􁁛  Test "Stale count scans run at most three at a time and a denial remains unavailable" passed after 0.376 seconds.
+􁁛  Suite F08ConcurrencyBoundaryTests passed after 0.378 seconds.
+􁁛  Suite F32BucketCountCacheTests passed after 0.378 seconds.
+􁁛  Test "Concurrent demand coalesces; eviction and mutation reject obsolete secondary responses" passed after 0.377 seconds.
+􁁛  Suite "F16 requested detail scheduling and shared freshness" passed after 0.379 seconds.
+􁁛  Test successEndsTimerBeforeTerminalCallback() passed after 0.378 seconds.
+􁁛  Test failureStopsTimerWithoutSuccessOrLateCallbacks() passed after 0.379 seconds.
+􁁛  Test cancellationStopsOwnedTimer() passed after 0.380 seconds.
+􁁛  Suite F17UploadProgressTests passed after 0.382 seconds.
+􁁛  Test attachmentsAreLoadedSentAndCleanedOneAtATime() passed after 0.386 seconds.
+􁁛  Suite F31SharePipelineTests passed after 0.388 seconds.
+􁁛  Test "Long swipe sessions retain only current and at most two adjacent images within bytes" passed after 0.389 seconds.
+􁁛  Suite "F14 gallery working window and request lifetime" passed after 0.403 seconds.
+􁁛  Test largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths() passed after 0.406 seconds.
+􁁛  Suite N06BoundedBatchExportTests passed after 0.408 seconds.
+􁁛  Test run with 344 tests in 90 suites passed after 0.408 seconds.

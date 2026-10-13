@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.000727208">
+    <testcase classname="AuditCoreTests.N09TabAccessibilityTests" name="exactlyOneSelection(_:)" time="0.000485291" />
+    <testcase classname="AuditCoreTests.N09TabAccessibilityTests" name="actions()" time="0.000266584" />
+  </testsuite>
+</testsuites>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.004480916">
-    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="successEndsTimerBeforeTerminalCallback()" time="0.003735541" />
-    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="absentCallbackStartsNoTimer()" time="0.000275125" />
-    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="failureStopsTimerWithoutSuccessOrLateCallbacks()" time="0.003741417" />
-    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="cancellationStopsOwnedTimer()" time="0.004141375" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.005541791">
+    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="cancellationStopsOwnedTimer()" time="0.005218666" />
+    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="successEndsTimerBeforeTerminalCallback()" time="0.003461667" />
+    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="failureStopsTimerWithoutSuccessOrLateCallbacks()" time="0.003937167" />
+    <testcase classname="AuditCoreTests.F17UploadProgressTests" name="absentCallbackStartsNoTimer()" time="0.000521" />
   </testsuite>
 </testsuites>

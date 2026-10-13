@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.002405167">
-    <testcase classname="AuditCoreTests.F13DecodedCacheTests" name="variantChurn()" time="0.002145083" />
+  <testsuite name="TestResults" errors="0" tests="1" failures="0" skipped="0" time="0.002338042">
+    <testcase classname="AuditCoreTests.F13DecodedCacheTests" name="variantChurn()" time="0.002070167" />
   </testsuite>
 </testsuites>

@@ -2,9 +2,9 @@
   "id": "N20",
   "expected_behavior": "The ambiguous Clear All action becomes an explicit Recent cache reset/rebuild, never remote deletion; it refreshes once and retains the last good snapshot if replacement fails.",
   "passed": true,
-  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:32:29.402924+00:00",
+  "recorded_at": "2026-10-13T07:39:47.433068+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,18 +23,18 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN20",
+      "name": "successfulRebuildPublishesOneReplacement()",
+      "time": "0.005518125"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN20",
       "name": "failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest()",
-      "time": "0.000936958"
+      "time": "0.01080275"
     },
     {
       "classname": "AuditCoreTests.AuditN20",
       "name": "priorInFlightRequestCannotUndoTheRebuild()",
-      "time": "0.001206083"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN20",
-      "name": "successfulRebuildPublishesOneReplacement()",
-      "time": "0.000917834"
+      "time": "0.011754333"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N20.log",

@@ -1,0 +1,29 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-verification-model-for-libcrypto.git",
+    "-c",
+    "http.version=HTTP/1.1",
+    "fetch",
+    "--depth=1",
+    "--no-tags",
+    "https://github.com/awslabs/aws-verification-model-for-libcrypto.git",
+    "53f8f8918f3aca5127937becd8efd9bfd1a860c2"
+  ],
+  "pid": 33665,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-s2n-nested.log",
+  "revision": "53f8f8918f3aca5127937becd8efd9bfd1a860c2",
+  "gitlink_path": "tests/cbmc/aws-verification-model-for-libcrypto",
+  "parent_s2n_revision": "92f7827c8487eb2a99b443aec6ee7d1df031b1bf",
+  "verified_gitmodules_blob": "37879f202d92315221f913b141ccf90b7c9d3e8e",
+  "remote": "https://github.com/awslabs/aws-verification-model-for-libcrypto.git",
+  "mirror_path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-verification-model-for-libcrypto.git",
+  "started_at_epoch": 1791876431.439329,
+  "timeout_seconds": 120,
+  "status": "completed",
+  "exit_code": 0,
+  "finished_at_epoch": 1791876436.629525,
+  "git_fsck_exit_code": 0,
+  "git_fsck_output": ""
+}

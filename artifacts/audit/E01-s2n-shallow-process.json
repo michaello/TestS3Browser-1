@@ -1,0 +1,25 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/s2n-tls.git",
+    "-c",
+    "http.version=HTTP/1.1",
+    "fetch",
+    "--depth=1",
+    "--no-tags",
+    "https://github.com/aws/s2n-tls.git",
+    "92f7827c8487eb2a99b443aec6ee7d1df031b1bf"
+  ],
+  "pid": 2268,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-s2n-shallow.log",
+  "revision": "92f7827c8487eb2a99b443aec6ee7d1df031b1bf",
+  "gitlink_path": "aws-common-runtime/s2n",
+  "parent_crt_revision": "2f4f02595a25a43f9ca9acdc9f4d4a8ff6e5d3ac",
+  "mirror_path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/s2n-tls.git",
+  "started_at_epoch": 1791875933.801301,
+  "timeout_seconds": 180,
+  "status": "failed",
+  "exit_code": 124,
+  "finished_at_epoch": 1791876113.808911
+}

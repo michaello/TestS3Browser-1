@@ -1,0 +1,15 @@
+Building for debugging...
+[Computing dependencies]
+Build complete! (0.43 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F27ConfirmedNavigationTests started.
+􀟈  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" started.
+􀟈  Test "Legacy route migration and saved navigation cannot cross accounts" started.
+􀟈  Test "A failed new folder cannot commit another route's cached rows" started.
+􁁛  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" passed after 0.019 seconds.
+􁁛  Test "Legacy route migration and saved navigation cannot cross accounts" passed after 0.019 seconds.
+􁁛  Test "A failed new folder cannot commit another route's cached rows" passed after 0.021 seconds.
+􁁛  Suite F27ConfirmedNavigationTests passed after 0.022 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.022 seconds.

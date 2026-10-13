@@ -1,0 +1,43 @@
+{
+  "id": "N37",
+  "expected_behavior": "Dump delete errors reach a user-visible terminal error/retry state and preserve the item after remote failure.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:40:10.553301+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N37DumpDeleteFeedbackTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N37DumpDeleteFeedbackTests",
+      "name": "cancelledBeforeStartCannotDeleteOrPublishFailure()",
+      "time": "0.008846666"
+    },
+    {
+      "classname": "AuditCoreTests.N37DumpDeleteFeedbackTests",
+      "name": "duplicateMutationCannotStartDuringActiveRequest()",
+      "time": "0.008991625"
+    },
+    {
+      "classname": "AuditCoreTests.N37DumpDeleteFeedbackTests",
+      "name": "failedDeleteRetainsRowAndRetryPublishesSuccess()",
+      "time": "0.008618333"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

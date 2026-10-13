@@ -9,6 +9,7 @@
     "ZIP modified blob",
     "ZIP changed executable mode",
     "ZIP extra path",
-    "ZIP path traversal"
+    "ZIP path traversal",
+    "incomplete exact-object hydration cannot pass"
   ]
 }

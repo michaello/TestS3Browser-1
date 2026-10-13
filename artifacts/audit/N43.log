@@ -9,7 +9,11 @@
       ],
       "api_inventory": {
         "TestS3Browser": {
+          "FileTimestamp": [
+            "Sources/Core/ScreensAppIndex.swift"
+          ],
           "UserDefaults": [
+            "Sources/Core/LocalObjectState.swift",
             "Sources/Services/AuditAppFixture.swift",
             "Sources/BucketBrowserView.swift",
             "Sources/ContentView.swift",
@@ -18,13 +22,13 @@
             "Sources/PrefixBrowserView.swift",
             "Sources/S3Service.swift",
             "Sources/SettingsView.swift",
-            "Sources/Services/SeenPhotosTracker.swift",
             "Sources/Services/SharedConfig.swift"
           ]
         },
         "DumpShareExtension": {
           "UserDefaults": [
-            "Sources/Services/SharedConfig.swift"
+            "Sources/Services/SharedConfig.swift",
+            "ShareExtension/ShareViewController.swift"
           ]
         },
         "TestS3BrowserWidget": {

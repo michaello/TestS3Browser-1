@@ -1,0 +1,38 @@
+{
+  "id": "F04",
+  "expected_behavior": "Recent, Stats and filter/search consumers share account-scoped metadata; changing file types does not restart an account scan, and newest results remain correct across all pages.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:38:43.008267+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F04SharedCatalogQueryTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F04SharedCatalogQueryTests",
+      "name": "duplicateConsumersJoin()",
+      "time": "0.006124375"
+    },
+    {
+      "classname": "AuditCoreTests.F04SharedCatalogQueryTests",
+      "name": "sharedScanAndLocalFilters()",
+      "time": "0.006079875"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

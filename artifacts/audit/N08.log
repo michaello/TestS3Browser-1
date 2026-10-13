@@ -1,0 +1,27 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.36 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N08 semantic card text and accessible list layout" started.
+􀟈  Test "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test "Card filename, metadata and chip styles are actual SwiftUI semantic fonts" started.
+􀟈  Test case passing 1 argument category → .xSmall to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .small to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .medium to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .large to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .xxLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility1 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test "Actual shared label view grows vertically for long names at accessibility sizes" started.
+􀟈  Test case passing 1 argument category → .xLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility3 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility4 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility5 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .xxxLarge to "Every accessibility category gets full filename wrapping and list alternative" started.
+􀟈  Test case passing 1 argument category → .accessibility2 to "Every accessibility category gets full filename wrapping and list alternative" started.
+􁁛  Test "Every accessibility category gets full filename wrapping and list alternative" with 12 test cases passed after 0.206 seconds.
+􁁛  Test "Card filename, metadata and chip styles are actual SwiftUI semantic fonts" passed after 0.206 seconds.
+􁁛  Test "Actual shared label view grows vertically for long names at accessibility sizes" passed after 0.207 seconds.
+􁁛  Suite "N08 semantic card text and accessible list layout" passed after 0.207 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.207 seconds.

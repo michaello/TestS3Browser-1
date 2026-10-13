@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "Temporary local Git submodule fixtures only; no network or SDK cache mutation",
+  "cases": [
+    {
+      "process_file_allow": false,
+      "exit_code": 1,
+      "output": "Submodule 'nested' (file:///nonexistent/s3-audit-original.git) registered for path 'nested'\nCloning into '/private/var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/s3-git-transport-zso37whk/default/nested'...\nfatal: transport 'file' not allowed\nfatal: clone of 'file:///nonexistent/s3-audit-original.git' into submodule path '/private/var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/s3-git-transport-zso37whk/default/nested' failed\nFailed to clone 'nested'. Retry scheduled\nCloning into '/private/var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/s3-git-transport-zso37whk/default/nested'...\nfatal: transport 'file' not allowed\nfatal: clone of 'file:///nonexistent/s3-audit-original.git' into submodule path '/private/var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/s3-git-transport-zso37whk/default/nested' failed\nFailed to clone 'nested' a second time, aborting\n"
+    },
+    {
+      "process_file_allow": true,
+      "exit_code": 0,
+      "output": "Submodule path 'nested': checked out '5a7856799d31e8aee0e29f2409103194d1aae8e2'\nSubmodule 'nested' (file:///nonexistent/s3-audit-original.git) registered for path 'nested'\nCloning into '/private/var/folders/mm/nvv2lt_96v5bmmfrh57rj2400000gn/T/s3-git-transport-zso37whk/allowed/nested'...\n"
+    }
+  ]
+}

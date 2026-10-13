@@ -2,9 +2,9 @@
   "id": "F26",
   "expected_behavior": "Stars, tags and new-file markers use account/bucket-qualified identities; equal keys remain independent and legacy mappings are migrated or retained without silent reassignment/data loss.",
   "passed": true,
-  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:32:25.611345+00:00",
+  "recorded_at": "2026-10-13T07:39:15.243889+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,33 +23,33 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditF26",
-      "name": "unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()",
-      "time": "0.07556325"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF26",
       "name": "ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()",
-      "time": "0.075421708"
+      "time": "0.012016625"
     },
     {
       "classname": "AuditCoreTests.AuditF26",
-      "name": "renameAndMoveCarryAnnotationsToTheExactDestination()",
-      "time": "0.075447542"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF26",
-      "name": "exactUnicodeAndRepeatedSlashKeysRemainDistinct()",
-      "time": "0.0754525"
-    },
-    {
-      "classname": "AuditCoreTests.AuditF26",
-      "name": "newFileMarkersDoNotCrossBucketOrAccountBoundaries()",
-      "time": "0.075479"
+      "name": "unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()",
+      "time": "0.010316542"
     },
     {
       "classname": "AuditCoreTests.AuditF26",
       "name": "equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()",
-      "time": "0.075444292"
+      "time": "0.008741458"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "newFileMarkersDoNotCrossBucketOrAccountBoundaries()",
+      "time": "0.010293458"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "exactUnicodeAndRepeatedSlashKeysRemainDistinct()",
+      "time": "0.010331166"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "renameAndMoveCarryAnnotationsToTheExactDestination()",
+      "time": "0.011976959"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.log",

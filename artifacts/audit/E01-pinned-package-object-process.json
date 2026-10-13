@@ -1,0 +1,21 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-sdk-swift.git",
+    "-c",
+    "http.version=HTTP/1.1",
+    "fetch",
+    "--no-tags",
+    "--no-write-fetch-head",
+    "https://github.com/awslabs/aws-sdk-swift",
+    "60765279d47b56c9e7707799c8b52e96022004c8"
+  ],
+  "pid": 79417,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-pinned-package-object.log",
+  "started_at_epoch": 1791873321.413495,
+  "timeout_seconds": 120,
+  "status": "completed",
+  "exit_code": 0,
+  "finished_at_epoch": 1791873323.356257
+}

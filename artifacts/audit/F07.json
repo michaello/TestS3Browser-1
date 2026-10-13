@@ -2,9 +2,9 @@
   "id": "F07",
   "expected_behavior": "Controlled out-of-order responses and errors never publish into a newer query/account generation; unrelated requests cannot clear each other's loading state or discard a required refresh.",
   "passed": true,
-  "source_fingerprint": "6f39871a8b884e4beb7492395e2aa3bdf8a77f21e683d3a48da06c3d6693e0e9",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:34.742605+00:00",
+  "recorded_at": "2026-10-13T07:38:33.360666+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,43 +23,43 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F07PagedListingTests",
-      "name": "viewRequestOwnership()",
-      "time": "0.001022459"
-    },
-    {
-      "classname": "AuditCoreTests.F07PagedListingTests",
       "name": "stalePaginationError()",
-      "time": "0.002710417"
+      "time": "0.002277084"
     },
     {
       "classname": "AuditCoreTests.F07PagedListingTests",
       "name": "refreshInvalidatesPagination()",
-      "time": "0.002625541"
+      "time": "0.002261291"
     },
     {
-      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
-      "name": "pendingRefresh()",
-      "time": "0.00221325"
-    },
-    {
-      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
-      "name": "resetInvalidatesError()",
-      "time": "0.002726417"
-    },
-    {
-      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
-      "name": "freshness()",
-      "time": "0.0016825"
-    },
-    {
-      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
-      "name": "joinsDuplicates()",
-      "time": "0.00165425"
+      "classname": "AuditCoreTests.F07PagedListingTests",
+      "name": "viewRequestOwnership()",
+      "time": "0.000670666"
     },
     {
       "classname": "AuditCoreTests.F07ResourceOwnershipTests",
       "name": "navigationReplacement()",
-      "time": "0.002751416"
+      "time": "0.002349791"
+    },
+    {
+      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
+      "name": "joinsDuplicates()",
+      "time": "0.001457583"
+    },
+    {
+      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
+      "name": "resetInvalidatesError()",
+      "time": "0.002373542"
+    },
+    {
+      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
+      "name": "pendingRefresh()",
+      "time": "0.002173166"
+    },
+    {
+      "classname": "AuditCoreTests.F07ResourceOwnershipTests",
+      "name": "freshness()",
+      "time": "0.001433792"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F07.log",

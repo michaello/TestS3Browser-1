@@ -1,0 +1,38 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[12 / 36] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[22 / 33] AuditCoreTests-product
+[38 / 50] AuditCoreTests-product
+[39 / 50] AuditCoreTests-product
+[43 / 49] AuditCoreTests-product
+[45 / 49] AuditCoreTests-product
+Build complete! (5.43 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N34ConfiguredPrefixTests started.
+􀟈  Suite F27ConfirmedNavigationTests started.
+􀟈  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" started.
+􀟈  Test "Applying configured bucket or prefix changes overrides an old saved route" started.
+􀟈  Test "A failed new folder cannot commit another route's cached rows" started.
+􀟈  Test "Legacy route migration and saved navigation cannot cross accounts" started.
+􀟈  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" started.
+􁁛  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" passed after 0.006 seconds.
+􁁛  Test "Applying configured bucket or prefix changes overrides an old saved route" passed after 0.006 seconds.
+􁁛  Suite N34ConfiguredPrefixTests passed after 0.006 seconds.
+􁁛  Test "Folder, breadcrumb, root and bucket changes persist through one success owner" passed after 0.012 seconds.
+􁁛  Test "A failed new folder cannot commit another route's cached rows" passed after 0.012 seconds.
+􁁛  Test "Legacy route migration and saved navigation cannot cross accounts" passed after 0.012 seconds.
+􁁛  Suite F27ConfirmedNavigationTests passed after 0.012 seconds.
+􁁛  Test run with 5 tests in 2 suites passed after 0.012 seconds.

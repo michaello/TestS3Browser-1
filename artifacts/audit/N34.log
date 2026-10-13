@@ -1,0 +1,13 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.32 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N34ConfiguredPrefixTests started.
+􀟈  Test "Applying configured bucket or prefix changes overrides an old saved route" started.
+􀟈  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" started.
+􁁛  Test "Applying configured bucket or prefix changes overrides an old saved route" passed after 0.042 seconds.
+􁁛  Test "An initial explicit prefix wins over unrelated unscoped legacy defaults" passed after 0.044 seconds.
+􁁛  Suite N34ConfiguredPrefixTests passed after 0.044 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.044 seconds.

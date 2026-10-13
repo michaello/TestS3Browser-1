@@ -1,23 +1,21 @@
 Building for debugging...
-[Computing dependencies]
-[Provisioning 2 / 4]
-[1 / 4] AuditCore
-Build complete! (1.50 sec)
+[1 / 1]
+Build complete! (0.29 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN02 started.
-􀟈  Test retryPreservesUneditedRemoteTags() started.
-􀟈  Test writeFailureRetainsDraftAndRemoteSnapshot() started.
+􀟈  Test cancelledReadDoesNotBecomeEmptySuccess() started.
 􀟈  Test oldReadCannotAuthorizeEditingAfterNewFailure() started.
+􀟈  Test writeFailureRetainsDraftAndRemoteSnapshot() started.
+􀟈  Test retryPreservesUneditedRemoteTags() started.
 􀟈  Test unknownAndFailedReadsCannotReplaceTags() started.
 􀟈  Test successfulEmptyReadAllowsFirstTag() started.
-􀟈  Test cancelledReadDoesNotBecomeEmptySuccess() started.
-􁁛  Test writeFailureRetainsDraftAndRemoteSnapshot() passed after 0.096 seconds.
-􁁛  Test unknownAndFailedReadsCannotReplaceTags() passed after 0.096 seconds.
-􁁛  Test successfulEmptyReadAllowsFirstTag() passed after 0.096 seconds.
-􁁛  Test retryPreservesUneditedRemoteTags() passed after 0.096 seconds.
-􁁛  Test cancelledReadDoesNotBecomeEmptySuccess() passed after 0.096 seconds.
-􁁛  Test oldReadCannotAuthorizeEditingAfterNewFailure() passed after 0.142 seconds.
-􁁛  Suite AuditN02 passed after 0.142 seconds.
-􁁛  Test run with 6 tests in 1 suite passed after 0.143 seconds.
+􁁛  Test cancelledReadDoesNotBecomeEmptySuccess() passed after 0.001 seconds.
+􁁛  Test writeFailureRetainsDraftAndRemoteSnapshot() passed after 0.005 seconds.
+􁁛  Test retryPreservesUneditedRemoteTags() passed after 0.006 seconds.
+􁁛  Test unknownAndFailedReadsCannotReplaceTags() passed after 0.006 seconds.
+􁁛  Test successfulEmptyReadAllowsFirstTag() passed after 0.006 seconds.
+􁁛  Test oldReadCannotAuthorizeEditingAfterNewFailure() passed after 0.006 seconds.
+􁁛  Suite AuditN02 passed after 0.006 seconds.
+􁁛  Test run with 6 tests in 1 suite passed after 0.006 seconds.

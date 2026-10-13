@@ -21,8 +21,8 @@ struct FileDetailView: View {
     @State private var downloadedBytes: Int64 = 0
     @State private var showingDetails = false
     @State private var showingShareSheet = false
-    @State private var objectMetadata: S3ObjectMetadata? = nil
-    @State private var metadataError: String?
+    @State private var metadataState = DetailMetadataLoadState<S3ObjectMetadata>()
+    private var objectMetadata: S3ObjectMetadata? { metadataState.value }
     @State private var versionsExpanded = false
     @State private var tagsExpanded = false
     @State private var permissionsExpanded = false
@@ -42,6 +42,7 @@ struct FileDetailView: View {
     @State private var isChangingStorageClass = false
     @State private var storageClassError: String? = nil
     @State private var showStorageClassError = false
+    @State private var copyEncryptionPrompt: CopyEncryptionPrompt?
     @State private var tagEditor = ObjectTagEditor()
     @State private var showTagsError = false
     @State private var objectACL: S3ObjectACL? = nil
@@ -55,7 +56,9 @@ struct FileDetailView: View {
     @State private var showRestoreConfirm = false
     @State private var pendingRestoreVersionId: String? = nil
     @State private var lifecycleRules: [LifecycleRuleDisplay] = []
-    @State private var isLoadingLifecycle = false
+    @State private var lifecycleRequest = RequestOwnership()
+    @State private var lifecycleError: String?
+    private var isLoadingLifecycle: Bool { lifecycleRequest.isLoading }
     private var lifecyclePrediction: LifecyclePrediction {
         service.lifecyclePrediction(
             objectKey: object.key, objectCreated: object.lastModified, rules: lifecycleRules,
@@ -91,6 +94,10 @@ struct FileDetailView: View {
                 standardDetailView
             }
         }
+        .copyEncryptionConfirmation(prompt: Binding(
+            get: { showingDetails ? nil : copyEncryptionPrompt },
+            set: { copyEncryptionPrompt = $0 }
+        ))
         .sheet(isPresented: $showingShareSheet) {
             SharePresignedURLSheet(object: object, s3Service: service)
         }
@@ -199,6 +206,7 @@ struct FileDetailView: View {
                 ScrollView { metadataCard.padding() }
                     .task { await loadMetadata() }
                     .navigationTitle("File Details")
+                    .copyEncryptionConfirmation(prompt: $copyEncryptionPrompt)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -223,6 +231,10 @@ struct FileDetailView: View {
             MetadataRow(label: "Modified", value: object.lastModified.relativeFormatted())
 
             if let meta = objectMetadata {
+                if let failure = metadataState.error {
+                    Text(failure).font(.caption).foregroundStyle(.secondary)
+                    Button("Retry Metadata") { Task { await loadMetadata(force: true) } }.font(.caption)
+                }
                 if let ct = meta.contentType {
                     MetadataRow(label: "Content-Type", value: ct)
                 }
@@ -255,10 +267,10 @@ struct FileDetailView: View {
                         MetadataRow(label: key, value: meta.userMetadata[key] ?? "")
                     }
                 }
-            } else if let metadataError {
+            } else if let metadataError = metadataState.error {
                 Text(metadataError).font(.caption).foregroundStyle(.secondary)
                 Button("Retry Metadata") { Task { await loadMetadata(force: true) } }.font(.caption)
-            } else {
+            } else if metadataState.isLoading {
                 HStack(spacing: 6) {
                     ProgressView()
                         .scaleEffect(0.7)
@@ -266,6 +278,9 @@ struct FileDetailView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+            } else {
+                Text(metadataState.phase == .empty ? "No additional metadata" : "Metadata not loaded")
+                    .font(.caption).foregroundStyle(.secondary)
             }
 
             if let url = service.getPublicURL(for: object.key) {
@@ -463,12 +478,21 @@ struct FileDetailView: View {
         .disabled(isChangingStorageClass)
     }
 
-    private func applyStorageClass(_ storageClass: S3ClientTypes.StorageClass) async {
+    private func applyStorageClass(_ storageClass: S3ClientTypes.StorageClass,
+                                   encryptionDecision: CopyEncryptionDecision = .automatic,
+                                   expectedGeneration: UUID? = nil) async {
+        let generation = expectedGeneration ?? service.session.generation
+        guard service.session.isCurrent(generation) else { return }
         isChangingStorageClass = true
         defer { isChangingStorageClass = false }
         do {
-            try await service.changeStorageClass(key: object.key, storageClass: storageClass, bucket: object.bucket)
+            try await service.changeStorageClass(key: object.key, storageClass: storageClass, bucket: object.bucket,
+                encryptionDecision: encryptionDecision, expectedGeneration: generation)
             await loadMetadata()
+        } catch let requirement as CopyEncryptionRequirement {
+            copyEncryptionPrompt = CopyEncryptionPrompt(requirement: requirement) { decision in
+                Task { await applyStorageClass(storageClass, encryptionDecision: decision, expectedGeneration: generation) }
+            }
         } catch {
             await MainActor.run {
                 storageClassError = error.localizedDescription
@@ -813,17 +837,22 @@ struct FileDetailView: View {
         }
     }
 
-    private func loadLifecycle() async {
-        isLoadingLifecycle = true
-        defer { isLoadingLifecycle = false }
-        guard case .lifecycle(let rules) = try? await DetailMetadataCache.shared.load(.lifecycle, object: object, service: service) else { return }
-        lifecycleRules = rules
-        if lifecycleRules.contains(where: {
-            $0.isEnabled && !$0.filter.tags.isEmpty &&
-            LifecyclePolicy.eligibility(filter: $0.filter, key: object.key, size: object.size, tags: nil) != .doesNotMatch
-        }),
-           tagEditor.loadState != .loaded {
-            await loadTags()
+    private func loadLifecycle(force: Bool = false) async {
+        let requestID = lifecycleRequest.begin()
+        let generation = service.session.generation
+        defer { lifecycleRequest.finish(requestID) }
+        do {
+            guard case .lifecycle(let rules) = try await DetailMetadataCache.shared.load(.lifecycle, object: object, service: service, force: force),
+                  service.session.isCurrent(generation), lifecycleRequest.owns(requestID) else { return }
+            lifecycleRules = rules
+            lifecycleError = nil
+            if lifecycleRules.contains(where: {
+                $0.isEnabled && !$0.filter.tags.isEmpty &&
+                LifecyclePolicy.eligibility(filter: $0.filter, key: object.key, size: object.size, tags: nil) != .doesNotMatch
+            }), tagEditor.loadState != .loaded { await loadTags() }
+        } catch {
+            guard !(error is CancellationError), service.session.isCurrent(generation), lifecycleRequest.owns(requestID) else { return }
+            lifecycleError = error.localizedDescription
         }
     }
 
@@ -876,7 +905,7 @@ struct FileDetailView: View {
                     ProgressView().scaleEffect(0.7)
                 } else {
                     Button("Refresh") {
-                        Task { await loadLifecycle() }
+                        Task { await loadLifecycle(force: true) }
                     }
                     .font(.caption)
                 }
@@ -890,6 +919,9 @@ struct FileDetailView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+            } else if let lifecycleError {
+                Text("Unable to load lifecycle rules: \(lifecycleError)")
+                    .font(.caption).foregroundStyle(.red)
             } else if lifecycleRules.isEmpty {
                 Text("No lifecycle rules configured")
                     .font(.caption)
@@ -934,19 +966,28 @@ struct FileDetailView: View {
         }
     }
 
-    private func restoreVersion(versionId: String) async {
-        let generation = service.session.generation
+    private func restoreVersion(versionId: String, encryptionDecision: CopyEncryptionDecision = .automatic,
+                                expectedGeneration: UUID? = nil) async {
+        let generation = expectedGeneration ?? service.session.generation
         await versionRestore.restore(versionId, isCurrent: {
             presentationAccount == service.session.configuration.account && service.session.isCurrent(generation)
         }, write: {
-            try await service.restoreVersion(key: object.key, versionId: versionId, bucket: object.bucket)
+            do {
+                try await service.restoreVersion(key: object.key, versionId: versionId, bucket: object.bucket,
+                    encryptionDecision: encryptionDecision, expectedGeneration: generation)
+            } catch let requirement as CopyEncryptionRequirement {
+                copyEncryptionPrompt = CopyEncryptionPrompt(requirement: requirement) { decision in
+                    Task { await restoreVersion(versionId: versionId, encryptionDecision: decision, expectedGeneration: generation) }
+                }
+                throw CancellationError()
+            }
         }, invalidate: {}, content: {
             await loadFile(forceRevisionRefresh: true)
             if let error { throw PreviewRefreshError(message: error) }
         }, metadata: {
             let metadata = try await service.headObject(key: object.key, bucket: object.bucket)
             guard service.session.isCurrent(generation) else { throw CancellationError() }
-            objectMetadata = metadata
+            metadataState.receive(metadata)
             DetailMetadataCache.shared.seed(.metadata(metadata), section: .metadata, object: object, service: service)
         }, versions: {
             let result = try await service.listObjectVersions(key: object.key, bucket: object.bucket)
@@ -957,12 +998,11 @@ struct FileDetailView: View {
     }
 
     private func loadMetadata(force: Bool = false) async {
-        do {
+        await metadataState.load {
             if case .metadata(let meta) = try await DetailMetadataCache.shared.load(.metadata, object: object, service: service, force: force) {
-                objectMetadata = meta; metadataError = nil
+                return meta
             }
-        } catch {
-            if !(error is CancellationError) { metadataError = error.localizedDescription }
+            return nil
         }
     }
 
@@ -1165,9 +1205,7 @@ struct HTMLWebView: UIViewRepresentable {
 
 struct ImageContentView: View {
     let image: UIImage
-    @State private var scale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    @State private var zoom = MediaZoomState()
     @State private var isFullScreen = false
 
     var body: some View {
@@ -1187,57 +1225,16 @@ struct ImageContentView: View {
                 .buttonStyle(.bordered)
             }
 
-            ZStack {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .scaleEffect(scale)
-                    .offset(offset)
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                scale = max(1.0, min(value, 5.0))
-                            }
-                    )
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                if scale > 1.0 {
-                                    offset = CGSize(
-                                        width: lastOffset.width + value.translation.width,
-                                        height: lastOffset.height + value.translation.height
-                                    )
-                                }
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
-                    .onTapGesture(count: 2) {
-                        withAnimation {
-                            if scale > 1.0 {
-                                scale = 1.0
-                                offset = .zero
-                                lastOffset = .zero
-                            } else {
-                                scale = 2.0
-                            }
-                        }
-                    }
-            }
+            ZoomableMediaImage(image: image, zoom: $zoom)
             .frame(maxWidth: .infinity)
             .frame(height: 300)
             .background(.gray.opacity(0.1))
             .cornerRadius(8)
 
             HStack {
-                if scale > 1.0 {
+                if zoom.scale > 1.0 {
                     Button("Reset") {
-                        withAnimation {
-                            scale = 1.0
-                            offset = .zero
-                            lastOffset = .zero
-                        }
+                        withAnimation { zoom.reset() }
                     }
                     .buttonStyle(.bordered)
                 }
@@ -1284,50 +1281,13 @@ struct ImageContentView: View {
 struct FullScreenImageView: View {
     let image: UIImage
     @Binding var isPresented: Bool
-    @State private var scale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    @State private var zoom = MediaZoomState()
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .scaleEffect(scale)
-                .offset(offset)
-                .gesture(
-                    MagnificationGesture()
-                        .onChanged { value in
-                            scale = max(1.0, min(value, 5.0))
-                        }
-                )
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            if scale > 1.0 {
-                                offset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                            }
-                        }
-                        .onEnded { _ in
-                            lastOffset = offset
-                        }
-                )
-                .onTapGesture(count: 2) {
-                    withAnimation {
-                        if scale > 1.0 {
-                            scale = 1.0
-                            offset = .zero
-                            lastOffset = .zero
-                        } else {
-                            scale = 2.0
-                        }
-                    }
-                }
+            ZoomableMediaImage(image: image, zoom: $zoom)
 
             VStack {
                 HStack {

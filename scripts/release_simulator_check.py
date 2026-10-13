@@ -69,7 +69,7 @@ def command_result(command, label, timeout, environment=None):
 
 def wait_for_owned_fetches():
     # A live process, not a stale state file, proves a verified wait. Do not restart it.
-    for name in ("E01-resolve-process.json", "E01-shallow-process.json", "E01-filtered-process.json", "E01-codeload-process.json", "E01-zip-process.json"):
+    for name in ("E01-resolve-process.json", "E01-shallow-process.json", "E01-filtered-process.json", "E01-codeload-process.json", "E01-zip-process.json", "E01-object-hydration.json", "E01-object-hydration-resume.json"):
         path = ARTIFACTS / name
         if not path.exists(): continue
         while True:
@@ -137,7 +137,22 @@ def inspect_resources(app):
 
 def validate_test_summary(summary):
     if summary.get("failedTests", 0) or summary.get("skippedTests", 0): raise RuntimeError("Integrated tests failed or skipped: " + json.dumps(summary))
-    if summary.get("passedTests", 0) < 12: raise RuntimeError("Expected at least eight integration and four UI tests; got " + json.dumps(summary))
+    if summary.get("passedTests", 0) < 13: raise RuntimeError("Expected at least eight integration and five UI tests; got " + json.dumps(summary))
+
+
+def inspect_sdk_resources(app, derived):
+    checks = []
+    packages = derived / "SourcePackages/checkouts"
+    for target, source in (("ClientRuntime", packages / "smithy-swift/Sources/ClientRuntime/PrivacyInfo.xcprivacy"),
+                           ("AwsCommonRuntimeKit", packages / "aws-crt-swift/Source/AwsCommonRuntimeKit/PrivacyInfo.xcprivacy")):
+        expected = plistlib.loads(source.read_bytes())
+        candidates = [path for path in app.rglob("PrivacyInfo.xcprivacy") if target.lower() in path.parent.name.lower()]
+        if not candidates: raise RuntimeError("Pinned SDK privacy resource is missing from app: " + target)
+        for path in candidates:
+            if plistlib.loads(path.read_bytes()) != expected:
+                raise RuntimeError("Built SDK manifest differs from pinned source: " + str(path))
+            checks.append({"target": target, "source_manifest": str(source), "built_manifest": str(path), "matches_pinned_source": True})
+    return checks
 
 
 def validate_test_tree(tree):
@@ -159,9 +174,32 @@ def validate_runtime_measurements(snapshot, case):
             raise RuntimeError("Missing or invalid runtime measurement: " + case + ":" + field)
     if type(snapshot.get("peakResidentBytes")) is not int or snapshot["peakResidentBytes"] <= 0:
         raise RuntimeError("Missing measured process peak resident memory: " + case)
-    for field in ("requestCount", "duplicateBodyRequests", "receivedBytes", "failedRequests", "scrollingStalls"):
+    for field in ("requestCount", "duplicateBodyRequests", "receivedBytes", "confirmedUploadPayloadBytes", "failedRequests", "scrollingStalls"):
         if type(snapshot.get(field)) is not int or snapshot[field] < 0:
             raise RuntimeError("Invalid runtime aggregate: " + case + ":" + field)
+    transfers = snapshot.get("maximumOwnedBodyTransfers")
+    if transfers is not None and (type(transfers) is not int or not 0 <= transfers <= 4):
+        raise RuntimeError("Measured app-owned body transfer peak exceeds the tested limit: " + case)
+    unavailable = snapshot.get("unavailableMeasurements")
+    if not isinstance(unavailable, list) or not unavailable or any(not isinstance(value, str) or not value for value in unavailable):
+        raise RuntimeError("Runtime report must identify unavailable measurements: " + case)
+    scope = snapshot.get("byteMeasurementScope")
+    if not isinstance(scope, str) or "sdk" not in scope.lower() or "upload" not in scope.lower():
+        raise RuntimeError("Runtime byte measurements have no SDK/upload scope: " + case)
+    construction = snapshot.get("viewConstruction")
+    allowed_surfaces = {"browse", "recent", "prefix", "dump", "stash", "gallery"}
+    if not isinstance(construction, dict) or "recent" not in construction or set(construction) - allowed_surfaces:
+        raise RuntimeError("Missing bounded actual view construction measurements: " + case)
+    for surface, metric in construction.items():
+        if type(metric.get("count")) is not int or metric["count"] < 1:
+            raise RuntimeError("Invalid construction sample count: " + case + ":" + surface)
+        for field in ("totalMilliseconds", "maximumMilliseconds"):
+            if type(metric.get(field)) not in (int, float) or not math.isfinite(metric[field]) or metric[field] < 0:
+                raise RuntimeError("Invalid measured construction duration: " + case + ":" + surface)
+        if metric["maximumMilliseconds"] > metric["totalMilliseconds"] + 1e-9:
+            raise RuntimeError("Construction maximum exceeds the observed total")
+    if "excludes layout" not in snapshot.get("viewConstructionScope", ""):
+        raise RuntimeError("View construction scope must exclude layout/draw work")
     if snapshot["requestCount"] < 1 or snapshot["duplicateBodyRequests"] != 0:
         raise RuntimeError("Runtime request coalescing evidence failed: " + case)
     refreshes = snapshot.get("refreshMilliseconds")
@@ -192,7 +230,7 @@ def collect_runtime_measurements(container, output=ARTIFACTS):
     for source in (container / "Documents").glob("audit-runtime-*.json"):
         source.unlink();removed.append(str(source))
     return {"cases": records, "synthetic_fixture_files_removed": removed,
-            "byte_measurement_scope": "Received body bytes only; metadata SDK wire bytes are unavailable and are not estimated"}
+            "byte_measurement_scope": "App-exported SDK download/confirmed-upload scope; unavailable native AVFoundation and partial-failure wire measurements are not estimated"}
 
 
 def main():
@@ -209,8 +247,8 @@ def main():
         timeout = command_result([sys.executable, "-c", "import time;time.sleep(5)"], "E01-script-timeout-test", 0.1)
         assert good["exit_code"] == 0 and Path(good["log_path"]).read_text().strip() == "fixture process executed"
         assert bad["exit_code"] == 7 and timeout["exit_code"] == 124
-        validate_test_summary({"passedTests": 12, "failedTests": 0, "skippedTests": 0})
-        for report in ({"passedTests": 0}, {"passedTests": 12, "failedTests": 1}, {"passedTests": 12, "skippedTests": 1}):
+        validate_test_summary({"passedTests": 13, "failedTests": 0, "skippedTests": 0})
+        for report in ({"passedTests": 0}, {"passedTests": 12}, {"passedTests": 13, "failedTests": 1}, {"passedTests": 13, "skippedTests": 1}):
             try: validate_test_summary(report)
             except RuntimeError: pass
             else: raise AssertionError("Invalid test report passed")
@@ -231,6 +269,21 @@ def main():
                     info["NSExtension"]["NSExtensionPrincipalClass"] = "DumpShareExtension.ShareViewController"
                 (bundle / "Info.plist").write_bytes(plistlib.dumps(info));(bundle / executable).write_bytes(b"fixture executable")
             assert len(inspect_resources(app)) == 3
+            derived = Path(directory) / "derived"
+            for target, relative in (("ClientRuntime", "smithy-swift/Sources/ClientRuntime"), ("AwsCommonRuntimeKit", "aws-crt-swift/Source/AwsCommonRuntimeKit")):
+                source = derived / "SourcePackages/checkouts" / relative / "PrivacyInfo.xcprivacy"
+                source.parent.mkdir(parents=True);source.write_bytes(plistlib.dumps({"NSPrivacyAccessedAPITypes": []}))
+                bundle = app / (target + ".bundle");bundle.mkdir();(bundle / "PrivacyInfo.xcprivacy").write_bytes(source.read_bytes())
+            assert len(inspect_sdk_resources(app, derived)) == 2
+            sdk = app / "ClientRuntime.bundle/PrivacyInfo.xcprivacy";baseline_sdk = sdk.read_bytes();sdk.unlink()
+            try: inspect_sdk_resources(app, derived)
+            except RuntimeError: resource_cases.append("missing pinned SDK manifest rejected")
+            else: raise AssertionError("Missing pinned SDK manifest passed")
+            sdk.write_bytes(plistlib.dumps({"wrong": True}))
+            try: inspect_sdk_resources(app, derived)
+            except RuntimeError: resource_cases.append("different pinned SDK manifest rejected")
+            else: raise AssertionError("Different pinned SDK manifest passed")
+            sdk.write_bytes(baseline_sdk)
             manifest = app / "PrivacyInfo.xcprivacy";baseline = manifest.read_bytes();manifest.unlink()
             try: inspect_resources(app)
             except RuntimeError: resource_cases.append("missing manifest rejected")
@@ -251,7 +304,9 @@ def main():
             except RuntimeError: resource_cases.append("incorrect principal rejected")
             else: raise AssertionError("Incorrect principal passed")
             container = Path(directory) / "container";(container / "Documents").mkdir(parents=True);(container / "Library/Preferences").mkdir(parents=True)
-            snapshot = {"launchToFirstContentMilliseconds": 120, "cacheToFirstContentMilliseconds": 20, "maximumFrameGapMilliseconds": 17, "peakResidentBytes": 1234, "requestCount": 1, "duplicateBodyRequests": 0, "receivedBytes": 0, "failedRequests": 0, "scrollingStalls": 0, "refreshMilliseconds": [3000]}
+            snapshot = {"launchToFirstContentMilliseconds": 120, "cacheToFirstContentMilliseconds": 20, "maximumFrameGapMilliseconds": 17, "peakResidentBytes": 1234, "requestCount": 1, "duplicateBodyRequests": 0, "receivedBytes": 0, "confirmedUploadPayloadBytes": 0, "unavailableMeasurements": ["Native AVFoundation HTTP wire bytes and requests", "Partial failed-upload bytes"], "byteMeasurementScope": "Consumed SDK downloads and confirmed upload payloads", "failedRequests": 0, "scrollingStalls": 0, "refreshMilliseconds": [3000]}
+            snapshot.update(viewConstruction={"recent": {"count": 1, "totalMilliseconds": 4, "maximumMilliseconds": 4}},
+                            viewConstructionScope="SwiftUI view construction only; excludes layout, drawing and framework work after body returns.")
             for case in ("cache-success", "offline", "scrolling", "selection"):
                 value = dict(snapshot);value["failedRequests"] = 1 if case == "offline" else 0
                 write_json(container / "Documents" / ("audit-runtime-" + case + ".json"), value)
@@ -260,7 +315,7 @@ def main():
             runtime = collect_runtime_measurements(container, Path(directory) / "runtime-proof")
             assert len(runtime["cases"]) == 4 and len(runtime["synthetic_fixture_files_removed"]) == 5
             assert not preference.exists() and protected.read_bytes() == b"must remain"
-            for invalid in ({}, {**snapshot, "peakResidentBytes": 0}, {**snapshot, "duplicateBodyRequests": 1}, {**snapshot, "refreshMilliseconds": []}):
+            for invalid in ({}, {**snapshot, "peakResidentBytes": 0}, {**snapshot, "duplicateBodyRequests": 1}, {**snapshot, "refreshMilliseconds": []}, {**snapshot, "maximumOwnedBodyTransfers": 5}, {**snapshot, "unavailableMeasurements": []}, {**snapshot, "viewConstruction": {}}, {**snapshot, "viewConstructionScope": "full rendering"}):
                 try: validate_runtime_measurements(invalid, "cache-success")
                 except RuntimeError: pass
                 else: raise AssertionError("Invalid runtime proof passed")
@@ -293,6 +348,7 @@ def main():
         built = command_result(base + destination + ["build-for-testing"], "E01-release-build", 1800, env);commands.append(built)
         if built["exit_code"] != 0: raise RuntimeError("Release build failed: " + built["log_path"])
         proof["built_resource_checks"] = inspect_resources(derived / "Build/Products/Release-iphonesimulator/TestS3Browser.app")
+        proof["built_sdk_resource_checks"] = inspect_sdk_resources(derived / "Build/Products/Release-iphonesimulator/TestS3Browser.app", derived)
         result_path = ARTIFACTS / ("E01-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".xcresult")
         tested = command_result(base + destination + ["-resultBundlePath", str(result_path), "test-without-building"], "E01-simulator-tests", 1800, env);commands.append(tested);proof["xcresult_path"] = str(result_path)
         if tested["exit_code"] != 0: raise RuntimeError("Simulator integration tests failed: " + tested["log_path"])

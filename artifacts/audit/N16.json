@@ -1,0 +1,33 @@
+{
+  "id": "N16",
+  "expected_behavior": "Folder sorting is correct for the complete known catalog, or explicitly states that unsearched/unloaded data remains; a first-page sort cannot claim globally newest results.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:40.542177+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N16PartialFolderSortTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 1,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N16PartialFolderSortTests",
+      "name": "partialSortNotice()",
+      "time": "0.001753041"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

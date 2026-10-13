@@ -2,9 +2,9 @@
   "id": "N31",
   "expected_behavior": "Rename/copy/restore/storage actions preserve applicable ACL/storage/encryption properties or explicitly disclose/handle an intended change; default COPY metadata is not falsely described as lost.",
   "passed": true,
-  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:32:24.028498+00:00",
+  "recorded_at": "2026-10-13T07:40:02.590588+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -14,37 +14,82 @@
     "--disable-xctest",
     "--enable-swift-testing",
     "--filter",
-    "N31CopyPropertyTests",
+    "N31CopyPropertyTests|N31EncryptionPolicyTests",
     "--xunit-output",
     "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N31.xml"
   ],
   "exit_code": 0,
-  "test_count": 5,
+  "test_count": 14,
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
-      "name": "unknownOwnersOrUnsafeGrantsFailBeforeMutation()",
-      "time": "0.0003075"
-    },
-    {
-      "classname": "AuditCoreTests.N31CopyPropertyTests",
-      "name": "customAndPublicGrantsRemainExplicitForBothCopyModes()",
-      "time": "0.00020575"
-    },
-    {
-      "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "multipartTagValuesAreEncodedWithoutChangingBytes()",
-      "time": "0.000173875"
+      "time": "0.000517125"
     },
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "crossOwnerCopyRetainsSourceOwnersGrant()",
-      "time": "0.000110875"
+      "time": "0.000519209"
     },
     {
       "classname": "AuditCoreTests.N31CopyPropertyTests",
       "name": "ownerOnlyPermissionUsesCompatibleExplicitCannedACL()",
-      "time": "0.000163417"
+      "time": "0.000437167"
+    },
+    {
+      "classname": "AuditCoreTests.N31CopyPropertyTests",
+      "name": "unknownOwnersOrUnsafeGrantsFailBeforeMutation()",
+      "time": "0.000565625"
+    },
+    {
+      "classname": "AuditCoreTests.N31CopyPropertyTests",
+      "name": "customAndPublicGrantsRemainExplicitForBothCopyModes()",
+      "time": "0.000405708"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion()",
+      "time": "0.022213958"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "invalidJSONOrBase64CannotConstructAnApprovedContext()",
+      "time": "0.019317125"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely()",
+      "time": "0.019308667"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths()",
+      "time": "0.019166959"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "encryptionConsentNeverAuthorizesDestinationReplacement()",
+      "time": "0.021251625"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "emptyOrMissingCopyAcknowledgementRetainsSource()",
+      "time": "0.022596375"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement()",
+      "time": "0.022593209"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent()",
+      "time": "0.022481792"
+    },
+    {
+      "classname": "AuditCoreTests.N31EncryptionPolicyTests",
+      "name": "cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable()",
+      "time": "0.023718167"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N31.log",

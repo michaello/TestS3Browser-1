@@ -303,36 +303,6 @@ struct CustomTabBar: View {
     }
 }
 
-/// Individual tab bar button with context menu
-struct TabBarButton: View {
-    let tab: AppTab
-    let isSelected: Bool
-    let onTap: () -> Void
-    let onSelectTab: (AppTab) -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            VStack(spacing: 4) {
-                Image(systemName: tab.icon)
-                    .font(.system(size: 22))
-                Text(tab.title)
-                    .font(.caption2)
-            }
-            .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
-            .frame(maxWidth: .infinity)
-        }
-        .contextMenu {
-            ForEach(AppTab.allCases, id: \.self) { menuTab in
-                Button {
-                    onSelectTab(menuTab)
-                } label: {
-                    Label(menuTab.title, systemImage: menuTab.icon)
-                }
-            }
-        }
-    }
-}
-
 #Preview {
     ContentView(config: .constant(S3Config.default))
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.005315583">
+    <testcase classname="AuditCoreTests.F30ListPresentationTests" name="initialAndEmptyStates()" time="0.000841166" />
+    <testcase classname="AuditCoreTests.F30ListPresentationTests" name="cachedRefreshStates()" time="0.004790334" />
+  </testsuite>
+</testsuites>

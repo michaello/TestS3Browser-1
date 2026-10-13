@@ -14,7 +14,33 @@ final class PagedListingState {
     private var paginationID: UUID?
     private var paginationTask: Task<MetadataListingPage, Error>?
     private var usedTokens: Set<Data> = []
-    private let requests = ResourceLoader<ListingQuery, MetadataListingPage>()
+    private let requests: ResourceLoader<ListingQuery, MetadataListingPage>
+
+    init(requests: ResourceLoader<ListingQuery, MetadataListingPage>? = nil) {
+        self.requests = requests ?? ResourceLoader()
+    }
+
+    var hasMore: Bool { page?.nextToken != nil }
+    var partialQueryNotice: String? {
+        hasMore ? "Search and sort apply to loaded files. Load remaining pages to include the whole folder." : nil
+    }
+    func canConfirmDestination(_ expected: ListingQuery) -> Bool {
+        query == expected && page != nil && !isLoading && error == nil
+    }
+
+    func cancelPagination() {
+        generation = UUID()
+        paginationTask?.cancel()
+        paginationTask = nil
+        paginationID = nil
+        isLoadingMore = false
+    }
+
+    func reset() {
+        cancelPagination()
+        query = nil;page = nil;isLoading = false;error = nil
+        usedTokens.removeAll()
+    }
 
     func remove(bucket: String, key: String) {
         guard let query, let old = page else { return }
@@ -56,7 +82,11 @@ final class PagedListingState {
     }
 
     func loadMore(operation: @escaping @MainActor (String?) async throws -> MetadataListingPage) async throws {
-        guard let query, let token = page?.nextToken, !isLoading, !isLoadingMore else { return }
+        guard let query, !isLoading, !isLoadingMore else { return }
+        // Successful mutations update the shared query cache. Appending another
+        // page must use that current value instead of resurrecting removed rows.
+        if let cached = requests.value(for: query) { page = cached }
+        guard let token = page?.nextToken else { return }
         let epoch = generation
         let identifier = UUID()
         paginationID = identifier

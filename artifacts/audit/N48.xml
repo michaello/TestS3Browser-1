@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.007897167">
+    <testcase classname="AuditCoreTests.N48FolderValidationTests" name="fullPrefixByteLimitAndRemoteFailureAreActionable()" time="0.007455708" />
+    <testcase classname="AuditCoreTests.N48FolderValidationTests" name="correctedNameCanBeSubmittedWithExactSpecialBytes()" time="0.000794709" />
+    <testcase classname="AuditCoreTests.N48FolderValidationTests" name="invalidNamesKeepInputAndShowErrorWithoutSending(_:)" time="0.000767084" />
+  </testsuite>
+</testsuites>

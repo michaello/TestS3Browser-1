@@ -2,9 +2,9 @@
   "id": "N36",
   "expected_behavior": "Partial batch download success visibly reports missing filenames/counts with retry information before/while sharing the successful subset.",
   "passed": true,
-  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:30.141177+00:00",
+  "recorded_at": "2026-10-13T07:40:09.346088+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N36PartialBatchExportTests",
-      "name": "missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()",
-      "time": "0.040845917"
+      "name": "completeFailureHasTerminalErrorSummaryAndNoShareFiles()",
+      "time": "0.007005042"
     },
     {
       "classname": "AuditCoreTests.N36PartialBatchExportTests",
-      "name": "completeFailureHasTerminalErrorSummaryAndNoShareFiles()",
-      "time": "0.03665875"
+      "name": "missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()",
+      "time": "0.00821775"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.log",

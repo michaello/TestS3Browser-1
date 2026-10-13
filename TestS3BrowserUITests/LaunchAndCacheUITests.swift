@@ -45,6 +45,22 @@ final class LaunchAndCacheUITests: XCTestCase {
         finish(app)
     }
 
+    func testCustomTabsExposeExactlyOneSelectedAccessibleControl() {
+        let app = launch("tab-accessibility")
+        let names = ["browse", "apps", "recent", "stash", "stats", "upload", "settings"]
+        XCTAssertTrue(app.buttons["tab.recent"].waitForExistence(timeout: 4))
+        for selected in names {
+            app.buttons["tab." + selected].tap()
+            for name in names {
+                let button = app.buttons["tab." + name]
+                XCTAssertTrue(button.exists)
+                XCTAssertFalse(button.label.isEmpty)
+                XCTAssertEqual(button.isSelected, name == selected)
+            }
+        }
+        finish(app)
+    }
+
     func testSelectionCanBeCancelledWithoutOpeningOrDeletingAFile() {
         let app = launch("selection", failure: true)
         let cached = app.descendants(matching: .any)["audit-cache-first.txt"].firstMatch
@@ -52,6 +68,9 @@ final class LaunchAndCacheUITests: XCTestCase {
         app.buttons["Edit"].tap()
         cached.tap()
         XCTAssertTrue(app.buttons["Done"].exists)
+        app.buttons["Browse"].tap()
+        app.buttons["Recent"].tap()
+        XCTAssertTrue(app.buttons["Done"].exists, "A tab revisit preserves the existing selection state")
         app.buttons["Done"].tap()
         XCTAssertTrue(cached.exists)
         finish(app)

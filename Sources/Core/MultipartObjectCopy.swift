@@ -40,13 +40,26 @@ struct MultipartCopiedPart: Sendable {
     let etag: String
 }
 
+enum MultipartDestinationCondition: Equatable, Sendable {
+    case absent, matchingETag(String)
+    init(_ presence: TransferObjectPresence) throws {
+        switch presence {
+        case .absent: self = .absent
+        case .present(let revision):
+            guard let etag = revision.etag, !etag.isEmpty else { throw MultipartCopyError.destinationRevisionUnavailable }
+            self = .matchingETag(etag)
+        }
+    }
+}
+
 enum MultipartCopyError: LocalizedError {
-    case invalidSize, invalidResponse
+    case invalidSize, invalidResponse, destinationRevisionUnavailable
     case cleanupFailed(uploadID: String, original: String, cleanup: String)
     var errorDescription: String? {
         switch self {
         case .invalidSize: return "The object size cannot be represented by S3 multipart-copy limits."
         case .invalidResponse: return "S3 did not confirm the multipart copy. The source was retained."
+        case .destinationRevisionUnavailable: return "S3 did not return the destination ETag required for safe multipart replacement. No copy was started."
         case .cleanupFailed(let id, let original, let cleanup):
             return "Copy failed: \(original). Multipart cleanup failed for upload \(id): \(cleanup). The source was retained."
         }
@@ -58,15 +71,18 @@ protocol MultipartCopyTransport {
     func validateContext() throws
     func create(properties: MultipartCopyProperties) async throws -> String
     func copyPart(uploadID: String, part: MultipartCopyPart) async throws -> String
-    func complete(uploadID: String, parts: [MultipartCopiedPart]) async throws
+    func complete(uploadID: String, parts: [MultipartCopiedPart], condition: MultipartDestinationCondition) async throws -> TransferObjectRevision
     func abort(uploadID: String) async throws
 }
 
 @MainActor
 enum MultipartObjectCopy {
+    @discardableResult
     static func perform(bytes: Int64, properties: MultipartCopyProperties,
-                        transport: any MultipartCopyTransport) async throws {
+                        destination: TransferObjectPresence = .absent,
+                        transport: any MultipartCopyTransport) async throws -> TransferObjectRevision {
         let plan = try MultipartCopyPlan(bytes: bytes)
+        let condition = try MultipartDestinationCondition(destination)
         try Task.checkCancellation()
         try transport.validateContext()
         let uploadID = try await transport.create(properties: properties)
@@ -82,7 +98,9 @@ enum MultipartObjectCopy {
             }
             try Task.checkCancellation()
             try transport.validateContext()
-            try await transport.complete(uploadID: uploadID, parts: copied)
+            let revision = try await transport.complete(uploadID: uploadID, parts: copied, condition: condition)
+            guard let etag = revision.etag, !etag.isEmpty else { throw MultipartCopyError.invalidResponse }
+            return revision
         } catch {
             // An owned cleanup task must run even when the caller is already cancelled.
             let original = error

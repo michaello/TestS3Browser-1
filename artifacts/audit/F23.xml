@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.002282">
+    <testcase classname="AuditCoreTests.F23FramesRefreshTests" name="failedRefreshRetainsFrames()" time="0.001756708" />
+    <testcase classname="AuditCoreTests.F23FramesRefreshTests" name="replacesObsoletePagination()" time="0.002037458" />
+    <testcase classname="AuditCoreTests.F23FramesRefreshTests" name="changedQueryRejectsOld()" time="0.001916125" />
+  </testsuite>
+</testsuites>

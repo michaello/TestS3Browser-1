@@ -1,0 +1,43 @@
+{
+  "id": "F23",
+  "expected_behavior": "Refreshing during delayed frame pagination cannot replace page one with page two or publish an obsolete continuation token.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:38:59.929778+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F23FramesRefreshTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F23FramesRefreshTests",
+      "name": "failedRefreshRetainsFrames()",
+      "time": "0.001756708"
+    },
+    {
+      "classname": "AuditCoreTests.F23FramesRefreshTests",
+      "name": "replacesObsoletePagination()",
+      "time": "0.002037458"
+    },
+    {
+      "classname": "AuditCoreTests.F23FramesRefreshTests",
+      "name": "changedQueryRejectsOld()",
+      "time": "0.001916125"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

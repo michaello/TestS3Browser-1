@@ -53,13 +53,17 @@ final class ServiceSession {
     private(set) var configuration: ServiceConfiguration
     private(set) var generation = UUID()
     private(set) var route: ListingQuery
+    private(set) var confirmedRoute: ListingQuery?
     let bucketChoices = ResourceLoader<String, [String]>()
     let listings = ResourceLoader<ListingQuery, MetadataListingPage>()
+    let browse: PagedListingState
     let catalogs = ResourceLoader<String, MetadataCatalogSnapshot>()
+    let counts = BucketCountCache()
 
     init(configuration: ServiceConfiguration) {
         self.configuration = configuration
         route = ListingQuery(account: configuration.account, bucket: configuration.bucket, prefix: configuration.prefix)
+        browse = PagedListingState(requests: listings)
     }
 
     @discardableResult
@@ -69,8 +73,11 @@ final class ServiceSession {
         generation = UUID()
         route = ListingQuery(account: configuration.account, bucket: configuration.bucket, prefix: configuration.prefix)
         bucketChoices.reset()
+        confirmedRoute = nil
         listings.reset()
+        browse.reset()
         catalogs.reset()
+        counts.reset()
         return true
     }
 
@@ -78,6 +85,7 @@ final class ServiceSession {
         let next = ListingQuery(account: configuration.account, bucket: bucket, prefix: prefix)
         guard next != route else { return }
         listings.cancel(route)
+        browse.cancelPagination()
         route = next
     }
 
@@ -93,4 +101,11 @@ final class ServiceSession {
     }
 
     func isCurrent(_ generation: UUID) -> Bool { self.generation == generation }
+
+    @discardableResult
+    func confirmRoute(_ query: ListingQuery) -> Bool {
+        guard route == query, listings.value(for: query) != nil else { return false }
+        confirmedRoute = query
+        return true
+    }
 }

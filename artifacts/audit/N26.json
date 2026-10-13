@@ -2,9 +2,9 @@
   "id": "N26",
   "expected_behavior": "Lifecycle eligibility uses rule status and applicable prefix/tag/size filters; unrelated or unknown-scope objects do not receive a false transition prediction.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:12.787662+00:00",
+  "recorded_at": "2026-10-13T07:39:55.558383+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,38 +23,38 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN26",
-      "name": "invalidSizeBoundsAndByteDistinctTagsRemainSafe()",
-      "time": "0.007467042"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN26",
       "name": "unknownEarlierRuleCannotCertifyAnotherAsNext()",
-      "time": "0.00393825"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN26",
-      "name": "missingTagsDoNotHideKnownPrefixMismatch()",
-      "time": "0.004083792"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN26",
-      "name": "prefixAndStatusExcludeUnrelatedObjects()",
-      "time": "0.009621708"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN26",
-      "name": "replicationAndMinimumAgePreventPrematurePrediction()",
-      "time": "0.009788083"
+      "time": "0.0068495"
     },
     {
       "classname": "AuditCoreTests.AuditN26",
       "name": "andFiltersRequireExactTagsAndStrictSizeBounds()",
-      "time": "0.011626583"
+      "time": "0.014879542"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN26",
+      "name": "missingTagsDoNotHideKnownPrefixMismatch()",
+      "time": "0.009931959"
     },
     {
       "classname": "AuditCoreTests.AuditN26",
       "name": "defaultMinimumAndCurrentStorageClassAffectTransitions()",
-      "time": "0.011814459"
+      "time": "0.0151915"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN26",
+      "name": "replicationAndMinimumAgePreventPrematurePrediction()",
+      "time": "0.013129666"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN26",
+      "name": "invalidSizeBoundsAndByteDistinctTagsRemainSafe()",
+      "time": "0.006613875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN26",
+      "name": "prefixAndStatusExcludeUnrelatedObjects()",
+      "time": "0.014024708"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N26.log",

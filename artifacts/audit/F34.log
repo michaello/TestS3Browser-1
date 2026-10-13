@@ -1,0 +1,17 @@
+Building for debugging...
+[1 / 5] AuditCore
+Build complete! (0.24 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F34DerivedRowsCacheTests started.
+􀟈  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" started.
+􀟈  Test "Construction metrics use bounded surface names and measure only the builder" started.
+􀟈  Test "Gallery projections are reused for index changes and rebuild only for source changes" started.
+􀟈  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" started.
+􁁛  Test "Construction metrics use bounded surface names and measure only the builder" passed after 0.045 seconds.
+􁁛  Test "Gallery projections are reused for index changes and rebuild only for source changes" passed after 0.045 seconds.
+􁁛  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" passed after 0.045 seconds.
+􁁛  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" passed after 0.045 seconds.
+􁁛  Suite F34DerivedRowsCacheTests passed after 0.045 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.045 seconds.

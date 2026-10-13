@@ -5,11 +5,13 @@ import hashlib
 import io
 import json
 import os
+import signal
 from pathlib import Path, PurePosixPath
 import subprocess
 import tarfile
 import tempfile
 import stat
+import time
 import zipfile
 import zlib
 
@@ -104,6 +106,55 @@ def verify(archive, mirror, revision, materialize=False, version=None):
     return result
 
 
+def hydrate(mirror, revision, version, proof, maximum_seconds):
+    expected = tree(mirror, revision)
+    identifiers = sorted({digest for _, digest in expected.values()})
+    def missing():
+        output = subprocess.check_output(["git", "-C", str(mirror), "cat-file", "--batch-check"],
+            input=("\n".join(identifiers) + "\n").encode(), env={**os.environ, "GIT_NO_LAZY_FETCH": "1"})
+        return [line.split()[0].decode() for line in output.splitlines() if line.endswith(b" missing")]
+    result = {"revision": revision, "tree": git(mirror, "rev-parse", revision + "^{tree}").decode().strip(),
+              "mirror_path": str(mirror), "verified_blob_paths": len(expected), "commands": [],
+              "pid": os.getpid(), "status": "running", "started_at_epoch": time.time(), "timeout_seconds": maximum_seconds + 30,
+              "strategy": "Fetch exact pinned Git blob objects in resumable bounded batches", "passed": False}
+    remaining = missing();result["initial_missing_blobs"] = len(remaining)
+    started = time.monotonic()
+    try:
+        while remaining:
+            budget = maximum_seconds - (time.monotonic() - started)
+            if budget <= 0: raise RuntimeError("Bounded hydration deadline reached; verified fetched objects retained")
+            batch = remaining[:32]
+            command = ["git", "-C", str(mirror), "-c", "http.version=HTTP/1.1", "fetch", "--no-tags", "--no-write-fetch-head", "--no-auto-maintenance", "https://github.com/awslabs/aws-sdk-swift", *batch]
+            log = proof.with_name(proof.stem + "-batch-" + str(len(result["commands"]) + 1).zfill(3) + ".log")
+            with log.open("w") as output:
+                process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
+                state = {"command": command, "pid": process.pid, "log_path": str(log), "status": "running"}
+                result["commands"].append(state);proof.write_text(json.dumps(result, indent=2) + "\n")
+                try: code = process.wait(timeout=min(120, budget))
+                except subprocess.TimeoutExpired:
+                    os.killpg(process.pid, signal.SIGTERM);process.wait();code = 124
+                state.update(status="completed" if code == 0 else "failed", exit_code=code)
+            remaining = missing();result["remaining_missing_blobs"] = len(remaining)
+            proof.write_text(json.dumps(result, indent=2) + "\n")
+            print(json.dumps({"batch": len(result["commands"]), "remaining_missing_blobs": len(remaining), "exit_code": code}), flush=True)
+            if code != 0: raise RuntimeError("Exact-object batch failed; successful previous objects retained: " + str(log))
+        if not version: raise ValueError("Hydration requires the approved version tag")
+        existing = subprocess.run(["git", "-C", str(mirror), "rev-parse", "refs/tags/" + version], capture_output=True, text=True)
+        if existing.returncode == 0 and existing.stdout.strip() != revision: raise ValueError("Preserve conflicting existing version tag")
+        git(mirror, "update-ref", "refs/tags/" + version, revision)
+        fsck = subprocess.run(["git", "-C", str(mirror), "fsck", "--full", "--no-reflogs"], env={**os.environ, "GIT_NO_LAZY_FETCH": "1"}, capture_output=True, text=True)
+        result["git_fsck_exit_code"] = fsck.returncode
+        if fsck.returncode != 0: raise RuntimeError("Hydrated mirror failed full Git integrity check: " + fsck.stdout + fsck.stderr)
+        result.update(passed=True, all_paths_contents_and_executable_modes_match=True, version_tag=version)
+    except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as error:
+        result["failure"] = str(error)
+    result["elapsed_seconds"] = time.monotonic() - started
+    result["status"] = "completed" if result["passed"] else "failed"
+    result["remaining_missing_blobs"] = len(missing())
+    proof.write_text(json.dumps(result, indent=2) + "\n")
+    return result
+
+
 def self_test():
     with tempfile.TemporaryDirectory(prefix="s3-pinned-archive-") as directory:
         working = Path(directory) / "repo";working.mkdir()
@@ -137,6 +188,15 @@ def self_test():
             try: verify(archive, mirror, revision)
             except ValueError: rejected.append(case)
             else: raise AssertionError("Invalid ZIP archive passed: " + case)
+        hydration_proof = Path(directory) / "hydration.json"
+        assert hydrate(mirror, revision, "fixture", hydration_proof, 10)["passed"]
+        blob = git(working, "rev-parse", "HEAD:test.swift").decode().strip()
+        # Remove one object from this temporary fixture only, never an SDK/cache.
+        (mirror / "objects" / blob[:2] / blob[2:]).unlink()
+        incomplete = hydrate(mirror, revision, "fixture", hydration_proof, 0)
+        assert not incomplete["passed"] and incomplete["remaining_missing_blobs"] == 1
+        assert git(working, "cat-file", "blob", blob) == b"pinned fixture\n"
+        rejected.append("incomplete exact-object hydration cannot pass")
         return {"passed": True, "scope": "Temporary local Git fixtures only", "rejected": rejected}
 
 
@@ -145,15 +205,20 @@ def main():
     parser.add_argument("--archive", type=Path);parser.add_argument("--mirror", type=Path)
     parser.add_argument("--revision");parser.add_argument("--version")
     parser.add_argument("--materialize", action="store_true");parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--hydrate", action="store_true");parser.add_argument("--maximum-seconds", type=int, default=900)
     parser.add_argument("--proof", type=Path)
     args = parser.parse_args()
     if args.self_test: result = self_test()
+    elif args.hydrate:
+        if not all((args.mirror, args.revision, args.version, args.proof)): parser.error("Hydration requires --mirror, --revision, --version and --proof")
+        result = hydrate(args.mirror, args.revision, args.version, args.proof, args.maximum_seconds)
     else:
         if not all((args.archive, args.mirror, args.revision)): parser.error("--archive, --mirror and --revision are required")
         result = verify(args.archive, args.mirror, args.revision, args.materialize, args.version)
     if args.proof:
         args.proof.parent.mkdir(parents=True, exist_ok=True);args.proof.write_text(json.dumps(result, indent=2) + "\n")
-    print(json.dumps(result, indent=2))
+    print(json.dumps({key: value for key, value in result.items() if key != "commands"}, indent=2))
+    return 0 if result.get("passed", True) else 1
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__": raise SystemExit(main())

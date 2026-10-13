@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.003824125">
+    <testcase classname="AuditCoreTests.F32BucketCountCacheTests" name="reuseTruncatedEstimate()" time="0.003187875" />
+    <testcase classname="AuditCoreTests.F32BucketCountCacheTests" name="reuseCatalog()" time="0.002464417" />
+    <testcase classname="AuditCoreTests.F32BucketCountCacheTests" name="failedRefreshAndAccountScope()" time="0.002929667" />
+    <testcase classname="AuditCoreTests.F32BucketCountCacheTests" name="boundAndFailure()" time="0.003561125" />
+  </testsuite>
+</testsuites>

@@ -2,9 +2,9 @@
   "id": "N47",
   "expected_behavior": "Numbered text preview preserves blank lines and correct numbering for LF, CRLF, mixed and trailing newlines, while original exported bytes remain unchanged.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:26.122836+00:00",
+  "recorded_at": "2026-10-13T07:40:30.144263+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.N47NumberedTextTests",
       "name": "reusesDerivedLines()",
-      "time": "0.034117583"
+      "time": "0.007574083"
     },
     {
       "classname": "AuditCoreTests.N47NumberedTextTests",
       "name": "lineEndings(fixture:)",
-      "time": "0.039666667"
+      "time": "0.007667"
     },
     {
       "classname": "AuditCoreTests.N47NumberedTextTests",
       "name": "unicodeBytes()",
-      "time": "0.0396695"
+      "time": "0.007553333"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N47.log",

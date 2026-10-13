@@ -11,6 +11,7 @@ struct ImageGalleryView: View {
     @State private var currentIndex: Int
     @State private var presentationAccount: String
     @State private var workingSet = GalleryWorkingSet<UIImage>()
+    @State private var projection = GalleryIdentityProjection<S3Object, MediaObjectIdentity>()
     @State private var dragOffset: CGFloat = 0
     @State private var isDraggingVertically = false
     @Environment(\.dismiss) private var dismiss
@@ -26,15 +27,21 @@ struct ImageGalleryView: View {
     }
 
     var body: some View {
+        AuditTelemetry.shared.measureViewConstruction(.gallery) { measuredContent }
+    }
+
+    private var measuredContent: some View {
         ZStack {
             TabView(selection: $currentIndex) {
-                ForEach(Array(images.enumerated()), id: \.element.id) { index, image in
+                ForEach(images.indices, id: \.self) { index in
+                    let image = images[index]
+                    let identity = projection.identities.indices.contains(index) ? projection.identities[index] : s3Service.mediaIdentity(for: image)
                     ImagePageView(
                         object: image,
                         s3Service: s3Service,
-                        loadedImage: workingSet.values[s3Service.mediaIdentity(for: image)],
-                        isLoading: workingSet.loading.contains(s3Service.mediaIdentity(for: image)),
-                        errorMessage: workingSet.errors[s3Service.mediaIdentity(for: image)]
+                        loadedImage: workingSet.values[identity],
+                        isLoading: workingSet.loading.contains(identity),
+                        errorMessage: workingSet.errors[identity]
                     )
                     .tag(index)
                 }
@@ -87,8 +94,8 @@ struct ImageGalleryView: View {
             }
         }
         .onChange(of: currentIndex) { _, _ in updateWorkingSet() }
-        .onChange(of: images) { _, _ in updateWorkingSet() }
-        .task { updateWorkingSet() }
+        .onChange(of: images) { _, _ in projection.update(images, identity: { s3Service.mediaIdentity(for: $0) });updateWorkingSet() }
+        .task { projection.update(images, identity: { s3Service.mediaIdentity(for: $0) });updateWorkingSet() }
         .onDisappear { workingSet.clear() }
         .onChange(of: s3Service.session.configuration.account) { _, _ in workingSet.clear(); dismiss() }
     }
@@ -96,8 +103,8 @@ struct ImageGalleryView: View {
     private func updateWorkingSet() {
         guard presentationAccount == s3Service.session.configuration.account else { workingSet.clear(); return }
         let generation = s3Service.session.generation
-        let mapped = Dictionary(images.map { (s3Service.mediaIdentity(for: $0), $0) }, uniquingKeysWith: { first, _ in first })
-        workingSet.select(images.map { s3Service.mediaIdentity(for: $0) }, index: currentIndex) { identity in
+        let mapped = projection.objects
+        workingSet.select(projection.identities, index: currentIndex) { identity in
             guard let object = mapped[identity], s3Service.session.isCurrent(generation),
                   let image = await ImageCacheActor.shared.loadDisplayImage(for: object, using: s3Service),
                   s3Service.session.isCurrent(generation), let cgImage = image.cgImage else {
@@ -117,9 +124,7 @@ struct ImagePageView: View {
     let errorMessage: String?
 
     @State private var thumbnail: UIImage?
-    @State private var scale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    @State private var zoom = MediaZoomState()
 
     private let logger = Logger(subsystem: "com.s3browser", category: "ImagePageView")
 
@@ -131,7 +136,7 @@ struct ImagePageView: View {
                 Group {
                     if let fullImage = loadedImage {
                         // Full image loaded
-                        zoomableImage(fullImage)
+                        ZoomableMediaImage(image: fullImage, zoom: $zoom)
                     } else if let thumb = thumbnail {
                         // Show thumbnail while loading full image
                         ZStack {
@@ -169,59 +174,38 @@ struct ImagePageView: View {
         }
     }
 
-    /// Creates a zoomable image view that doesn't interfere with TabView swiping
-    @ViewBuilder
-    private func zoomableImage(_ image: UIImage) -> some View {
-        Image(uiImage: image)
-            .resizable()
-            .scaledToFit()
-            .scaleEffect(scale)
-            .offset(offset)
-            .gesture(
-                MagnificationGesture()
-                    .onChanged { value in
-                        scale = max(1.0, min(value, 5.0))
-                    }
-                    .onEnded { _ in
-                        if scale < 1.0 {
-                            withAnimation {
-                                scale = 1.0
-                            }
-                        }
-                    }
-            )
-            .highPriorityGesture(
-                scale > 1.0 ?
-                DragGesture()
-                    .onChanged { value in
-                        offset = CGSize(
-                            width: lastOffset.width + value.translation.width,
-                            height: lastOffset.height + value.translation.height
-                        )
-                    }
-                    .onEnded { _ in
-                        lastOffset = offset
-                    }
-                : nil
-            )
-            .onTapGesture(count: 2) {
-                withAnimation {
-                    if scale > 1.0 {
-                        resetZoom()
-                    } else {
-                        scale = 2.0
-                    }
+    private func resetZoom() { zoom.reset() }
+
+
+}
+
+
+/// Shared interaction for gallery, inline and fullscreen image presentations.
+struct ZoomableMediaImage: View {
+    let image: UIImage
+    @Binding var zoom: MediaZoomState
+    var body: some View {
+        GeometryReader { geometry in
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .scaleEffect(zoom.scale)
+                .offset(zoom.offset)
+                .gesture(MagnificationGesture()
+                    .onChanged { zoom.magnify($0, image: image.size, viewport: geometry.size) }
+                    .onEnded { _ in zoom.endMagnification(image: image.size, viewport: geometry.size) })
+                .highPriorityGesture(zoom.scale > 1 ? DragGesture()
+                    .onChanged { zoom.pan($0.translation, image: image.size, viewport: geometry.size) }
+                    .onEnded { _ in zoom.endPan() } : nil)
+                .onTapGesture(count: 2) {
+                    withAnimation { zoom.doubleTap(image: image.size, viewport: geometry.size) }
                 }
-            }
+                .onChange(of: geometry.size) { _, size in zoom.clamp(image: image.size, viewport: size) }
+                .onChange(of: ObjectIdentifier(image)) { _, _ in zoom.reset() }
+        }
+        .clipped()
     }
-
-    private func resetZoom() {
-        scale = 1.0
-        offset = .zero
-        lastOffset = .zero
-    }
-
-
 }
 
 #Preview {

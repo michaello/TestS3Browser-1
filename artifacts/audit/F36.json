@@ -2,9 +2,9 @@
   "id": "F36",
   "expected_behavior": "Production-linked local regressions, an app test target and launch/request/byte instrumentation exist, with machine-readable fixture benchmark evidence; integrated Release proof belongs to E01.",
   "passed": true,
-  "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:57.746397+00:00",
+  "recorded_at": "2026-10-13T07:40:28.792205+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -14,27 +14,47 @@
     "--disable-xctest",
     "--enable-swift-testing",
     "--filter",
-    "F36PerformanceTests",
+    "F36PerformanceTests|F36MediaBodyObservationTests",
     "--xunit-output",
     "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36.xml"
   ],
   "exit_code": 0,
-  "test_count": 3,
+  "test_count": 7,
   "actual_assertions": [
     {
-      "classname": "AuditCoreTests.F36PerformanceTests",
-      "name": "unmeasuredValuesStayUnknownAndScrollingStallsAreScoped()",
-      "time": "0.000585291"
+      "classname": "AuditCoreTests.F36MediaBodyObservationTests",
+      "name": "truncatedBody()",
+      "time": "0.008129542"
+    },
+    {
+      "classname": "AuditCoreTests.F36MediaBodyObservationTests",
+      "name": "successfulBody()",
+      "time": "0.00823825"
+    },
+    {
+      "classname": "AuditCoreTests.F36MediaBodyObservationTests",
+      "name": "unreadBodyCleanup()",
+      "time": "0.008352208"
     },
     {
       "classname": "AuditCoreTests.F36PerformanceTests",
       "name": "aggregateEventsAreBoundedAndDoNotExportIdentities()",
-      "time": "0.000612166"
+      "time": "0.003029542"
     },
     {
       "classname": "AuditCoreTests.F36PerformanceTests",
       "name": "fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader()",
-      "time": "0.026529125"
+      "time": "0.029444667"
+    },
+    {
+      "classname": "AuditCoreTests.F36PerformanceTests",
+      "name": "uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes()",
+      "time": "0.003007042"
+    },
+    {
+      "classname": "AuditCoreTests.F36PerformanceTests",
+      "name": "unmeasuredValuesStayUnknownAndScrollingStallsAreScoped()",
+      "time": "0.003045375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36.log",

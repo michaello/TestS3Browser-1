@@ -20,13 +20,29 @@ enum ProcessResidentMemory {
     }
 }
 
+enum AuditViewSurface: String, CaseIterable, Sendable {
+    case browse, recent, prefix, dump, stash, gallery
+}
+
+struct AuditViewConstructionMetric: Codable, Sendable {
+    var count = 0
+    var totalMilliseconds = 0.0
+    var maximumMilliseconds = 0.0
+}
+
 struct AuditPerformanceSnapshot: Codable, Sendable {
+    var viewConstruction: [String: AuditViewConstructionMetric] = [:]
+    var viewConstructionScope = "SwiftUI view construction only; excludes layout, drawing and framework work after body returns."
     var launchToFirstContentMilliseconds: Double?
     var cacheToFirstContentMilliseconds: Double?
     var refreshMilliseconds: [Double] = []
     var requestCount = 0
     var duplicateBodyRequests = 0
     var receivedBytes: Int64 = 0
+    var confirmedUploadPayloadBytes: Int64 = 0
+    var maximumOwnedBodyTransfers: Int?
+    var unavailableMeasurements = ["Native AVFoundation HTTP wire bytes and requests", "Partial failed-upload bytes"]
+    var byteMeasurementScope = "Consumed SDK object-download bytes and confirmed upload payload sizes; excludes HTTP overhead and retransmission."
     var failedRequests = 0
     var peakResidentBytes: UInt64?
     var maximumFrameGapMilliseconds: Double?
@@ -57,6 +73,18 @@ final class AuditTelemetry {
         launchStarted = clock()
     }
 
+    func measureViewConstruction<Value>(_ surface: AuditViewSurface, build: () -> Value) -> Value {
+        let started = now()
+        let value = build()
+        let elapsed = max(0, now() - started) * 1_000
+        var metric = snapshot.viewConstruction[surface.rawValue] ?? AuditViewConstructionMetric()
+        metric.count += 1
+        metric.totalMilliseconds += elapsed
+        metric.maximumMilliseconds = max(metric.maximumMilliseconds, elapsed)
+        snapshot.viewConstruction[surface.rawValue] = metric
+        return value
+    }
+
     func cacheHydrationStarted() { cacheStarted = now() }
     func firstContentVisible(fromCache: Bool) {
         guard snapshot.launchToFirstContentMilliseconds == nil else { return }
@@ -77,14 +105,20 @@ final class AuditTelemetry {
         return token
     }
 
-    func finishRequest(_ token: UUID, bytes: Int64, succeeded: Bool) {
+    func finishRequest(_ token: UUID, bytes: Int64, succeeded: Bool, confirmedUploadBytes: Int64 = 0) {
         guard let request = requests.removeValue(forKey: token) else { return }
         if request.body {
             activeBodies[request.identity, default: 1] -= 1
             if activeBodies[request.identity] == 0 { activeBodies[request.identity] = nil }
         }
         snapshot.receivedBytes += max(0, bytes)
+        if succeeded { snapshot.confirmedUploadPayloadBytes += max(0, confirmedUploadBytes) }
         if !succeeded { snapshot.failedRequests += 1 }
+    }
+
+    func recordOwnedBodyTransfers(current: Int, peak: Int) {
+        guard current >= 0, peak >= current else { return }
+        snapshot.maximumOwnedBodyTransfers = max(snapshot.maximumOwnedBodyTransfers ?? 0, peak)
     }
 
     func beginRefresh() -> UUID {

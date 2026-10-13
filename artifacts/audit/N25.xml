@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.009529458">
-    <testcase classname="AuditCoreTests.N25MediaCacheResetTests" name="diskReset()" time="0.00924125" />
-    <testcase classname="AuditCoreTests.N25MediaCacheResetTests" name="decodedReset()" time="0.000765791" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.006121417">
+    <testcase classname="AuditCoreTests.N25MediaCacheResetTests" name="decodedReset()" time="0.000513125" />
+    <testcase classname="AuditCoreTests.N25MediaCacheResetTests" name="diskReset()" time="0.005840583" />
   </testsuite>
 </testsuites>

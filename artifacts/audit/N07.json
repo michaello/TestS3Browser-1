@@ -2,9 +2,9 @@
   "id": "N07",
   "expected_behavior": "New preference/config serialization contains no AWS secret values; app-owned migration preserves access through a shared secure credential reference for app/share/intents, tested with fake credential stores.",
   "passed": true,
-  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:45:40.213218+00:00",
+  "recorded_at": "2026-10-13T07:38:36.215899+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,68 +23,68 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.AuditN07",
-      "name": "malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:)",
-      "time": "0.002806583"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "appGroupLegacyMigratesWhenStandardHasNoRecord()",
-      "time": "0.002815875"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "settingsOnlySaveVerifiesAndReusesCredentialReference()",
-      "time": "0.002846375"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults()",
-      "time": "0.002816167"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:)",
-      "time": "0.002810834"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "emptyStoresLoadAsUnconfiguredWithoutWriting()",
-      "time": "0.002747542"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "extensionAndIntentsReadOnlyCompletedSharedReferences()",
-      "time": "0.002843625"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:)",
-      "time": "0.007257875"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
       "name": "standardMigrationPreservesAppliedSettingsAndUnrelatedStores()",
-      "time": "0.002864458"
+      "time": "0.004103084"
     },
     {
       "classname": "AuditCoreTests.AuditN07",
-      "name": "failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:)",
-      "time": "0.0028465"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension()",
-      "time": "0.002794209"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN07",
-      "name": "newPreferencesContainOnlySettingsAndOpaqueReference()",
-      "time": "0.002784958"
+      "name": "malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:)",
+      "time": "0.004130708"
     },
     {
       "classname": "AuditCoreTests.AuditN07",
       "name": "failedRollbackIsSurfacedAndExplicitReplacementRecovers()",
-      "time": "0.002963709"
+      "time": "0.003980625"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:)",
+      "time": "0.004125542"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults()",
+      "time": "0.004098333"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:)",
+      "time": "0.003951417"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "appGroupLegacyMigratesWhenStandardHasNoRecord()",
+      "time": "0.004094375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "settingsOnlySaveVerifiesAndReusesCredentialReference()",
+      "time": "0.004181417"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension()",
+      "time": "0.004087375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "newPreferencesContainOnlySettingsAndOpaqueReference()",
+      "time": "0.003953125"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:)",
+      "time": "0.004346209"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "extensionAndIntentsReadOnlyCompletedSharedReferences()",
+      "time": "0.004104209"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "emptyStoresLoadAsUnconfiguredWithoutWriting()",
+      "time": "0.003975042"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.log",

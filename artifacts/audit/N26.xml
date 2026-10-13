@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.012299458">
-    <testcase classname="AuditCoreTests.AuditN26" name="invalidSizeBoundsAndByteDistinctTagsRemainSafe()" time="0.007467042" />
-    <testcase classname="AuditCoreTests.AuditN26" name="unknownEarlierRuleCannotCertifyAnotherAsNext()" time="0.00393825" />
-    <testcase classname="AuditCoreTests.AuditN26" name="missingTagsDoNotHideKnownPrefixMismatch()" time="0.004083792" />
-    <testcase classname="AuditCoreTests.AuditN26" name="prefixAndStatusExcludeUnrelatedObjects()" time="0.009621708" />
-    <testcase classname="AuditCoreTests.AuditN26" name="replicationAndMinimumAgePreventPrematurePrediction()" time="0.009788083" />
-    <testcase classname="AuditCoreTests.AuditN26" name="andFiltersRequireExactTagsAndStrictSizeBounds()" time="0.011626583" />
-    <testcase classname="AuditCoreTests.AuditN26" name="defaultMinimumAndCurrentStorageClassAffectTransitions()" time="0.011814459" />
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.01544075">
+    <testcase classname="AuditCoreTests.AuditN26" name="unknownEarlierRuleCannotCertifyAnotherAsNext()" time="0.0068495" />
+    <testcase classname="AuditCoreTests.AuditN26" name="andFiltersRequireExactTagsAndStrictSizeBounds()" time="0.014879542" />
+    <testcase classname="AuditCoreTests.AuditN26" name="missingTagsDoNotHideKnownPrefixMismatch()" time="0.009931959" />
+    <testcase classname="AuditCoreTests.AuditN26" name="defaultMinimumAndCurrentStorageClassAffectTransitions()" time="0.0151915" />
+    <testcase classname="AuditCoreTests.AuditN26" name="replicationAndMinimumAgePreventPrematurePrediction()" time="0.013129666" />
+    <testcase classname="AuditCoreTests.AuditN26" name="invalidSizeBoundsAndByteDistinctTagsRemainSafe()" time="0.006613875" />
+    <testcase classname="AuditCoreTests.AuditN26" name="prefixAndStatusExcludeUnrelatedObjects()" time="0.014024708" />
   </testsuite>
 </testsuites>

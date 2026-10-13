@@ -1,15 +1,24 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.64 sec)
+Build complete! (0.21 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "F36 actual consumed SDK body telemetry" started.
 􀟈  Suite F36PerformanceTests started.
-􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
-􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test "Truncated body records consumed partial bytes and a failed request exactly once" started.
+􀟈  Test "Destination creation failure finishes telemetry and closes unread SDK body" started.
 􀟈  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() started.
-􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.001 seconds.
-􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.001 seconds.
-􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.026 seconds.
-􁁛  Suite F36PerformanceTests passed after 0.026 seconds.
-􁁛  Test run with 3 tests in 1 suite passed after 0.026 seconds.
+􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
+􀟈  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() started.
+􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test "Successful streamed body records real consumed bytes and owned permit peak" started.
+􁁛  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() passed after 0.003 seconds.
+􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.003 seconds.
+􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.003 seconds.
+􁁛  Test "Truncated body records consumed partial bytes and a failed request exactly once" passed after 0.008 seconds.
+􁁛  Test "Successful streamed body records real consumed bytes and owned permit peak" passed after 0.008 seconds.
+􁁛  Test "Destination creation failure finishes telemetry and closes unread SDK body" passed after 0.008 seconds.
+􁁛  Suite "F36 actual consumed SDK body telemetry" passed after 0.008 seconds.
+􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.029 seconds.
+􁁛  Suite F36PerformanceTests passed after 0.029 seconds.
+􁁛  Test run with 7 tests in 2 suites passed after 0.029 seconds.

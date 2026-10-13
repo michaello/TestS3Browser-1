@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "assertion_count": 19,
+  "assertions": [
+    "exact 85-item queue accepted",
+    "missing required ID rejected",
+    "unknown ID rejected",
+    "unregistered all-check rejected",
+    "pass process result handled",
+    "pass proof agrees with process",
+    "few process result handled",
+    "few proof agrees with process",
+    "skipped process result handled",
+    "skipped proof agrees with process",
+    "failure process result handled",
+    "failure proof agrees with process",
+    "exit-failure process result handled",
+    "exit-failure proof agrees with process",
+    "no-report process result handled",
+    "no-report proof agrees with process",
+    "changed process result handled",
+    "changed proof agrees with process",
+    "changed source cannot retain passing proof"
+  ],
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit_selftest.py"
+  ],
+  "scope": "Runner orchestration with real synthetic child processes; not production behavior or app integration."
+}

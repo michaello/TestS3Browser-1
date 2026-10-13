@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.003362792">
-    <testcase classname="AuditCoreTests.F01CachedRecentTests" name="emptyInitialLoading()" time="0.002262833" />
-    <testcase classname="AuditCoreTests.F01CachedRecentTests" name="cachedRowsRemainVisible()" time="0.003048583" />
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.0012995">
+    <testcase classname="AuditCoreTests.F01CachedRecentTests" name="emptyInitialLoading()" time="0.000365458" />
+    <testcase classname="AuditCoreTests.F01CachedRecentTests" name="cachedRowsRemainVisible()" time="0.001065292" />
   </testsuite>
 </testsuites>

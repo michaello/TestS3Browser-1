@@ -1,19 +1,39 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.35 sec)
+Build complete! (0.48 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite N31CopyPropertyTests started.
-􀟈  Test multipartTagValuesAreEncodedWithoutChangingBytes() started.
-􀟈  Test customAndPublicGrantsRemainExplicitForBothCopyModes() started.
+􀟈  Test crossOwnerCopyRetainsSourceOwnersGrant() started.
+􀟈  Suite N31EncryptionPolicyTests started.
 􀟈  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() started.
 􀟈  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() started.
-􀟈  Test crossOwnerCopyRetainsSourceOwnersGrant() started.
-􁁛  Test multipartTagValuesAreEncodedWithoutChangingBytes() passed after 0.001 seconds.
+􀟈  Test customAndPublicGrantsRemainExplicitForBothCopyModes() started.
+􀟈  Test multipartTagValuesAreEncodedWithoutChangingBytes() started.
+􀟈  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() started.
+􀟈  Test invalidJSONOrBase64CannotConstructAnApprovedContext() started.
+􀟈  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() started.
+􀟈  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() started.
+􀟈  Test emptyOrMissingCopyAcknowledgementRetainsSource() started.
+􀟈  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() started.
+􀟈  Test encryptionConsentNeverAuthorizesDestinationReplacement() started.
+􀟈  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() started.
+􀟈  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() started.
 􁁛  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() passed after 0.001 seconds.
-􁁛  Test crossOwnerCopyRetainsSourceOwnersGrant() passed after 0.001 seconds.
 􁁛  Test customAndPublicGrantsRemainExplicitForBothCopyModes() passed after 0.001 seconds.
+􁁛  Test crossOwnerCopyRetainsSourceOwnersGrant() passed after 0.001 seconds.
 􁁛  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() passed after 0.001 seconds.
+􁁛  Test multipartTagValuesAreEncodedWithoutChangingBytes() passed after 0.001 seconds.
 􁁛  Suite N31CopyPropertyTests passed after 0.001 seconds.
-􁁛  Test run with 5 tests in 1 suite passed after 0.001 seconds.
+􁁛  Test suppliedContextPreservesExactJSONBytesAndReachesBothCopyHeaderPaths() passed after 0.019 seconds.
+􁁛  Test nonKMSEncryptionNeedsNoContextAndMissingKMSKeyFailsSafely() passed after 0.019 seconds.
+􁁛  Test invalidJSONOrBase64CannotConstructAnApprovedContext() passed after 0.019 seconds.
+􁁛  Test encryptionConsentNeverAuthorizesDestinationReplacement() passed after 0.021 seconds.
+􁁛  Test unknownOrDeclinedContextChoiceCannotStartCopyOrSourceDeletion() passed after 0.022 seconds.
+􁁛  Test emptyOrMissingCopyAcknowledgementRetainsSource() passed after 0.022 seconds.
+􁁛  Test explicitDefaultChoiceRequiresThePermissionChangeDisclosureAndExactRequirement() passed after 0.022 seconds.
+􁁛  Test sourceRevisionGenerationAndKMSKeyChangesInvalidateContextConsent() passed after 0.022 seconds.
+􁁛  Test cancelledConfirmationDoesNotMutateEvenWithAValidContextAvailable() passed after 0.023 seconds.
+􁁛  Suite N31EncryptionPolicyTests passed after 0.024 seconds.
+􁁛  Test run with 14 tests in 2 suites passed after 0.024 seconds.

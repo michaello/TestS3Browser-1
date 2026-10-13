@@ -42,8 +42,8 @@ SWIFT_SUITES = {
     "N36": ("N36PartialBatchExportTests", 2),
     "N44": ("N44MediaLeaseTests|N44BatchExportCleanupTests", 3),
     "F10": ("F10MediaPreviewTests", 2),
-    "F11": ("F11MediaTransferTests", 3),
-    "F12": ("F12MediaIdentityTests", 2),
+    "F11": ("F11MediaTransferTests", 5),
+    "F12": ("F12MediaIdentityTests|F12ConfirmedMutationTests", 7),
     "F13": ("F13DecodedCacheTests", 1),
     "F14": ("F14GalleryWindowTests", 2),
     "F15": ("F15OriginalFileTests", 4),
@@ -51,10 +51,10 @@ SWIFT_SUITES = {
     "F19": ("F19MediaPathTests", 1),
     "N13": ("N13VersionRestoreTests", 4),
     "N25": ("N25MediaCacheResetTests", 2),
-    "F36": ("F36PerformanceTests", 3),
+    "F36": ("F36PerformanceTests|F36MediaBodyObservationTests", 7),
     "N33": ("N33ObjectVersionHistoryTests", 5),
-    "N32": ("N32MultipartCopyTests", 5),
-    "N31": ("N31CopyPropertyTests", 5),
+    "N32": ("N32MultipartCopyTests", 7),
+    "N31": ("N31CopyPropertyTests|N31EncryptionPolicyTests", 14),
     "F26": ("AuditF26", 6),
     "F29": ("AuditF29", 6),
     "N20": ("AuditN20", 3),
@@ -67,20 +67,67 @@ SWIFT_SUITES = {
     "F33": ("F33FullCatalogSearchTests", 2),
     "F16": ("F16DetailDemandTests", 4),
     "F23": ("F23FramesRefreshTests", 3),
+    "F27": ("F27ConfirmedNavigationTests", 3),
+    "N34": ("N34ConfiguredPrefixTests", 2),
+    "N37": ("N37DumpDeleteFeedbackTests", 3),
+    "N46": ("N46ACLAccessSummaryTests", 5),
+    "N48": ("N48FolderValidationTests", 3),
+    "F20": ("F20ListingPaginationTests", 3),
+    "N16": ("N16PartialFolderSortTests", 1),
+    "N17": ("N17PartialFolderSearchTests", 1),
+    "N39": ("N39DestinationListingTests", 2),
+    "F32": ("F32BucketCountCacheTests", 4),
+    "N19": ("AuditN19", 3),
+    "N21": ("AuditN21", 3),
+    "N12": ("AuditN12", 4),
+    "N24": ("AuditN24", 4),
+    "N42": ("AuditN42", 14),
+    "F28": ("F28ScreensIndexTests", 5),
+    "N40": ("N40ManifestFailureTests", 3),
+    "N38": ("N38MetadataFailureTests", 3),
+    "N14": ("N14MediaZoomTests", 3),
+    "F31": ("F31SharePipelineTests|F31FilePromiseTests", 8),
+    "N35": ("N35ShareOutcomeTests", 3),
+    "N18": ("N18TransferDismissalTests", 3),
+    "N41": ("AuditN41", 6),
+    "F08": ("F08ConcurrencyBoundaryTests", 4),
+    "F30": ("F30ListPresentationTests", 2),
+    "F34": ("F34DerivedRowsCacheTests", 4),
+    "N08": ("N08FileCardAccessibilityTests", 3),
+    "N09": ("N09TabAccessibilityTests", 2),
 }
 SEMANTIC_CHECKS = {"N43", "N49"}
 
 
-def source_identity():
+def load_queue():
+    queue = json.loads((ROOT / "AUDIT_QUEUE.json").read_text())
+    expected = {f"F{i:02d}" for i in range(1, 37)} | {f"N{i:02d}" for i in range(1, 50)}
+    items = queue["implementation_items"]
+    ids = [item["id"] for item in items]
+    if len(ids) != 85 or set(ids) != expected or queue["scope_finding_count"] != 85:
+        raise ValueError("The queue must retain exactly F01-F36 and N01-N49")
+    external = queue["verification_delivery_items"]
+    if len(external) != 2 or {item["id"] for item in external} != {"E01", "E02"}:
+        raise ValueError("The queue must retain E01 and E02 independently")
+    statuses = {"Open", "In Progress", "Done", "Blocked - External"}
+    for item in items + external:
+        behavior = item.get("acceptance_behavior") if item in items else item.get("required_behavior")
+        if item["status"] not in statuses or not behavior:
+            raise ValueError("Invalid status or missing acceptance behavior: " + item["id"])
+    return queue
+
+
+def source_identity(root=None):
+    root = ROOT if root is None else root
     digest = hashlib.sha256()
-    paths = [ROOT / "Package.swift", ROOT / "Info.plist", *sorted(ROOT.glob("*.entitlements")),
-             *sorted((ROOT / "scripts").glob("*.py"))]
+    paths = [root / "Package.swift", root / "Info.plist", *sorted(root.glob("*.entitlements")),
+             *sorted((root / "scripts").glob("*.py"))]
     for folder in ("Sources", "ShareExtension", "WidgetExtension", "Tests", "TestS3Browser.xcodeproj",
                    "TestS3BrowserIntegrationTests", "TestS3BrowserUITests"):
-        paths += sorted(p for p in (ROOT / folder).rglob("*") if p.is_file() and "xcuserdata" not in p.parts)
+        paths += sorted(p for p in (root / folder).rglob("*") if p.is_file() and "xcuserdata" not in p.parts)
     for path in sorted(paths):
         if path.is_file():
-            digest.update(str(path.relative_to(ROOT)).encode())
+            digest.update(str(path.relative_to(root)).encode())
             digest.update(b"\0")
             digest.update(path.read_bytes())
     return digest.hexdigest()
@@ -144,15 +191,19 @@ def run_id(item, source_retries=3):
     return passed
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--id")
     mode.add_argument("--all", action="store_true")
     mode.add_argument("--release-simulator", action="store_true")
     mode.add_argument("--delivery", action="store_true")
-    args = parser.parse_args()
-    queue = json.loads((ROOT / "AUDIT_QUEUE.json").read_text())
+    args = parser.parse_args(argv)
+    try:
+        queue = load_queue()
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        print("FAIL: invalid audit queue: " + str(error), file=sys.stderr)
+        return 1
     items = queue["implementation_items"]
     if args.id:
         item = next((x for x in items if x["id"] == args.id), None)
@@ -165,11 +216,15 @@ def main():
             print("FAIL: unimplemented audit checks: " + ", ".join(missing), file=sys.stderr)
             return 1
         outcomes = [run_id(x) for x in items]
-        return 0 if all(outcomes) else 1
+        identity = source_identity()
+        current = all(json.loads((ARTIFACTS / (x["id"] + ".json")).read_text())["source_fingerprint"]
+                      == identity for x in items)
+        if not current:
+            print("FAIL: source inputs changed across --all; rerun against stable inputs", file=sys.stderr)
+        return 0 if all(outcomes) and current else 1
     if args.release_simulator:
         return subprocess.run([sys.executable, str(ROOT / "scripts/release_simulator_check.py")], cwd=ROOT).returncode
-    print("FAIL: delivery verification is not implemented yet", file=sys.stderr)
-    return 1
+    return subprocess.run([sys.executable, str(ROOT / "scripts/verify_delivery.py")], cwd=ROOT).returncode
 
 
 if __name__ == "__main__":

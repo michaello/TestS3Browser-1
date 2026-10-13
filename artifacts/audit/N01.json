@@ -2,9 +2,9 @@
   "id": "N01",
   "expected_behavior": "A delayed picker/import representation followed by bucket/folder/account navigation still uploads to the original captured destination or is explicitly cancelled before mutation.",
   "passed": true,
-  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:45:47.519905+00:00",
+  "recorded_at": "2026-10-13T07:38:24.661320+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N01UploadPreparationTests",
-      "name": "delayedRepresentationRetainsOriginalBucketAndPrefix()",
-      "time": "0.000497125"
+      "name": "accountScopeHasUnambiguousFieldsAndNoCredentialText()",
+      "time": "0.006495791"
     },
     {
       "classname": "AuditCoreTests.N01UploadPreparationTests",
       "name": "changedAccountCancelsBeforeMutation()",
-      "time": "0.000505417"
+      "time": "0.000775125"
     },
     {
       "classname": "AuditCoreTests.N01UploadPreparationTests",
       "name": "cancelledInputCannotStartUpload()",
-      "time": "0.007593959"
+      "time": "0.006505375"
     },
     {
       "classname": "AuditCoreTests.N01UploadPreparationTests",
-      "name": "accountScopeHasUnambiguousFieldsAndNoCredentialText()",
-      "time": "0.007576958"
+      "name": "delayedRepresentationRetainsOriginalBucketAndPrefix()",
+      "time": "0.006451708"
     },
     {
       "classname": "AuditCoreTests.N01UploadPreparationTests",
       "name": "providerFailureAndMissingRepresentationDoNotMutate()",
-      "time": "0.007555875"
+      "time": "0.00649975"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N01.log",

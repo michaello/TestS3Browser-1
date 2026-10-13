@@ -1,0 +1,43 @@
+{
+  "id": "N40",
+  "expected_behavior": "Individual app manifest download/decode failures retain known cached entries where appropriate and mark an incomplete index; all failures cannot masquerade as a successful empty index.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:40:15.141729+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N40ManifestFailureTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N40ManifestFailureTests",
+      "name": "allFailuresThenRetry()",
+      "time": "0.008262583"
+    },
+    {
+      "classname": "AuditCoreTests.N40ManifestFailureTests",
+      "name": "partialFailureRetainsKnownEntry()",
+      "time": "0.005666125"
+    },
+    {
+      "classname": "AuditCoreTests.N40ManifestFailureTests",
+      "name": "emptyAndCachedFailureAreDistinct()",
+      "time": "0.00742625"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

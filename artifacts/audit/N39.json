@@ -1,0 +1,38 @@
+{
+  "id": "N39",
+  "expected_behavior": "A failed destination listing cannot display rows from another prefix under the new title or permit confirmation using mismatched destination state.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:40:13.982273+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N39DestinationListingTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N39DestinationListingTests",
+      "name": "failedDestination()",
+      "time": "0.001352042"
+    },
+    {
+      "classname": "AuditCoreTests.N39DestinationListingTests",
+      "name": "staleDestination()",
+      "time": "0.001504959"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

@@ -24,6 +24,7 @@ private struct S3MultipartCopyTransport: MultipartCopyTransport {
         input.storageClass = values["storageClass"].map(S3ClientTypes.StorageClass.init(rawValue:))
         input.serverSideEncryption = values["serverSideEncryption"].map(S3ClientTypes.ServerSideEncryption.init(rawValue:))
         input.ssekmsKeyId = values["ssekmsKeyId"]
+        input.ssekmsEncryptionContext = values["ssekmsEncryptionContext"]
         input.bucketKeyEnabled = values["bucketKeyEnabled"].map { $0 == "true" }
         input.objectLockMode = values["objectLockMode"].map(S3ClientTypes.ObjectLockMode.init(rawValue:))
         input.objectLockLegalHoldStatus = values["objectLockLegalHoldStatus"].map(S3ClientTypes.ObjectLockLegalHoldStatus.init(rawValue:))
@@ -49,12 +50,18 @@ private struct S3MultipartCopyTransport: MultipartCopyTransport {
         return etag
     }
 
-    func complete(uploadID: String, parts: [MultipartCopiedPart]) async throws {
+    func complete(uploadID: String, parts: [MultipartCopiedPart], condition: MultipartDestinationCondition) async throws -> TransferObjectRevision {
         let completed = parts.map { S3ClientTypes.CompletedPart(eTag: $0.etag, partNumber: $0.number) }
-        let output = try await client.completeMultipartUpload(input: CompleteMultipartUploadInput(
+        var input = CompleteMultipartUploadInput(
             bucket: request.destination.bucket, key: request.destination.key,
-            multipartUpload: .init(parts: completed), uploadId: uploadID))
+            multipartUpload: .init(parts: completed), uploadId: uploadID)
+        switch condition {
+        case .absent: input.ifNoneMatch = "*"
+        case .matchingETag(let etag): input.ifMatch = etag
+        }
+        let output = try await client.completeMultipartUpload(input: input)
         guard let etag = output.eTag, !etag.isEmpty else { throw MultipartCopyError.invalidResponse }
+        return TransferObjectRevision(etag: etag, versionID: output.versionId, lastModified: nil, size: revision.size)
     }
 
     func abort(uploadID: String) async throws {
@@ -65,9 +72,12 @@ private struct S3MultipartCopyTransport: MultipartCopyTransport {
 
 /// Every copy-based action uses the same exact source, property policy and size dispatch.
 @MainActor
+@discardableResult
 func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
                          revision: TransferObjectRevision, storageClass: S3ClientTypes.StorageClass? = nil,
-                         contextGuard: @escaping @MainActor () throws -> Void) async throws {
+                         expectedDestination: TransferObjectPresence? = nil,
+                         encryptionDecision: CopyEncryptionDecision = .automatic,
+                         contextGuard: @escaping @MainActor () throws -> Void) async throws -> ObjectCopyReceipt {
     try Task.checkCancellation()
     try contextGuard()
     let source = try await client.headObject(input: HeadObjectInput(bucket: request.source.bucket,
@@ -80,6 +90,8 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
     let capturedRevision = TransferObjectRevision(etag: source.eTag, versionID: revision.versionID ?? source.versionId,
         lastModified: source.lastModified, size: bytes)
     guard source.sseCustomerAlgorithm == nil else { throw ObjectCopyPropertyError.unsupportedCustomerEncryption }
+    let encryptionHeaders = try CopyEncryptionPolicy.headers(request: request, revision: capturedRevision,
+        algorithm: source.serverSideEncryption?.rawValue, kmsKeyID: source.ssekmsKeyId, decision: encryptionDecision)
     let acl = try await client.getObjectAcl(input: GetObjectAclInput(bucket: request.source.bucket,
         key: request.source.key, versionId: capturedRevision.versionID))
     try contextGuard()
@@ -98,6 +110,7 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
         }
     }
     var headers = try ObjectCopyProperties.aclHeaders(owner: acl.owner?.id, destinationOwner: destinationACL.owner?.id, grants: grants)
+    headers.merge(encryptionHeaders) { _, supplied in supplied }
     headers["contentType"] = source.contentType
     headers["contentEncoding"] = source.contentEncoding
     headers["contentLanguage"] = source.contentLanguage
@@ -113,6 +126,20 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
     headers["objectLockLegalHoldStatus"] = source.objectLockLegalHoldStatus?.rawValue
     headers["objectLockRetainUntilDate"] = source.objectLockRetainUntilDate.map { String($0.timeIntervalSince1970) }
     if Int64(bytes) > MultipartCopyPlan.singleCopyLimit {
+        let destination: TransferObjectPresence
+        if let expectedDestination { destination = expectedDestination }
+        else {
+            // Intentional restore/storage self-copies also protect the latest object
+            // observed at start from a concurrent writer before multipart completion.
+            do {
+                let latest = try await client.headObject(input: HeadObjectInput(
+                    bucket: request.destination.bucket, key: request.destination.key))
+                destination = .present(.init(etag: latest.eTag, versionID: latest.versionId,
+                    lastModified: latest.lastModified, size: latest.contentLength))
+            } catch is AWSS3.NotFound { destination = .absent }
+            catch is AWSS3.NoSuchKey { destination = .absent }
+        }
+        _ = try MultipartDestinationCondition(destination)
         let tags = try await client.getObjectTagging(input: GetObjectTaggingInput(bucket: request.source.bucket,
             key: request.source.key, versionId: capturedRevision.versionID))
         let preservedTags = try (tags.tagSet ?? []).map { tag -> ObjectTag in
@@ -120,9 +147,11 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
             return .init(key: key, value: value)
         }
         try contextGuard()
-        try await MultipartObjectCopy.perform(bytes: Int64(bytes),
+        let destinationRevision = try await MultipartObjectCopy.perform(bytes: Int64(bytes),
             properties: .init(metadata: source.metadata ?? [:], headers: headers, tags: preservedTags),
+            destination: destination,
             transport: S3MultipartCopyTransport(client: client, request: request, revision: capturedRevision, contextGuard: contextGuard))
+        return ObjectCopyReceipt(revision: destinationRevision, contentType: source.contentType)
     } else {
         try Task.checkCancellation()
         try contextGuard()
@@ -132,6 +161,7 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
         input.storageClass = storageClass ?? source.storageClass
         input.serverSideEncryption = source.serverSideEncryption
         input.ssekmsKeyId = source.ssekmsKeyId
+        input.ssekmsEncryptionContext = headers["ssekmsEncryptionContext"]
         input.bucketKeyEnabled = source.bucketKeyEnabled
         input.objectLockMode = source.objectLockMode
         input.objectLockLegalHoldStatus = source.objectLockLegalHoldStatus
@@ -143,6 +173,8 @@ func performS3ObjectCopy(client: S3Client, request: ObjectTransferRequest,
         input.grantReadACP = headers["grantReadACP"]
         input.grantWriteACP = headers["grantWriteACP"]
         let output = try await client.copyObject(input: input)
-        guard output.copyObjectResult != nil else { throw S3ServiceError.noDataReturned }
+        let etag = try CopyEncryptionPolicy.requireCopyETag(output.copyObjectResult?.eTag)
+        return ObjectCopyReceipt(revision: TransferObjectRevision(etag: etag, versionID: output.versionId,
+            lastModified: output.copyObjectResult?.lastModified, size: bytes), contentType: source.contentType)
     }
 }

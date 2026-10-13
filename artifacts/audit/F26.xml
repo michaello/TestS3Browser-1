@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.075832083">
-    <testcase classname="AuditCoreTests.AuditF26" name="unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()" time="0.07556325" />
-    <testcase classname="AuditCoreTests.AuditF26" name="ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()" time="0.075421708" />
-    <testcase classname="AuditCoreTests.AuditF26" name="renameAndMoveCarryAnnotationsToTheExactDestination()" time="0.075447542" />
-    <testcase classname="AuditCoreTests.AuditF26" name="exactUnicodeAndRepeatedSlashKeysRemainDistinct()" time="0.0754525" />
-    <testcase classname="AuditCoreTests.AuditF26" name="newFileMarkersDoNotCrossBucketOrAccountBoundaries()" time="0.075479" />
-    <testcase classname="AuditCoreTests.AuditF26" name="equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()" time="0.075444292" />
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.012374">
+    <testcase classname="AuditCoreTests.AuditF26" name="ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()" time="0.012016625" />
+    <testcase classname="AuditCoreTests.AuditF26" name="unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()" time="0.010316542" />
+    <testcase classname="AuditCoreTests.AuditF26" name="equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()" time="0.008741458" />
+    <testcase classname="AuditCoreTests.AuditF26" name="newFileMarkersDoNotCrossBucketOrAccountBoundaries()" time="0.010293458" />
+    <testcase classname="AuditCoreTests.AuditF26" name="exactUnicodeAndRepeatedSlashKeysRemainDistinct()" time="0.010331166" />
+    <testcase classname="AuditCoreTests.AuditF26" name="renameAndMoveCarryAnnotationsToTheExactDestination()" time="0.011976959" />
   </testsuite>
 </testsuites>

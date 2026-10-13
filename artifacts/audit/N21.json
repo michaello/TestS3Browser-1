@@ -1,0 +1,43 @@
+{
+  "id": "N21",
+  "expected_behavior": "Bulk confirmation count matches a frozen set of bucket-qualified selected objects even when search/filter changes; successful deletion and selection cleanup refer to the same set.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:48.845026+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditN21",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditN21",
+      "name": "exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot()",
+      "time": "0.000522708"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN21",
+      "name": "confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges()",
+      "time": "0.000558125"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN21",
+      "name": "selectionCannotMutateAnAlreadyPresentedConfirmation()",
+      "time": "0.000351833"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

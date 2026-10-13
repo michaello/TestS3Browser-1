@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.008592958">
+    <testcase classname="AuditCoreTests.F16DetailDemandTests" name="visiblePriority()" time="0.003304584" />
+    <testcase classname="AuditCoreTests.F16DetailDemandTests" name="demandAndFreshness()" time="0.004054083" />
+    <testcase classname="AuditCoreTests.F16DetailDemandTests" name="boundedAndInvalidated()" time="0.008321917" />
+    <testcase classname="AuditCoreTests.F16DetailDemandTests" name="failureAndRetry()" time="0.003939208" />
+  </testsuite>
+</testsuites>

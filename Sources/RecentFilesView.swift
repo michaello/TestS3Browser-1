@@ -7,6 +7,9 @@ private struct BrowseRoot: Hashable {}
 
 /// Displays the most recent files from the current bucket
 struct RecentFilesView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var rowProjection = DerivedRowsCache<[S3Object]>()
+    @State private var galleryProjection = DerivedRowsCache<[S3Object]>()
     private let logger = Logger(subsystem: "com.s3browser", category: "RecentFilesView")
     @Environment(\.scenePhase) private var scenePhase
     @State private var tagStore = TagStore.shared
@@ -21,6 +24,8 @@ struct RecentFilesView: View {
     @State private var hasLoadedOnce = false
     @State private var refreshRequestID: UUID?
     @State private var transferConflict: ObjectTransferConflict?
+    @State private var copyEncryptionPrompt: CopyEncryptionPrompt?
+    @State private var transferEncryptionDecision: CopyEncryptionDecision = .automatic
     @State private var autoPreviewPhoto: S3Object?
     @State private var navigationPath = NavigationPath()
     @State private var copyToast: String?
@@ -41,7 +46,7 @@ struct RecentFilesView: View {
     @State private var renameErrorMessage = ""
     /// Bulk-selection state.
     @State private var isSelecting = false
-    @State private var selectedIDs: Set<String> = []
+    @State private var bulkDeletion = BulkObjectDeletion()
     @State private var showBulkDeleteConfirm = false
     @State private var showBulkDeleteError = false
     @State private var bulkDeleteErrorMessage = ""
@@ -76,6 +81,16 @@ struct RecentFilesView: View {
     }
 
     private var filteredRecentFiles: [S3Object] {
+        rowProjection.value(for: projectionKey) { deriveFilteredRecentFiles() }
+    }
+
+    private var projectionKey: DerivedRowsKey {
+        DerivedRowsKey(revision: s3Service.recentRevision,
+            fields: [s3Service.session.configuration.account, String(fileTypeFilterRaw), String(annotationFilter.tag != nil), annotationFilter.tag ?? "",
+                String(annotationFilter.starredOnly), String(starStore.revision), String(tagStore.revision), searchText, sortOrder.rawValue])
+    }
+
+    private func deriveFilteredRecentFiles() -> [S3Object] {
         let typeFiltered = fileTypeFilter == .all
             ? s3Service.recentFiles
             : s3Service.recentFiles.filter { fileTypeFilter.matches($0.fileType) }
@@ -106,10 +121,14 @@ struct RecentFilesView: View {
 
     /// Returns only image files from the filtered list for gallery navigation
     private var imageFiles: [S3Object] {
-        filteredRecentFiles.filter { $0.fileType == .image }
+        galleryProjection.value(for: projectionKey) { filteredRecentFiles.filter { $0.fileType == .image } }
     }
 
     var body: some View {
+        AuditTelemetry.shared.measureViewConstruction(.recent) { measuredContent }
+    }
+
+    private var measuredContent: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
                 contentView
@@ -176,6 +195,8 @@ struct RecentFilesView: View {
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
+                        Button("Retry Refresh") { Task { await refreshRecentFiles(force: true) } }
+                            .disabled(s3Service.isRecentLoading)
                     }
                 }
             }
@@ -192,6 +213,8 @@ struct RecentFilesView: View {
             hasLoadedOnce = !s3Service.recentFiles.isEmpty
             annotationFilter.clear()
             newFileKeys.removeAll()
+            bulkDeletion.cancel(clearSelection: true)
+            showBulkDeleteConfirm = false
             Task { await refreshRecentFiles() }
         }
         .onChange(of: starStore.starredKeys) { _, _ in reconcileAnnotationFilter() }
@@ -225,8 +248,9 @@ struct RecentFilesView: View {
             Text(renameErrorMessage)
         }
         .objectTransferConfirmation(conflict: $transferConflict) { request, approval in
-            await performTransfer(request, approval: approval)
+            await performTransfer(request, approval: approval, encryptionDecision: transferEncryptionDecision)
         }
+        .copyEncryptionConfirmation(prompt: $copyEncryptionPrompt)
         .alert("Set Tag", isPresented: .init(
             get: { tagTarget != nil },
             set: { if !$0 { tagTarget = nil } }
@@ -251,14 +275,14 @@ struct RecentFilesView: View {
             }
         }
         .confirmationDialog(
-            "Delete \(selectedIDs.count) file\(selectedIDs.count == 1 ? "" : "s")?",
+            "Delete \(bulkDeletion.confirmationCount) file\(bulkDeletion.confirmationCount == 1 ? "" : "s")?",
             isPresented: $showBulkDeleteConfirm,
             titleVisibility: .visible
         ) {
             Button("Delete", role: .destructive) {
-                Task { await bulkDeleteSelected() }
+                bulkDeleteSelected()
             }
-            Button("Cancel", role: .cancel) {}
+            Button("Cancel", role: .cancel) { bulkDeletion.dismissConfirmation() }
         }
         .alert("Some Deletes Failed", isPresented: $showBulkDeleteError) {
             Button("OK", role: .cancel) {}
@@ -290,8 +314,13 @@ struct RecentFilesView: View {
                 systemImage: "gear",
                 description: Text("Go to Settings to configure your S3 bucket and credentials")
             )
-        } else if CachedRowsPresentation.showsInitialLoading(rowCount: s3Service.recentFiles.count,
-            hasLoadedOnce: hasLoadedOnce, isRefreshing: s3Service.isRecentLoading) {
+        } else if case .initialFailure(let message) = listPresentation {
+            ContentUnavailableView {
+                Label("Couldn't load files", systemImage: "exclamationmark.triangle")
+            } description: { Text(message) } actions: {
+                Button("Retry") { Task { await refreshRecentFiles(force: true) } }
+            }
+        } else if listPresentation == .initialLoading {
             VStack(spacing: 8) {
                 ProgressView()
                 Text(s3Service.recentLoadingStatus)
@@ -299,6 +328,13 @@ struct RecentFilesView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if s3Service.recentFiles.isEmpty, fileTypeFilter != .all,
+                  s3Service.session.catalogs.value(for: s3Service.session.configuration.account)?.records.isEmpty == false {
+            ContentUnavailableView {
+                Label("No Matching Files", systemImage: "doc")
+            } description: { Text("No files match the selected types.") } actions: {
+                Button("Clear Filters") { clearFilters() }
+            }
         } else if s3Service.recentFiles.isEmpty {
             ScrollView {
                 ContentUnavailableView(
@@ -322,9 +358,14 @@ struct RecentFilesView: View {
         }
     }
 
+    private var listPresentation: ListPresentation {
+        .resolve(hasSnapshot: s3Service.session.catalogs.value(for: s3Service.session.configuration.account) != nil,
+            rowCount: s3Service.recentFiles.count, isLoading: s3Service.isRecentLoading, error: s3Service.recentRefreshError)
+    }
+
     @ViewBuilder
     private var filesView: some View {
-        if viewMode == .list {
+        if viewMode == .list || FileCardPresentation.prefersList(requestedGrid: viewMode == .grid, isAccessibilitySize: dynamicTypeSize.isAccessibilitySize) {
             listView
         } else {
             gridView
@@ -339,8 +380,8 @@ struct RecentFilesView: View {
                         toggleSelection(file)
                     } label: {
                         HStack(spacing: 12) {
-                            Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(selectedIDs.contains(file.id) ? .blue : .secondary)
+                            Image(systemName: bulkDeletion.selected.contains(identity(file)) ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(bulkDeletion.selected.contains(identity(file)) ? .blue : .secondary)
                                 .font(.title3)
                             RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
                                 .accessibilityIdentifier(file.key)
@@ -348,6 +389,7 @@ struct RecentFilesView: View {
                         }
                     }
                     .buttonStyle(.plain)
+                    .disabled(bulkDeletion.isDeleting)
                 } else {
                     NavigationLink(destination: destinationView(for: file)) {
                         RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
@@ -380,14 +422,15 @@ struct RecentFilesView: View {
                         } label: {
                             ZStack(alignment: .topTrailing) {
                                 RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
-                                    .opacity(selectedIDs.contains(file.id) ? 0.75 : 1.0)
-                                Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle.fill")
-                                    .foregroundStyle(selectedIDs.contains(file.id) ? .blue : Color(.systemBackground).opacity(0.8))
+                                    .opacity(bulkDeletion.selected.contains(identity(file)) ? 0.75 : 1.0)
+                                Image(systemName: bulkDeletion.selected.contains(identity(file)) ? "checkmark.circle.fill" : "circle.fill")
+                                    .foregroundStyle(bulkDeletion.selected.contains(identity(file)) ? .blue : Color(.systemBackground).opacity(0.8))
                                     .font(.title3)
                                     .padding(6)
                             }
                         }
                         .buttonStyle(.plain)
+                        .disabled(bulkDeletion.isDeleting)
                     } else {
                         NavigationLink(destination: destinationView(for: file)) {
                             RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
@@ -402,56 +445,21 @@ struct RecentFilesView: View {
     }
 
     private func toggleSelection(_ file: S3Object) {
-        if selectedIDs.contains(file.id) {
-            selectedIDs.remove(file.id)
-        } else {
-            selectedIDs.insert(file.id)
-        }
+        bulkDeletion.toggle(identity(file))
     }
 
-    private func bulkDeleteSelected() async {
-        let toDelete = filteredRecentFiles.filter { selectedIDs.contains($0.id) }
-        var failures: [String] = []
-
-        await withTaskGroup(of: String?.self) { group in
-            for file in toDelete {
-                group.addTask {
-                    do {
-                        try await self.s3Service.deleteObject(key: file.key, bucket: file.bucket)
-                        return nil
-                    } catch {
-                        return error.localizedDescription
-                    }
-                }
-            }
-            for await errorMessage in group {
-                if let msg = errorMessage { failures.append(msg) }
-            }
-        }
-
-        await MainActor.run {
-            selectedIDs.removeAll()
-            isSelecting = false
-        }
-        await refreshRecentFiles()
-
-        if !failures.isEmpty {
-            await MainActor.run {
-                bulkDeleteErrorMessage = failures.joined(separator: "\n")
+    private func bulkDeleteSelected() {
+        let generation = s3Service.session.generation
+        bulkDeletion.start { target in
+            guard s3Service.session.isCurrent(generation),
+                  target.account.utf8.elementsEqual(s3Service.session.configuration.account.utf8) else { throw CancellationError() }
+            try await s3Service.deleteObject(key: target.key, bucket: target.bucket)
+        } completion: {
+            isSelecting = !bulkDeletion.selected.isEmpty
+            if let message = bulkDeletion.failureMessage {
+                bulkDeleteErrorMessage = message
                 showBulkDeleteError = true
             }
-        }
-    }
-
-    /// Copies a 1-day presigned URL for the file to the pasteboard, showing a toast for
-    /// either outcome. Shared by the leading swipe action and the context-menu Copy Link
-    /// item so both behave the same, including the nil-URL failure case.
-    private func copyURL(for file: S3Object) {
-        if let url = s3Service.generatePresignedURL(for: file.key, bucket: file.bucket, expiresIn: 86400) {
-            UIPasteboard.general.string = url
-            showCopyToast("Link copied")
-        } else {
-            showCopyToast("Could not copy link")
         }
     }
 
@@ -516,9 +524,9 @@ struct RecentFilesView: View {
         ToolbarItem(placement: .topBarLeading) {
             Button(isSelecting ? "Done" : "Edit") {
                 isSelecting.toggle()
-                if !isSelecting { selectedIDs.removeAll() }
+                if !isSelecting { bulkDeletion.clearSelection() }
             }
-            .disabled(s3Service.recentFiles.isEmpty)
+            .disabled(s3Service.recentFiles.isEmpty || bulkDeletion.isDeleting)
         }
         ToolbarItem(placement: .topBarTrailing) {
             trailingToolbarContent
@@ -529,12 +537,13 @@ struct RecentFilesView: View {
         HStack(spacing: 12) {
             if isSelecting {
                 Button {
+                    bulkDeletion.captureConfirmation()
                     showBulkDeleteConfirm = true
                 } label: {
-                    Text("Delete (\(selectedIDs.count))")
-                        .foregroundStyle(selectedIDs.isEmpty ? Color.secondary : Color.red)
+                    Text("Delete (\(bulkDeletion.confirmationCount))")
+                        .foregroundStyle(bulkDeletion.selected.isEmpty ? Color.secondary : Color.red)
                 }
-                .disabled(selectedIDs.isEmpty)
+                .disabled(bulkDeletion.selected.isEmpty || bulkDeletion.isDeleting)
             } else {
                 if viewMode == .grid {
                     Slider(value: $gridCardSize, in: 60...160, step: 10)
@@ -863,10 +872,16 @@ struct RecentFilesView: View {
         await performTransfer(request)
     }
 
-    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async {
+    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil,
+                                 encryptionDecision: CopyEncryptionDecision = .automatic) async {
         do {
-            try await s3Service.performObjectTransfer(request, approval: approval)
+            try await s3Service.performObjectTransfer(request, approval: approval, encryptionDecision: encryptionDecision)
+        } catch let requirement as CopyEncryptionRequirement {
+            copyEncryptionPrompt = CopyEncryptionPrompt(requirement: requirement) { decision in
+                Task { await performTransfer(request, approval: approval, encryptionDecision: decision) }
+            }
         } catch ObjectTransferError.confirmationRequired(let conflict) {
+            transferEncryptionDecision = encryptionDecision
             transferConflict = conflict
         } catch {
             logger.error("Rename failed: \(error.localizedDescription)")

@@ -10,19 +10,22 @@ struct PrefixPickerSheet: View {
     let sourceBucket: String
     let sourceObject: S3Object
     let mode: Mode
-    /// Called with the chosen destination prefix on confirm. The callee performs the operation.
-    let onConfirm: (String) async -> Void
+    /// Synchronously hands off a choice; the parent starts remote work after dismissal.
+    let onConfirm: (String) -> Void
 
     @Environment(\.dismiss) private var dismiss
     private let logger = Logger(subsystem: "com.s3browser", category: "PrefixPickerSheet")
 
     /// Stack of prefixes the user has drilled into. Empty = bucket root.
     @State private var prefixStack: [String] = []
-    @State private var items: [S3Item] = []
-    @State private var isLoading = false
-    @State private var isConfirming = false
+    @State private var listing = PagedListingState()
+    private var isLoading: Bool { listing.isLoading }
+    @State private var selection = DestinationSelection()
 
     private var currentPrefix: String { prefixStack.last ?? "" }
+    private var query: ListingQuery {
+        ListingQuery(account: s3Service.session.configuration.account, bucket: sourceBucket, prefix: currentPrefix)
+    }
 
     private var confirmLabel: String {
         let here = currentPrefix.isEmpty ? "/" : "/\(currentPrefix)"
@@ -32,7 +35,7 @@ struct PrefixPickerSheet: View {
     var body: some View {
         NavigationStack {
             Group {
-                if isLoading {
+                if isLoading && listing.page == nil {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
@@ -67,7 +70,16 @@ struct PrefixPickerSheet: View {
                             .foregroundStyle(.primary)
                         }
 
-                        if folders.isEmpty && !isLoading {
+                        if let error = listing.error {
+                            Text(error).font(.caption).foregroundStyle(.secondary)
+                            Button("Retry") { Task { await loadFolders(force: true) } }
+                        }
+                        if listing.hasMore {
+                            Button("Load more folders") { Task { await loadMoreFolders() } }
+                                .disabled(isLoading || listing.isLoadingMore)
+                            if listing.isLoadingMore { ProgressView() }
+                        }
+                        if folders.isEmpty && !isLoading && listing.error == nil && !listing.hasMore {
                             Text("No sub-folders")
                                 .foregroundStyle(.secondary)
                                 .font(.subheadline)
@@ -79,27 +91,24 @@ struct PrefixPickerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }
+                    Button("Cancel") { selection.cancel(); dismiss() }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        Task { await confirm() }
+                        confirm()
                     } label: {
-                        if isConfirming {
-                            ProgressView()
-                        } else {
-                            Text(mode == .move ? "Move" : "Copy")
-                                .fontWeight(.semibold)
-                        }
+                        Text(mode == .move ? "Move" : "Copy")
+                            .fontWeight(.semibold)
                     }
-                    .disabled(isConfirming || isSameDestination)
+                    .disabled(selection.hasDecided || isSameDestination || !listing.canConfirmDestination(query))
                 }
             }
             .safeAreaInset(edge: .bottom) {
                 destinationBanner
             }
         }
-        .task(id: currentPrefix) { await loadFolders() }
+        .task(id: query) { await loadFolders() }
+        .onDisappear { selection.cancel() }
     }
 
     // MARK: - Subviews
@@ -131,7 +140,8 @@ struct PrefixPickerSheet: View {
     // MARK: - Helpers
 
     private var folders: [S3Folder] {
-        items.compactMap { if case .folder(let f) = $0 { return f } else { return nil } }
+        guard listing.query == query else { return [] }
+        return (listing.page?.folders ?? []).map { S3Folder(prefix: $0) }
     }
 
     private var isSameDestination: Bool {
@@ -139,21 +149,28 @@ struct PrefixPickerSheet: View {
             sourceKey: sourceObject.key, destinationBucket: sourceBucket, destinationPrefix: currentPrefix)
     }
 
-    private func loadFolders() async {
-        isLoading = true
+    private func loadFolders(force: Bool = false) async {
+        let expected = query
         do {
-            let page = try await s3Service.listPrefix(currentPrefix, bucket: sourceBucket)
-            items = page.items
+            try await listing.reload(expected, force: force) { token in
+                try await s3Service.fetchPrefixMetadataPage(expected, token: token)
+            }
         } catch {
             logger.error("PrefixPickerSheet listPrefix failed: \(error.localizedDescription)")
         }
-        isLoading = false
     }
 
-    private func confirm() async {
-        isConfirming = true
-        await onConfirm(currentPrefix)
-        isConfirming = false
+    private func loadMoreFolders() async {
+        let expected = query
+        do {
+            try await listing.loadMore { token in try await s3Service.fetchPrefixMetadataPage(expected, token: token) }
+        } catch { logger.error("PrefixPickerSheet pagination failed: \(error.localizedDescription)") }
+    }
+
+    private func confirm() {
+        guard let destination = selection.confirm(currentPrefix,
+            canConfirm: listing.canConfirmDestination(query)) else { return }
+        onConfirm(destination)
         dismiss()
     }
 }

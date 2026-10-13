@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.207593541">
+    <testcase classname="AuditCoreTests.N08FileCardAccessibilityTests" name="adaptiveCategories(_:)" time="0.206180334" />
+    <testcase classname="AuditCoreTests.N08FileCardAccessibilityTests" name="semanticFonts()" time="0.206286041" />
+    <testcase classname="AuditCoreTests.N08FileCardAccessibilityTests" name="actualLabelLayout()" time="0.207207" />
+  </testsuite>
+</testsuites>

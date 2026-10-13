@@ -1,0 +1,32 @@
+{
+  "process_only_git_environment": {
+    "GIT_CONFIG_KEY_0": "url.file:///Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/s2n-tls.git.insteadOf",
+    "GIT_CONFIG_VALUE_0": "https://github.com/aws/s2n-tls.git",
+    "GIT_CONFIG_KEY_1": "url.file:///Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-verification-model-for-libcrypto.git.insteadOf",
+    "GIT_CONFIG_VALUE_1": "https://github.com/awslabs/aws-verification-model-for-libcrypto.git",
+    "GIT_CONFIG_COUNT": "3",
+    "GIT_CONFIG_KEY_2": "protocol.file.allow",
+    "GIT_CONFIG_VALUE_2": "always"
+  },
+  "verified_dependencies": [
+    {
+      "dependency": "s2n-tls",
+      "revision": "92f7827c8487eb2a99b443aec6ee7d1df031b1bf",
+      "original_url": "https://github.com/aws/s2n-tls.git",
+      "mirror": "file:///Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/s2n-tls.git",
+      "proof_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-s2n-object-hydration.json",
+      "verified_git_fsck_exit_code": 0
+    },
+    {
+      "dependency": "aws-verification-model-for-libcrypto",
+      "revision": "53f8f8918f3aca5127937becd8efd9bfd1a860c2",
+      "original_url": "https://github.com/awslabs/aws-verification-model-for-libcrypto.git",
+      "mirror": "file:///Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedMirrors/aws-verification-model-for-libcrypto.git",
+      "proof_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-s2n-nested-process.json",
+      "verified_git_fsck_exit_code": 0
+    }
+  ],
+  "scope": "Exact original gitlink SHAs, parent and nested source objects verified; dependency URLs/pins/source files unchanged.",
+  "transport_policy": "Allow verified file mirrors for this process and its Git submodule children only; no global Git configuration change",
+  "transport_fixture_proof": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-file-transport-fixture.json"
+}

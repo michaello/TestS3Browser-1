@@ -7,6 +7,7 @@ import SmithyStreams
 @MainActor
 private struct S3ObjectTransferTransport: ObjectTransferTransport {
     let client: S3Client
+    var encryptionDecision: CopyEncryptionDecision = .automatic
     let contextGuard: @MainActor () throws -> Void
 
     func validateContext() throws { try contextGuard() }
@@ -23,9 +24,11 @@ private struct S3ObjectTransferTransport: ObjectTransferTransport {
         }
     }
 
-    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision) async throws {
+    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision,
+              destinationPresence: TransferObjectPresence) async throws -> ObjectCopyReceipt {
         try await performS3ObjectCopy(client: client, request: request,
-            revision: sourceRevision, contextGuard: contextGuard)
+            revision: sourceRevision, expectedDestination: destinationPresence,
+            encryptionDecision: encryptionDecision, contextGuard: contextGuard)
     }
 
     func delete(_ source: TransferObjectLocation, revision: TransferObjectRevision) async throws {
@@ -65,23 +68,38 @@ extension S3Service {
         return try await MediaOriginalStore.shared.file(for: identity, knownBytes: size, purpose: purpose,
                                                         progress: onProgress) { @MainActor in
             guard self.session.isCurrent(generation) else { throw CancellationError() }
-            let output = try await capturedClient.getObject(input: GetObjectInput(
-                bucket: capturedIdentity.bucket, ifMatch: capturedIdentity.etag,
-                key: capturedIdentity.key, versionId: capturedIdentity.version))
-            guard self.session.isCurrent(generation) else { throw CancellationError() }
-            if let expected = capturedIdentity.etag, let actual = output.eTag,
-               !expected.utf8.elementsEqual(actual.utf8) { throw MediaTransferError.revisionMismatch }
-            guard let body = output.body else { throw MediaTransferError.missingBody }
-            switch body {
-            case .data(let data):
-                guard let data else { throw MediaTransferError.missingBody }
-                let reader = MediaDataReader(data)
-                return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init), read: { await reader.read() })
-            case .stream(let stream):
-                return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init),
-                    read: { try await stream.readAsync(upToCount: 65_536) }, close: { stream.close() })
-            case .noStream:
-                throw MediaTransferError.missingBody
+            let telemetry = AuditTelemetry.shared
+            let request = telemetry.beginRequest(identity: Data(capturedIdentity.digest.utf8), body: true)
+            let active = await BodyTransferLimiter.shared.activeCount, peak = await BodyTransferLimiter.shared.peak
+            telemetry.recordOwnedBodyTransfers(current: active, peak: peak)
+            do {
+                let output = try await capturedClient.getObject(input: GetObjectInput(
+                    bucket: capturedIdentity.bucket, ifMatch: capturedIdentity.etag,
+                    key: capturedIdentity.key, versionId: capturedIdentity.version))
+                var handedOff = false
+                defer { if !handedOff, case .stream(let stream) = output.body { stream.close() } }
+                guard self.session.isCurrent(generation) else { throw CancellationError() }
+                if let expected = capturedIdentity.etag, let actual = output.eTag,
+                   !expected.utf8.elementsEqual(actual.utf8) { throw MediaTransferError.revisionMismatch }
+                guard let body = output.body else { throw MediaTransferError.missingBody }
+                let completion: @Sendable (Int64, Bool) async -> Void = { bytes, succeeded in
+                    await MainActor.run { telemetry.finishRequest(request, bytes: bytes, succeeded: succeeded) }
+                }
+                switch body {
+                case .data(let data):
+                    guard let data else { throw MediaTransferError.missingBody }
+                    let reader = MediaDataReader(data)
+                    return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init), read: { await reader.read() }, completion: completion)
+                case .stream(let stream):
+                    handedOff = true
+                    return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init),
+                        read: { try await stream.readAsync(upToCount: 65_536) }, close: { stream.close() }, completion: completion)
+                case .noStream:
+                    throw MediaTransferError.missingBody
+                }
+            } catch {
+                telemetry.finishRequest(request, bytes: 0, succeeded: false)
+                throw error
             }
         }
     }
@@ -198,11 +216,23 @@ extension S3Service {
                             capturedConfig: S3Config, generation: UUID,
                             onProgress: (@MainActor (Double) -> Void)?) async throws {
         let permit = try await BodyTransferLimiter.shared.acquireLease()
+        var requestToken: UUID?
         do {
             guard config == capturedConfig, session.generation == generation else { throw UploadPreparationError.accountChanged }
+            try Task.checkCancellation()
+            let currentBodies = await BodyTransferLimiter.shared.activeCount
+            let peakBodies = await BodyTransferLimiter.shared.peak
+            AuditTelemetry.shared.recordOwnedBodyTransfers(current: currentBodies, peak: peakBodies)
+            let identity = MediaObjectIdentity(account: session.configuration.account, bucket: input.bucket ?? "",
+                key: input.key ?? "").digest
+            requestToken = AuditTelemetry.shared.beginRequest(identity: Data(("upload:" + identity).utf8), body: true)
             var etag: String?
             try await EstimatedUploadProgress.perform(byteCount: byteCount, progress: onProgress) {
                 etag = try await client.putObject(input: input).eTag
+            }
+            if let requestToken {
+                AuditTelemetry.shared.finishRequest(requestToken, bytes: 0, succeeded: true,
+                    confirmedUploadBytes: Int64(byteCount))
             }
             await BodyTransferLimiter.shared.releaseLease(permit)
             if session.generation == generation, let key = input.key, let bucket = input.bucket {
@@ -211,6 +241,7 @@ extension S3Service {
                 await invalidateMedia(key: key, bucket: bucket)
             }
         } catch {
+            if let requestToken { AuditTelemetry.shared.finishRequest(requestToken, bytes: 0, succeeded: false) }
             await BodyTransferLimiter.shared.releaseLease(permit)
             throw error
         }
@@ -271,9 +302,11 @@ extension S3Service {
     }
 
     @MainActor
-    func performObjectTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async throws {
+    func performObjectTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil,
+                               encryptionDecision: CopyEncryptionDecision = .automatic) async throws {
         let capturedConfig = config
         let capturedGeneration = session.generation
+        let capturedAccount = session.configuration.account
         guard request.generation == nil || request.generation == capturedGeneration else { throw ObjectTransferError.contextChanged }
         guard request.source.accountScope == objectTransferAccountScope,
               request.destination.accountScope == objectTransferAccountScope else {
@@ -282,17 +315,22 @@ extension S3Service {
         if client == nil { try await initializeClient() }
         guard config == capturedConfig else { throw ObjectTransferError.contextChanged }
         guard let client else { throw S3ServiceError.clientNotInitialized }
-        let transport = S3ObjectTransferTransport(client: client) { [weak self] in
+        let transport = S3ObjectTransferTransport(client: client, encryptionDecision: encryptionDecision) { [weak self] in
             guard let self, self.config == capturedConfig, self.session.generation == capturedGeneration else {
                 throw ObjectTransferError.contextChanged
             }
         }
-        try await ObjectTransferCoordinator(transport: transport).execute(request, approval: approval)
-
-        recordObjectTransfer(request, generation: capturedGeneration)
-        if session.generation == capturedGeneration {
-            await invalidateMedia(key: request.source.key, bucket: request.source.bucket)
-            await invalidateMedia(key: request.destination.key, bucket: request.destination.bucket)
+        let receipt = try await ObjectTransferCoordinator(transport: transport).execute(request, approval: approval) { receipt in
+            await ConfirmedMediaMutation.apply(identity: MediaObjectIdentity(account: capturedAccount,
+                bucket: request.destination.bucket, key: request.destination.key), isCurrent: { session.isCurrent(capturedGeneration) },
+                invalidate: { identity in await invalidateMedia(key: identity.key, bucket: identity.bucket, account: identity.account) },
+                publish: { recordObjectTransfer(request, receipt: receipt, removedSource: false, generation: capturedGeneration) })
+        }
+        if request.kind != .copy {
+            await ConfirmedMediaMutation.apply(identity: MediaObjectIdentity(account: capturedAccount,
+                bucket: request.source.bucket, key: request.source.key), isCurrent: { session.isCurrent(capturedGeneration) },
+                invalidate: { identity in await invalidateMedia(key: identity.key, bucket: identity.bucket, account: identity.account) },
+                publish: { recordObjectTransfer(request, receipt: receipt, removedSource: true, generation: capturedGeneration) })
         }
         logger.info("Object transfer completed: \(request.source.bucket)/\(request.source.key) -> \(request.destination.bucket)/\(request.destination.key)")
     }
@@ -302,11 +340,15 @@ extension S3Service {
     ///   - name: Folder name without slashes. The trailing slash is appended automatically.
     ///   - prefix: Parent prefix. Empty string creates at the bucket root.
     ///   - bucket: Target bucket (defaults to `currentBucket`).
-    func createFolder(named name: String, prefix: String = "", bucket: String? = nil) async throws {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+    func createFolder(named name: String, prefix: String = "", bucket: String? = nil,
+                      expectedGeneration: UUID? = nil) async throws {
+        let generation = expectedGeneration ?? session.generation
         let target = bucket ?? currentBucket
-        let key = prefix.isEmpty ? "\(name)/" : "\(prefix)\(name)/"
+        let validName = try FolderNameValidation.name(name, prefix: prefix)
+        if client == nil { try await initializeClient() }
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let key = prefix + validName + "/"
         let input = PutObjectInput(
             body: .data(Data()),
             bucket: target,
@@ -474,8 +516,10 @@ extension S3Service {
     }
 
     /// Restores a specific version of an object by copying it to the same key, making it the latest.
-    func restoreVersion(key: String, versionId: String, bucket: String? = nil) async throws {
+    func restoreVersion(key: String, versionId: String, bucket: String? = nil,
+                        encryptionDecision: CopyEncryptionDecision = .automatic, expectedGeneration: UUID? = nil) async throws {
         let generation = session.generation
+        guard expectedGeneration == nil || expectedGeneration == generation else { throw ObjectTransferError.contextChanged }
         let account = session.configuration.account
         let target = bucket ?? currentBucket
         if client == nil { try await initializeClient() }
@@ -485,6 +529,7 @@ extension S3Service {
         try await performS3ObjectCopy(client: client,
             request: .init(kind: .copy, source: location, destination: location, generation: generation),
             revision: .init(etag: nil, versionID: versionId, lastModified: nil, size: nil),
+            encryptionDecision: encryptionDecision,
             contextGuard: { guard self.session.isCurrent(generation) else { throw CancellationError() } })
         await invalidateMedia(key: key, bucket: target, account: account)
         guard session.isCurrent(generation) else { throw CancellationError() }
@@ -495,8 +540,10 @@ extension S3Service {
 
     /// Changes the storage class of an object by copying it to itself with the new class.
     /// All existing metadata is preserved via metadataDirective: .copy.
-    func changeStorageClass(key: String, storageClass: S3ClientTypes.StorageClass, bucket: String? = nil) async throws {
+    func changeStorageClass(key: String, storageClass: S3ClientTypes.StorageClass, bucket: String? = nil,
+                            encryptionDecision: CopyEncryptionDecision = .automatic, expectedGeneration: UUID? = nil) async throws {
         let generation = session.generation
+        guard expectedGeneration == nil || expectedGeneration == generation else { throw ObjectTransferError.contextChanged }
         let account = session.configuration.account
         let target = bucket ?? currentBucket
         if client == nil { try await initializeClient() }
@@ -506,6 +553,7 @@ extension S3Service {
         try await performS3ObjectCopy(client: client,
             request: .init(kind: .copy, source: location, destination: location, generation: generation),
             revision: .init(etag: nil, versionID: nil, lastModified: nil, size: nil), storageClass: storageClass,
+            encryptionDecision: encryptionDecision,
             contextGuard: { guard self.session.isCurrent(generation) else { throw CancellationError() } })
         await invalidateMedia(key: key, bucket: target, account: account)
         guard session.isCurrent(generation) else { throw CancellationError() }
@@ -538,7 +586,7 @@ extension S3Service {
         let authenticatedURI = "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
 
         var grants: [ACLGrant] = []
-        var isPublicRead = false
+        var semanticGrants: [ObjectCopyGrant] = []
 
         for grant in output.grants ?? [] {
             let perm = permissionLabel(grant.permission)
@@ -548,9 +596,6 @@ extension S3Service {
                 case .group:
                     if g.uri == allUsersURI {
                         granteeStr = "Everyone (public)"
-                        if grant.permission == .read || grant.permission == .fullControl {
-                            isPublicRead = true
-                        }
                     } else if g.uri == authenticatedURI {
                         granteeStr = "Authenticated AWS users"
                     } else {
@@ -566,18 +611,21 @@ extension S3Service {
             } else {
                 granteeStr = "unknown"
             }
+            let principal = grant.grantee
+            let kind: String
+            let identifier: String
+            switch principal?.type {
+            case .canonicaluser: kind = "id"; identifier = principal?.id ?? ""
+            case .group: kind = "uri"; identifier = principal?.uri ?? ""
+            case .amazoncustomerbyemail: kind = "emailAddress"; identifier = principal?.emailAddress ?? ""
+            default: kind = "unknown"; identifier = ""
+            }
+            semanticGrants.append(.init(permission: grant.permission?.rawValue ?? "UNKNOWN",
+                granteeKind: kind, identifier: identifier))
             grants.append(ACLGrant(grantee: granteeStr, permission: perm))
         }
 
-        let ownerOnly = grants.allSatisfy { !$0.grantee.contains("public") && !$0.grantee.contains("Authenticated") }
-        let summary: String
-        if isPublicRead {
-            summary = "Public (read)"
-        } else if ownerOnly || grants.isEmpty {
-            summary = "Private"
-        } else {
-            summary = "Custom (\(grants.count) grants)"
-        }
+        let summary = ObjectACLAccessSummary.summarize(ownerID: output.owner?.id, grants: semanticGrants)
 
         logger.info("ACL for \(target)/\(key): \(summary)")
         return S3ObjectACL(summary: summary, grants: grants)

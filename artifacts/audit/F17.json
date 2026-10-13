@@ -2,9 +2,9 @@
   "id": "F17",
   "expected_behavior": "Failed, cancelled and completed uploads leave no live estimated-progress loop, and no estimated callback can arrive after the terminal callback/state.",
   "passed": true,
-  "source_fingerprint": "df0456da20d4a9e44e1465040144f1adc771a2fe1ac31e78d22918e4706e1d0b",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:02:37.094967+00:00",
+  "recorded_at": "2026-10-13T07:38:53.180209+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,23 +23,23 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.F17UploadProgressTests",
-      "name": "successEndsTimerBeforeTerminalCallback()",
-      "time": "0.003735541"
+      "name": "cancellationStopsOwnedTimer()",
+      "time": "0.005218666"
     },
     {
       "classname": "AuditCoreTests.F17UploadProgressTests",
-      "name": "absentCallbackStartsNoTimer()",
-      "time": "0.000275125"
+      "name": "successEndsTimerBeforeTerminalCallback()",
+      "time": "0.003461667"
     },
     {
       "classname": "AuditCoreTests.F17UploadProgressTests",
       "name": "failureStopsTimerWithoutSuccessOrLateCallbacks()",
-      "time": "0.003741417"
+      "time": "0.003937167"
     },
     {
       "classname": "AuditCoreTests.F17UploadProgressTests",
-      "name": "cancellationStopsOwnedTimer()",
-      "time": "0.004141375"
+      "name": "absentCallbackStartsNoTimer()",
+      "time": "0.000521"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F17.log",

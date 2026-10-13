@@ -1,0 +1,38 @@
+{
+  "id": "F33",
+  "expected_behavior": "The search shortcut finds a matching older object outside the newest 50 and returns its bucket identity without first truncating the searchable catalog.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:25.200569+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F33FullCatalogSearchTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F33FullCatalogSearchTests",
+      "name": "olderMatch()",
+      "time": "0.000280959"
+    },
+    {
+      "classname": "AuditCoreTests.F33FullCatalogSearchTests",
+      "name": "limits()",
+      "time": "0.00043775"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

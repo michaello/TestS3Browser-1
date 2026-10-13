@@ -1,0 +1,48 @@
+{
+  "id": "F16",
+  "expected_behavior": "Initial HTML viewing performs no hidden versions/tags/ACL fetches; secondary details load on demand and reuse fresh metadata without delaying visible content.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:08.987902+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F16DetailDemandTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 4,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F16DetailDemandTests",
+      "name": "visiblePriority()",
+      "time": "0.003304584"
+    },
+    {
+      "classname": "AuditCoreTests.F16DetailDemandTests",
+      "name": "demandAndFreshness()",
+      "time": "0.004054083"
+    },
+    {
+      "classname": "AuditCoreTests.F16DetailDemandTests",
+      "name": "boundedAndInvalidated()",
+      "time": "0.008321917"
+    },
+    {
+      "classname": "AuditCoreTests.F16DetailDemandTests",
+      "name": "failureAndRetry()",
+      "time": "0.003939208"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

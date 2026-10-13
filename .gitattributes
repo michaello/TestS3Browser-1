@@ -1,0 +1,2 @@
+# Preserve exact process output without source whitespace rules for retained logs.
+artifacts/audit/*.log -whitespace

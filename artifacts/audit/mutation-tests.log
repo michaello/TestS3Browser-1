@@ -1,0 +1,74 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[12 / 36] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[19 / 32] AuditCoreTests-product
+[21 / 32] AuditCoreTests-product
+[38 / 49] AuditCoreTests-product
+[42 / 48] AuditCoreTests-product
+[44 / 48] AuditCoreTests-product
+[46 / 48] AuditCoreTests-product
+Build complete! (17.82 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN24 started.
+􀟈  Suite AuditN12 started.
+􀟈  Suite AuditN19 started.
+􀟈  Suite AuditN42 started.
+􀟈  Test delayedListingCannotRestoreASuccessfullyDeletedObject() started.
+􀟈  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() started.
+􀟈  Test obsoleteAccountDeleteCannotChangeCurrentCaches() started.
+􀟈  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() started.
+􀟈  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() started.
+􀟈  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() started.
+􀟈  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() started.
+􀟈  Test partialFailureRetainsOnlyTheFailedIdentitiesForRetry() started.
+􀟈  Test cancelledOldAccountCannotChangeTheReplacementSelection() started.
+􀟈  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() started.
+􀟈  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() started.
+􀟈  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() started.
+􀟈  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() started.
+􀟈  Test case passing 1 argument origin → "sheet-after-dismissal" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test case passing 1 argument origin → "queued" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􀟈  Test secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection() started.
+􀟈  Suite AuditN21 started.
+􀟈  Test exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot() started.
+􀟈  Test selectionCannotMutateAnAlreadyPresentedConfirmation() started.
+􀟈  Test confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges() started.
+􀟈  Test case passing 1 argument origin → "root" to everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) started.
+􁁛  Test selectionCannotMutateAnAlreadyPresentedConfirmation() passed after 0.002 seconds.
+􁁛  Test obsoleteAccountDeleteCannotChangeCurrentCaches() passed after 0.076 seconds.
+􁁛  Test nestedUploadAddsTheCorrectFolderWithoutChangingAnUnrelatedListing() passed after 0.076 seconds.
+􁁛  Test byteDistinctKeysAndBucketsAreNotEvictedAsAliases() passed after 0.076 seconds.
+􁁛  Test uploadBeforeTheFirstListingCreatesAVisibleStaleSnapshot() passed after 0.076 seconds.
+􁁛  Test obsoleteUploadAccountCannotPublishIntoTheNewActiveUploadList() passed after 0.076 seconds.
+􁁛  Test completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning() passed after 0.076 seconds.
+􁁛  Test lateShareCompletionPreservesTheNewActiveWidgetAccount() passed after 0.076 seconds.
+􁁛  Test uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget() passed after 0.076 seconds.
+􁁛  Test deletingBucketBKeyCannotEvictBucketAKeyFromAnySnapshot() passed after 0.077 seconds.
+􁁛  Test canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter() passed after 0.078 seconds.
+􁁛  Suite AuditN42 passed after 0.078 seconds.
+􁁛  Test everyUploadCompletionUpdatesTheExactActiveUploadSnapshot(_:) with 3 test cases passed after 0.079 seconds.
+􁁛  Suite AuditN12 passed after 0.079 seconds.
+􁁛  Test delayedListingCannotRestoreASuccessfullyDeletedObject() passed after 0.079 seconds.
+􁁛  Suite AuditN24 passed after 0.079 seconds.
+􁁛  Test exactUnicodeBucketAndKeyIdentitiesSurviveTheSelectionSnapshot() passed after 0.078 seconds.
+􁁛  Test cancelledOldAccountCannotChangeTheReplacementSelection() passed after 0.079 seconds.
+􁁛  Test secondActivationCannotStartDuplicateDeletesOrChangeTheRunningSelection() passed after 0.079 seconds.
+􁁛  Test confirmationDeletesTheFrozenSelectionAfterVisibleQueryChanges() passed after 0.078 seconds.
+􁁛  Suite AuditN21 passed after 0.079 seconds.
+􁁛  Test partialFailureRetainsOnlyTheFailedIdentitiesForRetry() passed after 0.088 seconds.
+􁁛  Suite AuditN19 passed after 0.089 seconds.
+􁁛  Test run with 18 tests in 5 suites passed after 0.089 seconds.

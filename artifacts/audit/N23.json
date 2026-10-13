@@ -2,9 +2,9 @@
   "id": "N23",
   "expected_behavior": "A nonempty filtered/limited refresh cannot forget other previously seen objects; seen identities and deliberate pruning are independent of the visible query.",
   "passed": true,
-  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:32:32.795083+00:00",
+  "recorded_at": "2026-10-13T07:39:51.789172+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,22 +24,22 @@
     {
       "classname": "AuditCoreTests.AuditN23",
       "name": "namespacesAndAccountsHaveIndependentSeenHistory()",
-      "time": "0.000182542"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN23",
-      "name": "filteredOrLimitedPagesCannotForgetPreviouslySeenKeys()",
-      "time": "0.000141708"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN23",
-      "name": "explicitPruningClearsOnlyTheRequestedScope()",
-      "time": "0.000222209"
+      "time": "0.000395083"
     },
     {
       "classname": "AuditCoreTests.AuditN23",
       "name": "historyRoundTripPreservesExactBytesAndAdditivePages()",
-      "time": "0.000306542"
+      "time": "0.00039375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN23",
+      "name": "explicitPruningClearsOnlyTheRequestedScope()",
+      "time": "0.000385583"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN23",
+      "name": "filteredOrLimitedPagesCannotForgetPreviouslySeenKeys()",
+      "time": "0.000384458"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N23.log",

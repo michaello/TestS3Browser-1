@@ -2,9 +2,9 @@
   "id": "N15",
   "expected_behavior": "Negative shortcut counts return a validation error before collection operations/network work; supported zero and boundary counts are tested and do not trap.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:09.802785+00:00",
+  "recorded_at": "2026-10-13T07:39:39.258532+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,28 +23,28 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N15ShortcutCountTests",
-      "name": "cancelledFetch()",
-      "time": "0.004019"
-    },
-    {
-      "classname": "AuditCoreTests.N15ShortcutCountTests",
       "name": "zeroDoesNotFetch()",
-      "time": "0.003023"
+      "time": "0.000156916"
     },
     {
       "classname": "AuditCoreTests.N15ShortcutCountTests",
       "name": "shortResultAndFailure()",
-      "time": "0.003543375"
-    },
-    {
-      "classname": "AuditCoreTests.N15ShortcutCountTests",
-      "name": "positiveBoundaries(value:)",
-      "time": "0.003489584"
+      "time": "0.000932125"
     },
     {
       "classname": "AuditCoreTests.N15ShortcutCountTests",
       "name": "invalidCounts(value:)",
-      "time": "0.003638125"
+      "time": "0.000980292"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "cancelledFetch()",
+      "time": "0.001003458"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "positiveBoundaries(value:)",
+      "time": "0.000972542"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.log",

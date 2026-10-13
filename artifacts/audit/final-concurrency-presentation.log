@@ -1,0 +1,85 @@
+Building for debugging...
+[1 / 1]
+[2 / 13] AuditCore
+[4 / 15] AuditCore
+[7 / 18] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[14 / 22] AuditCore
+[16 / 21] AuditCoreTests-product
+[33 / 38] AuditCoreTests-product
+[37 / 40] AuditCoreTests-product
+[39 / 43] AuditCoreTests-product
+[41 / 43] AuditCoreTests-product
+Build complete! (9.17 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F30ListPresentationTests started.
+􀟈  Suite F08ConcurrencyBoundaryTests started.
+􀟈  Suite F05MetadataCatalogTests started.
+􀟈  Suite F32BucketCountCacheTests started.
+􀟈  Suite F36PerformanceTests started.
+􀟈  Suite F34DerivedRowsCacheTests started.
+􀟈  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" started.
+􀟈  Test "Initial failure and a successful empty snapshot remain distinct from loading" started.
+􀟈  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" started.
+􀟈  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" started.
+􀟈  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" started.
+􀟈  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" started.
+􀟈  Test "Zero successful buckets cannot replace or persist an empty snapshot" started.
+􀟈  Test "An old account completion cannot publish into newly isolated observed state" started.
+􀟈  Test "Bucket scan concurrency stays at the declared limit of three" started.
+􀟈  Test "A disappearing bucket list does not erase last-good metadata" started.
+􀟈  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" started.
+􀟈  Test "Fresh first-page counts retain their truncation indication without a new request" started.
+􀟈  Test "Stale count scans run at most three at a time and a denial remains unavailable" started.
+􀟈  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" started.
+􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
+􀟈  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() started.
+􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() started.
+􀟈  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" started.
+􀟈  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" started.
+􀟈  Test "Gallery projections are reused for index changes and rebuild only for source changes" started.
+􀟈  Test "A failed bucket retains its previous complete rows and totals are incomplete" started.
+􀟈  Test "Construction metrics use bounded surface names and measure only the builder" started.
+􀟈  Test "All pages contribute to newest results and empty buckets remain in stats" started.
+􁁛  Test "Concurrent file consumers share one actor-owned transfer and receive independent leases" passed after 0.018 seconds.
+􁁛  Test "Initial failure and a successful empty snapshot remain distinct from loading" passed after 0.041 seconds.
+􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.041 seconds.
+􁁛  Test uploadPayloadAndObservedBodyPeakDoNotPretendToMeasureNativeWireBytes() passed after 0.041 seconds.
+􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.041 seconds.
+􁁛  Test "One thousand unrelated updates reuse row derivations; source and filters each invalidate once" passed after 0.041 seconds.
+􁁛  Test "Gallery projections are reused for index changes and rebuild only for source changes" passed after 0.041 seconds.
+􁁛  Test "Text lines remain derived once across progress updates and exact query bytes invalidate cache" passed after 0.041 seconds.
+􁁛  Test "A failed later page cannot replace a bucket's good snapshot with partial rows" passed after 0.042 seconds.
+􁁛  Test "Construction metrics use bounded surface names and measure only the builder" passed after 0.041 seconds.
+􁁛  Test "A disappearing bucket list does not erase last-good metadata" passed after 0.041 seconds.
+􁁛  Suite F34DerivedRowsCacheTests passed after 0.042 seconds.
+􁁛  Test "All pages contribute to newest results and empty buckets remain in stats" passed after 0.044 seconds.
+􁁛  Test "A failed bucket retains its previous complete rows and totals are incomplete" passed after 0.046 seconds.
+􁁛  Test "Zero successful buckets cannot replace or persist an empty snapshot" passed after 0.047 seconds.
+􁁛  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" passed after 0.046 seconds.
+􁁛  Test "An old account completion cannot publish into newly isolated observed state" passed after 0.047 seconds.
+􁁛  Test "Cached content remains content during a suspended and failed refresh, and explicit retry recovers" passed after 0.048 seconds.
+􁁛  Suite F30ListPresentationTests passed after 0.048 seconds.
+􁁛  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" passed after 0.048 seconds.
+􁁛  Test "Bucket scan concurrency stays at the declared limit of three" passed after 0.053 seconds.
+􁁛  Suite F05MetadataCatalogTests passed after 0.053 seconds.
+􁁛  Test "Fresh first-page counts retain their truncation indication without a new request" passed after 0.054 seconds.
+􁁛  Test "Stale count scans run at most three at a time and a denial remains unavailable" passed after 0.060 seconds.
+􁁛  Test "Eighty concurrent callers cross MainActor ownership and join one load per key" passed after 0.060 seconds.
+􁁛  Suite F32BucketCountCacheTests passed after 0.060 seconds.
+􁁛  Test "Simultaneous catalog and bucket-count consumers share three process-wide metadata permits" passed after 0.065 seconds.
+􁁛  Suite F08ConcurrencyBoundaryTests passed after 0.065 seconds.
+􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.068 seconds.
+􁁛  Suite F36PerformanceTests passed after 0.068 seconds.
+􁁛  Test run with 24 tests in 6 suites passed after 0.069 seconds.

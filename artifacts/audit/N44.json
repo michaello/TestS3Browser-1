@@ -2,9 +2,9 @@
   "id": "N44",
   "expected_behavior": "Batch export staging files/leases clean up after share completion, cancellation and failure, and reusable original-file storage stays within its declared eviction budget.",
   "passed": true,
-  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T06:20:31.980359+00:00",
+  "recorded_at": "2026-10-13T07:40:19.764247+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -22,19 +22,19 @@
   "test_count": 3,
   "actual_assertions": [
     {
-      "classname": "AuditCoreTests.N44MediaLeaseTests",
-      "name": "stagingCleanup()",
-      "time": "0.008209625"
-    },
-    {
       "classname": "AuditCoreTests.N44BatchExportCleanupTests",
       "name": "failedStagingReleasesOriginalAndLeavesNoExportLease()",
-      "time": "0.007717625"
+      "time": "0.008678"
     },
     {
       "classname": "AuditCoreTests.N44BatchExportCleanupTests",
       "name": "activityCompletionAndCancelledShareBothReleaseAllFiles()",
-      "time": "0.004924542"
+      "time": "0.005786708"
+    },
+    {
+      "classname": "AuditCoreTests.N44MediaLeaseTests",
+      "name": "stagingCleanup()",
+      "time": "0.0091645"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.log",

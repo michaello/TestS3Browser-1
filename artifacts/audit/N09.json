@@ -1,0 +1,38 @@
+{
+  "id": "N09",
+  "expected_behavior": "Exactly the selected custom tab exposes selected accessibility state and each tab keeps its meaningful label and action.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:39:28.345377+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N09TabAccessibilityTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N09TabAccessibilityTests",
+      "name": "exactlyOneSelection(_:)",
+      "time": "0.000485291"
+    },
+    {
+      "classname": "AuditCoreTests.N09TabAccessibilityTests",
+      "name": "actions()",
+      "time": "0.000266584"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

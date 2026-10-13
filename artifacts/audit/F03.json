@@ -1,0 +1,43 @@
+{
+  "id": "F03",
+  "expected_behavior": "Switching away and back preserves each tab snapshot and navigation state; revisits inside the 60-second freshness window send no redundant listing.",
+  "passed": true,
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T07:38:40.589046+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F03TabRetentionTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F03TabRetentionTests",
+      "name": "lazyInitialSelection()",
+      "time": "0.001997417"
+    },
+    {
+      "classname": "AuditCoreTests.F03TabRetentionTests",
+      "name": "accountReset()",
+      "time": "0.001988916"
+    },
+    {
+      "classname": "AuditCoreTests.F03TabRetentionTests",
+      "name": "cachedRevisit()",
+      "time": "0.001608083"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

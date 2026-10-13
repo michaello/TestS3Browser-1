@@ -1,0 +1,12 @@
+Building for debugging...
+Build complete! (0.20 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F33FullCatalogSearchTests started.
+􀟈  Test "Limits apply after matching and negative limits fail" started.
+􀟈  Test "Search includes an older match beyond the newest fifty and returns its bucket" started.
+􁁛  Test "Search includes an older match beyond the newest fifty and returns its bucket" passed after 0.001 seconds.
+􁁛  Test "Limits apply after matching and negative limits fail" passed after 0.001 seconds.
+􁁛  Suite F33FullCatalogSearchTests passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.

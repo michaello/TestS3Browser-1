@@ -36,6 +36,7 @@ final class ObjectAnnotationState {
     private(set) var legacyStarKeys: Set<String>
     private(set) var legacyTags: [String: String]
     private(set) var storageError: String?
+    private(set) var revision = 0
 
     init(defaults: UserDefaults) {
         self.defaults = defaults
@@ -104,6 +105,7 @@ final class ObjectAnnotationState {
             guard defaults.data(forKey: Self.storageKey) == data else { throw SecureConfigurationError.preferenceWriteNotVerified }
             stars = replacementStars
             tags = replacementTags
+            revision += 1
             storageError = nil
             return true
         } catch {

@@ -2,9 +2,9 @@
   "id": "N11",
   "expected_behavior": "Undecodable/nonimage Data is rejected visibly rather than uploaded with a .jpg name and image/jpeg type; supported conversion fallbacks keep a truthful representation.",
   "passed": true,
-  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:45:53.074062+00:00",
+  "recorded_at": "2026-10-13T07:39:31.485373+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -23,13 +23,13 @@
   "actual_assertions": [
     {
       "classname": "AuditCoreTests.N11InvalidImageUploadTests",
-      "name": "imageBytesAndActualTypeArePreserved(_:)",
-      "time": "2.239517417"
+      "name": "nonImagesAreRejectedBeforeUpload()",
+      "time": "0.009347709"
     },
     {
       "classname": "AuditCoreTests.N11InvalidImageUploadTests",
-      "name": "nonImagesAreRejectedBeforeUpload()",
-      "time": "0.280475458"
+      "name": "imageBytesAndActualTypeArePreserved(_:)",
+      "time": "0.564263375"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N11.log",

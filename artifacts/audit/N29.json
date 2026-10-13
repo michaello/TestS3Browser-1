@@ -2,9 +2,9 @@
   "id": "N29",
   "expected_behavior": "Date-only lifecycle expiration/transitions survive API-to-display conversion and remain visible/calculable alongside day-based schedules.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:20.891741+00:00",
+  "recorded_at": "2026-10-13T07:39:59.369752+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,17 +24,17 @@
     {
       "classname": "AuditCoreTests.AuditN29",
       "name": "pastDateRulesContinueApplyingToNewMatchingObjects()",
-      "time": "0.005967375"
-    },
-    {
-      "classname": "AuditCoreTests.AuditN29",
-      "name": "daysAndDatesCoexistAcrossRulesAndExpireFirstWins()",
-      "time": "0.007590291"
+      "time": "0.003331458"
     },
     {
       "classname": "AuditCoreTests.AuditN29",
       "name": "dateOnlySchedulesRemainVisibleAndCalculable()",
-      "time": "0.005176041"
+      "time": "0.003607292"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN29",
+      "name": "daysAndDatesCoexistAcrossRulesAndExpireFirstWins()",
+      "time": "0.004123083"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N29.log",

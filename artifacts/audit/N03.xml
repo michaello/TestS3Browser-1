@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.004057875">
-    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="cancellationAfterInitialization()" time="0.003831792" />
-    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="deleteFailure()" time="0.003586959" />
-    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="initializesBeforeDeleting()" time="0.003046917" />
-    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="initializationFailure()" time="0.003600583" />
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.000949542">
+    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="initializationFailure()" time="0.000511208" />
+    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="cancellationAfterInitialization()" time="0.000652167" />
+    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="initializesBeforeDeleting()" time="0.000437541" />
+    <testcase classname="AuditCoreTests.N03ShortcutDeleteTests" name="deleteFailure()" time="0.000463875" />
   </testsuite>
 </testsuites>

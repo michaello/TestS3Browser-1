@@ -20,6 +20,13 @@ enum SharedConfig {
         return config
     }
 
+    static func recentDeliveryLockURL() throws -> URL {
+        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: suiteName) else {
+            throw SharedSnapshotError.unavailableContainer
+        }
+        return container.appendingPathComponent("recent-delivery.lock")
+    }
+
     /// Only the main app calls this before creating its service or starting requests.
     static func loadAndMigrateConfig() throws -> S3Config? {
         let repository = try repository(includeLegacyStandard: true)
@@ -33,6 +40,11 @@ enum SharedConfig {
             standard: includeLegacyStandard ? UserDefaultsConfigurationStore(defaults: .standard) : nil,
             credentials: try AppleKeychainCredentialStore())
     }
+}
+
+private enum SharedSnapshotError: LocalizedError {
+    case unavailableContainer
+    var errorDescription: String? { "The shared app container is unavailable. Recent upload delivery could not be saved." }
 }
 
 extension S3Config {

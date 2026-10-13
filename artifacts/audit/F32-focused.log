@@ -1,0 +1,22 @@
+Building for debugging...
+[Provisioning 1 / 4]
+[Planning deferred tasks]
+[1 / 1]
+[6 / 17] AuditCoreTests-product
+[8 / 19] AuditCoreTests-product
+[14 / 18] AuditCoreTests-product
+Build complete! (8.33 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F32BucketCountCacheTests started.
+􀟈  Test "Fresh first-page counts retain their truncation indication without a new request" started.
+􀟈  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" started.
+􀟈  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" started.
+􀟈  Test "Stale count scans run at most three at a time and a denial remains unavailable" started.
+􁁛  Test "Fresh complete catalog counts require no bucket listings on repeated presentation" passed after 0.004 seconds.
+􁁛  Test "A failed refresh retains an earlier estimate with its error and cannot cross accounts" passed after 0.005 seconds.
+􁁛  Test "Fresh first-page counts retain their truncation indication without a new request" passed after 0.005 seconds.
+􁁛  Test "Stale count scans run at most three at a time and a denial remains unavailable" passed after 0.006 seconds.
+􁁛  Suite F32BucketCountCacheTests passed after 0.007 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.007 seconds.

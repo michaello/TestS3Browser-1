@@ -143,6 +143,8 @@ struct SettingsView: View {
                                 Text("Loading policy...")
                                     .foregroundStyle(.secondary)
                             }
+                        } else if let error = admin?.policy.error(for: administrationIdentity) {
+                            Text("Unable to load policy: \(error)").foregroundStyle(.red)
                         } else if let json = policyJSON {
                             ScrollView(.vertical) {
                                 Text(json)
@@ -174,6 +176,8 @@ struct SettingsView: View {
                                 Text("Loading rules...")
                                     .foregroundStyle(.secondary)
                             }
+                        } else if let error = admin?.lifecycle.error(for: administrationIdentity) {
+                            Text("Unable to load lifecycle rules: \(error)").foregroundStyle(.red)
                         } else if lifecycleLoaded && lifecycleRules.isEmpty {
                             Text("No lifecycle rules configured")
                                 .foregroundStyle(.secondary)
@@ -228,6 +232,8 @@ struct SettingsView: View {
                                 Text("Loading CORS rules...")
                                     .foregroundStyle(.secondary)
                             }
+                        } else if let error = admin?.cors.error(for: administrationIdentity) {
+                            Text("Unable to load CORS rules: \(error)").foregroundStyle(.red)
                         } else if corsLoaded && corsRules.isEmpty {
                             Text("No CORS rules configured")
                                 .foregroundStyle(.secondary)
@@ -270,6 +276,8 @@ struct SettingsView: View {
                                 Text("Loading replication rules...")
                                     .foregroundStyle(.secondary)
                             }
+                        } else if let error = admin?.replication.error(for: administrationIdentity) {
+                            Text("Unable to load replication rules: \(error)").foregroundStyle(.red)
                         } else if replicationLoaded && replicationRules.isEmpty {
                             Text("No replication configured")
                                 .foregroundStyle(.secondary)
@@ -453,7 +461,7 @@ struct SettingsView: View {
             let generation = service.session.generation
             await service.administration.replication.load(identity, expanded: replicationExpanded || force, force: force) {
                 guard service.session.isCurrent(generation) else { throw CancellationError() }
-                return await service.fetchReplicationRules(bucket: identity.bucket)
+                return try await service.fetchReplicationRules(bucket: identity.bucket)
             }
         } catch { configurationSaveError = error.localizedDescription }
     }
@@ -485,7 +493,7 @@ struct SettingsView: View {
             let generation = service.session.generation
             await service.administration.cors.load(identity, expanded: corsExpanded || force, force: force) {
                 guard service.session.isCurrent(generation) else { throw CancellationError() }
-                return await service.fetchCORSRules(bucket: identity.bucket)
+                return try await service.fetchCORSRules(bucket: identity.bucket)
             }
         } catch { configurationSaveError = error.localizedDescription }
     }
@@ -501,7 +509,7 @@ struct SettingsView: View {
             let generation = service.session.generation
             await service.administration.lifecycle.load(identity, expanded: lifecycleExpanded || force, force: force) {
                 guard service.session.isCurrent(generation) else { throw CancellationError() }
-                return await service.fetchLifecycleRules(bucket: identity.bucket)
+                return try await service.fetchLifecycleRules(bucket: identity.bucket)
             }
         } catch { configurationSaveError = error.localizedDescription }
     }
@@ -517,7 +525,7 @@ struct SettingsView: View {
             let generation = service.session.generation
             await service.administration.policy.load(identity, expanded: policyExpanded || force, force: force) {
                 guard service.session.isCurrent(generation) else { throw CancellationError() }
-                return await service.fetchBucketPolicy(bucket: identity.bucket)
+                return try await service.fetchBucketPolicy(bucket: identity.bucket)
             }
         } catch { configurationSaveError = error.localizedDescription }
     }

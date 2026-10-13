@@ -1,5 +1,6 @@
 import Foundation
 import AWSS3
+import ClientRuntime
 
 /// Bucket-level usage statistics for S3Service.
 extension S3Service {
@@ -13,29 +14,30 @@ extension S3Service {
     }
 
     /// Fetches the bucket policy JSON string for the given bucket.
-    /// Returns nil when no policy is configured or access is denied (both treated as "no policy").
-    func fetchBucketPolicy(bucket: String) async -> String? {
-        if client == nil { try? await initializeClient() }
-        guard let client else { return nil }
-        do {
+    /// Only the explicit service NoSuchBucketPolicy response means absence.
+    func fetchBucketPolicy(bucket: String) async throws -> String? {
+        try await initializeClient()
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        return try await BucketAdministrationRead.perform(.policy, absent: String?.none,
+            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
             let input = GetBucketPolicyInput(bucket: bucket)
             let output = try await client.getBucketPolicy(input: input)
-            return output.policy
-        } catch {
-            // NoSuchBucketPolicy and AccessDenied both mean "no readable policy"
-            return nil
+            guard let policy = output.policy else { throw BucketAdministrationReadError.invalidResponse(.policy) }
+            return policy
         }
     }
 
     /// Fetches replication rules for the given bucket.
-    /// Returns an empty array when no replication is configured or access is denied.
-    func fetchReplicationRules(bucket: String) async -> [ReplicationRuleDisplay] {
-        if client == nil { try? await initializeClient() }
-        guard let client else { return [] }
-        do {
+    /// Denied/network/unknown failures remain retryable failures.
+    func fetchReplicationRules(bucket: String) async throws -> [ReplicationRuleDisplay] {
+        try await initializeClient()
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        return try await BucketAdministrationRead.perform(.replication, absent: [],
+            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
             let input = GetBucketReplicationInput(bucket: bucket)
             let output = try await client.getBucketReplication(input: input)
-            return (output.replicationConfiguration?.rules ?? []).enumerated().map { index, rule in
+            guard let rules = output.replicationConfiguration?.rules else { throw BucketAdministrationReadError.invalidResponse(.replication) }
+            return rules.enumerated().map { index, rule in
                 // Destination arrives as an ARN: arn:aws:s3:::bucket-name — strip prefix for display.
                 let destARN = rule.destination?.bucket ?? ""
                 let destBucket = destARN.components(separatedBy: ":::").last ?? destARN
@@ -47,21 +49,19 @@ extension S3Service {
                     priority: rule.priority
                 )
             }
-        } catch {
-            // ReplicationConfigurationNotFoundError and AccessDenied both mean "no readable config"
-            return []
         }
     }
 
     /// Fetches CORS rules for the given bucket.
-    /// Returns an empty array when no CORS configuration exists or access is denied.
-    func fetchCORSRules(bucket: String) async -> [CORSRuleDisplay] {
-        if client == nil { try? await initializeClient() }
-        guard let client else { return [] }
-        do {
+    func fetchCORSRules(bucket: String) async throws -> [CORSRuleDisplay] {
+        try await initializeClient()
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        return try await BucketAdministrationRead.perform(.cors, absent: [],
+            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
             let input = GetBucketCorsInput(bucket: bucket)
             let output = try await client.getBucketCors(input: input)
-            return (output.corsRules ?? []).enumerated().map { index, rule in
+            guard let rules = output.corsRules else { throw BucketAdministrationReadError.invalidResponse(.cors) }
+            return rules.enumerated().map { index, rule in
                 CORSRuleDisplay(
                     id: rule.id ?? "Rule \(index + 1)",
                     allowedOrigins: rule.allowedOrigins ?? [],
@@ -71,40 +71,36 @@ extension S3Service {
                     maxAgeSeconds: rule.maxAgeSeconds
                 )
             }
-        } catch {
-            // NoSuchCORSConfiguration and AccessDenied both mean "no readable CORS rules"
-            return []
         }
     }
 
     /// Fetches lifecycle rules for the given bucket.
-    /// Returns an empty array when no rules are configured or access is denied.
-    func fetchLifecycleRules(bucket: String) async -> [LifecycleRuleDisplay] {
-        if client == nil { try? await initializeClient() }
-        guard let client else { return [] }
-        do {
+    func fetchLifecycleRules(bucket: String) async throws -> [LifecycleRuleDisplay] {
+        try await initializeClient()
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        return try await BucketAdministrationRead.perform(.lifecycle, absent: [],
+            serviceCode: { ($0 as? any ClientRuntime.ServiceError)?.typeName }) {
             let input = GetBucketLifecycleConfigurationInput(bucket: bucket)
             let output = try await client.getBucketLifecycleConfiguration(input: input)
+            guard output.rules != nil else { throw BucketAdministrationReadError.invalidResponse(.lifecycle) }
             return Self.lifecycleDisplayRules(output)
-        } catch {
-            // NoSuchLifecycleConfiguration and AccessDenied both mean "no readable rules"
-            return []
         }
     }
 
-    /// Returns a quick object count for a single bucket using one list page (max 1000 keys).
-    /// - Returns: `(count, truncated)` where `truncated` is true when the bucket has more than 1000 objects.
-    func quickObjectCount(bucket: String) async -> (count: Int, truncated: Bool) {
-        if client == nil { try? await initializeClient() }
-        guard let client else { return (0, false) }
+    /// Counts reuse the complete catalog or a timestamped first-page estimate.
+    /// A failed count remains unavailable, rather than being labeled zero objects.
+    func fetchBucketCounts() async -> [String: BucketCountEstimate] {
+        let generation = session.generation, account = session.configuration.account
         do {
-            let input = ListObjectsV2Input(bucket: bucket, maxKeys: 1000)
-            let output = try await client.listObjectsV2(input: input)
-            let count = output.contents?.filter { !($0.key?.hasSuffix("/") ?? false) }.count ?? 0
-            let truncated = output.isTruncated ?? false
-            return (count, truncated)
+            let transport = try await metadataTransport(generation: generation)
+            let results = await session.counts.load(account: account, buckets: availableBuckets,
+                catalog: session.catalogs.value(for: account), transport: transport)
+            guard session.isCurrent(generation) else { return [:] }
+            return results
         } catch {
-            return (0, false)
+            return Dictionary(uniqueKeysWithValues: availableBuckets.map {
+                ($0, BucketCountEstimate(count: nil, truncated: false, error: error.localizedDescription))
+            })
         }
     }
 }

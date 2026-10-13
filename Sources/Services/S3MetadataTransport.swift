@@ -35,12 +35,12 @@ extension S3Service {
             guard session.isCurrent(generation) else { throw CancellationError() }
         }
         if let injectedMetadataTransport {
-            return ValidatedMetadataTransport(base: injectedMetadataTransport, account: session.configuration.account, validate: validate)
+            return ValidatedMetadataTransport(base: LimitedMetadataCatalogTransport(base: injectedMetadataTransport), account: session.configuration.account, validate: validate)
         }
         try await initializeClient()
         try validate()
         guard let client else { throw S3ServiceError.clientNotInitialized }
-        return ValidatedMetadataTransport(base: S3MetadataTransport(client: client, validate: validate),
+        return ValidatedMetadataTransport(base: LimitedMetadataCatalogTransport(base: S3MetadataTransport(client: client, validate: validate)),
                                           account: session.configuration.account, validate: validate)
     }
 

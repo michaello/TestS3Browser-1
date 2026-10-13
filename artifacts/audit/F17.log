@@ -1,17 +1,17 @@
 Building for debugging...
 [1 / 1]
-Build complete! (0.44 sec)
+Build complete! (0.56 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite F17UploadProgressTests started.
 􀟈  Test successEndsTimerBeforeTerminalCallback() started.
-􀟈  Test cancellationStopsOwnedTimer() started.
 􀟈  Test failureStopsTimerWithoutSuccessOrLateCallbacks() started.
 􀟈  Test absentCallbackStartsNoTimer() started.
+􀟈  Test cancellationStopsOwnedTimer() started.
 􁁛  Test absentCallbackStartsNoTimer() passed after 0.001 seconds.
 􁁛  Test successEndsTimerBeforeTerminalCallback() passed after 0.003 seconds.
 􁁛  Test failureStopsTimerWithoutSuccessOrLateCallbacks() passed after 0.003 seconds.
-􁁛  Test cancellationStopsOwnedTimer() passed after 0.004 seconds.
-􁁛  Suite F17UploadProgressTests passed after 0.004 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.004 seconds.
+􁁛  Test cancellationStopsOwnedTimer() passed after 0.005 seconds.
+􁁛  Suite F17UploadProgressTests passed after 0.005 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.005 seconds.

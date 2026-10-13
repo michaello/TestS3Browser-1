@@ -2,9 +2,9 @@
   "id": "F01",
   "expected_behavior": "With a nonempty persisted snapshot and a delayed or failed transport, Recent exposes cached rows before any network response and retains them after failure.",
   "passed": true,
-  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
   "source_unchanged_during_check": true,
-  "recorded_at": "2026-10-13T05:27:28.424236+00:00",
+  "recorded_at": "2026-10-13T07:38:38.406038+00:00",
   "command": [
     "xcrun",
     "swift",
@@ -24,12 +24,12 @@
     {
       "classname": "AuditCoreTests.F01CachedRecentTests",
       "name": "emptyInitialLoading()",
-      "time": "0.002262833"
+      "time": "0.000365458"
     },
     {
       "classname": "AuditCoreTests.F01CachedRecentTests",
       "name": "cachedRowsRemainVisible()",
-      "time": "0.003048583"
+      "time": "0.001065292"
     }
   ],
   "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.log",

@@ -2,13 +2,14 @@ import UIKit
 import Social
 import UniformTypeIdentifiers
 import os.log
-import CommonCrypto
+import AVFoundation
+import WidgetKit
 
 /// Share Extension view controller for uploading images and videos to S3 dump folder
 class ShareViewController: UIViewController {
     private let logger = Logger(subsystem: "com.crispytoast.TestS3Browser.ShareExtension", category: "ShareVC")
 
-    private var statusLabel: UILabel!
+    private var statusLabel: UITextView!
     private var progressView: UIActivityIndicatorView!
     private var iconView: UIImageView!
     private var containerView: UIView!
@@ -20,6 +21,10 @@ class ShareViewController: UIViewController {
 
     /// Stores the presigned URL after successful upload
     private var presignedURL: String?
+    private var processingTask: Task<Void, Never>?
+    private var isFinished = false
+    private var hasSuccessfulUpload = false
+    private var cancellationRequested = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +52,16 @@ class ShareViewController: UIViewController {
         progressView.startAnimating()
         containerView.addSubview(progressView)
 
-        statusLabel = UILabel()
+        statusLabel = UITextView()
+        statusLabel.isEditable = false
+        statusLabel.isSelectable = true
+        statusLabel.isScrollEnabled = true
+        statusLabel.backgroundColor = .clear
+        statusLabel.adjustsFontForContentSizeCategory = true
+        statusLabel.textContainerInset = .zero
         statusLabel.text = "Uploading to S3..."
         statusLabel.textAlignment = .center
         statusLabel.font = .preferredFont(forTextStyle: .headline)
-        statusLabel.numberOfLines = 0
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(statusLabel)
 
@@ -106,6 +116,7 @@ class ShareViewController: UIViewController {
             progressView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 
             statusLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 12),
+            statusLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
             statusLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             statusLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
 
@@ -120,13 +131,21 @@ class ShareViewController: UIViewController {
     }
 
     @objc private func actionButtonTapped() {
-        if presignedURL != nil {
-            // Done — dismiss after successful upload
-            extensionContext?.completeRequest(returningItems: nil)
+        if isFinished {
+            if hasSuccessfulUpload { extensionContext?.completeRequest(returningItems: nil) }
+            else { extensionContext?.cancelRequest(withError: NSError(domain: "ShareExtension", code: -1)) }
         } else {
-            // Cancel — abort
-            extensionContext?.cancelRequest(withError: NSError(domain: "ShareExtension", code: -1))
+            cancellationRequested = true
+            processingTask?.cancel()
+            actionButton.isEnabled = false
+            actionButton.setTitle("Cancelling...", for: .normal)
+            statusLabel.text = "Stopping pending attachments..."
         }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !isFinished { processingTask?.cancel() }
     }
 
     @objc private func copyLinkTapped() {
@@ -148,152 +167,111 @@ class ShareViewController: UIViewController {
 
     private func processSharedItems() {
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else {
-            showError("No items to share")
-            return
+            showError("No items to share"); return
         }
-
         guard let config = loadSharedConfig() else {
-            showError(sharedConfigLoadError ?? "S3 not configured. Open CrispyAWS app to finish credential setup or migration.")
-            return
+            showError(sharedConfigLoadError ?? "S3 is not configured. Finish setup in the app."); return
         }
-
-        var itemsToUpload: [(Data, String, String)] = [] // (data, extension, contentType)
-        let group = DispatchGroup()
-
-        for extensionItem in extensionItems {
-            guard let attachments = extensionItem.attachments else { continue }
-
-            for attachment in attachments {
-                if attachment.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                    group.enter()
-                    attachment.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] item, error in
-                        defer { group.leave() }
-
-                        if let error = error {
-                            self?.logger.error("Failed to load image: \(error.localizedDescription)")
-                            return
-                        }
-
-                        var imageData: Data?
-                        if let url = item as? URL {
-                            imageData = try? Data(contentsOf: url)
-                        } else if let data = item as? Data {
-                            imageData = data
-                        } else if let image = item as? UIImage {
-                            imageData = image.jpegData(compressionQuality: 0.8)
-                        }
-
-                        if let data = imageData {
-                            let jpegData: Data
-                            if let image = UIImage(data: data), let jpeg = image.jpegData(compressionQuality: 0.8) {
-                                jpegData = jpeg
-                            } else {
-                                jpegData = data
-                            }
-                            itemsToUpload.append((jpegData, "jpg", "image/jpeg"))
-                        }
-                    }
-                } else if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-                    group.enter()
-                    attachment.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil) { [weak self] item, error in
-                        defer { group.leave() }
-
-                        if let error = error {
-                            self?.logger.error("Failed to load video: \(error.localizedDescription)")
-                            return
-                        }
-
-                        if let url = item as? URL, let data = try? Data(contentsOf: url) {
-                            let ext = url.pathExtension.lowercased()
-                            let contentType = ext == "mov" ? "video/quicktime" : "video/mp4"
-                            itemsToUpload.append((data, ext.isEmpty ? "mp4" : ext, contentType))
-                        }
-                    }
-                }
+        let attachments = extensionItems.flatMap { $0.attachments ?? [] }
+        guard !attachments.isEmpty else { showError("No attachments were supplied."); return }
+        let sources = attachments.enumerated().map { index, provider in
+            ShareAttachmentSource(name: provider.suggestedName ?? "Attachment \(index + 1)") {
+                try await self.loadAttachment(provider)
             }
         }
-
-        group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
-
-            if itemsToUpload.isEmpty {
-                self.showError("No supported media found")
-                return
-            }
-
-            Task {
-                await self.uploadItems(itemsToUpload, config: config)
-            }
+        processingTask = Task { [weak self] in
+            guard let self else { return }
+            let report = await ShareAttachmentPipeline.process(sources, progress: { index, total in
+                self.statusLabel.text = "Uploading attachment \(index) of \(total)..."
+            }, upload: { payload in
+                guard case .file(let file) = payload.body else { throw ShareUploadError.unsupportedRepresentation }
+                let key = UploadKeyFactory.image(extension: file.pathExtension)
+                try await self.uploadToS3(file: file, key: key, contentType: payload.contentType, config: config)
+                return key
+            })
+            self.finish(report, config: config)
+            self.processingTask = nil
         }
     }
 
-    private func uploadItems(_ items: [(Data, String, String)], config: S3Config) async {
-        let total = items.count
-        var uploaded = 0
-        var lastUploadedKey: String?
-
-        for (data, ext, contentType) in items {
-            await MainActor.run {
-                statusLabel.text = "Uploading \(uploaded + 1) of \(total)..."
-            }
-
-            let timestamp = ISO8601DateFormatter().string(from: Date())
-                .replacingOccurrences(of: ":", with: "-")
-            let key = "dump/\(timestamp).\(ext)"
-
-            do {
-                try await uploadToS3(data: data, key: key, contentType: contentType, config: config)
-                uploaded += 1
-                lastUploadedKey = key
-                logger.info("Uploaded \(key) (\(data.count) bytes)")
-            } catch {
-                logger.error("Upload failed for \(key): \(error.localizedDescription)")
-                await MainActor.run {
-                    showError("Upload failed: \(error.localizedDescription)")
+    private func loadAttachment(_ provider: NSItemProvider) async throws -> PreparedUploadPayload {
+        let movie = provider.hasItemConformingToTypeIdentifier(UTType.movie.identifier)
+        let image = provider.hasItemConformingToTypeIdentifier(UTType.image.identifier)
+        guard movie || image else { throw ShareUploadError.unsupportedRepresentation }
+        let type = movie ? UTType.movie.identifier : UTType.image.identifier
+        let promise = CancellableFilePromise<ImportedUploadFile>(identity: { $0.url }, dispose: { $0.payload.cleanInputFile() })
+        let raw: ImportedUploadFile
+        do {
+            raw = try await promise.value { finish in
+                provider.loadFileRepresentation(forTypeIdentifier: type) { url, error in
+                    do {
+                        if let error { throw error }
+                        guard let url else { throw ShareUploadError.unsupportedRepresentation }
+                        let accessing = url.startAccessingSecurityScopedResource()
+                        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+                        let descriptor = UploadFileDescriptor(filenameExtension: url.pathExtension,
+                            contentType: UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream")
+                        finish(.success(try OwnedUploadInputs.copyWhileAvailable(url, descriptor: descriptor)))
+                    } catch { finish(.failure(error)) }
                 }
-                return
+            }
+        } catch {
+            try Task.checkCancellation()
+            guard image && !movie else { throw error }
+            // Some image providers expose only a data representation. Stage one image,
+            // then release its Data before the serial pipeline requests another item.
+            let fallback = CancellableFilePromise<ImportedUploadFile>(identity: { $0.url }, dispose: { $0.payload.cleanInputFile() })
+            raw = try await fallback.value { finish in
+                provider.loadDataRepresentation(forTypeIdentifier: type) { data, error in
+                    do {
+                        if let error { throw error }
+                        guard let data else { throw ShareUploadError.unsupportedRepresentation }
+                        let decoded = try ImageUploadRepresentation.decode(data)
+                        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("s3-share-inputs")
+                        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                        let url = directory.appendingPathComponent(UUID().uuidString + "." + decoded.filenameExtension)
+                        do {
+                            try data.write(to: url, options: .atomic)
+                            finish(.success(.init(url: url, filename: url.lastPathComponent, contentType: decoded.contentType)))
+                        } catch { try? FileManager.default.removeItem(at: url); throw error }
+                    } catch { finish(.failure(error)) }
+                }
             }
         }
+        defer { raw.payload.cleanInputFile() }
+        try Task.checkCancellation()
+        return try await ImportedUploadFile.importMedia(at: raw.url, movie: movie).payload
+    }
 
-        // Generate presigned URL for the last uploaded file (1-day expiry)
-        let url: String?
-        if let key = lastUploadedKey {
-            url = generatePresignedURL(for: key, config: config, expiresIn: 86400)
-        } else {
-            url = nil
+    private func finish(_ report: ShareAttachmentReport, config: S3Config) {
+        isFinished = true
+        hasSuccessfulUpload = !report.keys.isEmpty
+        progressView.stopAnimating()
+        let complete = report.failed == 0 && report.cancelled == 0
+        iconView.image = UIImage(systemName: complete ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+        iconView.tintColor = complete ? .systemGreen : .systemOrange
+        statusLabel.text = report.summary
+        if let key = report.keys.last,
+           let url = S3ObjectAddress.presignedURL(bucket: config.bucketName, region: config.region, key: key,
+               accessKey: config.accessKey, secretKey: config.secretKey, expiresIn: 86_400) {
+            presignedURL = url
+            UIPasteboard.general.string = url
+            linkLabel.text = "Last successful link copied (expires in 1 day)"
+            linkLabel.isHidden = false
+            copyLinkButton.isHidden = false
         }
-
-        await MainActor.run {
-            progressView.stopAnimating()
-            iconView.image = UIImage(systemName: "checkmark.circle.fill")
-            iconView.tintColor = .systemGreen
-            statusLabel.text = "Uploaded \(uploaded) file\(uploaded == 1 ? "" : "s")"
-
-            if let url = url {
-                presignedURL = url
-                // Auto-copy to clipboard
-                UIPasteboard.general.string = url
-                linkLabel.text = "Link copied to clipboard (expires in 1 day)"
-                linkLabel.isHidden = false
-                copyLinkButton.isHidden = false
-            }
-
-            actionButton.setTitle("Done", for: .normal)
-        }
+        actionButton.isEnabled = true
+        actionButton.setTitle("Done", for: .normal)
     }
 
     private func showError(_ message: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.progressView.stopAnimating()
-            self?.iconView.image = UIImage(systemName: "xmark.circle.fill")
-            self?.iconView.tintColor = .systemRed
-            self?.statusLabel.text = message
-        }
-
-        // Auto-dismiss after 3 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            self?.extensionContext?.cancelRequest(withError: NSError(domain: "ShareExtension", code: -1))
-        }
+        isFinished = true
+        progressView.stopAnimating()
+        iconView.image = UIImage(systemName: "xmark.circle.fill")
+        iconView.tintColor = .systemRed
+        statusLabel.text = message
+        actionButton.isEnabled = true
+        actionButton.setTitle("Done", for: .normal)
     }
 
     // MARK: - Shared Config (App Groups)
@@ -308,176 +286,27 @@ class ShareViewController: UIViewController {
         }
     }
 
-    // MARK: - Presigned URL Generation
-
-    /// Generates a presigned GET URL for an S3 object (7-day max expiry)
-    private func generatePresignedURL(for key: String, config: S3Config, expiresIn: Int = 86400) -> String? {
-        let bucket = config.bucketName
-        let region = config.region
-        let host = region == "us-east-1"
-            ? "\(bucket).s3.amazonaws.com"
-            : "\(bucket).s3.\(region).amazonaws.com"
-
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-
-        dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
-        let amzDate = dateFormatter.string(from: now)
-
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let dateStamp = dateFormatter.string(from: now)
-
-        let credentialScope = "\(dateStamp)/\(region)/s3/aws4_request"
-        let credential = "\(config.accessKey)/\(credentialScope)"
-
-        let encodedKey = key.split(separator: "/").map { component in
-            component.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? String(component)
-        }.joined(separator: "/")
-
-        let signedHeaders = "host"
-        var awsQueryAllowed = CharacterSet.urlQueryAllowed
-        awsQueryAllowed.remove("/")
-        let encodedCredential = credential.addingPercentEncoding(withAllowedCharacters: awsQueryAllowed) ?? credential
-        let queryParams = [
-            "X-Amz-Algorithm=AWS4-HMAC-SHA256",
-            "X-Amz-Credential=\(encodedCredential)",
-            "X-Amz-Date=\(amzDate)",
-            "X-Amz-Expires=\(expiresIn)",
-            "X-Amz-SignedHeaders=\(signedHeaders)",
-        ].joined(separator: "&")
-
-        let canonicalRequest = [
-            "GET",
-            "/\(encodedKey)",
-            queryParams,
-            "host:\(host)",
-            "",
-            signedHeaders,
-            "UNSIGNED-PAYLOAD"
-        ].joined(separator: "\n")
-
-        let stringToSign = [
-            "AWS4-HMAC-SHA256",
-            amzDate,
-            credentialScope,
-            sha256Hex(canonicalRequest.data(using: .utf8)!)
-        ].joined(separator: "\n")
-
-        let kDate = hmacSHA256(key: "AWS4\(config.secretKey)".data(using: .utf8)!, data: dateStamp.data(using: .utf8)!)
-        let kRegion = hmacSHA256(key: kDate, data: region.data(using: .utf8)!)
-        let kService = hmacSHA256(key: kRegion, data: "s3".data(using: .utf8)!)
-        let kSigning = hmacSHA256(key: kService, data: "aws4_request".data(using: .utf8)!)
-
-        let signature = hmacSHA256(key: kSigning, data: stringToSign.data(using: .utf8)!)
-            .map { String(format: "%02x", $0) }.joined()
-
-        return "https://\(host)/\(encodedKey)?\(queryParams)&X-Amz-Signature=\(signature)"
-    }
-
-    // MARK: - S3 Upload via AWS Signature V4
-
-    private func uploadToS3(data: Data, key: String, contentType: String, config: S3Config) async throws {
-        let bucket = config.bucketName
-        let region = config.region
-        let host = region == "us-east-1"
-            ? "\(bucket).s3.amazonaws.com"
-            : "\(bucket).s3.\(region).amazonaws.com"
-
-        guard let url = URL(string: "https://\(host)/\(key)") else {
-            throw ShareUploadError.invalidURL
+    private func uploadToS3(file: URL, key: String, contentType: String, config: S3Config) async throws {
+        let signed = try await S3FileUploadSigning.shared.request(file: file, bucket: config.bucketName,
+            region: config.region, key: key, accessKey: config.accessKey, secretKey: config.secretKey, contentType: contentType)
+        try Task.checkCancellation()
+        let (_, response) = try await URLSession.shared.upload(for: signed.request, fromFile: file)
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            throw ShareUploadError.uploadFailed((response as? HTTPURLResponse)?.statusCode ?? -1)
         }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
-        request.httpBody = data
-
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-
-        dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
-        let amzDate = dateFormatter.string(from: now)
-
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let dateStamp = dateFormatter.string(from: now)
-
-        let payloadHash = sha256Hex(data)
-
-        request.setValue(host, forHTTPHeaderField: "Host")
-        request.setValue(amzDate, forHTTPHeaderField: "x-amz-date")
-        request.setValue(payloadHash, forHTTPHeaderField: "x-amz-content-sha256")
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-
-        let signedHeaders = "content-type;host;x-amz-content-sha256;x-amz-date"
-        let canonicalHeaders = [
-            "content-type:\(contentType)",
-            "host:\(host)",
-            "x-amz-content-sha256:\(payloadHash)",
-            "x-amz-date:\(amzDate)"
-        ].joined(separator: "\n")
-
-        let canonicalRequest = [
-            "PUT",
-            "/\(key)",
-            "",
-            canonicalHeaders,
-            "",
-            signedHeaders,
-            payloadHash
-        ].joined(separator: "\n")
-
-        let credentialScope = "\(dateStamp)/\(region)/s3/aws4_request"
-        let stringToSign = [
-            "AWS4-HMAC-SHA256",
-            amzDate,
-            credentialScope,
-            sha256Hex(canonicalRequest.data(using: .utf8)!)
-        ].joined(separator: "\n")
-
-        let kDate = hmacSHA256(key: "AWS4\(config.secretKey)".data(using: .utf8)!, data: dateStamp.data(using: .utf8)!)
-        let kRegion = hmacSHA256(key: kDate, data: region.data(using: .utf8)!)
-        let kService = hmacSHA256(key: kRegion, data: "s3".data(using: .utf8)!)
-        let kSigning = hmacSHA256(key: kService, data: "aws4_request".data(using: .utf8)!)
-
-        let signature = hmacSHA256(key: kSigning, data: stringToSign.data(using: .utf8)!).map { String(format: "%02x", $0) }.joined()
-
-        let authorization = "AWS4-HMAC-SHA256 Credential=\(config.accessKey)/\(credentialScope), SignedHeaders=\(signedHeaders), Signature=\(signature)"
-        request.setValue(authorization, forHTTPHeaderField: "Authorization")
-
-        let (_, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
-            throw ShareUploadError.uploadFailed(statusCode)
+        if let defaults = UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser") {
+            do {
+                let record = MetadataRecord(bucket: config.bucketName, key: key, size: signed.bytes, modified: Date(),
+                    etag: httpResponse.value(forHTTPHeaderField: "ETag"), contentType: contentType)
+                try RecentUploadDelivery.uploaded(record,
+                    account: S3AccountScope.identifier(region: config.region, accessKey: config.accessKey),
+                    defaults: defaults, lockURL: SharedConfig.recentDeliveryLockURL()) {
+                    WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget")
+                }
+            } catch { logger.error("Upload succeeded but widget snapshot delivery failed: \(error.localizedDescription)") }
         }
     }
 
-    // MARK: - Crypto Helpers
-
-    private func sha256Hex(_ data: Data) -> String {
-        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        data.withUnsafeBytes { buffer in
-            _ = CC_SHA256(buffer.baseAddress, CC_LONG(data.count), &hash)
-        }
-        return hash.map { String(format: "%02x", $0) }.joined()
-    }
-
-    private func hmacSHA256(key: Data, data: Data) -> Data {
-        var hmac = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        key.withUnsafeBytes { keyBuffer in
-            data.withUnsafeBytes { dataBuffer in
-                CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256),
-                       keyBuffer.baseAddress, key.count,
-                       dataBuffer.baseAddress, data.count,
-                       &hmac)
-            }
-        }
-        return Data(hmac)
-    }
 }
 
 /// S3Config definition for share extension (must match main app's S3Config)
@@ -499,12 +328,14 @@ enum ShareUploadError: LocalizedError {
     case invalidURL
     case uploadFailed(Int)
     case noConfig
+    case unsupportedRepresentation
 
     var errorDescription: String? {
         switch self {
         case .invalidURL: return "Invalid S3 URL"
         case .uploadFailed(let code): return "Upload failed with status \(code)"
         case .noConfig: return "S3 not configured"
+        case .unsupportedRepresentation: return "This attachment has no supported, readable image or movie representation."
         }
     }
 }

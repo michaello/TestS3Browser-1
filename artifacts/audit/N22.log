@@ -1,17 +1,16 @@
 Building for debugging...
-[1 / 1]
-Build complete! (0.51 sec)
+Build complete! (0.22 sec)
 􀟈  Test run started.
 􀄵  Testing Library Version: 2078
 􀄵  Target Platform: arm64e-apple-macos14.0
 􀟈  Suite AuditN22 started.
-􀟈  Test existingFiltersRemainUntilExplicitlyCleared() started.
 􀟈  Test unavailableTagDoesNotClearAnAvailableStarFilter() started.
-􀟈  Test removingLastSelectedTagResetsTagFilter() started.
 􀟈  Test removingLastStarResetsStarFilter() started.
-􁁛  Test existingFiltersRemainUntilExplicitlyCleared() passed after 0.024 seconds.
-􁁛  Test removingLastSelectedTagResetsTagFilter() passed after 0.024 seconds.
-􁁛  Test unavailableTagDoesNotClearAnAvailableStarFilter() passed after 0.024 seconds.
-􁁛  Test removingLastStarResetsStarFilter() passed after 0.024 seconds.
-􁁛  Suite AuditN22 passed after 0.025 seconds.
-􁁛  Test run with 4 tests in 1 suite passed after 0.025 seconds.
+􀟈  Test existingFiltersRemainUntilExplicitlyCleared() started.
+􀟈  Test removingLastSelectedTagResetsTagFilter() started.
+􁁛  Test removingLastStarResetsStarFilter() passed after 0.006 seconds.
+􁁛  Test unavailableTagDoesNotClearAnAvailableStarFilter() passed after 0.006 seconds.
+􁁛  Test existingFiltersRemainUntilExplicitlyCleared() passed after 0.006 seconds.
+􁁛  Test removingLastSelectedTagResetsTagFilter() passed after 0.009 seconds.
+􁁛  Suite AuditN22 passed after 0.009 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.009 seconds.

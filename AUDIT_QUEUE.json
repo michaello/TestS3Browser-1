@@ -42,7 +42,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N02.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "64c39a8af09f6279640179058869bbaff8aa383049c62dfedf0c970853792ff4",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -92,7 +92,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 13,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -109,7 +109,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Actual destination copy acknowledgement propagates into canonical records before source deletion. Captured destination/source media invalidates after confirmed mutations; partial moves publish destination while preserving source. Production-core partial/cancel/account tests pass."
     },
     {
       "id": "N01",
@@ -142,7 +143,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N01.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -192,7 +193,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -242,7 +243,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N03.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "f919ca87b92ea0f8ceee65d6636e0cc952572757bbc4305764c2ede6e635bd56",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -293,7 +294,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "6f39871a8b884e4beb7492395e2aa3bdf8a77f21e683d3a48da06c3d6693e0e9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -351,7 +352,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F07.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "6f39871a8b884e4beb7492395e2aa3bdf8a77f21e683d3a48da06c3d6693e0e9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 8,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -409,7 +410,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F05.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -459,7 +460,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 13,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -509,7 +510,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -532,7 +533,7 @@
       "id": "F02",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Browse performs three serial startup operations",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/BucketBrowserView.swift:990",
@@ -542,7 +543,28 @@
       "required_behavior": "Restore bucket and prefix together before requests. Load the saved folder once; refresh bucket choices independently using a freshness policy.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F02",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F02.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F02BrowseStartupTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F02.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 11,
       "acceptance_behavior": "Restoring a saved bucket/prefix sends one scoped listing, does not wait for bucket discovery, and does not erase the all-bucket Recent snapshot.",
@@ -561,7 +583,7 @@
       "id": "F03",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Tab changes discard screen state and restart loads",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ContentView.swift:75",
@@ -571,7 +593,28 @@
       "required_behavior": "Keep stable per-tab models/navigation state above the conditional content. Cache folder listings by account, bucket and prefix; retain content during refresh. Avoid instantiating every hidden tab and triggering all of its requests at launch.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F03",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F03TabRetentionTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F03.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 12,
       "acceptance_behavior": "Switching away and back preserves each tab snapshot and navigation state; revisits inside the 60-second freshness window send no redundant listing.",
@@ -590,7 +633,7 @@
       "id": "F04",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Displaying 50 Recent files scans the whole account repeatedly",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+RecentFiles.swift:107",
@@ -600,7 +643,28 @@
       "required_behavior": "Keep an account-scoped metadata catalog and derive filters, Recent and Stats locally. Join identical refreshes and bound bucket concurrency. If scale requires exact incremental recency, use a maintained index. A first page limited to 50 does not produce the latest 50 files.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F04",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F04SharedCatalogQueryTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F04.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 13,
       "acceptance_behavior": "Recent, Stats and filter/search consumers share account-scoped metadata; changing file types does not restart an account scan, and newest results remain correct across all pages.",
@@ -619,7 +683,7 @@
       "id": "F06",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "One global Recent snapshot serves incompatible queries",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/S3Service.swift:252",
@@ -629,7 +693,28 @@
       "required_behavior": "Persist a complete, account-scoped source snapshot independently of displayed filters and shortcut limits. Derive widget entries without overwriting the app catalog. Browsing another bucket must not erase all-bucket Recent data.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F06",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F06CanonicalCatalogTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F06.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 14,
       "acceptance_behavior": "Different filters, shortcut limits, bucket navigation and widget views cannot overwrite the canonical account-scoped catalog or another query snapshot.",
@@ -648,7 +733,7 @@
       "id": "F08",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "The shared service and raw-data cache have no concurrency isolation",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/S3Service.swift:10",
@@ -658,7 +743,28 @@
       "required_behavior": "Isolate UI-facing state to MainActor and give transfer/cache coordination an explicit actor boundary. Keep immutable request results and configuration generations. Actor isolation alone does not prevent stale completion after an await.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F08",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F08.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F08ConcurrencyBoundaryTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F08.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 15,
       "acceptance_behavior": "Changed UI/service/cache state has an explicit isolation boundary, passes strict concurrency checking in its local test target, and survives concurrent fixture requests without unsynchronized dictionary access.",
@@ -705,7 +811,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -756,8 +862,8 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F11.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
-          "assertion_count": 3,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -802,13 +908,13 @@
             "--disable-xctest",
             "--enable-swift-testing",
             "--filter",
-            "F12MediaIdentityTests",
+            "F12MediaIdentityTests|F12ConfirmedMutationTests",
             "--xunit-output",
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
-          "assertion_count": 2,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -824,7 +930,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Actual destination copy acknowledgement propagates into canonical records before source deletion. Captured destination/source media invalidates after confirmed mutations; partial moves publish destination while preserving source. Production-core partial/cancel/account tests pass."
     },
     {
       "id": "F17",
@@ -856,7 +963,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F17.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "df0456da20d4a9e44e1465040144f1adc771a2fe1ac31e78d22918e4706e1d0b",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -879,7 +986,7 @@
       "id": "F20",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Browse and folder picker ignore extra pages; Stash eventually misses newest reports",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/S3Service.swift:141",
@@ -890,7 +997,28 @@
       "required_behavior": "Use incremental Browse/folder pagination. For Stash, paginate fully or query date partitions/a maintained newest-first index. Verify 1,001+ entries and newest reports beyond page one.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F20",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F20.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F20ListingPaginationTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F20.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 20,
       "acceptance_behavior": "Browse and destination pickers expose later pages; Stash includes the actual newest report when reports exceed 1,000 keys instead of reversing only the oldest first page.",
@@ -936,7 +1064,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -988,7 +1116,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F22.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1011,7 +1139,7 @@
       "id": "F23",
       "priority": "P1",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Refresh during Apps pagination replaces page one with page two",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ScreensDesignAppsView.swift:223"
@@ -1020,7 +1148,28 @@
       "required_behavior": "Coordinate reload and pagination with cancellation and a generation. Keep old frames until a replacement succeeds. Verify refresh during a delayed next-page response cannot publish that obsolete page.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F23",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F23FramesRefreshTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F23.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 23,
       "acceptance_behavior": "Refreshing during delayed frame pagination cannot replace page one with page two or publish an obsolete continuation token.",
@@ -1066,7 +1215,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N06.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "81971d22abefac3c0d732467a77defa4dda463de2b99213b0969b8850b4b4b8a",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1115,7 +1264,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F13.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1166,7 +1315,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F14.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1216,7 +1365,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F15.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1239,7 +1388,7 @@
       "id": "F16",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Detail starts optional requests even when their results are hidden",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/FileDetailView.swift:168"
@@ -1248,7 +1397,28 @@
       "required_behavior": "Load secondary information when its sheet or section is requested. Reuse fresh per-object/per-bucket metadata and prioritize visible content.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F16",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F16DetailDemandTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F16.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 28,
       "acceptance_behavior": "Initial HTML viewing performs no hidden versions/tags/ACL fetches; secondary details load on demand and reuse fresh metadata without delaying visible content.",
@@ -1293,7 +1463,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1342,7 +1512,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F19.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 1,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1400,7 +1570,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F24.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1457,7 +1627,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F25.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1508,7 +1678,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1531,7 +1701,7 @@
       "id": "F27",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Breadcrumb navigation restores an outdated folder on return",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/BucketBrowserView.swift:350"
@@ -1540,7 +1710,28 @@
       "required_behavior": "Persist successful navigation in one central path owner rather than individual controls. Verify breadcrumbs, root, back and bucket switches restore the actual last location.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F27",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F27.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F27ConfirmedNavigationTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F27.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 34,
       "acceptance_behavior": "Successful breadcrumb, root, folder and bucket navigation persists the actual location; failed navigation cannot restore or label unrelated cached rows as the selected path.",
@@ -1559,7 +1750,7 @@
       "id": "F28",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Apps loads every manifest serially before showing results",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ScreensDesignAppsView.swift:68"
@@ -1568,7 +1759,28 @@
       "required_behavior": "Cache the app index per bucket and show it immediately. Fetch stale manifests with bounded concurrency or use one maintained index; publish usable results progressively. Reuse known cover metadata.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F28",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F28.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F28ScreensIndexTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F28.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 5,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 35,
       "acceptance_behavior": "Apps immediately displays a valid cached index, bounds manifest transfers, reuses unchanged manifest/cover metadata, and preserves explicit partial-failure state.",
@@ -1613,7 +1825,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 6,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1644,7 +1856,7 @@
       "id": "F30",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Failed refreshes hide usable content or pretend there are no files",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/RecentFilesView.swift:718"
@@ -1653,7 +1865,28 @@
       "required_behavior": "Keep last successful content visible during refresh failure, show an inline error/retry, and distinguish successful empty data from unavailable data. Always provide retry when no snapshot exists.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F30",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F30ListPresentationTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F30.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 37,
       "acceptance_behavior": "Initial failure, successful empty data, refreshing cached data and failed cached refresh are distinct states; every empty failure provides retry without hiding usable last-good rows.",
@@ -1672,7 +1905,7 @@
       "id": "F31",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Share extension buffers the entire batch and cannot own cancellation",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/ShareExtension/ShareViewController.swift:159"
@@ -1681,7 +1914,28 @@
       "required_behavior": "Use a bounded file-backed attachment pipeline, serialized result collection and an owned cancellable task. Stop requests on cancellation and keep per-item failure/completion state.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F31",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F31SharePipelineTests|F31FilePromiseTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F31.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 8,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 38,
       "acceptance_behavior": "Share attachment loading/uploading is a bounded file-backed pipeline with serialized result collection and owned cancellation; whole batches are not retained as Data in memory.",
@@ -1700,7 +1954,7 @@
       "id": "F32",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Every bucket-switcher presentation sends another request per bucket",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/BucketSwitcherOverlay.swift:94",
@@ -1710,7 +1964,28 @@
       "required_behavior": "Reuse timestamped catalog/count results and refresh only stale counts with bounded concurrency. Keep the existing truncated-count indication instead of treating a first-page count as an exact total.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F32",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F32.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F32BucketCountCacheTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F32.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 39,
       "acceptance_behavior": "Reopening the bucket switcher reuses fresh catalog/count results without one new listing per bucket; stale work is bounded and truncated/unavailable counts remain explicit.",
@@ -1729,7 +2004,7 @@
       "id": "F33",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Search shortcut only searches the newest 50 keys",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Intents/SearchFileIntent.swift:29"
@@ -1738,7 +2013,28 @@
       "required_behavior": "Search the cached metadata catalog before applying an output limit. Return bucket-qualified results. Verify a matching older object outside the newest 50 is returned.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F33",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F33FullCatalogSearchTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F33.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 40,
       "acceptance_behavior": "The search shortcut finds a matching older object outside the newest 50 and returns its bucket identity without first truncating the searchable catalog.",
@@ -1757,7 +2053,7 @@
       "id": "N08",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Compact grid labels and tag chips ignore Dynamic Type",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/BucketBrowserView.swift:1355"
@@ -1767,7 +2063,28 @@
       "required_behavior": "Use semantic/scaled fonts and adaptive cards with enough text space, with an accessible list alternative.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N08",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N08FileCardAccessibilityTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N08.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 41,
       "acceptance_behavior": "Grid filenames, sizes and tag chips use semantic/scaled typography and an adaptable layout; semantic/layout checks cover accessibility text sizes with runtime limits stated.",
@@ -1786,7 +2103,7 @@
       "id": "N09",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Custom tab controls do not expose their selected state to VoiceOver",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ContentView.swift:367"
@@ -1796,7 +2113,28 @@
       "required_behavior": "Expose selected state using accessibilityAddTraits / accessibilityValue or use the native tab container. Verify the accessibility tree.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N09",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N09TabAccessibilityTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N09.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 42,
       "acceptance_behavior": "Exactly the selected custom tab exposes selected accessibility state and each tab keeps its meaningful label and action.",
@@ -1842,7 +2180,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N10.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1892,7 +2230,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N11.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1915,7 +2253,7 @@
       "id": "N12",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Completed drop uploads do not refresh the active Upload list",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/DumpFilesView.swift:34"
@@ -1925,7 +2263,28 @@
       "required_behavior": "Publish upload completion tied to the exact bucket and refresh/incrementally update the active Upload snapshot after success; own sheet tasks and define dismissal behavior.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N12",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N12.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN12",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N12.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 45,
       "acceptance_behavior": "A successful root/sheet/queued upload updates or invalidates the exact active Upload snapshot after completion, including completion after sheet dismissal.",
@@ -1971,7 +2330,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N13.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -1994,7 +2353,7 @@
       "id": "N14",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Pinching a panned image back to1x retains its offset and disables panning",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ImageGalleryView.swift:215"
@@ -2004,7 +2363,28 @@
       "required_behavior": "Track accumulated magnification, reset or clamp pan offsets whenever zoom returns to1x, and clamp pan to visible image bounds.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N14",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N14.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N14MediaZoomTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N14.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 47,
       "acceptance_behavior": "Zoom is accumulated across gestures; returning a panned image to 1x recenters/clamps it and leaves no displaced image with disabled corrective panning.",
@@ -2050,7 +2430,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2073,7 +2453,7 @@
       "id": "N16",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Newest/oldest/name sort applies only to loaded pages",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/PrefixBrowserView.swift:85"
@@ -2083,7 +2463,28 @@
       "required_behavior": "Use a complete cached folder catalog or clearly expose partial-order semantics while loading all required metadata before promising a global sort.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N16",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N16PartialFolderSortTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N16.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 1,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 49,
       "acceptance_behavior": "Folder sorting is correct for the complete known catalog, or explicitly states that unsearched/unloaded data remains; a first-page sort cannot claim globally newest results.",
@@ -2102,7 +2503,7 @@
       "id": "N17",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "A no-match search hides Load more while unsearched pages remain",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/PrefixBrowserView.swift:108"
@@ -2112,7 +2513,28 @@
       "required_behavior": "Search all indexed folder metadata or keep pagination visible and explicitly label the search as partial until remaining pages are loaded.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N17",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N17PartialFolderSearchTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N17.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 1,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 50,
       "acceptance_behavior": "A no-match search on an incomplete folder retains access to remaining pages/search work; a matching later-page file remains discoverable.",
@@ -2131,7 +2553,7 @@
       "id": "N18",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Cancel dismisses the Move/Copy sheet while its operation continues",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/PrefixPickerSheet.swift:82"
@@ -2141,7 +2563,28 @@
       "required_behavior": "During an in-flight mutation, disable Cancel/interactive dismissal or label dismissal as Close and retain operation progress/result outside the sheet. If cancellation is offered, own the task and define which uncommitted phases can stop.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N18",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N18.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N18TransferDismissalTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N18.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 51,
       "acceptance_behavior": "Dismissal/cancellation semantics match actual Move/Copy task ownership; cancelled queued work cannot start destructive steps and committed/in-flight remote actions are never presented as rolled back.",
@@ -2160,7 +2603,7 @@
       "id": "N19",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Recent bulk deletes can be started repeatedly while the first batch is still running",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/RecentFilesView.swift:223"
@@ -2170,7 +2613,28 @@
       "required_behavior": "Track an owned deletion task and immutable selected snapshot; disable selection/delete controls until completion and preserve failed IDs.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N19",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN19",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N19.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 52,
       "acceptance_behavior": "A second bulk-delete activation during the first cannot start duplicate destructive requests or create an inconsistent terminal selection state.",
@@ -2216,7 +2680,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N20.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2240,7 +2704,7 @@
       "id": "N21",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Recent bulk-delete confirmation count disagrees with the files actually deleted after search changes",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/RecentFilesView.swift:372"
@@ -2250,7 +2714,28 @@
       "required_behavior": "Choose and enforce one selection policy: freeze the selected object identities independently of filtering, or remove hidden IDs and update the visible count when filters change.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N21",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN21",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N21.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 54,
       "acceptance_behavior": "Bulk confirmation count matches a frozen set of bucket-qualified selected objects even when search/filter changes; successful deletion and selection cleanup refer to the same set.",
@@ -2296,7 +2781,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N22.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2346,7 +2831,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N23.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 4,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2369,7 +2854,7 @@
       "id": "N24",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Deleting an object in another bucket removes a same-key item from the current Browse listing.",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/S3Service.swift:282"
@@ -2379,7 +2864,28 @@
       "required_behavior": "Only evict Browse items when the captured listing bucket matches targetBucket; compare complete object identity.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N24",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N24.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN24",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N24.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 57,
       "acceptance_behavior": "Deleting bucket B/key cannot evict bucket A/key from Browse or another cached snapshot.",
@@ -2425,7 +2931,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N25.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2475,7 +2981,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N26.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2525,7 +3031,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2575,7 +3081,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2625,7 +3131,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N29.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2675,7 +3181,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2720,13 +3226,13 @@
             "--disable-xctest",
             "--enable-swift-testing",
             "--filter",
-            "N31CopyPropertyTests",
+            "N31CopyPropertyTests|N31EncryptionPolicyTests",
             "--xunit-output",
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N31.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
-          "assertion_count": 5,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 14,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -2742,7 +3248,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Preserves ACL/tag/copy properties; unreadable KMS contexts require validated supplied JSON/base64 or explicit disclosed default choice tied to exact request/revision/generation. Empty copy ETag cannot authorize source deletion."
     },
     {
       "id": "N32",
@@ -2775,8 +3282,8 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
-          "assertion_count": 5,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -2825,7 +3332,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be41a1abfacc043755f5f548f6d368477782e31f185c97106d198aca364b720e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2848,7 +3355,7 @@
       "id": "N34",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "The editable Settings Prefix is never used as the initial browsing prefix.",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/SettingsView.swift:49"
@@ -2858,7 +3365,28 @@
       "required_behavior": "Define how a configured prefix interacts with the saved location and apply it in one navigation owner on fresh configuration.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N34",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N34.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N34ConfiguredPrefixTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N34.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 67,
       "acceptance_behavior": "Configured Prefix is used for initial browsing without a saved location, and an applied bucket/prefix change routes explicitly instead of being ignored by a stale global saved path.",
@@ -2877,7 +3405,7 @@
       "id": "N35",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Share extension silently omits failed attachment loads and reports a successful smaller batch",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/ShareExtension/ShareViewController.swift:171"
@@ -2887,7 +3415,28 @@
       "required_behavior": "Track every requested attachment and its load/upload outcome, show partial failures with failed names/counts, and allow retry before completion.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N35",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N35.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N35ShareOutcomeTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N35.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 68,
       "acceptance_behavior": "Share provider/representation failures appear in attempted/succeeded/failed counts and per-item outcomes; a smaller loaded subset cannot be reported as an entirely successful original batch.",
@@ -2933,7 +3482,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 2,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -2956,7 +3505,7 @@
       "id": "N37",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Dump file deletion failures are only logged",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/DumpFilesView.swift:194"
@@ -2966,7 +3515,28 @@
       "required_behavior": "Show the shared Delete Failed alert and retain the file; include the object name and error.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N37",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N37DumpDeleteFeedbackTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N37.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 70,
       "acceptance_behavior": "Dump delete errors reach a user-visible terminal error/retry state and preserve the item after remote failure.",
@@ -2985,7 +3555,7 @@
       "id": "N38",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Metadata failure displays a permanent loading indicator",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/FileDetailView.swift:895"
@@ -2995,7 +3565,28 @@
       "required_behavior": "Represent metadata loading, error, empty and success distinctly, end loading in guaranteed cleanup and provide retry.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N38",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N38.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N38MetadataFailureTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N38.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 71,
       "acceptance_behavior": "Failed HEAD/metadata requests leave loading and show an error/retry state; nil metadata is not a permanent spinner condition.",
@@ -3014,7 +3605,7 @@
       "id": "N39",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "A failed destination listing leaves folders from a different prefix under the new title",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/PrefixPickerSheet.swift:153"
@@ -3024,7 +3615,28 @@
       "required_behavior": "Key folder results by prefix, clear/retain them only with their original identity and show an inline retry error; disable confirmation until destination identity is validated.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N39",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N39DestinationListingTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N39.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 2,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 72,
       "acceptance_behavior": "A failed destination listing cannot display rows from another prefix under the new title or permit confirmation using mismatched destination state.",
@@ -3043,7 +3655,7 @@
       "id": "N40",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Manifest download/decoding failures are silently converted into a successful incomplete Apps index",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/ScreensDesignAppsView.swift:88"
@@ -3053,7 +3665,28 @@
       "required_behavior": "Keep successful cached entries, collect manifest failures and distinguish an empty index from an unavailable/incomplete index with retry.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N40",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N40ManifestFailureTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N40.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 73,
       "acceptance_behavior": "Individual app manifest download/decode failures retain known cached entries where appropriate and mark an incomplete index; all failures cannot masquerade as a successful empty index.",
@@ -3072,7 +3705,7 @@
       "id": "N41",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Bucket administration failures are presented as absent security or lifecycle configuration.",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Stats.swift:62"
@@ -3082,7 +3715,28 @@
       "required_behavior": "Return distinct loaded/absent/failed states and display retryable errors. Treat only the corresponding explicit NoSuchConfiguration responses as absence.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N41",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN41",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N41.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 6,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 74,
       "acceptance_behavior": "Bucket admin results distinguish known absence from denied/network/unknown failure instead of reporting absent policy/rules/security configuration on error.",
@@ -3101,7 +3755,7 @@
       "id": "N42",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "In Progress",
+      "status": "Done",
       "title": "Upload completion alone does not update the persisted snapshot read by the Recent Uploads widget.",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Widget/TestS3BrowserWidget.swift:63"
@@ -3111,7 +3765,28 @@
       "required_behavior": "Update a bucket-qualified shared recent snapshot after each successful upload through a single delivery seam and request timeline reload; keep background cache ownership separate from UI filters.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N42",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N42.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "AuditN42",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N42.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 14,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 75,
       "acceptance_behavior": "Successful upload completion updates the account-scoped persisted widget snapshot and requests a timeline reload without requiring a later Recent-tab scan.",
@@ -3124,7 +3799,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Account/exact-object pending deliveries merge into cached app snapshots. One app-group file lock serializes complete journal retirement, preference synchronization, catalog/widget writes, and recovery flushes. Fourteen production-core regression cases pass."
     },
     {
       "id": "N43",
@@ -3150,7 +3826,7 @@
             "N43"
           ],
           "exit_code": 0,
-          "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
         }
@@ -3167,7 +3843,8 @@
         "Exact verification command and exit code",
         "Retained log/artifact path",
         "Observed expected behavior; regression case covers the reported failure"
-      ]
+      ],
+      "progress_notes": "Final direct API inventory and reviewed app-container timestamp declaration pass for all3 targets."
     },
     {
       "id": "N44",
@@ -3200,7 +3877,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3250,7 +3927,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N45.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3273,7 +3950,7 @@
       "id": "N46",
       "priority": "P2",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Permissions summary can label an object Private despite grants to another account",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Transfer.swift:459"
@@ -3283,7 +3960,28 @@
       "required_behavior": "Compare canonical IDs with the owner for ACL-only labels, preserve raw IDs for logic and label the result ACL permissions. Resolve policy/block-public-access before claiming effective public/private access.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N46",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N46.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N46ACLAccessSummaryTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N46.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 5,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 79,
       "acceptance_behavior": "ACL summaries compare raw grantee identities with the owner, show external grants truthfully, and describe ACL evidence without claiming complete effective IAM privacy.",
@@ -3302,7 +4000,7 @@
       "id": "F34",
       "priority": "P3",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Derived list arrays are rebuilt during view construction",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/RecentFilesView.swift:76",
@@ -3314,7 +4012,28 @@
       "required_behavior": "Profile before prioritizing general list changes. Cache derivations when data/filter changes, use navigation values, and virtualize long text. Measure view-body duration and frame stalls on a Release build.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id F34",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. Source-pattern checks and the earlier extracted-method harness alone do not satisfy functional verification.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F34.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "F34DerivedRowsCacheTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F34.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 4,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 80,
       "acceptance_behavior": "Derived list/gallery/line data is reused across unrelated progress updates, remains correct when inputs change, and local timing/work-count evidence replaces unmeasured optimization claims.",
@@ -3359,7 +4078,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 5,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3404,13 +4123,13 @@
             "--disable-xctest",
             "--enable-swift-testing",
             "--filter",
-            "F36PerformanceTests",
+            "F36PerformanceTests|F36MediaBodyObservationTests",
             "--xunit-output",
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F36.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
-          "assertion_count": 3,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 7,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
       ],
@@ -3459,7 +4178,7 @@
             "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N47.xml"
           ],
           "exit_code": 0,
-          "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Production core with fake boundaries; full app integration is E01."
         }
@@ -3482,7 +4201,7 @@
       "id": "N48",
       "priority": "P3",
       "tier": "Self-contained",
-      "status": "Open",
+      "status": "Done",
       "title": "Invalid folder names dismiss Create without explaining the rejection",
       "source_locations": [
         "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/PrefixBrowserView.swift:277"
@@ -3492,7 +4211,28 @@
       "required_behavior": "Disable Create until valid or show a validation message before dismissing the form.",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --id N48",
       "verification_requirement": "Add a regression check that executes changed production behavior against deterministic local fixtures and proves the reported failure no longer occurs. For accessibility/packaging, a relevant executable semantic/resource check is allowed with runtime limitations stated.",
-      "proof": [],
+      "proof": [
+        {
+          "artifact": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N48.json",
+          "command": [
+            "xcrun",
+            "swift",
+            "test",
+            "--package-path",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1",
+            "--disable-xctest",
+            "--enable-swift-testing",
+            "--filter",
+            "N48FolderValidationTests",
+            "--xunit-output",
+            "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N48.xml"
+          ],
+          "exit_code": 0,
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+          "assertion_count": 3,
+          "scope": "Production core with fake boundaries; full app integration is E01."
+        }
+      ],
       "blocker": null,
       "order": 84,
       "acceptance_behavior": "Rejected folder names produce an actionable visible explanation without silently dismissing the operation or submitting an invalid key.",
@@ -3531,7 +4271,7 @@
             "N49"
           ],
           "exit_code": 0,
-          "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+          "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
           "assertion_count": 3,
           "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
         }
@@ -3557,7 +4297,7 @@
       "order": 86,
       "priority": "P1",
       "tier": "Access-gated",
-      "status": "Open",
+      "status": "In Progress",
       "title": "Release simulator build and integrated regression suite for the delivered app-source tree",
       "verification_command": "python3 /Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py --release-simulator",
       "required_behavior": "Resolve the pinned AWS SDK packages and build the Release app, share extension and widget with code signing disabled for simulator, using the IDE DerivedData path without removing it. Run the iOS regression/UI suite.",
@@ -3579,7 +4319,8 @@
         "Release simulator app/share/widget build and integrated tests pass with real pinned SDK dependencies.",
         "Built app-source fingerprint matches delivered source; ledger/log-only commits may follow without changing tested app inputs.",
         "artifacts/audit/E01.json records commands, SDK/runtime details, .xcresult/build logs and built resource checks."
-      ]
+      ],
+      "progress_notes": "Pinned AWS SDK exact Git tree hydrated and fsck-verified; Xcode package resolution live on pinned CRT submodules. Release app/share/widget build and simulator tests remain required."
     },
     {
       "id": "E02",
@@ -3695,5 +4436,18 @@
       "Write machine-readable per-ID results and retained command output under artifacts/audit/."
     ]
   },
-  "dependency_rule": "No external integration/delivery item is a prerequisite for a local audit-resolution item. Isolate local production logic/tests from SDK network availability. If an unforeseen final proof needs missing access, split only that obligation into a separate E item without dropping it."
+  "dependency_rule": "No external integration/delivery item is a prerequisite for a local audit-resolution item. Isolate local production logic/tests from SDK network availability. If an unforeseen final proof needs missing access, split only that obligation into a separate E item without dropping it.",
+  "final_local_verification": {
+    "all_command": [
+      "python3",
+      "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/verify_audit.py",
+      "--all"
+    ],
+    "source_fingerprint": "36e17f4a68d34b259e71dbc54765a469170f3b3b3e3c1dc60e0908ef31610bd4",
+    "all_id_log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/all-final.log",
+    "required_id_count": 85,
+    "passing_id_count": 85,
+    "full_core_log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/final-core.log",
+    "full_core_report": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/final-core.xml"
+  }
 }

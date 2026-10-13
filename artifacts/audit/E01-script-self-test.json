@@ -7,13 +7,13 @@
         "-c",
         "print('fixture process executed')"
       ],
-      "pid": 95355,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-self-test-20261013-142303-263838.log",
-      "started_at_epoch": 1791872583.263854,
+      "pid": 81389,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-self-test-20261013-150810-417021.log",
+      "started_at_epoch": 1791875290.417044,
       "timeout_seconds": 10,
       "status": "completed",
       "exit_code": 0,
-      "elapsed_seconds": 0.04074287414550781
+      "elapsed_seconds": 0.08150291442871094
     },
     {
       "command": [
@@ -21,13 +21,13 @@
         "-c",
         "raise SystemExit(7)"
       ],
-      "pid": 95369,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-negative-test-20261013-142303-304876.log",
-      "started_at_epoch": 1791872583.304897,
+      "pid": 81516,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-negative-test-20261013-150810-498804.log",
+      "started_at_epoch": 1791875290.4988291,
       "timeout_seconds": 10,
       "status": "failed",
       "exit_code": 7,
-      "elapsed_seconds": 0.04026174545288086
+      "elapsed_seconds": 0.06382989883422852
     },
     {
       "command": [
@@ -35,16 +35,18 @@
         "-c",
         "import time;time.sleep(5)"
       ],
-      "pid": 95379,
-      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-timeout-test-20261013-142303-345489.log",
-      "started_at_epoch": 1791872583.345516,
+      "pid": 81615,
+      "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-timeout-test-20261013-150810-563529.log",
+      "started_at_epoch": 1791875290.563583,
       "timeout_seconds": 0.1,
       "status": "failed",
       "exit_code": 124,
-      "elapsed_seconds": 0.10854506492614746
+      "elapsed_seconds": 0.14038300514221191
     }
   ],
   "resource_negative_cases": [
+    "missing pinned SDK manifest rejected",
+    "different pinned SDK manifest rejected",
     "missing manifest rejected",
     "different manifest rejected",
     "unsupported file activation rejected",

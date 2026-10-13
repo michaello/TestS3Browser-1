@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="14" failures="0" skipped="0" time="0.034835792">
+    <testcase classname="AuditCoreTests.AuditN42" name="scanStartedBeforeDeliveryCannotEraseItAndLaterAuthoritativeScanCanRetireIt()" time="0.022758209" />
+    <testcase classname="AuditCoreTests.AuditN42" name="canonicalWidgetDeliveryKeepsRowsIndependentOfAnyUIFilter()" time="0.023132041" />
+    <testcase classname="AuditCoreTests.AuditN42" name="coordinationFailuresCannotPublishOrReloadUncoordinatedState()" time="0.034392125" />
+    <testcase classname="AuditCoreTests.AuditN42" name="lateShareCompletionPreservesTheNewActiveWidgetAccount()" time="0.022746334" />
+    <testcase classname="AuditCoreTests.AuditN42" name="cachedAppPublicationCannotEraseANewerShareUpload()" time="0.022662375" />
+    <testcase classname="AuditCoreTests.AuditN42" name="acknowledgedDeleteOrReplacementClearsOnlyItsExactPendingUpload()" time="0.034408542" />
+    <testcase classname="AuditCoreTests.AuditN42" name="completedUploadPersistsTheAccountEnvelopeAndRequestsReloadWithoutScanning()" time="0.022695666" />
+    <testcase classname="AuditCoreTests.AuditN42" name="filesystemLockProtectsRetirementEnvelopeWidgetAndPreferenceSynchronization()" time="0.034307333" />
+    <testcase classname="AuditCoreTests.AuditN42" name="failedPublicationFlushesItsRecoveryJournalBeforeReleasingTheLock()" time="0.02276325" />
+    <testcase classname="AuditCoreTests.AuditN42" name="synchronizationImportsANewerSameKeyDeliveryBeforeRetiringAnOldEntry()" time="0.034402459" />
+    <testcase classname="AuditCoreTests.AuditN42" name="competingWriterCannotOvertakeRetirementOrLeaveAnOlderFinalWidget()" time="0.034485083" />
+    <testcase classname="AuditCoreTests.AuditN42" name="pendingDeliveryKeysPreserveExactUnicodeAndAccountIdentity()" time="0.034503292" />
+    <testcase classname="AuditCoreTests.AuditN42" name="failedBucketRefreshRetainsPendingUploadsDespiteANewerScanTimestamp()" time="0.023099042" />
+    <testcase classname="AuditCoreTests.AuditN42" name="uploadPreservesOtherBucketRowsAndReplacesOnlyTheExactTarget()" time="0.034418667" />
+  </testsuite>
+</testsuites>
