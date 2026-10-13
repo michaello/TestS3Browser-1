@@ -1,0 +1,93 @@
+{
+  "id": "N05",
+  "expected_behavior": "An existing destination is never replaced without confirmation; declining causes no copy/delete and unknown conflict-check errors are not interpreted as an absent destination.",
+  "passed": true,
+  "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:49:58.642434+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N05ObjectTransferTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 13,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "cancelledAfterCopy()",
+      "time": "0.011238125"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "changedAfterCopy(_:)",
+      "time": "0.01019825"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "missingSourceETag()",
+      "time": "0.010830167"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "concurrentDestination()",
+      "time": "0.011975958"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "absentCopy()",
+      "time": "0.007983541"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "keepBoth()",
+      "time": "0.000805792"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "collisionWithoutApproval()",
+      "time": "0.010217959"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "failedDelete()",
+      "time": "0.010213917"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "exactUnicodeApproval()",
+      "time": "0.010220834"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "scopedApproval()",
+      "time": "0.011765708"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "unknownHeadFailure(_:)",
+      "time": "0.0102485"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "failedCopy()",
+      "time": "0.010183792"
+    },
+    {
+      "classname": "AuditCoreTests.N05ObjectTransferTests",
+      "name": "encodedSource()",
+      "time": "0.011174541"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N05.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

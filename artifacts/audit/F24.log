@@ -1,0 +1,20 @@
+Building for debugging...
+[Computing dependencies]
+[1 / 1]
+Build complete! (0.98 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F24ObjectAddressTests started.
+􀟈  Test unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct() started.
+􀟈  Test reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs() started.
+􀟈  Test publishedAWSSigV4ExampleMatches() started.
+􀟈  Test fileNamesAndNavigationNeverInterpretURLSyntax() started.
+􀟈  Test invalidExpirationCannotProduceSignedURL() started.
+􁁛  Test unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct() passed after 0.001 seconds.
+􁁛  Test fileNamesAndNavigationNeverInterpretURLSyntax() passed after 0.001 seconds.
+􁁛  Test invalidExpirationCannotProduceSignedURL() passed after 0.001 seconds.
+􁁛  Test reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs() passed after 0.002 seconds.
+􁁛  Test publishedAWSSigV4ExampleMatches() passed after 0.004 seconds.
+􁁛  Suite F24ObjectAddressTests passed after 0.004 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.004 seconds.

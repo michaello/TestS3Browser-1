@@ -1,0 +1,63 @@
+{
+  "id": "N28",
+  "expected_behavior": "Metrics configuration retrieval uses an actual configuration ID or the paginated list API; configured fixtures produce entries and errors remain distinct from no configuration.",
+  "passed": true,
+  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:27:19.008223+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditN28",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 7,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "cancelledRequestCannotPublishConfiguration()",
+      "time": "0.012139334"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "duplicateConfigurationKeepsStableDisplayIdentity()",
+      "time": "0.010477416"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "invalidConfigurationDoesNotMasqueradeAsUnconfigured()",
+      "time": "0.011337875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "truncatedMissingOrRepeatedTokenFails()",
+      "time": "0.011436417"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "emptyConfigurationIsOnlyASuccessfulEmptyResponse()",
+      "time": "0.011365375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "laterPageFailureDoesNotReturnPartialAsComplete()",
+      "time": "0.011344167"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN28",
+      "name": "configuredPagesProduceEntriesAndOpaqueTokensAdvance()",
+      "time": "0.010475791"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N28.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

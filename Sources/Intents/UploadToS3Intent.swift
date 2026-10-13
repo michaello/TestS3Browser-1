@@ -7,8 +7,8 @@ import UniformTypeIdentifiers
 /// Appears in the Shortcuts app as "Upload File to S3" and can receive files from
 /// the share sheet, Files picker, or any previous Shortcuts action that outputs files.
 struct UploadFileToS3Intent: AppIntent {
-    static var title: LocalizedStringResource = "Upload File to S3"
-    static var description = IntentDescription(
+    static let title: LocalizedStringResource = "Upload File to S3"
+    static let description = IntentDescription(
         "Uploads one or more files to the S3 dump folder and returns presigned links.",
         categoryName: "Upload"
     )
@@ -24,8 +24,9 @@ struct UploadFileToS3Intent: AppIntent {
         Summary("Upload \(\.$files) to S3")
     }
 
+    @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<[String]> & ProvidesDialog {
-        let config = SharedConfig.loadConfig() ?? S3Config.default
+        let config = try SharedConfig.requireConfig()
         let service = S3Service(config: config)
 
         var presignedURLs: [String] = []
@@ -47,7 +48,9 @@ struct UploadFileToS3Intent: AppIntent {
 
             let key = Self.dumpKey(for: filename)
 
-            try await service.uploadObject(data: data, key: key, contentType: contentType)
+            let context = UploadContext(service: service, bucket: config.bucketName, prefix: Self.uploadPrefix)
+            try await UploadQueueManager.shared.upload(data: data, filename: filename, key: key,
+                contentType: contentType, context: context, using: service)
 
             if let url = service.generatePresignedURL(for: key, expiresIn: 86400) {
                 presignedURLs.append(url)
@@ -71,7 +74,7 @@ struct UploadFileToS3Intent: AppIntent {
         let safeName = filename
             .replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: " ", with: "_")
-        return "\(uploadPrefix)\(timestamp)-\(safeName)"
+        return "\(uploadPrefix)\(timestamp)-\(UUID().uuidString)-\(safeName)"
     }
 }
 

@@ -1,0 +1,36 @@
+{
+  "added": [
+    {
+      "target": "TestS3Browser",
+      "source": "Sources/Core/ImportedUploadFile.swift"
+    },
+    {
+      "target": "TestS3Browser",
+      "source": "Sources/Core/MediaPlaybackResources.swift"
+    },
+    {
+      "target": "TestS3Browser",
+      "source": "Sources/Core/SecureConfigurationRepository.swift"
+    },
+    {
+      "target": "TestS3Browser",
+      "source": "Sources/Core/VersionRestoreFlow.swift"
+    },
+    {
+      "target": "TestS3Browser",
+      "source": "Sources/Services/AppleKeychainCredentialStore.swift"
+    },
+    {
+      "target": "DumpShareExtension",
+      "source": "Sources/Core/SecureConfigurationRepository.swift"
+    },
+    {
+      "target": "DumpShareExtension",
+      "source": "Sources/Services/AppleKeychainCredentialStore.swift"
+    },
+    {
+      "target": "DumpShareExtension",
+      "source": "Sources/Services/SharedConfig.swift"
+    }
+  ]
+}

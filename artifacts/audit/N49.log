@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "id": "N49",
+      "assertions": [
+        "Share services activation advertises up to ten images and ten movies",
+        "Generic files, text, web pages and web URLs have no activation support declaration",
+        "Activation rule is a typed dictionary, with no always-true predicate or generic attachment override"
+      ]
+    }
+  ],
+  "failures": [],
+  "sources": [
+    "https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype",
+    "https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api",
+    "https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html"
+  ],
+  "limits": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
+}

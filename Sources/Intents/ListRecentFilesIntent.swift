@@ -1,19 +1,17 @@
 import AppIntents
 import Foundation
 
-/// App Intent that returns the keys of the most recently modified S3 objects across
-/// all buckets. Appears in the Shortcuts app as "List Recent S3 Files" and can be
-/// chained into other Shortcuts actions that consume a list of text values.
+/// Returns bucket-qualified files that Download/Delete can consume without losing identity.
 struct ListRecentFilesIntent: AppIntent {
-    static var title: LocalizedStringResource = "List Recent S3 Files"
-    static var description = IntentDescription(
-        "Lists the keys of the most recently modified files across your S3 buckets.",
+    static let title: LocalizedStringResource = "List Recent S3 Files"
+    static let description = IntentDescription(
+        "Lists the most recently modified files with their S3 bucket identities.",
         categoryName: "Browse"
     )
 
     @Parameter(
         title: "Count",
-        description: "How many recent files to return",
+        description: "How many recent files to return. Must be zero or greater; zero returns no files without scanning.",
         default: 10
     )
     var count: Int
@@ -22,18 +20,18 @@ struct ListRecentFilesIntent: AppIntent {
         Summary("List \(\.$count) recent S3 files")
     }
 
-    func perform() async throws -> some IntentResult & ReturnsValue<[String]> & ProvidesDialog {
-        let config = SharedConfig.loadConfig() ?? S3Config.default
-        let service = S3Service(config: config)
+    @MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<[S3FileEntity]> & ProvidesDialog {
+        let request = try RecentShortcutCount(count)
+        let files: [S3FileEntity] = try await request.load { limit in
+            let config = try SharedConfig.requireConfig()
+            let service = S3Service(config: config)
+            try await service.fetchRecentFilesFromAllBuckets(limit: limit)
+            let account = S3FileEntity.accountScope(for: config)
+            return try service.recentFiles.map { try S3FileEntity(object: $0, account: account) }
+        }
 
-        // recentFiles is empty on a freshly built service, so fetch first to populate it,
-        // then read the keys back off recentFiles. Use the all-buckets fetch because the
-        // Recent Files feature mixes objects from every bucket.
-        try await service.fetchRecentFilesFromAllBuckets(limit: count)
-
-        let keys = service.recentFiles.map(\.key)
-
-        let dialog = IntentDialog("Found \(keys.count) recent file\(keys.count == 1 ? "" : "s")")
-        return .result(value: keys, dialog: dialog)
+        let dialog = IntentDialog("Found \(files.count) recent file\(files.count == 1 ? "" : "s")")
+        return .result(value: files, dialog: dialog)
     }
 }

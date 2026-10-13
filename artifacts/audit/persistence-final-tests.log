@@ -1,0 +1,103 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.36 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN20 started.
+􀟈  Suite AuditF29 started.
+􀟈  Suite AuditN07 started.
+􀟈  Suite AuditF26 started.
+􀟈  Suite AuditN23 started.
+􀟈  Suite AuditN22 started.
+􀟈  Test priorInFlightRequestCannotUndoTheRebuild() started.
+􀟈  Test successfulRebuildPublishesOneReplacement() started.
+􀟈  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() started.
+􀟈  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() started.
+􀟈  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() started.
+􀟈  Test failedForcedRefreshRetainsGoodAdministrationData() started.
+􀟈  Test typingDraftDoesNotPublishOrPersistUntilApply() started.
+􀟈  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() started.
+􀟈  Test emptyStoresLoadAsUnconfiguredWithoutWriting() started.
+􀟈  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() started.
+􀟈  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() started.
+􀟈  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() started.
+􀟈  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() started.
+􀟈  Test newPreferencesContainOnlySettingsAndOpaqueReference() started.
+􀟈  Test extensionAndIntentsReadOnlyCompletedSharedReferences() started.
+􀟈  Test settingsOnlySaveVerifiesAndReusesCredentialReference() started.
+􀟈  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() started.
+􀟈  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test renameAndMoveCarryAnnotationsToTheExactDestination() started.
+􀟈  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() started.
+􀟈  Test appGroupLegacyMigratesWhenStandardHasNoRecord() started.
+􀟈  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() started.
+􀟈  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() started.
+􀟈  Test namespacesAndAccountsHaveIndependentSeenHistory() started.
+􀟈  Test explicitPruningClearsOnlyTheRequestedScope() started.
+􀟈  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() started.
+􀟈  Test historyRoundTripPreservesExactBytesAndAdditivePages() started.
+􀟈  Test unavailableTagDoesNotClearAnAvailableStarFilter() started.
+􀟈  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() started.
+􀟈  Test removingLastStarResetsStarFilter() started.
+􀟈  Test removingLastSelectedTagResetsTagFilter() started.
+􀟈  Test existingFiltersRemainUntilExplicitlyCleared() started.
+􀟈  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .writeThenReject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument futureSchema → false to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test case passing 1 argument failStandard → false to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() started.
+􀟈  Test case passing 1 argument failStandard → true to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test case passing 1 argument fault → .reject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .reject to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .readback to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􁁛  Test namespacesAndAccountsHaveIndependentSeenHistory() passed after 0.001 seconds.
+􀟈  Test case passing 1 argument futureSchema → true to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􁁛  Test explicitPruningClearsOnlyTheRequestedScope() passed after 0.001 seconds.
+􁁛  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() passed after 0.001 seconds.
+􁁛  Test historyRoundTripPreservesExactBytesAndAdditivePages() passed after 0.001 seconds.
+􁁛  Suite AuditN23 passed after 0.001 seconds.
+􁁛  Test successfulRebuildPublishesOneReplacement() passed after 0.023 seconds.
+􁁛  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() passed after 0.023 seconds.
+􁁛  Test typingDraftDoesNotPublishOrPersistUntilApply() passed after 0.023 seconds.
+􁁛  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() passed after 0.023 seconds.
+􁁛  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() passed after 0.023 seconds.
+􁁛  Test emptyStoresLoadAsUnconfiguredWithoutWriting() passed after 0.023 seconds.
+􁁛  Test newPreferencesContainOnlySettingsAndOpaqueReference() passed after 0.024 seconds.
+􁁛  Test settingsOnlySaveVerifiesAndReusesCredentialReference() passed after 0.023 seconds.
+􁁛  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) with 4 test cases passed after 0.024 seconds.
+􁁛  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() passed after 0.024 seconds.
+􁁛  Test extensionAndIntentsReadOnlyCompletedSharedReferences() passed after 0.024 seconds.
+􁁛  Test appGroupLegacyMigratesWhenStandardHasNoRecord() passed after 0.023 seconds.
+􁁛  Test renameAndMoveCarryAnnotationsToTheExactDestination() passed after 0.023 seconds.
+􁁛  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() passed after 0.023 seconds.
+􁁛  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() passed after 0.023 seconds.
+􁁛  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() passed after 0.023 seconds.
+􁁛  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() passed after 0.023 seconds.
+􁁛  Test removingLastStarResetsStarFilter() passed after 0.023 seconds.
+􁁛  Test existingFiltersRemainUntilExplicitlyCleared() passed after 0.023 seconds.
+􁁛  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) with 2 test cases passed after 0.023 seconds.
+􁁛  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) with 4 test cases passed after 0.024 seconds.
+􁁛  Test removingLastSelectedTagResetsTagFilter() passed after 0.023 seconds.
+􁁛  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() passed after 0.024 seconds.
+􁁛  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) with 2 test cases passed after 0.024 seconds.
+􁁛  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() passed after 0.023 seconds.
+􁁛  Test unavailableTagDoesNotClearAnAvailableStarFilter() passed after 0.023 seconds.
+􁁛  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() passed after 0.023 seconds.
+􁁛  Suite AuditN22 passed after 0.024 seconds.
+􁁛  Suite AuditF26 passed after 0.024 seconds.
+􁁛  Suite AuditN07 passed after 0.024 seconds.
+􁁛  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() passed after 0.026 seconds.
+􁁛  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() passed after 0.026 seconds.
+􁁛  Test failedForcedRefreshRetainsGoodAdministrationData() passed after 0.026 seconds.
+􁁛  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() passed after 0.026 seconds.
+􁁛  Suite AuditF29 passed after 0.026 seconds.
+􁁛  Test priorInFlightRequestCannotUndoTheRebuild() passed after 0.026 seconds.
+􁁛  Suite AuditN20 passed after 0.027 seconds.
+􁁛  Test run with 36 tests in 6 suites passed after 0.027 seconds.

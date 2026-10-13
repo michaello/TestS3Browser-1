@@ -1,0 +1,20 @@
+{
+  "added_source_memberships": [
+    "Sources/Core/AuditTelemetry.swift",
+    "Sources/Core/FileUploadQueue.swift",
+    "Sources/Core/GalleryWorkingSet.swift",
+    "Sources/Core/ImageUploadRepresentation.swift",
+    "Sources/Core/MediaDataReader.swift",
+    "Sources/Core/MediaIdentity.swift",
+    "Sources/Core/MediaOriginalStore.swift",
+    "Sources/Core/MetadataSnapshotStore.swift",
+    "Sources/Core/PagedListingState.swift",
+    "Sources/Core/VideoPosterRenderer.swift",
+    "Sources/Services/AuditAppFixture.swift",
+    "Sources/Services/AppPerformanceMonitor.swift"
+  ],
+  "test_target_ids": {
+    "TestS3BrowserIntegrationTests": "85CD85282B8776A41F16BED8",
+    "TestS3BrowserUITests": "8BBACAE105C3490B8792EFDA"
+  }
+}

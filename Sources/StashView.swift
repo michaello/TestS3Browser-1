@@ -11,10 +11,11 @@ struct StashView: View {
     /// Separate seen-tracking namespace so the Recent tab's all-buckets scan (which
     /// marks phone-stash keys seen under the plain bucket name) cannot clobber the
     /// Stash tab's "new until tapped" state.
-    private let seenKey = "phone-stash:stash"
+    private let seenNamespace = "stash"
 
     @State private var reports: [S3Object] = []
-    @State private var isLoading = false
+    @State private var loadRequest = RequestOwnership()
+    private var isLoading: Bool { loadRequest.isLoading }
     @State private var error: String?
     @State private var navigationPath = NavigationPath()
     /// Keys of reports we have not seen or tapped yet - emphasized in the list.
@@ -29,7 +30,7 @@ struct StashView: View {
                 if isLoading && reports.isEmpty {
                     ProgressView("Loading reports...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let error {
+                } else if let error, reports.isEmpty {
                     ContentUnavailableView {
                         Label("Couldn't load reports", systemImage: "exclamationmark.triangle")
                     } description: {
@@ -68,50 +69,58 @@ struct StashView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        Task { await load() }
+                    Task { await load(force: true) }
                     } label: {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
             }
-            .refreshable { await load() }
+            .refreshable { await load(force: true) }
             .task {
                 if reports.isEmpty { await load() }
             }
             .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
+            .onChange(of: s3Service.session.configuration.account) { _, _ in newKeys.removeAll() }
         }
     }
 
-    private func load() async {
-        isLoading = true
+    private func load(force: Bool = false) async {
+        let requestID = loadRequest.begin()
+        let generation = s3Service.session.generation
+        let account = s3Service.session.configuration.account
+        defer { loadRequest.finish(requestID) }
         error = nil
         do {
-            let fetched = try await s3Service.fetchStashReports(bucket: bucket)
+            let fetched = try await s3Service.fetchStashReports(bucket: bucket, force: force)
+            guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
 
             // Flag reports we have not seen before. Only flag when we have a prior
             // seen record, so the very first visit does not light up everything.
             let keys = fetched.map { $0.key }
             var unseen: Set<String> = []
-            if await SeenPhotosTracker.shared.hasSeenPhotos(for: seenKey) {
-                unseen = Set(await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: seenKey))
+            if await SeenPhotosTracker.shared.hasSeenPhotos(for: bucket, account: account, namespace: seenNamespace) {
+                unseen = Set(await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: bucket, account: account, namespace: seenNamespace))
             } else if !keys.isEmpty {
                 // First visit: record them as seen so they are not all "new" next time.
-                await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: seenKey)
+                await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: bucket, account: account, namespace: seenNamespace)
             }
 
             await MainActor.run {
+                guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
                 reports = fetched
                 // Keep emphasis on anything still unseen, plus anything already
                 // flagged new in this session that the user has not tapped yet.
                 newKeys = unseen.union(newKeys).intersection(Set(keys))
             }
             // Prefetch so tapping a report opens instantly.
-            s3Service.prefetchObjects(fetched)
+            if loadRequest.owns(requestID), s3Service.session.isCurrent(generation) { s3Service.prefetchObjects(fetched) }
+        } catch is CancellationError {
+            return
         } catch {
+            guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
             await MainActor.run { self.error = error.localizedDescription }
             logger.error("Failed to load stash reports: \(error.localizedDescription)")
         }
-        await MainActor.run { isLoading = false }
     }
 
     /// A report stops being "new" once tapped. Persist that so it stays seen across
@@ -119,9 +128,10 @@ struct StashView: View {
     private func markSeen(_ report: S3Object) {
         guard newKeys.contains(report.key) else { return }
         newKeys.remove(report.key)
+        let account = s3Service.session.configuration.account
         Task {
             // Additive - keep the rest of the bucket's seen record intact.
-            await SeenPhotosTracker.shared.addSeen(photoKeys: [report.key], bucket: seenKey)
+            await SeenPhotosTracker.shared.addSeen(photoKeys: [report.key], bucket: bucket, account: account, namespace: seenNamespace)
         }
     }
 

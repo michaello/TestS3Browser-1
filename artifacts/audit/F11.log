@@ -1,0 +1,15 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.25 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "F11 original single-flight and transfer policy" started.
+􀟈  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" started.
+􀟈  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" started.
+􀟈  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" started.
+􁁛  Test "Four permits bound complete bodies and cancelled waiters leave no slot leak" passed after 0.003 seconds.
+􁁛  Test "Concurrent row/gallery/export requests share one transfer and completed persistent original" passed after 0.012 seconds.
+􁁛  Test "Visible work precedes speculation and prefetch bytes/size/lifetime stay bounded" passed after 0.026 seconds.
+􁁛  Suite "F11 original single-flight and transfer policy" passed after 0.026 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.026 seconds.

@@ -1,0 +1,53 @@
+{
+  "id": "N32",
+  "expected_behavior": "Copy-based operations above the single-copy limit use supported multipart-copy semantics, preserve operation properties, delete a move source only after successful completion, and clean up failed/cancelled multipart work.",
+  "passed": true,
+  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:32:22.820854+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N32MultipartCopyTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()",
+      "time": "0.014048167"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "plansCoverEveryByteWithoutExceedingPartLimits()",
+      "time": "0.008494333"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "failedPartOrCompletionAbortsAndRetainsMoveSource()",
+      "time": "0.014052834"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "cleanupFailureIncludesUploadIDAndOriginalFailure()",
+      "time": "0.013786916"
+    },
+    {
+      "classname": "AuditCoreTests.N32MultipartCopyTests",
+      "name": "moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()",
+      "time": "0.008476209"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N32.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

@@ -1,0 +1,18 @@
+{
+  "measurement_environment" : "macOS production-core fixture",
+  "metrics" : {
+    "cacheToFirstContentMilliseconds" : 0.036375000000000005,
+    "duplicateBodyRequests" : 0,
+    "failedRequests" : 0,
+    "launchToFirstContentMilliseconds" : 0.045749999999999999,
+    "maximumFrameGapMilliseconds" : 16,
+    "peakResidentBytes" : 98648064,
+    "receivedBytes" : 512,
+    "refreshMilliseconds" : [
+      233.53133400000002
+    ],
+    "requestCount" : 1,
+    "scrollingStalls" : 0
+  },
+  "scope" : "Actual monotonic cache\/refresh durations and process peak memory; joined fake transport bytes\/counts. Frame gap is a deterministic fixture, not a simulator scrolling measurement."
+}

@@ -1,0 +1,48 @@
+Building for debugging...
+[Provisioning 1 / 4]
+[1 / 1]
+Build complete! (0.94 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN07 started.
+􀟈  Test appGroupLegacyMigratesWhenStandardHasNoRecord() started.
+􀟈  Test extensionAndIntentsReadOnlyCompletedSharedReferences() started.
+􀟈  Test settingsOnlySaveVerifiesAndReusesCredentialReference() started.
+􀟈  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() started.
+􀟈  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() started.
+􀟈  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() started.
+􀟈  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() started.
+􀟈  Test emptyStoresLoadAsUnconfiguredWithoutWriting() started.
+􀟈  Test newPreferencesContainOnlySettingsAndOpaqueReference() started.
+􀟈  Test case passing 1 argument fault → .reject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􀟈  Test case passing 1 argument futureSchema → false to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test case passing 1 argument fault → .reject to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument futureSchema → true to malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) started.
+􀟈  Test case passing 1 argument fault → .readback to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .corrupt to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument fault → .discard to failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) started.
+􀟈  Test case passing 1 argument failStandard → false to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test case passing 1 argument failStandard → true to legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) started.
+􀟈  Test case passing 1 argument fault → .writeThenReject to failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) started.
+􁁛  Test appGroupLegacyMigratesWhenStandardHasNoRecord() passed after 0.002 seconds.
+􁁛  Test extensionAndIntentsReadOnlyCompletedSharedReferences() passed after 0.002 seconds.
+􁁛  Test settingsOnlySaveVerifiesAndReusesCredentialReference() passed after 0.002 seconds.
+􁁛  Test malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:) with 2 test cases passed after 0.002 seconds.
+􁁛  Test standardMigrationPreservesAppliedSettingsAndUnrelatedStores() passed after 0.002 seconds.
+􁁛  Test failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:) with 4 test cases passed after 0.002 seconds.
+􁁛  Test missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults() passed after 0.002 seconds.
+􁁛  Test replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension() passed after 0.002 seconds.
+􁁛  Test legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:) with 2 test cases passed after 0.002 seconds.
+􁁛  Test emptyStoresLoadAsUnconfiguredWithoutWriting() passed after 0.002 seconds.
+􁁛  Test failedRollbackIsSurfacedAndExplicitReplacementRecovers() passed after 0.002 seconds.
+􁁛  Test newPreferencesContainOnlySettingsAndOpaqueReference() passed after 0.002 seconds.
+􁁛  Test failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:) with 4 test cases passed after 0.007 seconds.
+􁁛  Suite AuditN07 passed after 0.007 seconds.
+􁁛  Test run with 13 tests in 1 suite passed after 0.007 seconds.

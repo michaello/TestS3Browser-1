@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "id": "N43",
+      "assertions": [
+        "TestS3Browser: one valid own manifest in Resources; direct API categories and reviewed reasons agree",
+        "DumpShareExtension: one valid own manifest in Resources; direct API categories and reviewed reasons agree",
+        "TestS3BrowserWidget: one valid own manifest in Resources; direct API categories and reviewed reasons agree"
+      ],
+      "api_inventory": {
+        "TestS3Browser": {
+          "UserDefaults": [
+            "Sources/Services/AuditAppFixture.swift",
+            "Sources/BucketBrowserView.swift",
+            "Sources/ContentView.swift",
+            "Sources/DumpFilesView.swift",
+            "Sources/RecentFilesView.swift",
+            "Sources/PrefixBrowserView.swift",
+            "Sources/S3Service.swift",
+            "Sources/SettingsView.swift",
+            "Sources/Services/SeenPhotosTracker.swift",
+            "Sources/Services/SharedConfig.swift"
+          ]
+        },
+        "DumpShareExtension": {
+          "UserDefaults": [
+            "Sources/Services/SharedConfig.swift"
+          ]
+        },
+        "TestS3BrowserWidget": {
+          "UserDefaults": [
+            "Sources/Widget/TestS3BrowserWidget.swift"
+          ]
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "sources": [
+    "https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype",
+    "https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api",
+    "https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html"
+  ],
+  "limits": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
+}

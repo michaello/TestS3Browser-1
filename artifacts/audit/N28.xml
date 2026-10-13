@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="7" failures="0" skipped="0" time="0.012443542">
+    <testcase classname="AuditCoreTests.AuditN28" name="cancelledRequestCannotPublishConfiguration()" time="0.012139334" />
+    <testcase classname="AuditCoreTests.AuditN28" name="duplicateConfigurationKeepsStableDisplayIdentity()" time="0.010477416" />
+    <testcase classname="AuditCoreTests.AuditN28" name="invalidConfigurationDoesNotMasqueradeAsUnconfigured()" time="0.011337875" />
+    <testcase classname="AuditCoreTests.AuditN28" name="truncatedMissingOrRepeatedTokenFails()" time="0.011436417" />
+    <testcase classname="AuditCoreTests.AuditN28" name="emptyConfigurationIsOnlyASuccessfulEmptyResponse()" time="0.011365375" />
+    <testcase classname="AuditCoreTests.AuditN28" name="laterPageFailureDoesNotReturnPartialAsComplete()" time="0.011344167" />
+    <testcase classname="AuditCoreTests.AuditN28" name="configuredPagesProduceEntriesAndOpaqueTokensAdvance()" time="0.010475791" />
+  </testsuite>
+</testsuites>

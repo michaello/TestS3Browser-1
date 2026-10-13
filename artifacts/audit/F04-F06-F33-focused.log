@@ -1,0 +1,42 @@
+Building for debugging...
+[Constructing description]
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[10 / 34] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[20 / 31] AuditCoreTests-product
+[37 / 48] AuditCoreTests-product
+[41 / 47] AuditCoreTests-product
+[43 / 47] AuditCoreTests-product
+Build complete! (5.70 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F33FullCatalogSearchTests started.
+􀟈  Suite F04SharedCatalogQueryTests started.
+􀟈  Suite F06CanonicalCatalogTests started.
+􀟈  Test "Limits apply after matching and negative limits fail" started.
+􀟈  Test "Search includes an older match beyond the newest fifty and returns its bucket" started.
+􀟈  Test "Simultaneous consumers join one catalog refresh" started.
+􀟈  Test "Type selections and Stats reuse one fully paginated account scan" started.
+􀟈  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" started.
+􀟈  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" started.
+􁁛  Test "Limits apply after matching and negative limits fail" passed after 0.001 seconds.
+􁁛  Test "Search includes an older match beyond the newest fifty and returns its bucket" passed after 0.001 seconds.
+􁁛  Suite F33FullCatalogSearchTests passed after 0.001 seconds.
+􁁛  Test "Equal filenames and canonically equivalent Unicode keys remain separate records" passed after 0.019 seconds.
+􁁛  Test "Filters, shortcut limits, widget limits and bucket navigation preserve full source" passed after 0.019 seconds.
+􁁛  Suite F06CanonicalCatalogTests passed after 0.019 seconds.
+􁁛  Test "Type selections and Stats reuse one fully paginated account scan" passed after 0.021 seconds.
+􁁛  Test "Simultaneous consumers join one catalog refresh" passed after 0.037 seconds.
+􁁛  Suite F04SharedCatalogQueryTests passed after 0.037 seconds.
+􁁛  Test run with 6 tests in 3 suites passed after 0.037 seconds.

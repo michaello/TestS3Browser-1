@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.00738275">
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerPermitOwnership()" time="0.001408667" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="playerFileOwnership()" time="0.005827041" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="truncatedFailure()" time="0.004612792" />
+    <testcase classname="AuditCoreTests.F15OriginalFileTests" name="filesAndLeaseBudget()" time="0.00709225" />
+  </testsuite>
+</testsuites>

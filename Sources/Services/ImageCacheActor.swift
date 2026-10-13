@@ -1,416 +1,78 @@
 import UIKit
 import Foundation
-import os.log
-import ImageIO
+import AVFoundation
 
-/// Keeps scrolling through a large folder from starting hundreds of S3 downloads at once.
-private actor ThumbnailRequestLimiter {
-    static let shared = ThumbnailRequestLimiter()
-    private var available = 4
-    private var waiters: [CheckedContinuation<Void, Never>] = []
-
-    func acquire() async {
-        if available > 0 {
-            available -= 1
-        } else {
-            await withCheckedContinuation { waiters.append($0) }
-        }
-    }
-
-    func release() {
-        if waiters.isEmpty {
-            available += 1
-        } else {
-            waiters.removeFirst().resume()
-        }
-    }
-}
-
-/// Global actor responsible for caching image thumbnails and full images
-/// Maintains separate caches for thumbnails and full-size images to optimize memory usage
-/// Thumbnails are persisted to disk for faster loading across app launches
+/// All variants share one byte-accounted LRU. Originals live in the reusable file store.
 @globalActor
 actor ImageCacheActor {
     static let shared = ImageCacheActor()
+    private struct ImageKey: Hashable { let object: MediaObjectIdentity; let pixels: Int }
+    private var decoded = ByteCostLRU<ImageKey, UIImage>(limit: MediaLimits().decodedBytes)
+    private var epochs = MediaCacheEpoch()
 
-    private let logger = Logger(subsystem: "com.s3browser", category: "ImageCacheActor")
-
-    // MARK: - Cache Storage
-
-    /// Cache for thumbnail images (smaller, suitable for list views)
-    /// Key: S3 object key, Value: Thumbnail UIImage
-    private var thumbnailCache: [String: UIImage] = [:]
-    private var thumbnailLoads: [String: Task<UIImage?, Never>] = [:]
-
-    /// Cache for full-size images
-    /// Key: S3 object key, Value: Full UIImage
-    private var fullImageCache: [String: UIImage] = [:]
-
-    /// Tracks the order of cache entries for LRU eviction
-    private var accessOrder: [String] = []
-
-    /// Maximum number of thumbnails to keep in memory
-    private let maxThumbnailCacheSize = 100
-
-    /// Maximum number of full images to keep in memory
-    private let maxFullImageCacheSize = 20
-
-    /// Directory for persistent thumbnail storage
-    private let thumbnailCacheDirectory: URL
-
-    /// Maximum number of thumbnails to keep on disk
-    private let maxDiskThumbnailCount = 500
-
-    // MARK: - Initialization
-
-    init() {
-        // Set up cache directory
-        let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        thumbnailCacheDirectory = cacheDir.appendingPathComponent("thumbnails", isDirectory: true)
-
-        // Create directory if needed
-        try? FileManager.default.createDirectory(at: thumbnailCacheDirectory, withIntermediateDirectories: true)
+    func getThumbnail(for identity: MediaObjectIdentity) -> UIImage? {
+        decoded.value(for: ImageKey(object: identity, pixels: 360))
     }
-
-    // MARK: - Thumbnail Operations
-
-    /// Retrieves a cached thumbnail from memory or disk
-    /// - Parameter key: S3 object key
-    /// - Returns: Cached thumbnail if available, nil otherwise
-    func getThumbnail(for key: String) -> UIImage? {
-        // Check memory cache first
-        if let memCached = thumbnailCache[key] {
-            updateAccessOrder(for: key)
-            return memCached
-        }
-
-        // Check disk cache
-        if let diskCached = loadThumbnailFromDisk(for: key) {
-            // Promote to memory cache
-            thumbnailCache[key] = diskCached
-            updateAccessOrder(for: key)
-            evictOldThumbnailsIfNeeded()
-            return diskCached
-        }
-
-        return nil
+    func getFullImage(for identity: MediaObjectIdentity) -> UIImage? {
+        decoded.value(for: ImageKey(object: identity, pixels: 2_048))
     }
-
-    /// Downloads small, visible images once and creates a thumbnail without retaining the full image.
     func loadThumbnail(for object: S3Object, using service: S3Service) async -> UIImage? {
-        if let cached = getThumbnail(for: object.key) { return cached }
-        guard object.fileType == .image, object.size > 0,
-              object.size <= 2 * 1024 * 1024 else { return nil }
-
-        let requestKey = "\(object.bucket ?? service.currentBucket)/\(object.key)"
-        if let existing = thumbnailLoads[requestKey] { return await existing.value }
-
-        let task = Task<UIImage?, Never> {
-            await ThumbnailRequestLimiter.shared.acquire()
-            let result: UIImage?
-            if Task.isCancelled {
-                result = nil
+        await load(object, using: service, pixels: 360)
+    }
+    func loadDisplayImage(for object: S3Object, using service: S3Service) async -> UIImage? {
+        await load(object, using: service, pixels: 2_048)
+    }
+    private func load(_ object: S3Object, using service: S3Service, pixels: Int) async -> UIImage? {
+        let (identity, serviceGeneration) = await MainActor.run { (service.mediaIdentity(for: object), service.session.generation) }
+        let ticket = epochs.begin(identity)
+        defer { epochs.finish(ticket) }
+        var cacheKey = ImageKey(object: identity, pixels: pixels)
+        if identity.etag != nil, let cached = decoded.value(for: cacheKey) { return cached }
+        do {
+            let image: UIImage?
+            if object.fileType == .video {
+                // AVURLAsset issues range requests; rendering one poster never downloads the
+                // entire movie through downloadObject. Hold the common body permit while it works.
+                guard let url = await MainActor.run(body: { service.generatePresignedURL(for: object.key, bucket: identity.bucket).flatMap(URL.init(string:)) }) else { return nil }
+                image = try await BodyTransferLimiter.shared.withPermit {
+                    let cgImage = try await VideoPosterRenderer.shared.image(at: url, maximumPixels: pixels)
+                    return UIImage(cgImage: cgImage)
+                }
             } else {
-                do {
-                    let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
-                    result = makeThumbnail(from: data)
-                    if let result { cacheThumbnail(result, for: object.key) }
-                } catch {
-                    result = nil
+                guard object.fileType == .image else { return nil }
+                let lease = try await service.downloadOriginalFile(for: object)
+                cacheKey = ImageKey(object: lease.identity, pixels: pixels)
+                if let cached = decoded.value(for: cacheKey) {
+                    await MediaOriginalStore.shared.release(lease)
+                    guard epochs.isCurrent(ticket),
+                          await MainActor.run(body: { service.session.isCurrent(serviceGeneration) }) else { return nil }
+                    return cached
                 }
+                let cgImage = ImageDownsampling.image(at: lease.url, maximumPixelSize: pixels,
+                    byteLimit: pixels == 360 ? 2 * 1024 * 1024 : MediaLimits().displayImageBytes)
+                image = cgImage.map { UIImage(cgImage: $0) }
+                await MediaOriginalStore.shared.release(lease)
             }
-            await ThumbnailRequestLimiter.shared.release()
-            return result
-        }
-        thumbnailLoads[requestKey] = task
-        let thumbnail = await task.value
-        thumbnailLoads.removeValue(forKey: requestKey)
-        return thumbnail
-    }
-
-    private func makeThumbnail(from data: Data) -> UIImage? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
-              let image = CGImageSourceCreateThumbnailAtIndex(source, 0, [
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                kCGImageSourceThumbnailMaxPixelSize: 360
-              ] as CFDictionary) else { return nil }
-        return UIImage(cgImage: image)
-    }
-
-    /// Caches a thumbnail image to both memory and disk
-    /// - Parameters:
-    ///   - image: The thumbnail image to cache
-    ///   - key: S3 object key
-    func cacheThumbnail(_ image: UIImage, for key: String) {
-        thumbnailCache[key] = image
-        updateAccessOrder(for: key)
-        evictOldThumbnailsIfNeeded()
-
-        // Persist to disk asynchronously
-        saveThumbnailToDisk(image, for: key)
-    }
-
-    /// Generates and caches a thumbnail from full image data
-    /// - Parameters:
-    ///   - data: Image data
-    ///   - key: S3 object key
-    ///   - targetSize: Desired thumbnail size (default 60x60)
-    /// - Returns: Generated thumbnail image
-    func generateAndCacheThumbnail(from data: Data, for key: String, targetSize: CGSize = CGSize(width: 60, height: 60)) -> UIImage? {
-        guard let fullImage = UIImage(data: data) else {
-            return nil
-        }
-
-        // Cache full image as well
-        cacheFullImage(fullImage, for: key)
-
-        // Generate thumbnail
-        let thumbnail = resizeImage(fullImage, targetSize: targetSize)
-        cacheThumbnail(thumbnail, for: key)
-
-        return thumbnail
-    }
-
-    // MARK: - Full Image Operations
-
-    /// Retrieves a cached full-size image
-    /// - Parameter key: S3 object key
-    /// - Returns: Cached full image if available, nil otherwise
-    func getFullImage(for key: String) -> UIImage? {
-        updateAccessOrder(for: key)
-        return fullImageCache[key]
-    }
-
-    /// Caches a full-size image
-    /// - Parameters:
-    ///   - image: The full image to cache
-    ///   - key: S3 object key
-    func cacheFullImage(_ image: UIImage, for key: String) {
-        fullImageCache[key] = image
-        updateAccessOrder(for: key)
-        evictOldFullImagesIfNeeded()
-    }
-
-    /// Caches both full image and thumbnail from data
-    /// - Parameters:
-    ///   - data: Image data
-    ///   - key: S3 object key
-    /// - Returns: Full image if successfully created
-    func cacheImage(from data: Data, for key: String) -> UIImage? {
-        guard let fullImage = UIImage(data: data) else {
-            return nil
-        }
-
-        cacheFullImage(fullImage, for: key)
-
-        // Also generate and cache thumbnail
-        let thumbnail = resizeImage(fullImage, targetSize: CGSize(width: 60, height: 60))
-        cacheThumbnail(thumbnail, for: key)
-
-        return fullImage
-    }
-
-    // MARK: - Cache Management
-
-    /// Updates the access order for LRU eviction
-    /// - Parameter key: S3 object key that was accessed
-    private func updateAccessOrder(for key: String) {
-        accessOrder.removeAll { $0 == key }
-        accessOrder.append(key)
-    }
-
-    /// Evicts oldest thumbnails when cache size exceeds limit
-    private func evictOldThumbnailsIfNeeded() {
-        while thumbnailCache.count > maxThumbnailCacheSize, let oldest = accessOrder.first {
-            thumbnailCache.removeValue(forKey: oldest)
-            accessOrder.removeFirst()
-        }
-    }
-
-    /// Evicts oldest full images when cache size exceeds limit
-    private func evictOldFullImagesIfNeeded() {
-        while fullImageCache.count > maxFullImageCacheSize {
-            // Find least recently used full image
-            for key in accessOrder {
-                if fullImageCache[key] != nil {
-                    fullImageCache.removeValue(forKey: key)
-                    break
-                }
+            try Task.checkCancellation()
+            guard epochs.isCurrent(ticket),
+                  await MainActor.run(body: { service.session.isCurrent(serviceGeneration) }) else { return nil }
+            if let image, let cgImage = image.cgImage {
+                _ = epochs.publish(ticket, into: &decoded, key: cacheKey, value: image, cost: cgImage.bytesPerRow * cgImage.height)
             }
-        }
+            return image
+        } catch { return nil }
     }
-
-    /// Clears all cached images (memory and disk)
-    func clearCache() {
-        thumbnailCache.removeAll()
-        fullImageCache.removeAll()
-        accessOrder.removeAll()
-        clearDiskCache()
+    func invalidate(account: String, bucket: String, key: String) {
+        // Cancelled original transfers cannot repopulate a removed decoded generation.
+        epochs.invalidate(account: account, bucket: bucket, key: key)
+        for entry in decoded.keys where entry.object.matches(account: account, bucket: bucket, key: key) { decoded.remove(entry) }
     }
-
-    /// Removes cached images for a specific key (memory and disk)
-    /// - Parameter key: S3 object key to remove from cache
-    func removeCachedImages(for key: String) {
-        thumbnailCache.removeValue(forKey: key)
-        fullImageCache.removeValue(forKey: key)
-        accessOrder.removeAll { $0 == key }
-
-        // Remove from disk
-        let fileURL = thumbnailFileURL(for: key)
-        try? FileManager.default.removeItem(at: fileURL)
+    func clearCache() async {
+        epochs.reset()
+        decoded.removeAll()
+        try? await MediaOriginalStore.shared.clear()
     }
+    func clearDiskCache() async { try? await MediaOriginalStore.shared.clear() }
+    func diskCacheSize() async -> Int64 { await MediaOriginalStore.shared.cachedBytes }
 
-    // MARK: - Image Processing
-
-    /// Resizes an image to fit within target size while maintaining aspect ratio
-    /// - Parameters:
-    ///   - image: Source image
-    ///   - targetSize: Maximum size for the resulting image
-    /// - Returns: Resized image
-    private func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        let widthRatio = targetSize.width / size.width
-        let heightRatio = targetSize.height / size.height
-        let ratio = min(widthRatio, heightRatio)
-
-        let newSize = CGSize(width: size.width * ratio, height: size.height * ratio)
-
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        return renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: newSize))
-        }
-    }
-
-    // MARK: - Disk Persistence
-
-    /// Generates a safe filename from an S3 key
-    /// - Parameter key: S3 object key
-    /// - Returns: Safe filename for disk storage
-    private func diskFilename(for key: String) -> String {
-        // Use SHA256-like hash approach: base64 encode the key and replace unsafe characters
-        let data = Data(key.utf8)
-        let base64 = data.base64EncodedString()
-        let safe = base64
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "=", with: "")
-        return safe + ".jpg"
-    }
-
-    /// Returns the file URL for a thumbnail on disk
-    /// - Parameter key: S3 object key
-    /// - Returns: URL to the thumbnail file
-    private func thumbnailFileURL(for key: String) -> URL {
-        thumbnailCacheDirectory.appendingPathComponent(diskFilename(for: key))
-    }
-
-    /// Saves a thumbnail to disk
-    /// - Parameters:
-    ///   - image: The thumbnail image
-    ///   - key: S3 object key
-    private func saveThumbnailToDisk(_ image: UIImage, for key: String) {
-        let fileURL = thumbnailFileURL(for: key)
-
-        // Skip if already exists
-        if FileManager.default.fileExists(atPath: fileURL.path) {
-            return
-        }
-
-        guard let data = image.jpegData(compressionQuality: 0.7) else {
-            logger.error("Failed to convert thumbnail to JPEG for key: \(key)")
-            return
-        }
-
-        do {
-            try data.write(to: fileURL, options: .atomic)
-            cleanupOldDiskThumbnailsIfNeeded()
-        } catch {
-            logger.error("Failed to save thumbnail to disk for key \(key): \(error.localizedDescription)")
-        }
-    }
-
-    /// Loads a thumbnail from disk
-    /// - Parameter key: S3 object key
-    /// - Returns: Loaded thumbnail or nil if not found
-    private func loadThumbnailFromDisk(for key: String) -> UIImage? {
-        let fileURL = thumbnailFileURL(for: key)
-
-        guard FileManager.default.fileExists(atPath: fileURL.path) else {
-            return nil
-        }
-
-        guard let data = try? Data(contentsOf: fileURL) else {
-            logger.error("Failed to read thumbnail data from disk for key: \(key)")
-            return nil
-        }
-
-        // Update access time by touching the file
-        try? FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: fileURL.path)
-
-        return UIImage(data: data)
-    }
-
-    /// Removes excess thumbnails from disk using LRU (based on modification date)
-    private func cleanupOldDiskThumbnailsIfNeeded() {
-        do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(
-                at: thumbnailCacheDirectory,
-                includingPropertiesForKeys: [.contentModificationDateKey],
-                options: .skipsHiddenFiles
-            )
-
-            guard fileURLs.count > maxDiskThumbnailCount else { return }
-
-            // Sort by modification date (oldest first)
-            let sortedFiles = fileURLs.compactMap { url -> (URL, Date)? in
-                guard let date = try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate else {
-                    return nil
-                }
-                return (url, date)
-            }.sorted { $0.1 < $1.1 }
-
-            // Delete oldest files until we're under the limit
-            let filesToDelete = sortedFiles.prefix(fileURLs.count - maxDiskThumbnailCount)
-            for (url, _) in filesToDelete {
-                try? FileManager.default.removeItem(at: url)
-            }
-
-            logger.debug("Cleaned up \(filesToDelete.count) old thumbnails from disk")
-        } catch {
-            logger.error("Failed to cleanup disk thumbnails: \(error.localizedDescription)")
-        }
-    }
-
-    /// Returns total bytes used by the on-disk thumbnail cache.
-    func diskCacheSize() -> Int64 {
-        guard let urls = try? FileManager.default.contentsOfDirectory(
-            at: thumbnailCacheDirectory,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: .skipsHiddenFiles
-        ) else { return 0 }
-        return urls.reduce(Int64(0)) { total, url in
-            let size = (try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize).flatMap { Int64($0) } ?? 0
-            return total + size
-        }
-    }
-
-    /// Clears all cached thumbnails from disk
-    func clearDiskCache() {
-        do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(
-                at: thumbnailCacheDirectory,
-                includingPropertiesForKeys: nil,
-                options: .skipsHiddenFiles
-            )
-
-            for url in fileURLs {
-                try? FileManager.default.removeItem(at: url)
-            }
-
-            logger.debug("Cleared \(fileURLs.count) thumbnails from disk cache")
-        } catch {
-            logger.error("Failed to clear disk cache: \(error.localizedDescription)")
-        }
-    }
 }

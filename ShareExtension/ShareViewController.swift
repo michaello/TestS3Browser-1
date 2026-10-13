@@ -12,6 +12,7 @@ class ShareViewController: UIViewController {
     private var progressView: UIActivityIndicatorView!
     private var iconView: UIImageView!
     private var containerView: UIView!
+    private var sharedConfigLoadError: String?
     private var actionButton: UIButton!
     private var copyLinkButton: UIButton!
     private var linkLabel: UILabel!
@@ -152,7 +153,7 @@ class ShareViewController: UIViewController {
         }
 
         guard let config = loadSharedConfig() else {
-            showError("S3 not configured. Open CrispyAWS app first to set up credentials.")
+            showError(sharedConfigLoadError ?? "S3 not configured. Open CrispyAWS app to finish credential setup or migration.")
             return
         }
 
@@ -298,16 +299,13 @@ class ShareViewController: UIViewController {
     // MARK: - Shared Config (App Groups)
 
     private func loadSharedConfig() -> S3Config? {
-        let suiteName = "group.com.crispytoast.TestS3Browser"
-        guard let defaults = UserDefaults(suiteName: suiteName) else {
-            logger.error("Failed to access App Group UserDefaults")
+        sharedConfigLoadError = nil
+        do { return try SharedConfig.loadConfig() }
+        catch {
+            sharedConfigLoadError = error.localizedDescription
+            logger.error("Secure S3 configuration could not be loaded: \(error.localizedDescription)")
             return nil
         }
-        guard let data = defaults.data(forKey: "s3Config") else {
-            logger.error("No S3 config found in App Group UserDefaults")
-            return nil
-        }
-        return try? JSONDecoder().decode(S3Config.self, from: data)
     }
 
     // MARK: - Presigned URL Generation
@@ -483,12 +481,18 @@ class ShareViewController: UIViewController {
 }
 
 /// S3Config definition for share extension (must match main app's S3Config)
-struct S3Config: Codable, Equatable {
+struct S3Config: Decodable, Equatable, Sendable {
     var bucketName: String
     var region: String
     var accessKey: String
     var secretKey: String
     var prefix: String
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        zip([lhs.bucketName, lhs.region, lhs.accessKey, lhs.secretKey, lhs.prefix],
+            [rhs.bucketName, rhs.region, rhs.accessKey, rhs.secretKey, rhs.prefix])
+            .allSatisfy { $0.utf8.elementsEqual($1.utf8) }
+    }
 }
 
 enum ShareUploadError: LocalizedError {

@@ -1,41 +1,48 @@
 import Foundation
 
-/// Shared configuration storage using App Groups UserDefaults.
-/// Both the main app and share extension use the same app group container.
+/// App/share/intents resolve the same opaque secure credential reference.
+@MainActor
 enum SharedConfig {
     private static let suiteName = "group.com.crispytoast.TestS3Browser"
-    private static let configKey = "s3Config"
 
-    /// Saves S3Config to shared App Groups UserDefaults
-    static func saveConfig(_ config: S3Config) {
-        guard let data = try? JSONEncoder().encode(config) else {
-            print("[SharedConfig] Failed to encode config")
-            return
-        }
-        guard let defaults = UserDefaults(suiteName: suiteName) else {
-            print("[SharedConfig] Failed to access App Group UserDefaults with suite: \(suiteName)")
-            return
-        }
-        defaults.set(data, forKey: configKey)
-        defaults.synchronize()
-        print("[SharedConfig] Config saved to App Group UserDefaults")
+    static func saveConfig(_ config: S3Config) throws {
+        let repository = try repository(includeLegacyStandard: true)
+        try repository.save(config.credentialConfiguration)
     }
 
-    /// Loads S3Config from shared App Groups UserDefaults
-    static func loadConfig() -> S3Config? {
-        guard let defaults = UserDefaults(suiteName: suiteName) else {
-            print("[SharedConfig] Failed to access App Group UserDefaults with suite: \(suiteName)")
-            return nil
-        }
-        guard let data = defaults.data(forKey: configKey) else {
-            print("[SharedConfig] No config data found in App Group UserDefaults")
-            return nil
-        }
-        guard let config = try? JSONDecoder().decode(S3Config.self, from: data) else {
-            print("[SharedConfig] Failed to decode config from App Group UserDefaults")
-            return nil
-        }
-        print("[SharedConfig] Config loaded from App Group UserDefaults")
+    /// Extensions never migrate or fall back to plaintext configuration.
+    static func loadConfig() throws -> S3Config? {
+        try repository(includeLegacyStandard: false).load().map(S3Config.init)
+    }
+
+    static func requireConfig() throws -> S3Config {
+        guard let config = try loadConfig() else { throw SecureConfigurationError.missingCredentials }
         return config
+    }
+
+    /// Only the main app calls this before creating its service or starting requests.
+    static func loadAndMigrateConfig() throws -> S3Config? {
+        let repository = try repository(includeLegacyStandard: true)
+        guard let material = try repository.loadAndMigrate() else { return nil }
+        return S3Config(material)
+    }
+
+    private static func repository(includeLegacyStandard: Bool) throws -> SecureConfigurationRepository {
+        guard let defaults = UserDefaults(suiteName: suiteName) else { throw SecureConfigurationError.preferenceWriteNotVerified }
+        return SecureConfigurationRepository(shared: UserDefaultsConfigurationStore(defaults: defaults),
+            standard: includeLegacyStandard ? UserDefaultsConfigurationStore(defaults: .standard) : nil,
+            credentials: try AppleKeychainCredentialStore())
+    }
+}
+
+extension S3Config {
+    var credentialConfiguration: CredentialConfiguration {
+        CredentialConfiguration(settings: S3PreferenceSettings(bucketName: bucketName, region: region, prefix: prefix),
+            credentials: CredentialMaterial(accessKey: accessKey, secretKey: secretKey))
+    }
+
+    init(_ stored: CredentialConfiguration) {
+        self.init(bucketName: stored.settings.bucketName, region: stored.settings.region,
+                  accessKey: stored.credentials.accessKey, secretKey: stored.credentials.secretKey, prefix: stored.settings.prefix)
     }
 }

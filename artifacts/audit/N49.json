@@ -1,0 +1,24 @@
+{
+  "id": "N49",
+  "expected_behavior": "Share activation advertises the actual supported image/movie representations and does not offer unsupported arbitrary files as though they can be uploaded.",
+  "passed": true,
+  "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:58.046852+00:00",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/check_extension_resources.py",
+    "--id",
+    "N49"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    "Share services activation advertises up to ten images and ten movies",
+    "Generic files, text, web pages and web URLs have no activation support declaration",
+    "Activation rule is a typed dictionary, with no always-true predicate or generic attachment override"
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N49.log",
+  "test_report_path": null,
+  "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
+}

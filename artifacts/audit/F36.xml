@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.026806083">
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="unmeasuredValuesStayUnknownAndScrollingStallsAreScoped()" time="0.000585291" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="aggregateEventsAreBoundedAndDoNotExportIdentities()" time="0.000612166" />
+    <testcase classname="AuditCoreTests.F36PerformanceTests" name="fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader()" time="0.026529125" />
+  </testsuite>
+</testsuites>

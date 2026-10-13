@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.000836416">
+    <testcase classname="AuditCoreTests.N04ShortcutIdentityTests" name="chainedObjectsRetainBucket()" time="0.000372583" />
+    <testcase classname="AuditCoreTests.N04ShortcutIdentityTests" name="exactUTF8Identity()" time="0.000226166" />
+    <testcase classname="AuditCoreTests.N04ShortcutIdentityTests" name="rejectsAmbiguousRouting()" time="0.000374125" />
+    <testcase classname="AuditCoreTests.N04ShortcutIdentityTests" name="invalidInputs()" time="0.000388542" />
+    <testcase classname="AuditCoreTests.N04ShortcutIdentityTests" name="legacyInputs()" time="0.000482916" />
+  </testsuite>
+</testsuites>

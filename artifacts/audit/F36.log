@@ -1,0 +1,15 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.64 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F36PerformanceTests started.
+􀟈  Test aggregateEventsAreBoundedAndDoNotExportIdentities() started.
+􀟈  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() started.
+􀟈  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() started.
+􁁛  Test aggregateEventsAreBoundedAndDoNotExportIdentities() passed after 0.001 seconds.
+􁁛  Test unmeasuredValuesStayUnknownAndScrollingStallsAreScoped() passed after 0.001 seconds.
+􁁛  Test fixtureBenchmarkUsesActualCacheAndJoinedProductionLoader() passed after 0.026 seconds.
+􁁛  Suite F36PerformanceTests passed after 0.026 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.026 seconds.

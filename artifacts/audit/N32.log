@@ -1,0 +1,19 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.48 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N32MultipartCopyTests started.
+􀟈  Test plansCoverEveryByteWithoutExceedingPartLimits() started.
+􀟈  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() started.
+􀟈  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() started.
+􀟈  Test cleanupFailureIncludesUploadIDAndOriginalFailure() started.
+􀟈  Test failedPartOrCompletionAbortsAndRetainsMoveSource() started.
+􁁛  Test plansCoverEveryByteWithoutExceedingPartLimits() passed after 0.008 seconds.
+􁁛  Test moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties() passed after 0.008 seconds.
+􁁛  Test cleanupFailureIncludesUploadIDAndOriginalFailure() passed after 0.013 seconds.
+􁁛  Test cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource() passed after 0.014 seconds.
+􁁛  Test failedPartOrCompletionAbortsAndRetainsMoveSource() passed after 0.014 seconds.
+􁁛  Suite N32MultipartCopyTests passed after 0.014 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.014 seconds.

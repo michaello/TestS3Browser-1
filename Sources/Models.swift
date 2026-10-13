@@ -1,6 +1,6 @@
 import Foundation
 
-struct S3Object: Identifiable, Hashable, Codable {
+struct S3Object: Identifiable, Hashable, Codable, Sendable {
     let key: String
     let size: Int64
     let lastModified: Date
@@ -9,14 +9,23 @@ struct S3Object: Identifiable, Hashable, Codable {
     var bucket: String?
 
     var id: String {
-        if let bucket = bucket {
-            return "\(bucket)/\(key)"
-        }
-        return key
+        S3TransferKeys.identifier(bucket: bucket, key: key)
+    }
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id && lhs.size == rhs.size && lhs.lastModified == rhs.lastModified &&
+            lhs.etag.map { Data($0.utf8) } == rhs.etag.map { Data($0.utf8) }
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(size)
+        hasher.combine(lastModified)
+        hasher.combine(etag.map { Data($0.utf8) })
     }
 
     var fileName: String {
-        URL(string: key)?.lastPathComponent ?? key
+        S3TransferKeys.fileName(of: key)
     }
 
     var fileType: FileType {
@@ -48,20 +57,19 @@ struct S3Object: Identifiable, Hashable, Codable {
 }
 
 /// Represents an S3 folder (prefix)
-struct S3Folder: Identifiable {
+struct S3Folder: Identifiable, Sendable {
     let prefix: String
 
-    var id: String { prefix }
+    var id: String { "folder." + Data(prefix.utf8).base64EncodedString() }
 
     var folderName: String {
         // Remove trailing slash and get last path component
-        let cleanPrefix = prefix.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        return URL(string: cleanPrefix)?.lastPathComponent ?? cleanPrefix
+        S3PrefixPath.folderName(prefix)
     }
 }
 
 /// Represents either a folder or a file in S3
-enum S3Item: Identifiable {
+enum S3Item: Identifiable, Sendable {
     case folder(S3Folder)
     case file(S3Object)
 
@@ -107,7 +115,7 @@ enum S3Item: Identifiable {
     }
 }
 
-enum FileType {
+enum FileType: Sendable {
     case log
     case image
     case video
@@ -139,7 +147,7 @@ enum FileType {
 }
 
 /// Metadata returned by a HeadObject call for a single S3 object.
-struct S3ObjectMetadata {
+struct S3ObjectMetadata: Sendable {
     let contentType: String?
     let contentLength: Int?
     let lastModified: Date?
@@ -152,23 +160,7 @@ struct S3ObjectMetadata {
     let expirationDate: String?
     /// User-defined metadata keys (x-amz-meta-* headers), with the "x-amz-meta-" prefix stripped.
     let userMetadata: [String: String]
-}
-
-/// A single version of an S3 object, returned by S3Service.listObjectVersions(key:bucket:).
-struct S3VersionEntry: Identifiable {
-    let versionId: String
-    let lastModified: Date
-    let size: Int
-    let isLatest: Bool
-    var id: String { versionId }
-
-    var formattedSize: String {
-        let kb = Double(size) / 1024.0
-        if kb < 1024 { return String(format: "%.1f KB", kb) }
-        let mb = kb / 1024.0
-        if mb < 1024 { return String(format: "%.1f MB", mb) }
-        return String(format: "%.2f GB", mb / 1024.0)
-    }
+    var replicationStatus: String? = nil
 }
 
 /// Per-bucket object count and total storage size, returned by S3Service.fetchBucketStats().
@@ -196,20 +188,20 @@ struct BucketStats: Identifiable {
 }
 
 /// A single ACL grant entry returned by GetObjectAcl.
-struct ACLGrant: Identifiable {
+struct ACLGrant: Identifiable, Sendable {
     let grantee: String
     let permission: String
     var id: String { "\(grantee)-\(permission)" }
 }
 
 /// ACL information for an S3 object, returned by S3Service.getObjectAcl(key:bucket:).
-struct S3ObjectACL {
+struct S3ObjectACL: Sendable {
     /// Human-readable summary: "Public (read)", "Private", or "Custom (N grants)".
     let summary: String
     let grants: [ACLGrant]
 }
 
-struct ReplicationRuleDisplay: Identifiable {
+struct ReplicationRuleDisplay: Identifiable, Sendable {
     let id: String
     let status: String
     let destinationBucket: String
@@ -219,7 +211,7 @@ struct ReplicationRuleDisplay: Identifiable {
     var isEnabled: Bool { status.lowercased() == "enabled" }
 }
 
-struct CORSRuleDisplay: Identifiable {
+struct CORSRuleDisplay: Identifiable, Sendable {
     let id: String
     let allowedOrigins: [String]
     let allowedMethods: [String]
@@ -228,46 +220,31 @@ struct CORSRuleDisplay: Identifiable {
     let maxAgeSeconds: Int?
 }
 
-struct LifecycleTransitionDisplay: Identifiable {
-    var id: String { "\(days ?? -1)-\(storageClass)" }
-    let days: Int?
-    let storageClass: String
-}
-
-struct LifecycleRuleDisplay: Identifiable {
-    let id: String
-    let status: String
-    let expirationDays: Int?
-    let transitions: [LifecycleTransitionDisplay]
-
-    var isEnabled: Bool { status.lowercased() == "enabled" }
-}
-
-struct BucketMetric: Identifiable {
+struct BucketMetric: Identifiable, Sendable {
     let name: String
     let value: String
     let unit: String
     var id: String { name }
 }
 
-struct LifecycleTransition: Identifiable {
-    let transitionDate: Date
-    let targetStorageClass: String
-    var id: String { targetStorageClass }
-}
-
-struct S3Config: Codable, Equatable {
+struct S3Config: Decodable, Equatable, Sendable {
     var bucketName: String
     var region: String
     var accessKey: String
     var secretKey: String
     var prefix: String
 
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        zip([lhs.bucketName, lhs.region, lhs.accessKey, lhs.secretKey, lhs.prefix],
+            [rhs.bucketName, rhs.region, rhs.accessKey, rhs.secretKey, rhs.prefix])
+            .allSatisfy { $0.utf8.elementsEqual($1.utf8) }
+    }
+
     static let `default` = S3Config(
         bucketName: "hairforceone-pro",
         region: "ap-southeast-1",
-        accessKey: "REDACTED_KEY",
-        secretKey: "REDACTED_SECRET",
+        accessKey: "",
+        secretKey: "",
         prefix: "previews/"
     )
 }

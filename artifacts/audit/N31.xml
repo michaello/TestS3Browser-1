@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.000565584">
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="unknownOwnersOrUnsafeGrantsFailBeforeMutation()" time="0.0003075" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="customAndPublicGrantsRemainExplicitForBothCopyModes()" time="0.00020575" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="multipartTagValuesAreEncodedWithoutChangingBytes()" time="0.000173875" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="crossOwnerCopyRetainsSourceOwnersGrant()" time="0.000110875" />
+    <testcase classname="AuditCoreTests.N31CopyPropertyTests" name="ownerOnlyPermissionUsesCompatibleExplicitCannedACL()" time="0.000163417" />
+  </testsuite>
+</testsuites>

@@ -31,3 +31,7 @@ UITestScreenshots/
 
 ## macOS
 .DS_Store
+
+## Local production-logic regression package
+.build/
+__pycache__/

@@ -1,0 +1,48 @@
+{
+  "id": "N03",
+  "expected_behavior": "A fresh Delete shortcut initializes its transport and deletes the requested fixture object instead of throwing client-not-initialized before its first request.",
+  "passed": true,
+  "source_fingerprint": "f919ca87b92ea0f8ceee65d6636e0cc952572757bbc4305764c2ede6e635bd56",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T04:42:41.488994+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N03ShortcutDeleteTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N03.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 4,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N03ShortcutDeleteTests",
+      "name": "cancellationAfterInitialization()",
+      "time": "0.003831792"
+    },
+    {
+      "classname": "AuditCoreTests.N03ShortcutDeleteTests",
+      "name": "deleteFailure()",
+      "time": "0.003586959"
+    },
+    {
+      "classname": "AuditCoreTests.N03ShortcutDeleteTests",
+      "name": "initializesBeforeDeleting()",
+      "time": "0.003046917"
+    },
+    {
+      "classname": "AuditCoreTests.N03ShortcutDeleteTests",
+      "name": "initializationFailure()",
+      "time": "0.003600583"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N03.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N03.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

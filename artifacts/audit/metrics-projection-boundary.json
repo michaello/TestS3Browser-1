@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "command": [
+        "swiftc",
+        "-emit-library",
+        "-emit-module",
+        "-module-name",
+        "AWSS3",
+        "/tmp/s3browser-metrics-projection/Models.swift",
+        "-o",
+        "/tmp/s3browser-metrics-projection/libAWSS3.dylib",
+        "-emit-module-path",
+        "/tmp/s3browser-metrics-projection/AWSS3.swiftmodule"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "swiftc",
+        "-swift-version",
+        "6",
+        "-I",
+        "/tmp/s3browser-metrics-projection",
+        "-L",
+        "/tmp/s3browser-metrics-projection",
+        "-lAWSS3",
+        "-Xlinker",
+        "-rpath",
+        "-Xlinker",
+        "/tmp/s3browser-metrics-projection",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Models.swift",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BucketMetricsLoader.swift",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Metrics.swift",
+        "/tmp/s3browser-metrics-projection/Check.swift",
+        "-o",
+        "/tmp/s3browser-metrics-projection/metrics-check"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/tmp/s3browser-metrics-projection/metrics-check"
+      ],
+      "exit_code": 0,
+      "output": "Actual production metrics adapter called list API, advanced opaque token, mapped both configured entries and propagated access error\n"
+    }
+  ],
+  "sdk_revision": "37f1ef1c1c00a28b867dd761f20a2bd8a0f2a6b9",
+  "pinned_models_sha256": "17a6951a63857a52a9fd87a0f578d495303e751d38bdf2869c973df31f1d1239",
+  "model_boundary_sha256": "8182b90d61d4fa9b6fe54b217301556a3fb11726a5265137eb8280465790a7b4",
+  "limits": "Executed real production metrics adapter against exact pinned SDK value declarations and a fake transport client. SDK runtime and app build not exercised; E01 remains required.",
+  "source_hashes": {
+    "Sources/Models.swift": "0a4f548abaa6de3821ff987e21db95536c2675377e540ecdcc3952d7993de117",
+    "Sources/Core/BucketMetricsLoader.swift": "ab303af679948e51656555a8170f043a5b90aea48fa96436d28b70a8f3e31562",
+    "Sources/Services/S3Service+Metrics.swift": "6374f399f8e4cbb6ccd766cc42dafcdc6a2aaa39a4dec21376b74f2235621ab6"
+  }
+}

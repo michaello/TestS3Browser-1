@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="6" failures="0" skipped="0" time="0.006383417">
+    <testcase classname="AuditCoreTests.AuditF29" name="collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()" time="0.000991084" />
+    <testcase classname="AuditCoreTests.AuditF29" name="typingDraftDoesNotPublishOrPersistUntilApply()" time="0.000969666" />
+    <testcase classname="AuditCoreTests.AuditF29" name="sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()" time="0.005900875" />
+    <testcase classname="AuditCoreTests.AuditF29" name="failedForcedRefreshRetainsGoodAdministrationData()" time="0.005852375" />
+    <testcase classname="AuditCoreTests.AuditF29" name="obsoleteResponseCannotOverwriteTheCurrentAdministrationResults()" time="0.006044959" />
+    <testcase classname="AuditCoreTests.AuditF29" name="failedApplyKeepsTheAppliedConfigurationAndEditableDraft()" time="0.000944083" />
+  </testsuite>
+</testsuites>

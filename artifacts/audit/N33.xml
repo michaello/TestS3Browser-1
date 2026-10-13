@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.009975583">
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="cancellationStopsBeforeFetchingAnotherPage()" time="0.009535542" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="bothMarkersReachOlderRestorePointsBeyondOneThousandVersions()" time="0.00928075" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()" time="0.000393375" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="missingOrRepeatedMarkersFailRatherThanHidingHistory()" time="0.009493042" />
+    <testcase classname="AuditCoreTests.N33ObjectVersionHistoryTests" name="laterFailureAndChangedGenerationNeverReturnPartialSuccess()" time="0.0095565" />
+  </testsuite>
+</testsuites>

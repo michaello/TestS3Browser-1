@@ -1,0 +1,43 @@
+{
+  "id": "N45",
+  "expected_behavior": "Repeated updateUIView calls for the same document do not reload unchanged HTML; new document/content identity loads once and preserves unrelated view state.",
+  "passed": true,
+  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:27:22.473956+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N45HTMLDocumentTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N45.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N45HTMLDocumentTests",
+      "name": "unchangedUpdatesDoNotReload()",
+      "time": "0.000138666"
+    },
+    {
+      "classname": "AuditCoreTests.N45HTMLDocumentTests",
+      "name": "changedDocumentsLoad()",
+      "time": "0.000109"
+    },
+    {
+      "classname": "AuditCoreTests.N45HTMLDocumentTests",
+      "name": "byteExactChanges()",
+      "time": "0.000217333"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N45.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N45.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

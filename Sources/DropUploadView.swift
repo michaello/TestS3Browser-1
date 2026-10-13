@@ -12,7 +12,9 @@ struct DropUploadView: View {
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult?
     @State private var isDropTargeted = false
+    @State private var batchSummary: String?
     @State private var copyToast: String?
+    @State private var uploadInputTask: Task<Void, Never>?
 
     enum UploadResult {
         case success(String)
@@ -57,6 +59,9 @@ struct DropUploadView: View {
                         }
                     }
 
+                    if let batchSummary {
+                        Text(batchSummary).font(.caption).padding(.horizontal)
+                    }
                     // Result message
                     if let result = uploadResult {
                         resultView(result)
@@ -89,10 +94,16 @@ struct DropUploadView: View {
             .animation(.easeInOut(duration: 0.25), value: copyToast)
             .navigationTitle("Upload to Dump")
             .onChange(of: selectedItem) { _, newItem in
-                Task {
-                    await handleSelectedItem(newItem)
+                let context = UploadContext(service: s3Service, prefix: "dump/")
+                let previous = uploadInputTask
+                previous?.cancel()
+                uploadInputTask = Task {
+                    await previous?.value
+                    guard !Task.isCancelled else { return }
+                    await handleSelectedItem(newItem, context: context)
                 }
             }
+            .onDisappear { uploadInputTask?.cancel() }
         }
     }
 
@@ -125,10 +136,9 @@ struct DropUploadView: View {
         .frame(height: 200)
         .padding(.horizontal)
         .dropDestination(for: Data.self) { items, _ in
-            guard let data = items.first else { return false }
-            Task {
-                await uploadImageData(data)
-            }
+            guard !items.isEmpty else { return false }
+            let context = UploadContext(service: s3Service, prefix: "dump/")
+            Task { await uploadImages(items, context: context) }
             return true
         } isTargeted: { targeted in
             isDropTargeted = targeted
@@ -202,22 +212,31 @@ struct DropUploadView: View {
         }
     }
 
-    private func handleSelectedItem(_ item: PhotosPickerItem?) async {
+    private func handleSelectedItem(_ item: PhotosPickerItem?, context: UploadContext) async {
         guard let item = item else { return }
-
+        isUploading = true
+        uploadProgress = 0
+        uploadResult = nil
+        batchSummary = nil
+        defer { isUploading = false }
         do {
-            guard let data = try await item.loadTransferable(type: Data.self) else {
-                await MainActor.run {
-                    uploadResult = .failure("Could not load image data")
-                }
-                return
-            }
-            await uploadImageData(data)
+            try await UploadPreparation.perform(destination: context.destination,
+                load: { try await item.loadTransferable(type: ImportedUploadFile.self)?.payload },
+                isCurrentAccount: { context.matches(s3Service) },
+                send: { payload, _ in
+                    guard case .file(let file) = payload.body else { throw UploadPreparationError.unavailableRepresentation }
+                    let key = try await s3Service.uploadToDump(imageFile: file, bucket: context.destination.bucket,
+                        expectedConfig: context.configuration, expectedGeneration: context.generation,
+                        onProgress: { uploadProgress = $0 })
+                    batchSummary = "Uploaded 1 of 1 image."
+                    uploadResult = .success(key)
+                    selectedItem = nil
+                })
+        } catch is CancellationError {
+            // The view ended before representation loading could start a queued upload.
         } catch {
             logger.error("Failed to load image: \(error.localizedDescription)")
-            await MainActor.run {
-                uploadResult = .failure(error.localizedDescription)
-            }
+            uploadResult = .failure(error.localizedDescription)
         }
     }
 
@@ -229,40 +248,26 @@ struct DropUploadView: View {
         }
     }
 
-    private func uploadImageData(_ data: Data) async {
-        await MainActor.run {
-            isUploading = true
-            uploadProgress = 0
-            uploadResult = nil
+    private func uploadImages(_ items: [Data], context: UploadContext) async {
+        isUploading = true
+        uploadProgress = 0
+        uploadResult = nil
+        batchSummary = nil
+        defer { isUploading = false }
+        let outcome = await ImageDropBatch.process(items) { image in
+            try await s3Service.uploadToDump(imageData: image.data, bucket: context.destination.bucket,
+                expectedConfig: context.configuration, expectedGeneration: context.generation,
+                onProgress: { uploadProgress = $0 })
         }
-
-        do {
-            // Convert to JPEG if needed for consistency
-            let jpegData: Data
-            if let image = UIImage(data: data), let jpeg = image.jpegData(compressionQuality: 0.8) {
-                jpegData = jpeg
-            } else {
-                jpegData = data
-            }
-
-            let key = try await s3Service.uploadToDump(imageData: jpegData) { fraction in
-                self.uploadProgress = fraction
-            }
-            logger.info("Uploaded to \(key)")
-
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .success(key)
-                selectedItem = nil
-            }
-        } catch {
-            logger.error("Upload failed: \(error.localizedDescription)")
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .failure(error.localizedDescription)
-            }
+        batchSummary = outcome.summary
+        if outcome.failures.isEmpty, let key = outcome.uploadedKeys.last {
+            uploadResult = .success(key)
+            selectedItem = nil
+        } else {
+            uploadResult = .failure(outcome.summary)
         }
     }
+
 }
 
 #Preview {

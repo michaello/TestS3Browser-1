@@ -9,8 +9,8 @@ struct ImageGalleryView: View {
     let s3Service: S3Service
 
     @State private var currentIndex: Int
-    @State private var loadedImages: [String: UIImage] = [:]
-    @State private var isLoading: [String: Bool] = [:]
+    @State private var presentationAccount: String
+    @State private var workingSet = GalleryWorkingSet<UIImage>()
     @State private var dragOffset: CGFloat = 0
     @State private var isDraggingVertically = false
     @Environment(\.dismiss) private var dismiss
@@ -21,7 +21,8 @@ struct ImageGalleryView: View {
         self.images = images
         self.initialIndex = initialIndex
         self.s3Service = s3Service
-        self._currentIndex = State(initialValue: initialIndex)
+        self._currentIndex = State(initialValue: max(0, min(initialIndex, images.count - 1)))
+        self._presentationAccount = State(initialValue: s3Service.session.configuration.account)
     }
 
     var body: some View {
@@ -31,14 +32,9 @@ struct ImageGalleryView: View {
                     ImagePageView(
                         object: image,
                         s3Service: s3Service,
-                        loadedImage: loadedImages[image.key],
-                        isLoading: isLoading[image.key] ?? false,
-                        onImageLoaded: { loadedImage in
-                            loadedImages[image.key] = loadedImage
-                        },
-                        onLoadingChanged: { loading in
-                            isLoading[image.key] = loading
-                        }
+                        loadedImage: workingSet.values[s3Service.mediaIdentity(for: image)],
+                        isLoading: workingSet.loading.contains(s3Service.mediaIdentity(for: image)),
+                        errorMessage: workingSet.errors[s3Service.mediaIdentity(for: image)]
                     )
                     .tag(index)
                 }
@@ -77,7 +73,7 @@ struct ImageGalleryView: View {
                     isDraggingVertically = false
                 }
         )
-        .navigationTitle(images.isEmpty ? "" : images[currentIndex].fileName)
+        .navigationTitle(images.indices.contains(currentIndex) ? images[currentIndex].fileName : "")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
@@ -90,56 +86,24 @@ struct ImageGalleryView: View {
                 }
             }
         }
-        .onChange(of: currentIndex) { _, newIndex in
-            // Preload adjacent images
-            preloadAdjacentImages(around: newIndex)
-        }
-        .task {
-            preloadAdjacentImages(around: currentIndex)
-        }
+        .onChange(of: currentIndex) { _, _ in updateWorkingSet() }
+        .onChange(of: images) { _, _ in updateWorkingSet() }
+        .task { updateWorkingSet() }
+        .onDisappear { workingSet.clear() }
+        .onChange(of: s3Service.session.configuration.account) { _, _ in workingSet.clear(); dismiss() }
     }
 
-    /// Preloads images adjacent to the current index for smoother swiping
-    private func preloadAdjacentImages(around index: Int) {
-        let indicesToPreload = [index - 1, index, index + 1].filter { $0 >= 0 && $0 < images.count }
-
-        for i in indicesToPreload {
-            let image = images[i]
-            guard loadedImages[image.key] == nil, isLoading[image.key] != true else { continue }
-
-            Task {
-                await preloadImage(for: image)
+    private func updateWorkingSet() {
+        guard presentationAccount == s3Service.session.configuration.account else { workingSet.clear(); return }
+        let generation = s3Service.session.generation
+        let mapped = Dictionary(images.map { (s3Service.mediaIdentity(for: $0), $0) }, uniquingKeysWith: { first, _ in first })
+        workingSet.select(images.map { s3Service.mediaIdentity(for: $0) }, index: currentIndex) { identity in
+            guard let object = mapped[identity], s3Service.session.isCurrent(generation),
+                  let image = await ImageCacheActor.shared.loadDisplayImage(for: object, using: s3Service),
+                  s3Service.session.isCurrent(generation), let cgImage = image.cgImage else {
+                throw MediaTransferError.missingBody
             }
-        }
-    }
-
-    /// Preloads a single image into the cache
-    private func preloadImage(for object: S3Object) async {
-        // Check if already cached
-        if let cached = await ImageCacheActor.shared.getFullImage(for: object.key) {
-            await MainActor.run {
-                loadedImages[object.key] = cached
-            }
-            return
-        }
-
-        await MainActor.run {
-            isLoading[object.key] = true
-        }
-
-        do {
-            let data = try await s3Service.downloadObject(key: object.key)
-            if let image = await ImageCacheActor.shared.cacheImage(from: data, for: object.key) {
-                await MainActor.run {
-                    loadedImages[object.key] = image
-                    isLoading[object.key] = false
-                }
-            }
-        } catch {
-            logger.error("Failed to preload image \(object.key): \(error.localizedDescription)")
-            await MainActor.run {
-                isLoading[object.key] = false
-            }
+            return GalleryImageValue(value: image, bytes: cgImage.bytesPerRow * cgImage.height)
         }
     }
 }
@@ -150,8 +114,7 @@ struct ImagePageView: View {
     let s3Service: S3Service
     let loadedImage: UIImage?
     let isLoading: Bool
-    let onImageLoaded: (UIImage) -> Void
-    let onLoadingChanged: (Bool) -> Void
+    let errorMessage: String?
 
     @State private var thumbnail: UIImage?
     @State private var scale: CGFloat = 1.0
@@ -188,18 +151,21 @@ struct ImagePageView: View {
                                 .font(.system(size: 60))
                                 .foregroundStyle(.gray)
 
-                            if isLoading {
-                                ProgressView()
-                                    .tint(.white)
-                            }
+                            if isLoading { ProgressView().tint(.white) }
+                            if let errorMessage { Text(errorMessage).foregroundStyle(.secondary).font(.caption) }
                         }
                     }
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .task {
-            await loadImages()
+        .task(id: s3Service.mediaIdentity(for: object).digest) {
+            resetZoom()
+            thumbnail = nil
+            let generation = s3Service.session.generation
+            let cached = await ImageCacheActor.shared.getThumbnail(for: s3Service.mediaIdentity(for: object))
+            guard !Task.isCancelled, s3Service.session.isCurrent(generation) else { return }
+            thumbnail = cached
         }
     }
 
@@ -255,36 +221,7 @@ struct ImagePageView: View {
         lastOffset = .zero
     }
 
-    private func loadImages() async {
-        // Load thumbnail first (from cache)
-        if let cachedThumb = await ImageCacheActor.shared.getThumbnail(for: object.key) {
-            await MainActor.run {
-                thumbnail = cachedThumb
-            }
-        }
 
-        // Check if full image is already cached
-        if let cachedFull = await ImageCacheActor.shared.getFullImage(for: object.key) {
-            onImageLoaded(cachedFull)
-            return
-        }
-
-        // Load full image if not already loading
-        guard !isLoading else { return }
-
-        onLoadingChanged(true)
-
-        do {
-            let data = try await s3Service.downloadObject(key: object.key)
-            if let image = await ImageCacheActor.shared.cacheImage(from: data, for: object.key) {
-                onImageLoaded(image)
-            }
-        } catch {
-            logger.error("Failed to load image \(object.key): \(error.localizedDescription)")
-        }
-
-        onLoadingChanged(false)
-    }
 }
 
 #Preview {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="1.443945958">
+    <testcase classname="AuditCoreTests.N06BoundedBatchExportTests" name="cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles()" time="0.317879" />
+    <testcase classname="AuditCoreTests.N06BoundedBatchExportTests" name="largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths()" time="1.441064333" />
+    <testcase classname="AuditCoreTests.N06BoundedBatchExportTests" name="loaderReceivesCapturedAccountBucketKeyAndRevision()" time="0.236597625" />
+  </testsuite>
+</testsuites>

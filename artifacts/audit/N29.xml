@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.007828167">
+    <testcase classname="AuditCoreTests.AuditN29" name="pastDateRulesContinueApplyingToNewMatchingObjects()" time="0.005967375" />
+    <testcase classname="AuditCoreTests.AuditN29" name="daysAndDatesCoexistAcrossRulesAndExpireFirstWins()" time="0.007590291" />
+    <testcase classname="AuditCoreTests.AuditN29" name="dateOnlySchedulesRemainVisibleAndCalculable()" time="0.005176041" />
+  </testsuite>
+</testsuites>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.004367">
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="cancelledFetch()" time="0.004019" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="zeroDoesNotFetch()" time="0.003023" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="shortResultAndFailure()" time="0.003543375" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="positiveBoundaries(value:)" time="0.003489584" />
+    <testcase classname="AuditCoreTests.N15ShortcutCountTests" name="invalidCounts(value:)" time="0.003638125" />
+  </testsuite>
+</testsuites>

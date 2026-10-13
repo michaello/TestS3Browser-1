@@ -6,7 +6,8 @@ struct DumpFilesView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "DumpFilesView")
     let s3Service: S3Service
     @State private var dumpFiles: [S3Object] = []
-    @State private var isLoading = false
+    @State private var loadRequest = RequestOwnership()
+    private var isLoading: Bool { loadRequest.isLoading }
     @State private var hasLoadedOnce = false
     @State private var loadError: String?
     @State private var showingUpload = false
@@ -32,7 +33,7 @@ struct DumpFilesView: View {
                 .navigationTitle("Upload")
                 .toolbar { toolbarContent }
                 .sheet(isPresented: $showingUpload, onDismiss: {
-                    Task { await refreshDumpFiles() }
+                    Task { await refreshDumpFiles(force: true) }
                 }) {
                     DropUploadView(s3Service: s3Service)
                 }
@@ -50,7 +51,7 @@ struct DumpFilesView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if let error = loadError {
+        } else if let error = loadError, dumpFiles.isEmpty {
             ContentUnavailableView(
                 "Load Failed",
                 systemImage: "exclamationmark.triangle",
@@ -65,7 +66,7 @@ struct DumpFilesView: View {
                 )
                 .frame(maxWidth: .infinity, minHeight: 300)
             }
-            .refreshable { await refreshDumpFiles() }
+            .refreshable { await refreshDumpFiles(force: true) }
         } else {
             filesView
         }
@@ -89,7 +90,7 @@ struct DumpFilesView: View {
                 .contextMenu { fileContextMenu(for: file) }
             }
         }
-        .refreshable { await refreshDumpFiles() }
+        .refreshable { await refreshDumpFiles(force: true) }
     }
 
     private var gridView: some View {
@@ -104,7 +105,7 @@ struct DumpFilesView: View {
             }
             .padding()
         }
-        .refreshable { await refreshDumpFiles() }
+        .refreshable { await refreshDumpFiles(force: true) }
     }
 
     @ViewBuilder
@@ -133,7 +134,7 @@ struct DumpFilesView: View {
                 }
 
                 Button {
-                    Task { await refreshDumpFiles() }
+                    Task { await refreshDumpFiles(force: true) }
                 } label: {
                     Image(systemName: "arrow.clockwise")
                 }
@@ -162,22 +163,26 @@ struct DumpFilesView: View {
         await refreshDumpFiles()
     }
 
-    private func refreshDumpFiles() async {
-        isLoading = true
+    private func refreshDumpFiles(force: Bool = false) async {
+        let requestID = loadRequest.begin()
+        let generation = s3Service.session.generation
+        defer { loadRequest.finish(requestID) }
         loadError = nil
 
         do {
-            let files = try await s3Service.fetchDumpFiles()
+            let files = try await s3Service.fetchDumpFiles(force: force)
+            guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
             await MainActor.run {
                 dumpFiles = files
-                isLoading = false
                 hasLoadedOnce = true
             }
+        } catch is CancellationError {
+            return
         } catch {
+            guard loadRequest.owns(requestID), s3Service.session.isCurrent(generation) else { return }
             logger.error("Failed to load dump files: \(error.localizedDescription)")
             await MainActor.run {
                 loadError = error.localizedDescription
-                isLoading = false
                 hasLoadedOnce = true
             }
         }

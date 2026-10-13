@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.314110583">
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending()" time="0.256888167" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="invalidMediaIsRejectedWithoutOwnedFiles()" time="0.259093459" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="moviesRetainPlayableOriginalBytesAndMovieType(mp4:)" time="0.275879625" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="genericFileNameIsPreservedAndLocalNameIsBounded()" time="0.254003625" />
+    <testcase classname="AuditCoreTests.F22FileImportTests" name="actualImageTypeSurvivesMisleadingProviderName(_:)" time="0.313775042" />
+  </testsuite>
+</testsuites>

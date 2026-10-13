@@ -1,0 +1,13 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.47 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "F10 bounded decoded preview production paths" started.
+􀟈  Test "ImageIO thumbnails do not decode or return original dimensions and respect single-image bytes" started.
+􀟈  Test "AVFoundation poster renderer extracts bounded frame from asset URL without original loader" started.
+􁁛  Test "ImageIO thumbnails do not decode or return original dimensions and respect single-image bytes" passed after 0.033 seconds.
+􁁛  Test "AVFoundation poster renderer extracts bounded frame from asset URL without original loader" passed after 0.270 seconds.
+􁁛  Suite "F10 bounded decoded preview production paths" passed after 0.270 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.270 seconds.

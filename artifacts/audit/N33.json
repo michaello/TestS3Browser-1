@@ -1,0 +1,53 @@
+{
+  "id": "N33",
+  "expected_behavior": "Version history follows both pagination markers or provides explicit history pagination; valid older restore points remain reachable beyond the first page.",
+  "passed": true,
+  "source_fingerprint": "be41a1abfacc043755f5f548f6d368477782e31f185c97106d198aca364b720e",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:24:47.810002+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N33ObjectVersionHistoryTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "cancellationStopsBeforeFetchingAnotherPage()",
+      "time": "0.009535542"
+    },
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "bothMarkersReachOlderRestorePointsBeyondOneThousandVersions()",
+      "time": "0.00928075"
+    },
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "keyFilterIsExactAndDuplicatePageEntriesAreCollapsed()",
+      "time": "0.000393375"
+    },
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "missingOrRepeatedMarkersFailRatherThanHidingHistory()",
+      "time": "0.009493042"
+    },
+    {
+      "classname": "AuditCoreTests.N33ObjectVersionHistoryTests",
+      "name": "laterFailureAndChangedGenerationNeverReturnPartialSuccess()",
+      "time": "0.0095565"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N33.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

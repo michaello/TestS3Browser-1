@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.000618708">
+    <testcase classname="AuditCoreTests.N30CopySourceEncodingTests" name="keyAndVersionAreEncodedExactlyOnce()" time="0.000303417" />
+    <testcase classname="AuditCoreTests.N30CopySourceEncodingTests" name="literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects()" time="0.000209459" />
+    <testcase classname="AuditCoreTests.N30CopySourceEncodingTests" name="unicodeNormalizationDoesNotChangeCopyHeader()" time="0.000200958" />
+  </testsuite>
+</testsuites>

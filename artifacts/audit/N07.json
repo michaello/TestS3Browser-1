@@ -1,0 +1,93 @@
+{
+  "id": "N07",
+  "expected_behavior": "New preference/config serialization contains no AWS secret values; app-owned migration preserves access through a shared secure credential reference for app/share/intents, tested with fake credential stores.",
+  "passed": true,
+  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:45:40.213218+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditN07",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 13,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "malformedOrFuturePreferencesNeverTriggerLegacyFallback(_:)",
+      "time": "0.002806583"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "appGroupLegacyMigratesWhenStandardHasNoRecord()",
+      "time": "0.002815875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "settingsOnlySaveVerifiesAndReusesCredentialReference()",
+      "time": "0.002846375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "missingOrUnavailableSecureItemDoesNotFallBackToLegacyOrDefaults()",
+      "time": "0.002816167"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "legacyCleanupFailureKeepsVerifiedConfigurationAndCanRetry(_:)",
+      "time": "0.002810834"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "emptyStoresLoadAsUnconfiguredWithoutWriting()",
+      "time": "0.002747542"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "extensionAndIntentsReadOnlyCompletedSharedReferences()",
+      "time": "0.002843625"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "failedPreferencePublicationRetainsPreviousCredentialsAndLegacy(_:)",
+      "time": "0.007257875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "standardMigrationPreservesAppliedSettingsAndUnrelatedStores()",
+      "time": "0.002864458"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "failedSecureWriteOrReadbackRetainsBothLegacySourcesAndRetries(_:)",
+      "time": "0.0028465"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "replacementKeepsPriorReferenceAvailableForAlreadyRunningExtension()",
+      "time": "0.002794209"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "newPreferencesContainOnlySettingsAndOpaqueReference()",
+      "time": "0.002784958"
+    },
+    {
+      "classname": "AuditCoreTests.AuditN07",
+      "name": "failedRollbackIsSurfacedAndExplicitReplacementRecovers()",
+      "time": "0.002963709"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N07.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

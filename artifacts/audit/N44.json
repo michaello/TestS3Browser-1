@@ -1,0 +1,43 @@
+{
+  "id": "N44",
+  "expected_behavior": "Batch export staging files/leases clean up after share completion, cancellation and failure, and reusable original-file storage stays within its declared eviction budget.",
+  "passed": true,
+  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:31.980359+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N44MediaLeaseTests|N44BatchExportCleanupTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N44MediaLeaseTests",
+      "name": "stagingCleanup()",
+      "time": "0.008209625"
+    },
+    {
+      "classname": "AuditCoreTests.N44BatchExportCleanupTests",
+      "name": "failedStagingReleasesOriginalAndLeavesNoExportLease()",
+      "time": "0.007717625"
+    },
+    {
+      "classname": "AuditCoreTests.N44BatchExportCleanupTests",
+      "name": "activityCompletionAndCancelledShareBothReleaseAllFiles()",
+      "time": "0.004924542"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N44.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

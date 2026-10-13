@@ -1,40 +1,18 @@
 import Foundation
 import Observation
 
-/// Persists the set of starred S3 object keys to UserDefaults.
-@Observable
+/// Shares account/bucket-qualified annotation state with TagStore.
+@Observable @MainActor
 final class StarStore {
     static let shared = StarStore()
 
-    private(set) var starredKeys: Set<String> = []
-
-    private let udKey = "s3StarredKeys"
-
-    private init() {
-        if let saved = UserDefaults.standard.array(forKey: udKey) as? [String] {
-            starredKeys = Set(saved)
-        }
-    }
-
-    func toggle(_ key: String) {
-        if starredKeys.contains(key) {
-            starredKeys.remove(key)
-        } else {
-            starredKeys.insert(key)
-        }
-        persist()
-    }
-
-    func isStarred(_ key: String) -> Bool {
-        starredKeys.contains(key)
-    }
-
-    func clearAll() {
-        starredKeys.removeAll()
-        persist()
-    }
-
-    private func persist() {
-        UserDefaults.standard.set(Array(starredKeys), forKey: udKey)
-    }
+    private let state = ObjectAnnotationState.shared
+    var starredKeys: Set<LocalObjectIdentity> { state.stars }
+    var legacyCount: Int { state.legacyStarKeys.count }
+    var storageError: String? { state.storageError }
+    private init() {}
+    func toggle(_ identity: LocalObjectIdentity) { state.toggleStar(identity) }
+    func isStarred(_ identity: LocalObjectIdentity) -> Bool { state.stars.contains(identity) }
+    func hasStars(in account: String) -> Bool { state.hasStars(in: account) }
+    func clearAll() { state.clearStars() }
 }

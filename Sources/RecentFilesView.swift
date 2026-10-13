@@ -11,7 +11,7 @@ struct RecentFilesView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var tagStore = TagStore.shared
     @State private var starStore = StarStore.shared
-    @State private var showOnlyStarred = false
+    @State private var annotationFilter = RecentAnnotationFilter()
     let config: S3Config
     let s3Service: S3Service
     @AppStorage("s3RecentViewMode") private var viewModeRaw: String = "list"
@@ -19,6 +19,8 @@ struct RecentFilesView: View {
     @AppStorage("s3RecentFileTypeFilter") private var fileTypeFilterRaw: Int = FileTypeFilter.all.rawValue
     @AppStorage("autoPreviewNewPhotos") private var autoPreviewNewPhotos = false
     @State private var hasLoadedOnce = false
+    @State private var refreshRequestID: UUID?
+    @State private var transferConflict: ObjectTransferConflict?
     @State private var autoPreviewPhoto: S3Object?
     @State private var navigationPath = NavigationPath()
     @State private var copyToast: String?
@@ -28,7 +30,7 @@ struct RecentFilesView: View {
     /// Drives the Clear All confirmation prompt before emptying the recent files list.
     @State private var showClearAllConfirm = false
     /// Keys of files that are new since the last time the screen was visited
-    @State private var newFileKeys: Set<String> = []
+    @State private var newFileKeys: Set<LocalObjectIdentity> = []
     @State private var searchText = ""
     /// The file whose presigned-URL share sheet is open.
     @State private var shareTarget: S3Object? = nil
@@ -44,7 +46,7 @@ struct RecentFilesView: View {
     @State private var showBulkDeleteError = false
     @State private var bulkDeleteErrorMessage = ""
     /// Tag filter. nil means "show all". A non-nil string shows only files with that tag.
-    @State private var tagFilter: String? = nil
+
     /// Drives the "Set Tag" alert for a single file.
     @State private var tagTarget: S3Object? = nil
     @State private var tagText = ""
@@ -78,13 +80,13 @@ struct RecentFilesView: View {
             ? s3Service.recentFiles
             : s3Service.recentFiles.filter { fileTypeFilter.matches($0.fileType) }
         let tagFiltered: [S3Object]
-        if let tagFilter {
-            tagFiltered = typeFiltered.filter { tagStore.tag(forKey: $0.key) == tagFilter }
+        if let selectedTag = annotationFilter.tag {
+            tagFiltered = typeFiltered.filter { tagStore.tag(for: identity($0)) == selectedTag }
         } else {
             tagFiltered = typeFiltered
         }
-        let starFiltered: [S3Object] = showOnlyStarred
-            ? tagFiltered.filter { starStore.isStarred($0.key) }
+        let starFiltered: [S3Object] = annotationFilter.starredOnly
+            ? tagFiltered.filter { starStore.isStarred(identity($0)) }
             : tagFiltered
         let searchFiltered: [S3Object]
         if searchText.isEmpty {
@@ -152,17 +154,48 @@ struct RecentFilesView: View {
             .toolbar { toolbarContent }
             .searchable(text: $searchText, prompt: "Search files")
             .safeAreaInset(edge: .top) {
-                tagFilterBar
+                VStack(spacing: 6) {
+                    tagFilterBar
+                    if s3Service.isRecentLoading || s3Service.lastRecentRefreshAt != nil {
+                        HStack(spacing: 6) {
+                            if s3Service.isRecentLoading { ProgressView().controlSize(.small) }
+                            if let date = s3Service.lastRecentRefreshAt {
+                                Text("Updated \(date, style: .relative) ago")
+                            } else {
+                                Text("Refreshing saved files...")
+                            }
+                            Spacer()
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+                    }
+                    if let message = s3Service.recentRefreshError {
+                        Label(message, systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                    }
+                }
             }
         }
-        .task(id: fileTypeFilterRaw) { await initialLoad() }
+        .task { await initialLoad() }
+        .onChange(of: fileTypeFilterRaw) { _, _ in
+            s3Service.selectRecentFiles(limit: 50, typeFilter: fileTypeFilter)
+        }
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active, isConfigured else { return }
             Task { await refreshRecentFilesAndCheckForNew() }
         }
-        .onChange(of: config) { _, newConfig in
-            Task { await handleConfigChange(newConfig) }
+        .onChange(of: s3Service.session.generation) { _, _ in
+            hasLoadedOnce = !s3Service.recentFiles.isEmpty
+            annotationFilter.clear()
+            newFileKeys.removeAll()
+            Task { await refreshRecentFiles() }
         }
+        .onChange(of: starStore.starredKeys) { _, _ in reconcileAnnotationFilter() }
+        .onChange(of: tagStore.tags) { _, _ in reconcileAnnotationFilter() }
         .sheet(item: $shareTarget) { file in
             SharePresignedURLSheet(object: file, s3Service: s3Service)
         }
@@ -177,8 +210,7 @@ struct RecentFilesView: View {
                 guard let file = renameTarget else { return }
                 let newName = renameText.trimmingCharacters(in: .whitespaces)
                 guard !newName.isEmpty else { renameTarget = nil; return }
-                let dir = (file.key as NSString).deletingLastPathComponent
-                let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
+                let newKey = S3TransferKeys.parentPrefix(of: file.key) + newName
                 Task { await renameFile(file, to: newKey) }
             }
             Button("Cancel", role: .cancel) { renameTarget = nil }
@@ -192,6 +224,9 @@ struct RecentFilesView: View {
         } message: {
             Text(renameErrorMessage)
         }
+        .objectTransferConfirmation(conflict: $transferConflict) { request, approval in
+            await performTransfer(request, approval: approval)
+        }
         .alert("Set Tag", isPresented: .init(
             get: { tagTarget != nil },
             set: { if !$0 { tagTarget = nil } }
@@ -201,12 +236,12 @@ struct RecentFilesView: View {
                 .autocapitalization(.none)
             Button("Save") {
                 guard let file = tagTarget else { return }
-                tagStore.setTag(tagText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : tagText.trimmingCharacters(in: .whitespaces), forKey: file.key)
+                tagStore.setTag(tagText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : tagText.trimmingCharacters(in: .whitespaces), for: identity(file))
                 tagTarget = nil
             }
             Button("Remove Tag", role: .destructive) {
                 guard let file = tagTarget else { return }
-                tagStore.setTag(nil, forKey: file.key)
+                tagStore.setTag(nil, for: identity(file))
                 tagTarget = nil
             }
             Button("Cancel", role: .cancel) { tagTarget = nil }
@@ -231,17 +266,19 @@ struct RecentFilesView: View {
             Text(bulkDeleteErrorMessage)
         }
         .confirmationDialog(
-            "Clear all recent files?",
+            "Reset Recent Cache?",
             isPresented: $showClearAllConfirm,
             titleVisibility: .visible
         ) {
-            Button("Clear All", role: .destructive) {
+            Button("Reset Recent Cache") {
                 Task {
                     await MainActor.run { s3Service.clearRecentFiles() }
-                    await refreshRecentFiles()
+                    await refreshRecentFiles(force: true)
                 }
             }
             Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Rebuilds the local Recent cache after a successful refresh. Existing S3 files are kept.")
         }
     }
 
@@ -253,10 +290,11 @@ struct RecentFilesView: View {
                 systemImage: "gear",
                 description: Text("Go to Settings to configure your S3 bucket and credentials")
             )
-        } else if !hasLoadedOnce || (s3Service.isLoading && s3Service.recentFiles.isEmpty) {
+        } else if CachedRowsPresentation.showsInitialLoading(rowCount: s3Service.recentFiles.count,
+            hasLoadedOnce: hasLoadedOnce, isRefreshing: s3Service.isRecentLoading) {
             VStack(spacing: 8) {
                 ProgressView()
-                Text(s3Service.loadingStatus.isEmpty ? "Loading..." : s3Service.loadingStatus)
+                Text(s3Service.recentLoadingStatus)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -270,16 +308,14 @@ struct RecentFilesView: View {
                 )
                 .frame(maxWidth: .infinity, minHeight: 300)
             }
-            .refreshable { await refreshRecentFiles() }
+            .refreshable { await refreshRecentFiles(force: true) }
         } else if filteredRecentFiles.isEmpty {
-            if !searchText.isEmpty {
-                ContentUnavailableView.search(text: searchText)
-            } else {
-                ContentUnavailableView(
-                    "No Matching Files",
-                    systemImage: "doc",
-                    description: Text("No files match the selected filter")
-                )
+            ContentUnavailableView {
+                Label("No Matching Files", systemImage: "doc")
+            } description: {
+                Text("No files match the selected filters or search.")
+            } actions: {
+                Button("Clear Filters") { clearFilters() }
             }
         } else {
             filesView
@@ -306,13 +342,17 @@ struct RecentFilesView: View {
                             Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle")
                                 .foregroundStyle(selectedIDs.contains(file.id) ? .blue : .secondary)
                                 .font(.title3)
-                            RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
+                            RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
+                                .accessibilityIdentifier(file.key)
+                                .onAppear { AuditTelemetry.shared.firstContentVisible(fromCache: s3Service.recentRowsFromCache) }
                         }
                     }
                     .buttonStyle(.plain)
                 } else {
                     NavigationLink(destination: destinationView(for: file)) {
-                        RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
+                        RecentFileRow(object: file, s3Service: s3Service, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
+                            .accessibilityIdentifier(file.key)
+                            .onAppear { AuditTelemetry.shared.firstContentVisible(fromCache: s3Service.recentRowsFromCache) }
                     }
                     .contextMenu { deleteContextMenu(for: file) }
                     .swipeActions(edge: .leading) {
@@ -326,7 +366,8 @@ struct RecentFilesView: View {
                 }
             }
         }
-        .refreshable { await refreshRecentFiles() }
+        .refreshable { await refreshRecentFiles(force: true) }
+        .onScrollPhaseChange { _, phase in AuditTelemetry.shared.setScrolling(phase != .idle) }
     }
 
     private var gridView: some View {
@@ -338,7 +379,7 @@ struct RecentFilesView: View {
                             toggleSelection(file)
                         } label: {
                             ZStack(alignment: .topTrailing) {
-                                RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
+                                RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
                                     .opacity(selectedIDs.contains(file.id) ? 0.75 : 1.0)
                                 Image(systemName: selectedIDs.contains(file.id) ? "checkmark.circle.fill" : "circle.fill")
                                     .foregroundStyle(selectedIDs.contains(file.id) ? .blue : Color(.systemBackground).opacity(0.8))
@@ -349,7 +390,7 @@ struct RecentFilesView: View {
                         .buttonStyle(.plain)
                     } else {
                         NavigationLink(destination: destinationView(for: file)) {
-                            RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(file.key), tag: tagStore.tag(forKey: file.key))
+                            RecentFileGridItem(object: file, s3Service: s3Service, cardSize: gridCardSize, isNew: newFileKeys.contains(identity(file)), tag: tagStore.tag(for: identity(file)))
                         }
                         .contextMenu { deleteContextMenu(for: file) }
                     }
@@ -357,7 +398,7 @@ struct RecentFilesView: View {
             }
             .padding()
         }
-        .refreshable { await refreshRecentFiles() }
+        .refreshable { await refreshRecentFiles(force: true) }
     }
 
     private func toggleSelection(_ file: S3Object) {
@@ -437,16 +478,16 @@ struct RecentFilesView: View {
         }
 
         Button {
-            tagText = tagStore.tag(forKey: file.key) ?? ""
+            tagText = tagStore.tag(for: identity(file)) ?? ""
             tagTarget = file
         } label: {
-            Label(tagStore.tag(forKey: file.key) != nil ? "Edit Tag" : "Set Tag", systemImage: "tag")
+            Label(tagStore.tag(for: identity(file)) != nil ? "Edit Tag" : "Set Tag", systemImage: "tag")
         }
 
         Button {
-            starStore.toggle(file.key)
+            starStore.toggle(identity(file))
         } label: {
-            Label(starStore.isStarred(file.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(file.key) ? "star.slash" : "star")
+            Label(starStore.isStarred(identity(file)) ? "Unstar" : "Star", systemImage: starStore.isStarred(identity(file)) ? "star.slash" : "star")
         }
 
         Divider()
@@ -513,7 +554,7 @@ struct RecentFilesView: View {
                 Button {
                     showClearAllConfirm = true
                 } label: {
-                    Image(systemName: "trash")
+                    Label("Reset Recent Cache", systemImage: "arrow.clockwise.circle")
                 }
 
                 Button {
@@ -529,12 +570,12 @@ struct RecentFilesView: View {
     /// Hidden when there are no tags and no starred files.
     @ViewBuilder
     private var tagFilterBar: some View {
-        let tags = tagStore.allTags
-        let hasStarred = !starStore.starredKeys.isEmpty
-        if !tags.isEmpty || hasStarred {
+        let tags = tagStore.allTags(in: s3Service.session.configuration.account)
+        let hasStarred = starStore.hasStars(in: s3Service.session.configuration.account)
+        if !tags.isEmpty || hasStarred || annotationFilter.isActive {
             HStack(spacing: 12) {
                 if !tags.isEmpty {
-                    Picker("Tag", selection: $tagFilter) {
+                    Picker("Tag", selection: $annotationFilter.tag) {
                         Text("All tags").tag(String?.none)
                         ForEach(tags, id: \.self) { tag in
                             HStack {
@@ -545,29 +586,33 @@ struct RecentFilesView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: tagFilter) { _, _ in
-                        if tagFilter != nil { showOnlyStarred = false }
+                    .onChange(of: annotationFilter.tag) { _, _ in
+                        if annotationFilter.tag != nil { annotationFilter.starredOnly = false }
                     }
                 }
 
                 if hasStarred {
                     Button {
-                        showOnlyStarred.toggle()
-                        if showOnlyStarred { tagFilter = nil }
+                        annotationFilter.starredOnly.toggle()
+                        if annotationFilter.starredOnly { annotationFilter.tag = nil }
                     } label: {
                         HStack(spacing: 4) {
-                            Image(systemName: showOnlyStarred ? "star.fill" : "star")
+                            Image(systemName: annotationFilter.starredOnly ? "star.fill" : "star")
                                 .font(.caption)
                             Text("Starred")
                                 .font(.subheadline)
-                                .fontWeight(showOnlyStarred ? .semibold : .regular)
+                                .fontWeight(annotationFilter.starredOnly ? .semibold : .regular)
                         }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(showOnlyStarred ? Color.yellow.opacity(0.85) : Color(.secondarySystemFill), in: Capsule())
-                        .foregroundStyle(showOnlyStarred ? Color.black : Color.primary)
+                        .background(annotationFilter.starredOnly ? Color.yellow.opacity(0.85) : Color(.secondarySystemFill), in: Capsule())
+                        .foregroundStyle(annotationFilter.starredOnly ? Color.black : Color.primary)
                     }
                     .buttonStyle(.plain)
+                }
+
+                if annotationFilter.isActive {
+                    Button("Clear Filters") { clearFilters() }
                 }
 
                 Spacer()
@@ -684,40 +729,53 @@ struct RecentFilesView: View {
         await refreshRecentFiles()
     }
 
-    private func handleConfigChange(_ newConfig: S3Config) async {
-        try? await s3Service.updateConfig(newConfig)
-        s3Service.currentBucket = newConfig.bucketName
-        hasLoadedOnce = false
-        await refreshRecentFiles()
+    private func identity(_ file: S3Object) -> LocalObjectIdentity { s3Service.annotationIdentity(for: file) }
+
+    private func reconcileAnnotationFilter() {
+        let account = s3Service.session.configuration.account
+        annotationFilter.reconcile(availableTags: tagStore.allTags(in: account), hasStars: starStore.hasStars(in: account))
     }
 
-    private func refreshRecentFiles() async {
+    private func clearFilters() {
+        annotationFilter.clear()
+        searchText = ""
+        fileTypeFilterRaw = FileTypeFilter.all.rawValue
+    }
+
+    private func refreshRecentFiles(force: Bool = false) async {
+        let generation = s3Service.session.generation
+        let account = s3Service.session.configuration.account
+        let requestID = UUID()
+        refreshRequestID = requestID
         do {
-            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50, typeFilter: fileTypeFilter)
+            try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50, typeFilter: fileTypeFilter, force: force)
+            guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
 
             // Compute new file keys before marking seen, grouped by bucket
-            var discoveredNewKeys: Set<String> = []
+            var discoveredNewKeys: Set<LocalObjectIdentity> = []
             let filesByBucket = Dictionary(grouping: s3Service.recentFiles, by: { $0.bucket ?? s3Service.currentBucket })
             for (bucket, files) in filesByBucket {
+                guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
                 let keys = files.map { $0.key }
                 // Only report new items when we have a prior seen record (not first visit)
-                if await SeenPhotosTracker.shared.hasSeenPhotos(for: bucket) {
-                    let newKeys = await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: bucket)
-                    discoveredNewKeys.formUnion(newKeys)
+                if await SeenPhotosTracker.shared.hasSeenPhotos(for: bucket, account: account) {
+                    let newKeys = await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: bucket, account: account)
+                    discoveredNewKeys.formUnion(newKeys.map { LocalObjectIdentity(account: account, bucket: bucket, key: $0) })
                 }
                 if !keys.isEmpty {
-                    await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: bucket)
+                    await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: bucket, account: account)
                 }
             }
 
             await MainActor.run {
-                newFileKeys = discoveredNewKeys
+                if s3Service.session.isCurrent(generation), refreshRequestID == requestID { newFileKeys = discoveredNewKeys }
             }
         } catch is CancellationError {
             return
         } catch {
             logger.error("Failed to fetch recent files: \(error.localizedDescription)")
         }
+        guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
         if !hasLoadedOnce {
             await MainActor.run {
                 hasLoadedOnce = true
@@ -734,40 +792,46 @@ struct RecentFilesView: View {
             await refreshRecentFiles()
             return
         }
+        let generation = s3Service.session.generation
+        let account = s3Service.session.configuration.account
+        let requestID = UUID()
+        refreshRequestID = requestID
 
         do {
             try await s3Service.fetchRecentFilesFromAllBuckets(limit: 50, typeFilter: fileTypeFilter)
+            guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
 
             // Compute new keys across all buckets (all file types), grouped by bucket
-            var discoveredNewKeys: Set<String> = []
-            var allNewPhotoKeys: [String] = []
+            var discoveredNewKeys: Set<LocalObjectIdentity> = []
+            var allNewPhotoKeys: [LocalObjectIdentity] = []
             let filesByBucket = Dictionary(grouping: s3Service.recentFiles, by: { $0.bucket ?? s3Service.currentBucket })
             for (bucket, files) in filesByBucket {
+                guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
                 let keys = files.map { $0.key }
-                if await SeenPhotosTracker.shared.hasSeenPhotos(for: bucket) {
-                    let newKeys = await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: bucket)
-                    discoveredNewKeys.formUnion(newKeys)
+                if await SeenPhotosTracker.shared.hasSeenPhotos(for: bucket, account: account) {
+                    let newKeys = await SeenPhotosTracker.shared.findNewPhotos(currentPhotos: keys, bucket: bucket, account: account)
+                    discoveredNewKeys.formUnion(newKeys.map { LocalObjectIdentity(account: account, bucket: bucket, key: $0) })
                     // Collect new image keys for auto-preview
                     let newImageKeys = newKeys.filter { key in
                         files.first(where: { $0.key == key })?.fileType == .image
                     }
-                    allNewPhotoKeys.append(contentsOf: newImageKeys)
+                    allNewPhotoKeys.append(contentsOf: newImageKeys.map { LocalObjectIdentity(account: account, bucket: bucket, key: $0) })
                 }
                 if !keys.isEmpty {
-                    await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: bucket)
+                    await SeenPhotosTracker.shared.markAsSeen(photoKeys: keys, bucket: bucket, account: account)
                 }
             }
 
             await MainActor.run {
-                newFileKeys = discoveredNewKeys
+                if s3Service.session.isCurrent(generation), refreshRequestID == requestID { newFileKeys = discoveredNewKeys }
             }
 
             // Auto-preview the newest new photo
             if let newestNewKey = allNewPhotoKeys.first,
-               let newestPhoto = imageFiles.first(where: { $0.key == newestNewKey }) {
-                logger.info("Auto-previewing new photo: \(newestNewKey)")
+               let newestPhoto = imageFiles.first(where: { identity($0) == newestNewKey }) {
+                logger.info("Auto-previewing new photo: \(newestNewKey.key)")
                 await MainActor.run {
-                    autoPreviewPhoto = newestPhoto
+                    if s3Service.session.isCurrent(generation), refreshRequestID == requestID { autoPreviewPhoto = newestPhoto }
                 }
             }
         } catch is CancellationError {
@@ -776,6 +840,7 @@ struct RecentFilesView: View {
             logger.error("Failed to fetch recent files: \(error.localizedDescription)")
         }
 
+        guard s3Service.session.isCurrent(generation), refreshRequestID == requestID else { return }
         if !hasLoadedOnce {
             await MainActor.run {
                 hasLoadedOnce = true
@@ -793,13 +858,20 @@ struct RecentFilesView: View {
 
     private func renameFile(_ file: S3Object, to newKey: String) async {
         renameTarget = nil
+        let request = s3Service.makeObjectTransferRequest(kind: .rename,
+            key: file.key, to: newKey, sourceBucket: file.bucket)
+        await performTransfer(request)
+    }
+
+    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async {
         do {
-            try await s3Service.renameObject(key: file.key, to: newKey, bucket: file.bucket)
-            logger.info("Renamed \(file.key) -> \(newKey)")
+            try await s3Service.performObjectTransfer(request, approval: approval)
+        } catch ObjectTransferError.confirmationRequired(let conflict) {
+            transferConflict = conflict
         } catch {
-            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
+            logger.error("Rename failed: \(error.localizedDescription)")
             await MainActor.run {
-                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
+                renameErrorMessage = error.localizedDescription
                 showRenameError = true
             }
         }

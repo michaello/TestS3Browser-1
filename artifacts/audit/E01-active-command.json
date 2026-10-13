@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "import time;time.sleep(5)"
+  ],
+  "pid": 95379,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-script-timeout-test-20261013-142303-345489.log",
+  "started_at_epoch": 1791872583.345516,
+  "timeout_seconds": 0.1,
+  "status": "failed",
+  "exit_code": 124,
+  "elapsed_seconds": 0.10854506492614746
+}

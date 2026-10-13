@@ -6,187 +6,208 @@ import Smithy
 import os.log
 import CommonCrypto
 import WidgetKit
+import CryptoKit
 
-@Observable
+@Observable @MainActor
 final class S3Service {
     // Internal (not private) so the S3Service+* extension files can reach the client,
     // config, prefetch cache, and logger. Swift file-scopes `private`, so these would be
     // invisible to extensions living in other files.
     let logger = Logger(subsystem: "com.s3browser", category: "S3Service")
-    // These four use an internal (not private) setter so the S3Service+* extension files,
-    // which live in other files in the same module, can update loading state and results.
-    // `private(set)` would file-scope the setter and make it invisible to those extensions.
-    internal(set) var isLoading = false
-    private(set) var items: [S3Item] = []
-    internal(set) var error: String?
-    private(set) var availableBuckets: [String] = []
-    internal(set) var recentFiles: [S3Object] = []
-    var recentFilesRequestID: UUID?
+    let session: ServiceSession
+    let administration = BucketAdministrationCache()
+    private var configurationError: String?
+    private var clientInitialization: Task<S3Client, Error>?
+    private var clientInitializationID: UUID?
 
-    /// Status message during loading operations (e.g. "Fetching files..." or "Found 42 files")
-    internal(set) var loadingStatus: String = ""
+    var isLoading: Bool { session.listings.isLoading(session.route) }
+    var items: [S3Item] {
+        guard let page = session.listings.value(for: session.route) else { return [] }
+        return page.folders.map { .folder(S3Folder(prefix: $0)) } + page.files.map { .file($0.s3Object) }
+    }
+    var error: String? { configurationError ?? session.listings.error(for: session.route) }
+    var availableBuckets: [String] { session.bucketChoices.value(for: session.configuration.account) ?? [] }
+    internal(set) var recentFiles: [S3Object] = []
+    let recentRequest = RequestOwnership()
+    var recentSelectionFilter: FileTypeFilter = .all
+    var recentSelectionLimit = 50
+    var recentRowsFromCache = false
+    var isRecentLoading: Bool { recentRequest.isLoading || session.catalogs.isLoading(session.configuration.account) }
+    var recentRefreshError: String? {
+        if let configurationError { return configurationError }
+        if let discoveryError = session.bucketChoices.error(for: session.configuration.account) {
+            return "Refresh incomplete: " + discoveryError
+        }
+        if let message = session.catalogs.error(for: session.configuration.account) { return message }
+        let failed = session.catalogs.value(for: session.configuration.account)?.failedBuckets ?? []
+        return failed.isEmpty ? nil : "Refresh incomplete: " + failed.map(\.bucket).joined(separator: ", ")
+    }
+    var lastRecentRefreshAt: Date? { session.catalogs.value(for: session.configuration.account)?.refreshedAt }
+    var isCatalogComplete: Bool {
+        recentRefreshError == nil && session.catalogs.value(for: session.configuration.account)?.isComplete == true
+    }
+    var loadingStatus: String { isLoading ? "Fetching files..." : "Loaded \(items.count) items" }
+    var recentLoadingStatus: String { isRecentLoading ? "Refreshing metadata..." : "Showing \(recentFiles.count) recent files" }
 
     /// Current folder prefix being browsed. Empty string for bucket root.
-    var currentPrefix: String = ""
+    var currentPrefix: String {
+        get { session.route.prefix }
+        set { session.selectRoute(bucket: currentBucket, prefix: newValue) }
+    }
 
     /// Currently selected bucket name
-    var currentBucket: String = ""
+    var currentBucket: String {
+        get { session.route.bucket }
+        set { session.selectRoute(bucket: newValue, prefix: currentPrefix) }
+    }
 
     var client: S3Client?
-    var config: S3Config
+    private(set) var config: S3Config
+    let injectedMetadataTransport: (any MetadataCatalogTransport)?
+    let injectedBucketDiscovery: (@MainActor () async throws -> [String])?
+    let snapshotDefaults: UserDefaults?
+    let publishWidget: Bool
 
     /// Prefetch cache for file data downloaded in the background
     var prefetchedData: [String: Data] = [:]
     var prefetchTask: Task<Void, Never>?
 
-    init(config: S3Config) {
+    init(config: S3Config, metadataTransport: (any MetadataCatalogTransport)? = nil,
+         bucketDiscovery: (@MainActor () async throws -> [String])? = nil,
+         snapshotDefaults: UserDefaults? = UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser"),
+         publishWidget: Bool = true) {
         self.config = config
-        self.currentBucket = config.bucketName
-        self.recentFiles = Self.loadPersistedRecentFiles()
+        injectedMetadataTransport = metadataTransport
+        injectedBucketDiscovery = bucketDiscovery
+        self.snapshotDefaults = snapshotDefaults
+        self.publishWidget = publishWidget
+        self.session = ServiceSession(configuration: Self.sessionConfiguration(config))
+        AuditTelemetry.shared.cacheHydrationStarted()
+        restoreMetadataSnapshot()
     }
 
     /// Loads the last-saved recentFiles from the shared App Group UserDefaults so
     /// Recent Files is populated on cold launch without a network round-trip.
-    private static func loadPersistedRecentFiles() -> [S3Object] {
-        guard
-            let defaults = UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser"),
-            let data = defaults.data(forKey: "recentUploads"),
-            let files = try? JSONDecoder().decode([S3Object].self, from: data)
-        else { return [] }
-        return files
-    }
-
     func updateConfig(_ config: S3Config) async throws {
+        try Task.checkCancellation()
+        let changed = session.apply(Self.sessionConfiguration(config))
         self.config = config
+        let generation = session.generation
+        if changed {
+            recentRequest.reset()
+            clientInitialization?.cancel()
+            clientInitialization = nil
+            clientInitializationID = nil
+            client = nil
+            configurationError = nil
+            prefetchTask?.cancel()
+            prefetchTask = nil
+            prefetchedData.removeAll()
+            recentFiles.removeAll()
+            restoreMetadataSnapshot()
+            // The legacy cache has no account identity. Invalidate it on account/config apply.
+            await ImageCacheActor.shared.clearCache()
+        }
+        try Task.checkCancellation()
+        guard session.isCurrent(generation) else { throw CancellationError() }
         try await initializeClient()
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        if changed { try await fetchAvailableBuckets() }
     }
 
     func initializeClient() async throws {
+        if injectedMetadataTransport != nil { return }
+        if AuditAppFixture.isEnabled { throw S3ServiceError.fixtureOperationUnavailable }
+        if client != nil { return }
+        let generation = session.generation
+        if let clientInitialization {
+            let initialized = try await clientInitialization.value
+            guard session.isCurrent(generation) else { throw CancellationError() }
+            client = initialized
+            configurationError = nil
+            return
+        }
+        let captured = config
+        let identifier = UUID()
+        clientInitializationID = identifier
+        let task = Task { @MainActor in
         let credentials = SmithyIdentity.AWSCredentialIdentity(
-            accessKey: config.accessKey,
-            secret: config.secretKey
+            accessKey: captured.accessKey,
+            secret: captured.secretKey
         )
 
         let identityResolver = try SmithyIdentity.StaticAWSCredentialIdentityResolver(credentials)
 
         let s3Config = try await S3Client.S3ClientConfiguration(
             awsCredentialIdentityResolver: identityResolver,
-            region: config.region
+            region: captured.region
         )
-
-        client = S3Client(config: s3Config)
-    }
-
-    /// Fetches list of available S3 buckets
-    func fetchAvailableBuckets() async throws {
-        if client == nil {
-            try await initializeClient()
+            try Task.checkCancellation()
+            return S3Client(config: s3Config)
         }
-
-        guard let client = client else {
-            throw S3ServiceError.clientNotInitialized
+        clientInitialization = task
+        defer {
+            if clientInitializationID == identifier {
+                clientInitialization = nil
+                clientInitializationID = nil
+            }
         }
-
-        isLoading = true
-        error = nil
-
         do {
-            let input = ListBucketsInput()
-            let output = try await client.listBuckets(input: input)
-
-            var bucketNames: [String] = []
-            if let buckets = output.buckets {
-                for bucket in buckets {
-                    if let name = bucket.name {
-                        bucketNames.append(name)
-                    }
-                }
-            }
-
-            let sortedBuckets = bucketNames.sorted()
-            await MainActor.run {
-                self.availableBuckets = sortedBuckets
-                self.isLoading = false
-            }
+            let initialized = try await task.value
+            guard session.isCurrent(generation) else { throw CancellationError() }
+            client = initialized
+            configurationError = nil
         } catch {
-            self.error = error.localizedDescription
-            isLoading = false
+            if session.isCurrent(generation), !(error is CancellationError) { configurationError = error.localizedDescription }
             throw error
         }
     }
 
-    /// Lists objects and folders in the current prefix
-    func listObjects() async throws {
-        if client == nil {
-            try await initializeClient()
-        }
+    static func sessionConfiguration(_ config: S3Config) -> ServiceConfiguration {
+        let fields = [config.region, config.accessKey, config.secretKey].map { Data($0.utf8).base64EncodedString() }
+        let revision = SHA256.hash(data: Data(fields.joined(separator: ".").utf8)).map { String(format: "%02x", $0) }.joined()
+        return ServiceConfiguration(account: S3AccountScope.identifier(region: config.region, accessKey: config.accessKey),
+            credentialRevision: revision, bucket: config.bucketName, prefix: config.prefix)
+    }
 
-        guard let client = client else {
-            throw S3ServiceError.clientNotInitialized
-        }
-
-        isLoading = true
-        error = nil
-        loadingStatus = "Fetching files..."
-
-        do {
-            // Use currentPrefix directly for browsing - config.prefix is only used as initial default
-            let input = ListObjectsV2Input(
-                bucket: currentBucket,
-                delimiter: "/",
-                prefix: currentPrefix.isEmpty ? nil : currentPrefix
-            )
-
-            self.logger.debug("Calling listObjectsV2 - bucket: \(self.currentBucket), prefix: \(self.currentPrefix.isEmpty ? "(root)" : self.currentPrefix)")
-            let output = try await client.listObjectsV2(input: input)
-            self.logger.debug("Got response from S3")
-
-            var s3Items: [S3Item] = []
-            var folderCount = 0
-            var fileCount = 0
-
-            // Parse folders from commonPrefixes
-            if let commonPrefixes = output.commonPrefixes {
-                for prefix in commonPrefixes {
-                    if let folderPrefix = prefix.prefix {
-                        let folder = S3Folder(prefix: folderPrefix)
-                        s3Items.append(.folder(folder))
-                        folderCount += 1
-                    }
-                }
+    /// Discovery has its own loading/error state and never blocks a known folder.
+    func fetchAvailableBuckets(force: Bool = false) async throws {
+        let generation = session.generation
+        let account = session.configuration.account
+        if let injectedBucketDiscovery {
+            _ = try await session.bucketChoices.load(account, policy: force ? .force : .automatic) { [self] in
+                let buckets = try await injectedBucketDiscovery()
+                guard session.isCurrent(generation) else { throw CancellationError() }
+                return buckets
             }
-            self.logger.debug("Found \(folderCount) folders")
-
-            // Parse files from contents
-            if let contents = output.contents {
-                loadingStatus = "Processing \(contents.count) items..."
-                for item in contents {
-                    guard let key = item.key else { continue }
-                    // Skip items that are just folder markers
-                    if key.hasSuffix("/") { continue }
-
-                    let object = S3Object(
-                        key: key,
-                        size: Int64(item.size ?? 0),
-                        lastModified: item.lastModified ?? Date(),
-                        etag: item.eTag
-                    )
-                    s3Items.append(.file(object))
-                    fileCount += 1
-                }
-            }
-            self.logger.debug("Found \(fileCount) files, total items: \(s3Items.count)")
-
-            loadingStatus = "Loaded \(fileCount) files, \(folderCount) folders"
-            items = s3Items
-            isLoading = false
-        } catch {
-            self.error = error.localizedDescription
-            loadingStatus = ""
-            isLoading = false
-            throw error
+            return
+        }
+        try await initializeClient()
+        guard session.isCurrent(generation), let client else { throw CancellationError() }
+        _ = try await session.bucketChoices.load(account, policy: force ? .force : .automatic) { [self] in
+            let output = try await client.listBuckets(input: ListBucketsInput())
+            guard session.isCurrent(generation) else { throw CancellationError() }
+            return (output.buckets ?? []).compactMap(\.name).sorted()
         }
     }
+
+    /// The visible list is derived from the current immutable route, so an old response
+    /// cannot publish into a new folder. Explicit refresh intent survives active work.
+    func listObjects(force: Bool = false) async throws {
+        let query = session.route
+        let generation = session.generation
+        let transport = try await metadataTransport(generation: generation)
+        guard session.route == query else { throw CancellationError() }
+        _ = try await session.listings.load(query, policy: force ? .force : .automatic) {
+            try await MetadataCatalogScanner.listing(query, transport: transport)
+        }
+    }
+
+    func selectRoute(bucket: String, prefix: String) {
+        session.selectRoute(bucket: bucket, prefix: prefix)
+    }
+
+    func invalidateCurrentListing() { session.listings.invalidate(session.route) }
 
     /// Navigates into a folder
     /// - Parameter folderPrefix: The prefix of the folder to navigate into
@@ -197,45 +218,27 @@ final class S3Service {
 
     /// Navigates up one level (to parent folder)
     func navigateUp() async throws {
-        let components = currentPrefix.trimmingCharacters(in: CharacterSet(charactersIn: "/")).split(separator: "/")
-        if components.isEmpty {
-            currentPrefix = ""
-        } else {
-            let parentPath = components.dropLast().joined(separator: "/")
-            currentPrefix = parentPath.isEmpty ? "" : parentPath + "/"
-        }
+        currentPrefix = S3PrefixPath.parent(currentPrefix)
         try await listObjects()
     }
 
     /// Returns path components for breadcrumb navigation
     func getPathComponents() -> [String] {
-        let clean = currentPrefix.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        guard !clean.isEmpty else { return [] }
-        return clean.split(separator: "/").map(String.init)
+        S3PrefixPath.components(currentPrefix).map { $0.isEmpty ? "/" : $0 }
     }
 
     /// Navigates to a specific path level in the breadcrumb
     /// - Parameter index: Index in the path (0-based), or -1 for root
     func navigateToBreadcrumb(_ index: Int) async throws {
-        if index == -1 {
-            currentPrefix = ""
-        } else {
-            let components = getPathComponents()
-            guard index < components.count else { return }
-            let path = components.prefix(through: index).joined(separator: "/")
-            currentPrefix = path + "/"
-        }
+        guard let prefix = S3PrefixPath.breadcrumb(currentPrefix, index: index) else { return }
+        currentPrefix = prefix
         try await listObjects()
     }
 
     /// Switches to a different bucket
     /// - Parameter bucketName: The name of the bucket to switch to
     func switchBucket(_ bucketName: String) async throws {
-        currentBucket = bucketName
-        currentPrefix = ""
-        items = []
-        recentFiles = []
-        persistRecentFiles()
+        session.selectRoute(bucket: bucketName, prefix: "")
         try await listObjects()
     }
 
@@ -243,16 +246,8 @@ final class S3Service {
     /// outside S3Service go through this to empty it (for example the Clear All button).
     @MainActor
     func clearRecentFiles() {
-        recentFiles.removeAll()
-        persistRecentFiles()
-    }
-
-    /// Writes the current recentFiles array to the shared App Group UserDefaults and
-    /// tells WidgetKit to reload the timeline so the widget reflects the change immediately.
-    func persistRecentFiles() {
-        guard let data = try? JSONEncoder().encode(recentFiles) else { return }
-        UserDefaults(suiteName: "group.com.crispytoast.TestS3Browser")?.set(data, forKey: "recentUploads")
-        WidgetCenter.shared.reloadTimelines(ofKind: "TestS3BrowserWidget")
+        // Reset freshness, retaining the last successful rows until rebuilding succeeds.
+        session.catalogs.prepareRebuild(session.configuration.account)
     }
 
     /// Deletes an object from S3
@@ -263,11 +258,13 @@ final class S3Service {
     ///     deleting a key from the wrong bucket "succeeds" silently and the file stays.
     /// - Throws: S3ServiceError if the client is not initialized or AWS SDK errors
     func deleteObject(key: String, bucket: String? = nil) async throws {
+        let generation = session.generation
+        let targetBucket = bucket ?? currentBucket
+        try await initializeClient()
+        guard session.isCurrent(generation) else { throw CancellationError() }
         guard let client = client else {
             throw S3ServiceError.clientNotInitialized
         }
-
-        let targetBucket = bucket ?? currentBucket
 
         do {
             let input = DeleteObjectInput(
@@ -277,73 +274,50 @@ final class S3Service {
 
             _ = try await client.deleteObject(input: input)
 
-            // Update local arrays to reflect deletion
-            await MainActor.run {
-                items.removeAll { item in
-                    if case .file(let object) = item {
-                        return object.key == key
-                    }
-                    return false
-                }
+            guard session.isCurrent(generation) else { throw CancellationError() }
+            // Mutations update every affected local snapshot without rescanning the account.
+            for (query, cached) in session.listings.snapshots where query.bucket.utf8.elementsEqual(targetBucket.utf8) {
+                let page = cached.value
+                session.listings.seed(MetadataListingPage(files: page.files.filter { !$0.key.utf8.elementsEqual(key.utf8) },
+                    folders: page.folders, nextToken: page.nextToken), for: query, refreshedAt: cached.refreshedAt)
+                if session.listings.isLoading(query) { session.listings.invalidate(query) }
+            }
+            let account = session.configuration.account
+            if var cached = session.catalogs.value(for: account) {
+                cached.records.removeAll { $0.key.utf8.elementsEqual(key.utf8) && $0.bucket.utf8.elementsEqual(targetBucket.utf8) }
+                session.catalogs.seed(cached, for: account, refreshedAt: cached.refreshedAt)
+                if session.catalogs.isLoading(account) { session.catalogs.invalidate(account) }
+            }
                 recentFiles.removeAll { object in
-                    object.key == key && (object.bucket ?? currentBucket) == targetBucket
+                    object.key.utf8.elementsEqual(key.utf8) && (object.bucket ?? targetBucket).utf8.elementsEqual(targetBucket.utf8)
                 }
                 persistRecentFiles()
-            }
         } catch {
             self.logger.error("Failed to delete object '\(key)' from '\(targetBucket)': \(error.localizedDescription)")
             throw error
         }
     }
 
-    /// Fetches all files from the dump/ prefix, sorted by most recent first
-    /// - Returns: Array of S3Object from the dump/ folder
-    func fetchDumpFiles() async throws -> [S3Object] {
-        if client == nil {
-            try await initializeClient()
+    func fetchDumpFiles(force: Bool = false) async throws -> [S3Object] {
+        try await fetchFiles(prefix: "dump/", bucket: currentBucket, force: force)
+    }
+
+    func fetchFiles(prefix: String, bucket: String, force: Bool = false) async throws -> [S3Object] {
+        let generation = session.generation
+        let query = ListingQuery(account: session.configuration.account, bucket: bucket, prefix: prefix, delimiter: nil)
+        let transport = try await metadataTransport(generation: generation)
+        let page = try await session.listings.load(query, policy: force ? .force : .automatic) {
+            try await MetadataCatalogScanner.listing(query, transport: transport)
         }
-
-        guard let client = client else {
-            throw S3ServiceError.clientNotInitialized
-        }
-
-        var allFiles: [S3Object] = []
-        var continuationToken: String? = nil
-
-        repeat {
-            let input = ListObjectsV2Input(
-                bucket: currentBucket,
-                continuationToken: continuationToken,
-                prefix: "dump/"
-            )
-
-            let output = try await client.listObjectsV2(input: input)
-
-            if let contents = output.contents {
-                for item in contents {
-                    guard let key = item.key else { continue }
-                    if key.hasSuffix("/") { continue }
-
-                    let object = S3Object(
-                        key: key,
-                        size: Int64(item.size ?? 0),
-                        lastModified: item.lastModified ?? Date(),
-                        etag: item.eTag
-                    )
-                    allFiles.append(object)
-                }
-            }
-
-            continuationToken = output.nextContinuationToken
-        } while continuationToken != nil
-
-        return allFiles.sorted { $0.lastModified > $1.lastModified }
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        return page.files.sorted { $0.modified > $1.modified }.map(\.s3Object)
     }
 }
 
 enum S3ServiceError: LocalizedError {
     case clientNotInitialized
     case noDataReturned
+    case fixtureOperationUnavailable
 
     var errorDescription: String? {
         switch self {
@@ -351,6 +325,8 @@ enum S3ServiceError: LocalizedError {
             return "S3 client not initialized. Please configure credentials."
         case .noDataReturned:
             return "No data returned from S3"
+        case .fixtureOperationUnavailable:
+            return "This operation is unavailable in the local audit fixture."
         }
     }
 }

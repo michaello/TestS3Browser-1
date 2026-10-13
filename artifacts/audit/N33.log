@@ -1,0 +1,38 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[11 / 35] AuditCore
+[27 / 51] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[32 / 48] AuditCore
+[34 / 48] AuditCore
+[37 / 48] AuditCoreTests-product
+[54 / 65] AuditCoreTests-product
+[58 / 64] AuditCoreTests-product
+[60 / 64] AuditCoreTests-product
+Build complete! (8.66 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N33ObjectVersionHistoryTests started.
+􀟈  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() started.
+􀟈  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() started.
+􀟈  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() started.
+􀟈  Test cancellationStopsBeforeFetchingAnotherPage() started.
+􀟈  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() started.
+􁁛  Test keyFilterIsExactAndDuplicatePageEntriesAreCollapsed() passed after 0.001 seconds.
+􁁛  Test bothMarkersReachOlderRestorePointsBeyondOneThousandVersions() passed after 0.009 seconds.
+􁁛  Test missingOrRepeatedMarkersFailRatherThanHidingHistory() passed after 0.009 seconds.
+􁁛  Test laterFailureAndChangedGenerationNeverReturnPartialSuccess() passed after 0.009 seconds.
+􁁛  Test cancellationStopsBeforeFetchingAnotherPage() passed after 0.009 seconds.
+􁁛  Suite N33ObjectVersionHistoryTests passed after 0.009 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.009 seconds.

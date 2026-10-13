@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.014078041">
+    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="truthfulDataURLs(fixture:)" time="0.002319875" />
+    <testcase classname="AuditCoreTests.F18OriginalExportTests" name="originalGIF()" time="0.013808833" />
+  </testsuite>
+</testsuites>

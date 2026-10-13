@@ -1,47 +1,16 @@
 import SwiftUI
 import os.log
 
-/// Tab identifiers for navigation
-enum AppTab: String, CaseIterable {
-    case browse
-    case apps
-    case recent
-    case stash
-    case stats
-    case upload
-    case settings
-
-    var title: String {
-        switch self {
-        case .browse: return "Browse"
-        case .apps: return "Apps"
-        case .recent: return "Recent"
-        case .stash: return "Stash"
-        case .stats: return "Stats"
-        case .upload: return "Upload"
-        case .settings: return "Settings"
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .browse: return "folder"
-        case .apps: return "square.grid.2x2"
-        case .recent: return "clock"
-        case .stash: return "doc.richtext"
-        case .stats: return "chart.bar"
-        case .upload: return "square.and.arrow.up"
-        case .settings: return "gear"
-        }
-    }
-}
-
 struct ContentView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "ContentView")
     @Binding var config: S3Config
     @State private var s3Service: S3Service
     @AppStorage("lastSelectedTab") private var lastSelectedTabRaw: String = AppTab.browse.rawValue
-    @State private var selectedTab: AppTab = .browse
+    @State private var tabState: AppTabState
+    private var selectedTab: AppTab {
+        get { tabState.selected }
+        nonmutating set { tabState.select(newValue) }
+    }
     @State private var isDropTargeted = false
     @State private var uploadToast: UploadToast?
     @State private var showBucketSwitcher = false
@@ -62,39 +31,34 @@ struct ContentView: View {
         }
     }
 
-    init(config: Binding<S3Config>) {
+    init(config: Binding<S3Config>, service: S3Service? = nil) {
         self._config = config
-        self._s3Service = State(initialValue: S3Service(config: config.wrappedValue))
+        self._s3Service = State(initialValue: service ?? S3Service(config: config.wrappedValue))
+        let preferences = service?.snapshotDefaults ?? .standard
+        let initial = AuditAppFixture.isEnabled ? AppTab.recent : AppTab(rawValue: preferences.string(forKey: "lastSelectedTab") ?? "") ?? .browse
+        self._tabState = State(initialValue: AppTabState(initial: initial))
     }
 
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
                 // Content area
-                Group {
-                    switch selectedTab {
-                    case .browse:
-                        BucketBrowserView(s3Service: s3Service, config: $config)
-                    case .apps:
-                        ScreensDesignAppsView(s3Service: s3Service)
-                    case .recent:
-                        RecentFilesView(config: config, s3Service: s3Service)
-                    case .stash:
-                        StashView(s3Service: s3Service)
-                    case .stats:
-                        StatsView(s3Service: s3Service)
-                    case .upload:
-                        DumpFilesView(s3Service: s3Service)
-                    case .settings:
-                        SettingsView(config: $config)
+                ZStack {
+                    ForEach(tabState.retainedTabs, id: \.self) { tab in
+                        tabContent(tab)
+                            .opacity(selectedTab == tab ? 1 : 0)
+                            .allowsHitTesting(selectedTab == tab)
+                            .accessibilityHidden(selectedTab != tab)
+                            .zIndex(selectedTab == tab ? 1 : 0)
                     }
                 }
+                .id(s3Service.session.generation)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 Divider()
 
                 // Custom tab bar with context menu support
-                CustomTabBar(selectedTab: $selectedTab)
+                CustomTabBar(selectedTab: Binding(get: { selectedTab }, set: { selectedTab = $0 }))
             }
 
             // Drop overlay when dragging
@@ -203,10 +167,9 @@ struct ContentView: View {
             }
         }
         .dropDestination(for: Data.self) { items, _ in
-            guard let data = items.first else { return false }
-            Task {
-                await handleDroppedImage(data)
-            }
+            guard !items.isEmpty else { return false }
+            let context = UploadContext(service: s3Service, prefix: "dump/")
+            Task { await handleDroppedImages(items, context: context) }
             return true
         } isTargeted: { targeted in
             isDropTargeted = targeted
@@ -217,19 +180,34 @@ struct ContentView: View {
         }
         .onAppear {
             // Restore last selected tab on launch
-            if let savedTab = AppTab(rawValue: lastSelectedTabRaw) {
+            if AuditAppFixture.isEnabled {
+                selectedTab = .recent
+            } else if let savedTab = AppTab(rawValue: lastSelectedTabRaw) {
                 selectedTab = savedTab
             }
-            queueManager.configure(s3Service: s3Service)
         }
         .onChange(of: selectedTab) { _, newTab in
             // Persist tab selection
-            lastSelectedTabRaw = newTab.rawValue
+            if !AuditAppFixture.isEnabled { lastSelectedTabRaw = newTab.rawValue }
         }
-        .onChange(of: config) { _, newConfig in
-            Task {
-                try? await s3Service.updateConfig(newConfig)
-            }
+        .onChange(of: s3Service.session.generation) { _, _ in tabState.resetForConfiguration() }
+        .task(id: config) {
+            do { try await s3Service.updateConfig(config) }
+            catch is CancellationError {}
+            catch { logger.error("Configuration apply failed: \(error.localizedDescription)") }
+        }
+    }
+
+    @ViewBuilder
+    private func tabContent(_ tab: AppTab) -> some View {
+        switch tab {
+        case .browse: BucketBrowserView(s3Service: s3Service, config: $config)
+        case .apps: ScreensDesignAppsView(s3Service: s3Service)
+        case .recent: RecentFilesView(config: config, s3Service: s3Service)
+        case .stash: StashView(s3Service: s3Service)
+        case .stats: StatsView(s3Service: s3Service)
+        case .upload: DumpFilesView(s3Service: s3Service)
+        case .settings: SettingsView(config: $config, service: s3Service)
         }
     }
 
@@ -290,49 +268,18 @@ struct ContentView: View {
         .animation(.easeInOut, value: uploadToast?.id)
     }
 
-    private func handleDroppedImage(_ data: Data) async {
-        await MainActor.run {
-            uploadToast = .uploading
+    private func handleDroppedImages(_ items: [Data], context: UploadContext) async {
+        uploadToast = .uploading
+        let outcome = await ImageDropBatch.process(items) { image in
+            try await s3Service.uploadToDump(imageData: image.data, bucket: context.destination.bucket,
+                expectedConfig: context.configuration, expectedGeneration: context.generation)
         }
-
-        do {
-            // Convert to JPEG
-            let jpegData: Data
-            if let image = UIImage(data: data), let jpeg = image.jpegData(compressionQuality: 0.8) {
-                jpegData = jpeg
-            } else {
-                jpegData = data
-            }
-
-            let key = try await s3Service.uploadToDump(imageData: jpegData)
-            logger.info("Uploaded dropped image to \(key)")
-
-            await MainActor.run {
-                uploadToast = .success(key)
-            }
-
-            // Auto-dismiss after 3 seconds
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
-            await MainActor.run {
-                if case .success = uploadToast {
-                    uploadToast = nil
-                }
-            }
-        } catch {
-            logger.error("Drop upload failed: \(error.localizedDescription)")
-            await MainActor.run {
-                uploadToast = .failure(error.localizedDescription)
-            }
-
-            // Auto-dismiss after 5 seconds
-            try? await Task.sleep(nanoseconds: 5_000_000_000)
-            await MainActor.run {
-                if case .failure = uploadToast {
-                    uploadToast = nil
-                }
-            }
-        }
+        uploadToast = outcome.failures.isEmpty ? .success(outcome.summary) : .failure(outcome.summary)
+        do { try await Task.sleep(for: .seconds(outcome.failures.isEmpty ? 3 : 5)) }
+        catch { return }
+        uploadToast = nil
     }
+
 }
 
 /// Custom tab bar that supports context menus on long press

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.033516625">
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancelledQueuedJobNeverStartsAndOtherJobsContinue()" time="0.033273208" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue()" time="0.03318075" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="successfulUploadReadsOwnedFileAndCleansPayload()" time="0.029898792" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="cancellationOfActiveUploadCleansOwnedFile()" time="0.031316667" />
+    <testcase classname="AuditCoreTests.F35FileUploadQueueTests" name="failedUploadRetainsFileAndRetryUsesSameDestination()" time="0.032917458" />
+  </testsuite>
+</testsuites>

@@ -1,0 +1,14 @@
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditN27 started.
+􀟈  Test invalidAndConflictingSchedulesAreUnknown() started.
+􀟈  Test dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument fixture → ("2014-01-15T10:30:00Z", 3, "2014-01-19T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument fixture → ("2026-03-08T09:30:00Z", 1, "2026-03-10T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument fixture → ("2026-10-01T23:59:59Z", 0, "2026-10-02T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􀟈  Test case passing 1 argument fixture → ("2026-10-01T00:00:00Z", 0, "2026-10-02T00:00:00Z") to dayEligibilityUsesNextUTCMidnight(fixture:) started.
+􁁛  Test invalidAndConflictingSchedulesAreUnknown() passed after 0.009 seconds.
+􁁛  Test dayEligibilityUsesNextUTCMidnight(fixture:) with 4 test cases passed after 0.023 seconds.
+􁁛  Suite AuditN27 passed after 0.023 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.024 seconds.

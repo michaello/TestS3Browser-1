@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="4" failures="0" skipped="0" time="0.000695459">
+    <testcase classname="AuditCoreTests.AuditN23" name="namespacesAndAccountsHaveIndependentSeenHistory()" time="0.000182542" />
+    <testcase classname="AuditCoreTests.AuditN23" name="filteredOrLimitedPagesCannotForgetPreviouslySeenKeys()" time="0.000141708" />
+    <testcase classname="AuditCoreTests.AuditN23" name="explicitPruningClearsOnlyTheRequestedScope()" time="0.000222209" />
+    <testcase classname="AuditCoreTests.AuditN23" name="historyRoundTripPreservesExactBytesAndAdditivePages()" time="0.000306542" />
+  </testsuite>
+</testsuites>

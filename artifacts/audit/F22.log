@@ -1,0 +1,24 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.52 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F22FileImportTests started.
+􀟈  Test moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending() started.
+􀟈  Test genericFileNameIsPreservedAndLocalNameIsBounded() started.
+􀟈  Test invalidMediaIsRejectedWithoutOwnedFiles() started.
+􀟈  Test actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test case passing 1 argument mp4 → false to moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test case passing 1 argument mp4 → true to moviesRetainPlayableOriginalBytesAndMovieType(mp4:) started.
+􀟈  Test case passing 1 argument type → public.png to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test case passing 1 argument type → public.jpeg to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􀟈  Test case passing 1 argument type → public.heic to actualImageTypeSurvivesMisleadingProviderName(_:) started.
+􁁛  Test genericFileNameIsPreservedAndLocalNameIsBounded() passed after 0.254 seconds.
+􁁛  Test cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending() passed after 0.256 seconds.
+􁁛  Test invalidMediaIsRejectedWithoutOwnedFiles() passed after 0.259 seconds.
+􁁛  Test moviesRetainPlayableOriginalBytesAndMovieType(mp4:) with 2 test cases passed after 0.275 seconds.
+􁁛  Test actualImageTypeSurvivesMisleadingProviderName(_:) with 3 test cases passed after 0.313 seconds.
+􁁛  Suite F22FileImportTests passed after 0.313 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.314 seconds.

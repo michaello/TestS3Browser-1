@@ -1,0 +1,27 @@
+{
+  "command": [
+    "curl",
+    "--fail",
+    "--location",
+    "--retry",
+    "2",
+    "--retry-all-errors",
+    "--retry-delay",
+    "2",
+    "--connect-timeout",
+    "20",
+    "--max-time",
+    "900",
+    "--output",
+    "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedArchives/aws-sdk-swift-37f1ef1.tar.gz",
+    "https://codeload.github.com/awslabs/aws-sdk-swift/tar.gz/37f1ef1c1c00a28b867dd761f20a2bd8a0f2a6b9"
+  ],
+  "pid": 31625,
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/E01-codeload.log",
+  "archive_path": "/Users/mike/Library/Developer/Xcode/DerivedData/TestS3BrowserAudit/PinnedArchives/aws-sdk-swift-37f1ef1.tar.gz",
+  "started_at_epoch": 1791870014.440442,
+  "timeout_seconds": 1200,
+  "status": "failed",
+  "exit_code": 124,
+  "finished_at_epoch": 1791872424.270875
+}

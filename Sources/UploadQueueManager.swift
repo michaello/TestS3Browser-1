@@ -1,119 +1,101 @@
 import SwiftUI
 import os.log
 
-enum UploadItemState {
-    case pending
-    case uploading(progress: Double)
-    case done
-    case failed(String)
-}
+typealias UploadItem = FileUploadJob
 
-@Observable
-final class UploadItem: Identifiable {
-    let id: UUID
-    let filename: String
-    let key: String
-    let bucket: String
-    let contentType: String
-    let data: Data
-    var state: UploadItemState
-    var retryCount: Int
-
-    init(filename: String, key: String, bucket: String, contentType: String, data: Data) {
-        self.id = UUID()
-        self.filename = filename
-        self.key = key
-        self.bucket = bucket
-        self.contentType = contentType
-        self.data = data
-        self.state = .pending
-        self.retryCount = 0
-    }
-
-    var isActive: Bool {
-        if case .uploading = state { return true }
-        return false
-    }
-
-    var isPending: Bool {
-        if case .pending = state { return true }
-        return false
-    }
-
-    var isDone: Bool {
-        if case .done = state { return true }
-        return false
-    }
-
-    var isFailed: Bool {
-        if case .failed = state { return true }
-        return false
-    }
-}
-
-@Observable
+/// App adapter keeps credentials in memory and sends only file-backed, captured jobs.
+@MainActor @Observable
 final class UploadQueueManager {
     static let shared = UploadQueueManager()
+    @ObservationIgnored private var services: [UUID: S3Service] = [:]
+    @ObservationIgnored private var configurations: [UUID: UploadContext] = [:]
+    @ObservationIgnored private var callbacks: [UUID: @MainActor (Double) -> Void] = [:]
+    @ObservationIgnored private lazy var queue = FileUploadQueue(
+        store: UploadPayloadStore(directory: FileManager.default.temporaryDirectory.appendingPathComponent("s3-upload-queue"))
+    ) { [weak self] job, progress in
+        guard let self, let service = self.services[job.id], let configuration = self.configurations[job.id] else {
+            throw FileUploadQueueError.failed("The upload's captured configuration is unavailable.")
+        }
+        try await service.uploadFileObject(file: job.fileURL, key: job.key, contentType: job.contentType,
+            bucket: job.bucket, expectedConfig: configuration.configuration, expectedGeneration: configuration.generation, onProgress: { fraction in
+                progress(fraction)
+                self.callbacks[job.id]?(fraction)
+            })
+        self.forget(job.id)
+    }
 
-    private let logger = Logger(subsystem: "com.s3browser", category: "UploadQueueManager")
-
-    var items: [UploadItem] = []
-    private var s3Service: S3Service?
-    private var isProcessing = false
-
+    var items: [UploadItem] { queue.items }
     var pendingCount: Int { items.filter(\.isPending).count }
     var activeCount: Int { items.filter(\.isActive).count }
     var failedCount: Int { items.filter(\.isFailed).count }
     var busyCount: Int { pendingCount + activeCount }
 
-    func configure(s3Service: S3Service) {
-        self.s3Service = s3Service
-    }
-
-    func enqueue(filename: String, key: String, bucket: String, contentType: String, data: Data) {
-        let item = UploadItem(filename: filename, key: key, bucket: bucket, contentType: contentType, data: data)
-        items.append(item)
-        logger.info("Enqueued \(filename) -> \(bucket)/\(key)")
-        Task { await processNext() }
-    }
-
-    func retry(id: UUID) {
-        guard let item = items.first(where: { $0.id == id }), item.isFailed else { return }
-        item.state = .pending
-        item.retryCount += 1
-        logger.info("Retrying \(item.filename) (attempt \(item.retryCount + 1))")
-        Task { await processNext() }
-    }
-
-    func removeCompleted() {
-        items.removeAll(where: \.isDone)
-    }
-
-    @MainActor
-    private func processNext() async {
-        guard !isProcessing, let service = s3Service else { return }
-        guard let item = items.first(where: \.isPending) else { return }
-
-        isProcessing = true
-        item.state = .uploading(progress: 0)
-
-        do {
-            try await service.uploadObject(
-                data: item.data,
-                key: item.key,
-                contentType: item.contentType,
-                onProgress: { [weak item] fraction in
-                    item?.state = .uploading(progress: fraction)
-                }
-            )
-            item.state = .done
-            logger.info("Queue item done: \(item.filename)")
-        } catch {
-            item.state = .failed(error.localizedDescription)
-            logger.error("Queue item failed: \(item.filename): \(error.localizedDescription)")
+    @discardableResult
+    func upload(_ payload: PreparedUploadPayload, key: String, context: UploadContext,
+                using service: S3Service, onProgress: (@MainActor (Double) -> Void)? = nil) async throws -> String {
+        switch payload.body {
+        case .data(let data):
+            try await upload(data: data, filename: payload.filename, key: key, contentType: payload.contentType,
+                context: context, using: service, onProgress: onProgress)
+        case .file(let file):
+            try await upload(file: file, filename: payload.filename, key: key, contentType: payload.contentType,
+                context: context, using: service, onProgress: onProgress)
         }
+    }
 
-        isProcessing = false
-        await processNext()
+    @discardableResult
+    func upload(data: Data, filename: String, key: String, contentType: String,
+                context: UploadContext, using service: S3Service,
+                onProgress: (@MainActor (Double) -> Void)? = nil) async throws -> String {
+        try await enqueueAndWait(context: context, using: service, onProgress: onProgress) { id in
+            try await queue.enqueue(id: id, filename: filename, key: key, bucket: context.destination.bucket,
+                account: context.destination.account, contentType: contentType, data: data)
+        }
+    }
+
+    @discardableResult
+    func upload(file: URL, filename: String, key: String, contentType: String,
+                context: UploadContext, using service: S3Service,
+                onProgress: (@MainActor (Double) -> Void)? = nil) async throws -> String {
+        try await enqueueAndWait(context: context, using: service, onProgress: onProgress) { id in
+            try await queue.enqueue(id: id, filename: filename, key: key, bucket: context.destination.bucket,
+                account: context.destination.account, contentType: contentType, file: file)
+        }
+    }
+
+    private func enqueueAndWait(context: UploadContext, using service: S3Service,
+        onProgress: (@MainActor (Double) -> Void)?,
+        stage: (UUID) async throws -> FileUploadJob) async throws -> String {
+        try Task.checkCancellation()
+        guard context.matches(service) else { throw UploadPreparationError.accountChanged }
+        let id = UUID()
+        services[id] = service
+        configurations[id] = context
+        callbacks[id] = onProgress
+        do {
+            let job = try await stage(id)
+            let key = try await queue.waitForCompletion(id: job.id)
+            forget(id)
+            return key
+        } catch {
+            callbacks.removeValue(forKey: id)
+            if !items.contains(where: { $0.id == id && $0.isFailed }) { forget(id) }
+            throw error
+        }
+    }
+
+    func retry(id: UUID) { queue.retry(id: id) }
+
+    func cancel(id: UUID) async {
+        await queue.cancel(id: id)
+        forget(id)
+    }
+
+    func removeCompleted() async { await queue.removeCompleted() }
+
+    private func forget(_ id: UUID) {
+        callbacks.removeValue(forKey: id)
+        services.removeValue(forKey: id)
+        configurations.removeValue(forKey: id)
     }
 }

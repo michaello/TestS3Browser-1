@@ -1,0 +1,53 @@
+{
+  "id": "F22",
+  "expected_behavior": "PhotosPicker movies, HEIC, PNG and JPEG representations keep an appropriate filename/type and playable/decodable bytes; movies are never uploaded as image/jpeg.",
+  "passed": true,
+  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:45:42.746713+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F22FileImportTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F22.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F22FileImportTests",
+      "name": "cancelledOrChangedAccountCleansOwnedRepresentationWithoutSending()",
+      "time": "0.256888167"
+    },
+    {
+      "classname": "AuditCoreTests.F22FileImportTests",
+      "name": "invalidMediaIsRejectedWithoutOwnedFiles()",
+      "time": "0.259093459"
+    },
+    {
+      "classname": "AuditCoreTests.F22FileImportTests",
+      "name": "moviesRetainPlayableOriginalBytesAndMovieType(mp4:)",
+      "time": "0.275879625"
+    },
+    {
+      "classname": "AuditCoreTests.F22FileImportTests",
+      "name": "genericFileNameIsPreservedAndLocalNameIsBounded()",
+      "time": "0.254003625"
+    },
+    {
+      "classname": "AuditCoreTests.F22FileImportTests",
+      "name": "actualImageTypeSurvivesMisleadingProviderName(_:)",
+      "time": "0.313775042"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F22.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F22.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

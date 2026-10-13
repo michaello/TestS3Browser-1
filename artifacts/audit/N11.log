@@ -1,0 +1,18 @@
+Building for debugging...
+[Computing dependencies]
+[1 / 1]
+Build complete! (0.76 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N11InvalidImageUploadTests started.
+􀟈  Test imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test nonImagesAreRejectedBeforeUpload() started.
+􀟈  Test case passing 1 argument type → public.png to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → public.jpeg to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → com.compuserve.gif to imageBytesAndActualTypeArePreserved(_:) started.
+􀟈  Test case passing 1 argument type → public.heic to imageBytesAndActualTypeArePreserved(_:) started.
+􁁛  Test nonImagesAreRejectedBeforeUpload() passed after 0.280 seconds.
+􁁛  Test imageBytesAndActualTypeArePreserved(_:) with 4 test cases passed after 2.239 seconds.
+􁁛  Suite N11InvalidImageUploadTests passed after 2.240 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 2.240 seconds.

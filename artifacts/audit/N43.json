@@ -1,0 +1,24 @@
+{
+  "id": "N43",
+  "expected_behavior": "App/share/widget required-reason manifests declare actual API usage and are included in their resource targets; local checks validate structure/membership and E01 validates built resources.",
+  "passed": true,
+  "source_fingerprint": "2dc764a93b465c9ae435f77c5941d39b7621b3ef6548894a335b6b92df438190",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:57.923946+00:00",
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/scripts/check_extension_resources.py",
+    "--id",
+    "N43"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    "TestS3Browser: one valid own manifest in Resources; direct API categories and reviewed reasons agree",
+    "DumpShareExtension: one valid own manifest in Resources; direct API categories and reviewed reasons agree",
+    "TestS3BrowserWidget: one valid own manifest in Resources; direct API categories and reviewed reasons agree"
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N43.log",
+  "test_report_path": null,
+  "scope": "Local plist/resource semantics and direct app-owned Swift API inventory only. E01 separately verifies real built app/share/widget bundles and SDK manifests. This does not claim App Store approval or host share-sheet runtime behavior."
+}

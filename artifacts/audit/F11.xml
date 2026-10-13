@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.026950917">
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="speculativePolicy()" time="0.026614167" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="bodyCeilingAndCancellation()" time="0.003645958" />
+    <testcase classname="AuditCoreTests.F11MediaTransferTests" name="singleFlight()" time="0.012015416" />
+  </testsuite>
+</testsuites>

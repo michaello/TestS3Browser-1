@@ -1,0 +1,33 @@
+{
+  "id": "F21",
+  "expected_behavior": "Two image uploads with the same injected second generate distinct keys and preserve both objects in the fake S3 store.",
+  "passed": true,
+  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:26:48.275611+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F21UniqueUploadKeyTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 1,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F21UniqueUploadKeyTests",
+      "name": "sameSecondUploadsPreserveBothObjects()",
+      "time": "0.018930875"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F21.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

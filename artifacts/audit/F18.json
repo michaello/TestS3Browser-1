@@ -1,0 +1,38 @@
+{
+  "id": "F18",
+  "expected_behavior": "Unconverted exports preserve original byte hashes, extension and MIME type, including animated/metadata-bearing formats; requested conversions and Data URLs declare their actual output format.",
+  "passed": true,
+  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:43.169460+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F18OriginalExportTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F18OriginalExportTests",
+      "name": "truthfulDataURLs(fixture:)",
+      "time": "0.002319875"
+    },
+    {
+      "classname": "AuditCoreTests.F18OriginalExportTests",
+      "name": "originalGIF()",
+      "time": "0.013808833"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F18.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

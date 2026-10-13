@@ -1,0 +1,19 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.35 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N31CopyPropertyTests started.
+􀟈  Test multipartTagValuesAreEncodedWithoutChangingBytes() started.
+􀟈  Test customAndPublicGrantsRemainExplicitForBothCopyModes() started.
+􀟈  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() started.
+􀟈  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() started.
+􀟈  Test crossOwnerCopyRetainsSourceOwnersGrant() started.
+􁁛  Test multipartTagValuesAreEncodedWithoutChangingBytes() passed after 0.001 seconds.
+􁁛  Test ownerOnlyPermissionUsesCompatibleExplicitCannedACL() passed after 0.001 seconds.
+􁁛  Test crossOwnerCopyRetainsSourceOwnersGrant() passed after 0.001 seconds.
+􁁛  Test customAndPublicGrantsRemainExplicitForBothCopyModes() passed after 0.001 seconds.
+􁁛  Test unknownOwnersOrUnsafeGrantsFailBeforeMutation() passed after 0.001 seconds.
+􁁛  Suite N31CopyPropertyTests passed after 0.001 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.001 seconds.

@@ -1,0 +1,43 @@
+{
+  "id": "N06",
+  "expected_behavior": "Batch downloads enforce the configured active-transfer bound and file-backed results, with owned cancellation rather than one full-Data task per selected object.",
+  "passed": true,
+  "source_fingerprint": "81971d22abefac3c0d732467a77defa4dda463de2b99213b0969b8850b4b4b8a",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:14:08.780871+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N06BoundedBatchExportTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N06.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N06BoundedBatchExportTests",
+      "name": "cancellingOwnedOperationStopsWorkersAndCleansPreparedFiles()",
+      "time": "0.317879"
+    },
+    {
+      "classname": "AuditCoreTests.N06BoundedBatchExportTests",
+      "name": "largeSelectionUsesFourFileBackedWorkersAndCollisionSafePaths()",
+      "time": "1.441064333"
+    },
+    {
+      "classname": "AuditCoreTests.N06BoundedBatchExportTests",
+      "name": "loaderReceivesCapturedAccountBucketKeyAndRevision()",
+      "time": "0.236597625"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N06.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N06.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

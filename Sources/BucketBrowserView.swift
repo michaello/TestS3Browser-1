@@ -3,7 +3,7 @@ import PhotosUI
 import UniformTypeIdentifiers
 import os.log
 
-private let starStore = StarStore.shared
+@MainActor private let starStore = StarStore.shared
 
 enum SortOption: String, CaseIterable {
     case dateNewest = "Date (Newest)"
@@ -35,6 +35,7 @@ struct BucketBrowserView: View {
     @State private var showPhotoPicker = false
     @State private var showFilePicker = false
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var uploadInputTask: Task<Void, Never>?
     @State private var isUploading = false
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult? = nil
@@ -48,6 +49,8 @@ struct BucketBrowserView: View {
     @State private var moveCopyMode: PrefixPickerSheet.Mode = .copy
     @State private var showMoveCopyError = false
     @State private var moveCopyErrorMessage = ""
+    @State private var transferConflict: ObjectTransferConflict?
+    @State private var pendingMoveCopyRequest: ObjectTransferRequest?
     @State private var showDeleteError = false
     @State private var deleteErrorMessage = ""
 
@@ -71,6 +74,8 @@ struct BucketBrowserView: View {
     @State private var showBatchDownloadShare = false
     @State private var batchDownloadError: String? = nil
     @State private var showBatchDownloadError = false
+    @State private var batchExport: BatchFileExport?
+    @State private var batchExportTask: Task<Void, Never>?
 
     enum UploadResult {
         case success(String)
@@ -220,8 +225,7 @@ struct BucketBrowserView: View {
                 guard let file = renameTarget else { return }
                 let newName = renameText.trimmingCharacters(in: .whitespaces)
                 guard !newName.isEmpty else { renameTarget = nil; showRenameAlert = false; return }
-                let dir = (file.key as NSString).deletingLastPathComponent
-                let newKey = dir.isEmpty ? newName : "\(dir)/\(newName)"
+                let newKey = S3TransferKeys.parentPrefix(of: file.key) + newName
                 Task { await renameFile(file, to: newKey) }
             }
             Button("Cancel", role: .cancel) { renameTarget = nil; showRenameAlert = false }
@@ -231,10 +235,10 @@ struct BucketBrowserView: View {
         .alert("Rename Failed", isPresented: $showRenameError) {
             Button("OK", role: .cancel) {}
         } message: { Text(renameErrorMessage) }
-        .sheet(item: $moveCopyTarget) { object in
+        .sheet(item: $moveCopyTarget, onDismiss: performPendingMoveCopy) { object in
             PrefixPickerSheet(
                 s3Service: s3Service,
-                sourceBucket: s3Service.currentBucket,
+                sourceBucket: object.bucket ?? s3Service.currentBucket,
                 sourceObject: object,
                 mode: moveCopyMode
             ) { destPrefix in
@@ -244,6 +248,9 @@ struct BucketBrowserView: View {
         .alert("Operation Failed", isPresented: $showMoveCopyError) {
             Button("OK", role: .cancel) {}
         } message: { Text(moveCopyErrorMessage) }
+        .objectTransferConfirmation(conflict: $transferConflict) { request, approval in
+            await performTransfer(request, approval: approval)
+        }
         .deleteErrorAlert(isPresented: $showDeleteError, message: deleteErrorMessage)
         .confirmationDialog(bulkDeleteTitle, isPresented: $showBulkDeleteConfirm, titleVisibility: .visible) {
             Button(bulkDeleteButtonLabel, role: .destructive) { Task { await bulkDelete() } }
@@ -259,7 +266,7 @@ struct BucketBrowserView: View {
                 Task {
                     do {
                         try await s3Service.createFolder(named: name, prefix: s3Service.currentPrefix)
-                        await refreshFiles()
+                        await refreshFiles(force: true)
                     } catch {
                         newFolderErrorMessage = error.localizedDescription
                         showNewFolderError = true
@@ -285,7 +292,9 @@ struct BucketBrowserView: View {
             mainContent
                 .onDrop(of: [.fileURL, .data], isTargeted: isConfigured ? $isDragTargeted : .constant(false)) { providers in
                     guard isConfigured else { return false }
-                    Task { await handleDrop(providers: providers) }
+                    let context = UploadContext(service: s3Service)
+                    uploadInputTask?.cancel()
+                    uploadInputTask = Task { await handleDrop(providers: providers, context: context) }
                     return true
                 }
                 .overlay { dragOverlay }
@@ -300,18 +309,10 @@ struct BucketBrowserView: View {
             guard newPhase == .active, isConfigured else { return }
             Task { await refreshFiles() }
         }
-        .onChange(of: config) { _, newConfig in
-            Task {
-                try? await s3Service.updateConfig(newConfig)
-                savedPrefix = ""
-                savedBucket = ""
-                s3Service.currentPrefix = ""
-                s3Service.currentBucket = newConfig.bucketName
-                do { try await s3Service.fetchAvailableBuckets() } catch {
-                    logger.error("Failed to fetch buckets: \(error.localizedDescription)")
-                }
-                await refreshFiles()
-            }
+        .onChange(of: s3Service.config) { _, _ in
+            savedPrefix = s3Service.currentPrefix
+            savedBucket = s3Service.currentBucket
+            Task { await refreshFiles() }
         }
         .onChange(of: s3Service.currentPrefix) { _, _ in
             isSelecting = false
@@ -321,9 +322,19 @@ struct BucketBrowserView: View {
             isSelecting = false
             selectedKeys.removeAll()
         }
+        .onDisappear {
+            uploadInputTask?.cancel()
+            let task = batchExportTask, owner = batchExport
+            task?.cancel()
+            if !showBatchDownloadShare {
+                Task { await task?.value; await owner?.close() }
+            }
+        }
         .onChange(of: selectedPhoto) { _, item in
             guard let item else { return }
-            Task { await handlePhotoPickerItem(item) }
+            let context = UploadContext(service: s3Service)
+            uploadInputTask?.cancel()
+            uploadInputTask = Task { await handlePhotoPickerItem(item, context: context) }
         }
         .searchable(text: $searchText, prompt: searchPrompt)
         .safeAreaInset(edge: .bottom) { bottomStatusBar }
@@ -338,7 +349,9 @@ struct BucketBrowserView: View {
             allowedContentTypes: [.item],
             allowsMultipleSelection: false
         ) { result in
-            Task { await handleFileImport(result) }
+            let context = UploadContext(service: s3Service)
+            uploadInputTask?.cancel()
+            uploadInputTask = Task { await handleFileImport(result, context: context) }
         }
     }
 
@@ -430,7 +443,7 @@ struct BucketBrowserView: View {
         if !selectedKeys.isEmpty {
             HStack(spacing: 12) {
                 Button {
-                    Task { await batchDownload() }
+                    startBatchDownload()
                 } label: {
                     Label("Download (\(selectedKeys.count))", systemImage: "arrow.down.to.line")
                 }
@@ -496,7 +509,7 @@ struct BucketBrowserView: View {
                         switch result {
                         case .success(let key):
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                            Text(URL(string: key)?.lastPathComponent ?? key)
+                            Text(S3TransferKeys.fileName(of: key))
                                 .font(.subheadline)
                                 .lineLimit(1)
                         case .failure(let msg):
@@ -526,6 +539,21 @@ struct BucketBrowserView: View {
     private var bottomStatusBar: some View {
         if isBatchDownloading {
             batchDownloadStatusBar
+        } else if let owner = batchExport, !owner.failures.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(owner.summary).font(.caption).fixedSize(horizontal: false, vertical: true)
+                HStack {
+                    Button("Retry Failed") { startBatchDownload(retry: true) }
+                    if !owner.urls.isEmpty {
+                        Button("Share \(owner.urls.count) Files") {
+                            batchDownloadURLs = owner.urls
+                            showBatchDownloadShare = true
+                        }
+                    }
+                    Button("Dismiss") { Task { await owner.close() } }
+                }
+            }
+            .padding()
         } else if isUploading || uploadResult != nil {
             uploadStatusBar
         }
@@ -534,11 +562,17 @@ struct BucketBrowserView: View {
     @ViewBuilder
     private var batchDownloadShareContent: some View {
         if let urls = batchDownloadURLs {
-            MultiFileActivityView(urls: urls)
+            MultiFileActivityView(urls: urls, onDismiss: {
+                let owner = batchExport
+                showBatchDownloadShare = false
+                Task { await owner?.close() }
+            })
         }
     }
 
     private func onBatchDownloadShareDismiss() {
+        let owner = batchExport
+        Task { await owner?.close() }
         batchDownloadURLs = nil
         isSelecting = false
         selectedKeys.removeAll()
@@ -548,11 +582,14 @@ struct BucketBrowserView: View {
         VStack(spacing: 0) {
             Divider()
             VStack(spacing: 6) {
-                ProgressView(value: batchDownloadTotal > 0 ? Double(batchDownloadProgress) / Double(batchDownloadTotal) : 0)
+                let completed = batchExport?.completed ?? 0
+                let total = batchExport?.total ?? 0
+                ProgressView(value: total > 0 ? Double(completed) / Double(total) : 0)
                     .progressViewStyle(.linear)
-                Text("Downloading \(batchDownloadProgress) / \(batchDownloadTotal)...")
+                Text("Downloading \(completed) / \(total)...")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                Button("Cancel") { batchExportTask?.cancel() }
             }
             .padding(.horizontal)
             .padding(.vertical, 10)
@@ -562,166 +599,143 @@ struct BucketBrowserView: View {
 
     // MARK: - Batch download
 
-    private func batchDownload() async {
-        let keys = Array(selectedKeys)
+    private func startBatchDownload(retry: Bool = false) {
+        guard !isBatchDownloading else { return }
+        let generation = s3Service.session.generation
         let bucket = s3Service.currentBucket
-        await MainActor.run {
-            isBatchDownloading = true
-            batchDownloadProgress = 0
-            batchDownloadTotal = keys.count
+        let listedObjects = s3Service.items.compactMap { item -> S3Object? in
+            if case .file(let object) = item { return object }
+            return nil
         }
-
-        let cacheDir = FileManager.default.temporaryDirectory.appendingPathComponent("s3cache")
-        try? FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
-
-        var downloadedURLs: [URL] = []
-        var failedCount = 0
-
-        await withTaskGroup(of: (URL?, String).self) { group in
-            for key in keys {
-                group.addTask {
-                    do {
-                        let data = try await self.s3Service.downloadObject(key: key, bucket: bucket)
-                        let sanitized = key.replacingOccurrences(of: "/", with: "_")
-                        let dest = cacheDir.appendingPathComponent(sanitized)
-                        try data.write(to: dest)
-                        return (dest, key)
-                    } catch {
-                        self.logger.error("Batch download failed for \(key): \(error.localizedDescription)")
-                        return (nil, key)
-                    }
+        let items = selectedKeys.map { key in
+            let object = listedObjects.first { $0.key.utf8.elementsEqual(key.utf8) } ??
+                S3Object(key: key, size: -1, lastModified: .distantPast, etag: nil, bucket: bucket)
+            let identity = MediaObjectIdentity(account: s3Service.session.configuration.account,
+                bucket: object.bucket ?? bucket, key: key, etag: object.etag, version: nil)
+            return BatchExportItem(identity: identity, bytes: object.size)
+        }
+        let owner: BatchFileExport
+        if retry, let existing = batchExport { owner = existing }
+        else {
+            owner = BatchFileExport { item in
+                guard s3Service.session.isCurrent(generation) else { throw CancellationError() }
+                let object = S3Object(key: item.identity.key, size: item.bytes, lastModified: .distantPast,
+                    etag: item.identity.etag, bucket: item.identity.bucket)
+                let lease = try await s3Service.downloadOriginalFile(for: object)
+                guard s3Service.session.isCurrent(generation) else {
+                    await MediaOriginalStore.shared.release(lease)
+                    throw CancellationError()
                 }
-            }
-            for await (url, _) in group {
-                await MainActor.run { batchDownloadProgress += 1 }
-                if let url {
-                    downloadedURLs.append(url)
-                } else {
-                    failedCount += 1
-                }
+                return lease
             }
         }
-
-        await MainActor.run {
-            isBatchDownloading = false
-            if downloadedURLs.isEmpty {
-                batchDownloadError = "All \(failedCount) file\(failedCount == 1 ? "" : "s") failed to download."
+        let previous = batchExport
+        batchExport = owner
+        isBatchDownloading = true
+        batchExportTask = Task {
+            if !retry { await previous?.close() }
+            defer { isBatchDownloading = false }
+            do {
+                if retry { try await owner.retryFailures() }
+                else { try await owner.prepare(items) }
+                guard s3Service.session.isCurrent(generation) else { await owner.close(); return }
+                if owner.failures.isEmpty, !owner.urls.isEmpty {
+                    batchDownloadURLs = owner.urls
+                    showBatchDownloadShare = true
+                } else if owner.urls.isEmpty {
+                    batchDownloadError = owner.summary
+                    showBatchDownloadError = true
+                }
+            } catch is CancellationError { await owner.close() }
+            catch {
+                await owner.close()
+                batchDownloadError = error.localizedDescription
                 showBatchDownloadError = true
-            } else {
-                batchDownloadURLs = downloadedURLs
-                showBatchDownloadShare = true
-                if failedCount > 0 {
-                    logger.error("Batch download: \(failedCount) file(s) failed, \(downloadedURLs.count) succeeded")
-                }
             }
         }
     }
 
     // MARK: - Upload handlers
 
-    private func handlePhotoPickerItem(_ item: PhotosPickerItem) async {
-        defer { Task { @MainActor in selectedPhoto = nil } }
+    private func handlePhotoPickerItem(_ item: PhotosPickerItem, context: UploadContext) async {
+        defer { selectedPhoto = nil }
+        await prepareUpload(context: context) {
+            try await item.loadTransferable(type: ImportedUploadFile.self)?.payload
+        }
+    }
+
+    private func handleFileImport(_ result: Result<[URL], Error>, context: UploadContext) async {
+        await prepareUpload(context: context) {
+            let urls = try result.get()
+            guard let url = urls.first else { return nil }
+            let accessing = url.startAccessingSecurityScopedResource()
+            defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+            return try await ImportedUploadFile.importFile(at: url).payload
+        }
+    }
+
+    private func prepareUpload(context: UploadContext,
+        load: () async throws -> PreparedUploadPayload?) async {
         do {
-            guard let data = try await item.loadTransferable(type: Data.self) else { return }
-            let base = (item.itemIdentifier ?? "photo")
-                .components(separatedBy: "/").last ?? "photo"
-            let filename = base.hasSuffix(".jpg") || base.hasSuffix(".png") ? base : base + ".jpg"
-            let contentType = filename.hasSuffix(".png") ? "image/png" : "image/jpeg"
-            await upload(data: data, filename: filename, contentType: contentType)
+            try await UploadPreparation.perform(destination: context.destination, load: load,
+                isCurrentAccount: { context.matches(s3Service) },
+                send: { payload, _ in try await upload(payload, context: context) })
+        } catch is CancellationError {
+            // Input task ownership ended before a new upload could start.
         } catch {
-            logger.error("Photo picker load failed: \(error.localizedDescription)")
-            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+            logger.error("Upload preparation failed: \(error.localizedDescription)")
+            uploadResult = .failure(error.localizedDescription)
         }
     }
 
-    private func handleFileImport(_ result: Result<[URL], Error>) async {
-        switch result {
-        case .failure(let error):
-            logger.error("File import failed: \(error.localizedDescription)")
-            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
-        case .success(let urls):
-            guard let url = urls.first else { return }
-            do {
-                let accessing = url.startAccessingSecurityScopedResource()
-                defer { if accessing { url.stopAccessingSecurityScopedResource() } }
-                let data = try Data(contentsOf: url)
-                let filename = url.lastPathComponent
-                let contentType = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType
-                    ?? "application/octet-stream"
-                await upload(data: data, filename: filename, contentType: contentType)
-            } catch {
-                logger.error("File read failed: \(error.localizedDescription)")
-                await MainActor.run { uploadResult = .failure(error.localizedDescription) }
-            }
-        }
+    private func upload(_ payload: PreparedUploadPayload, context: UploadContext) async throws {
+        let key = context.destination.key(for: payload.filename)
+        isUploading = true
+        uploadProgress = 0
+        uploadResult = nil
+        defer { isUploading = false }
+        try await UploadQueueManager.shared.upload(payload, key: key, context: context, using: s3Service,
+            onProgress: { fraction in uploadProgress = fraction })
+        logger.info("Uploaded \(key) to \(context.destination.bucket)")
+        uploadResult = .success(key)
+        if context.matches(s3Service) { await refreshFiles(force: true) }
     }
 
-    private func handleDrop(providers: [NSItemProvider]) async {
-        await withTaskGroup(of: Void.self) { group in
-            for provider in providers {
-                group.addTask {
-                    // Prefer a file URL so we can read large files without loading all bytes at once.
-                    if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                        await withCheckedContinuation { continuation in
-                            provider.loadFileRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { url, error in
-                                guard let url, error == nil else { continuation.resume(); return }
+    private func handleDrop(providers: [NSItemProvider], context: UploadContext) async {
+        // Each provider is awaited under the original captured destination and owned task.
+        for provider in providers {
+            if Task.isCancelled { return }
+            await prepareUpload(context: context) {
+                if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+                    return try await withCheckedThrowingContinuation { continuation in
+                        provider.loadFileRepresentation(forTypeIdentifier: UTType.fileURL.identifier) { url, error in
+                            do {
+                                if let error { throw error }
+                                guard let url else { throw UploadPreparationError.unavailableRepresentation }
                                 let accessing = url.startAccessingSecurityScopedResource()
                                 defer { if accessing { url.stopAccessingSecurityScopedResource() } }
-                                guard let data = try? Data(contentsOf: url) else { continuation.resume(); return }
-                                let filename = url.lastPathComponent
-                                let contentType = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType
-                                    ?? "application/octet-stream"
-                                Task { await self.upload(data: data, filename: filename, contentType: contentType) }
-                                continuation.resume()
-                            }
-                        }
-                    } else {
-                        // Fallback: load raw data.
-                        let types = provider.registeredTypeIdentifiers
-                        guard let typeID = types.first else { return }
-                        await withCheckedContinuation { continuation in
-                            provider.loadDataRepresentation(forTypeIdentifier: typeID) { data, error in
-                                guard let data, error == nil else { continuation.resume(); return }
-                                let filename = provider.suggestedName ?? "dropped-file"
-                                let contentType = UTType(typeID)?.preferredMIMEType ?? "application/octet-stream"
-                                Task { await self.upload(data: data, filename: filename, contentType: contentType) }
-                                continuation.resume()
-                            }
+                                let descriptor = UploadFileDescriptor(filenameExtension: url.pathExtension,
+                                    contentType: UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream")
+                                let owned = try OwnedUploadInputs.copyWhileAvailable(url, descriptor: descriptor,
+                                    filename: url.lastPathComponent)
+                                continuation.resume(returning: owned.payload)
+                            } catch { continuation.resume(throwing: error) }
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private func upload(data: Data, filename: String, contentType: String) async {
-        let prefix = s3Service.currentPrefix
-        let key = prefix.isEmpty ? filename : "\(prefix)\(filename)"
-        await MainActor.run {
-            isUploading = true
-            uploadProgress = 0
-            uploadResult = nil
-        }
-        do {
-            try await s3Service.uploadObject(
-                data: data,
-                key: key,
-                contentType: contentType,
-                onProgress: { fraction in
-                    self.uploadProgress = fraction
+                guard let type = provider.registeredTypeIdentifiers.first else { return nil }
+                return try await withCheckedThrowingContinuation { continuation in
+                    provider.loadDataRepresentation(forTypeIdentifier: type) { data, error in
+                        if let error { continuation.resume(throwing: error); return }
+                        guard let data else {
+                            continuation.resume(throwing: UploadPreparationError.unavailableRepresentation)
+                            return
+                        }
+                        continuation.resume(returning: PreparedUploadPayload(data: data,
+                            filename: provider.suggestedName ?? "dropped-file",
+                            contentType: UTType(type)?.preferredMIMEType ?? "application/octet-stream"))
+                    }
                 }
-            )
-            logger.info("Uploaded \(key) to \(s3Service.currentBucket)")
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .success(key)
-            }
-            await refreshFiles()
-        } catch {
-            logger.error("Upload failed for \(key): \(error.localizedDescription)")
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .failure(error.localizedDescription)
             }
         }
     }
@@ -736,16 +750,16 @@ struct BucketBrowserView: View {
                 }
             }
 
-            if object.fileType == .video, let url = s3Service.getPublicURL(for: object.key) {
+            if object.fileType == .video, let url = s3Service.getPublicURL(for: object.key, bucket: object.bucket) {
                 ShareLink(item: url) {
                     Label("Share Link", systemImage: "square.and.arrow.up")
                 }
             }
 
             Button {
-                starStore.toggle(object.key)
+                starStore.toggle(s3Service.annotationIdentity(for: object))
             } label: {
-                Label(starStore.isStarred(object.key) ? "Unstar" : "Star", systemImage: starStore.isStarred(object.key) ? "star.slash" : "star")
+                Label(starStore.isStarred(s3Service.annotationIdentity(for: object)) ? "Unstar" : "Star", systemImage: starStore.isStarred(s3Service.annotationIdentity(for: object)) ? "star.slash" : "star")
             }
 
             Button {
@@ -786,7 +800,7 @@ struct BucketBrowserView: View {
                 systemImage: "gear",
                 description: Text("Go to Settings to configure your S3 bucket and credentials")
             )
-        } else if s3Service.isLoading {
+        } else if s3Service.isLoading && s3Service.items.isEmpty {
             VStack(spacing: 8) {
                 ProgressView()
                 Text(s3Service.loadingStatus.isEmpty ? "Loading..." : s3Service.loadingStatus)
@@ -794,14 +808,14 @@ struct BucketBrowserView: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if let error = s3Service.error {
+        } else if let error = s3Service.error, s3Service.items.isEmpty {
             ContentUnavailableView {
                 Label("Couldn't load files", systemImage: "exclamationmark.triangle")
             } description: {
                 Text(error)
             } actions: {
                 Button("Retry") {
-                    Task { await refreshFiles() }
+                    Task { await refreshFiles(force: true) }
                 }
             }
         } else if s3Service.items.isEmpty {
@@ -813,7 +827,7 @@ struct BucketBrowserView: View {
                 )
                 .frame(maxWidth: .infinity, minHeight: 300)
             }
-            .refreshable { await refreshFiles() }
+            .refreshable { await refreshFiles(force: true) }
         } else if !searchText.isEmpty && sortedItems.isEmpty {
             ContentUnavailableView.search(text: searchText)
         } else if viewStyle == .grid {
@@ -879,7 +893,7 @@ struct BucketBrowserView: View {
                 }
             }
         }
-        .refreshable { await refreshFiles() }
+        .refreshable { await refreshFiles(force: true) }
     }
 
     private var gridContent: some View {
@@ -930,7 +944,7 @@ struct BucketBrowserView: View {
             }
             .padding(10)
         }
-        .refreshable { await refreshFiles() }
+        .refreshable { await refreshFiles(force: true) }
     }
 
     private var sortedItems: [S3Item] {
@@ -989,35 +1003,21 @@ struct BucketBrowserView: View {
 
     private func initialLoad() async {
         guard isConfigured else { return }
-        logger.info("Task started - bucket: \(config.bucketName)")
-        do {
-            try await s3Service.fetchAvailableBuckets()
-            logger.info("Successfully fetched \(s3Service.availableBuckets.count) buckets")
-        } catch {
-            logger.error("Failed to fetch buckets: \(error.localizedDescription)")
-        }
-        if !savedBucket.isEmpty {
-            do {
-                try await s3Service.switchBucket(savedBucket)
-            } catch {
-                logger.error("Failed to switch to saved bucket: \(error.localizedDescription)")
-            }
-        } else {
-            s3Service.currentBucket = config.bucketName
-        }
-        s3Service.currentPrefix = savedPrefix
-        await refreshFiles()
-        logger.info("Task completed - found \(s3Service.items.count) items")
+        let bucket = savedBucket.isEmpty ? config.bucketName : savedBucket
+        let prefix = savedBucket.isEmpty && savedPrefix.isEmpty ? s3Service.currentPrefix : savedPrefix
+        await s3Service.session.restoreBrowse(bucket: bucket, prefix: prefix,
+            listing: { await refreshFiles() },
+            discovery: {
+                do { try await s3Service.fetchAvailableBuckets() }
+                catch is CancellationError {}
+                catch { logger.error("Failed to fetch buckets: \(error.localizedDescription)") }
+            })
     }
 
-    private func refreshFiles() async {
-        guard !s3Service.isLoading else {
-            logger.debug("Already loading, skipping refresh")
-            return
-        }
+    private func refreshFiles(force: Bool = false) async {
         do {
             logger.debug("Listing objects for bucket: \(s3Service.currentBucket), prefix: \(s3Service.currentPrefix.isEmpty ? "(root)" : s3Service.currentPrefix)")
-            try await s3Service.listObjects()
+            try await s3Service.listObjects(force: force)
             logger.info("Successfully listed \(s3Service.items.count) items")
         } catch {
             logger.error("Failed to list objects: \(error.localizedDescription)")
@@ -1073,41 +1073,42 @@ struct BucketBrowserView: View {
     }
 
     private func performMoveCopy(object: S3Object, destPrefix: String) async {
-        let filename = object.fileName
-        let destKey = destPrefix.isEmpty ? filename : "\(destPrefix)\(filename)"
-        let bucket = s3Service.currentBucket
-        do {
-            try await s3Service.copyObject(
-                key: object.key,
-                to: destKey,
-                sourceBucket: bucket,
-                destBucket: bucket
-            )
-            if moveCopyMode == .move {
-                try await s3Service.deleteObject(key: object.key, bucket: bucket)
-            }
-            logger.info("\(moveCopyMode == .move ? "Moved" : "Copied") \(object.key) -> \(destKey)")
-            await refreshFiles()
-        } catch {
-            logger.error("Move/copy failed for \(object.key): \(error.localizedDescription)")
-            await MainActor.run {
-                moveCopyErrorMessage = error.localizedDescription
-                showMoveCopyError = true
-            }
-        }
+        let destination = destPrefix + S3TransferKeys.fileName(of: object.key)
+        let bucket = object.bucket ?? s3Service.currentBucket
+        let request = s3Service.makeObjectTransferRequest(kind: moveCopyMode == .move ? .move : .copy,
+            key: object.key, to: destination, sourceBucket: bucket, destBucket: bucket)
+        pendingMoveCopyRequest = request
+    }
+
+    @MainActor
+    private func performPendingMoveCopy() {
+        guard let request = pendingMoveCopyRequest else { return }
+        pendingMoveCopyRequest = nil
+        Task { await performTransfer(request) }
     }
 
     private func renameFile(_ file: S3Object, to newKey: String) async {
         renameTarget = nil
+        let request = s3Service.makeObjectTransferRequest(kind: .rename,
+            key: file.key, to: newKey, sourceBucket: file.bucket)
+        await performTransfer(request)
+    }
+
+    @MainActor
+    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async {
         do {
-            try await s3Service.renameObject(key: file.key, to: newKey, bucket: file.bucket)
-            logger.info("Renamed \(file.key) -> \(newKey)")
+            try await s3Service.performObjectTransfer(request, approval: approval)
             await refreshFiles()
+        } catch ObjectTransferError.confirmationRequired(let conflict) {
+            transferConflict = conflict
         } catch {
-            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
-            await MainActor.run {
-                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
+            logger.error("Object transfer failed: \(error.localizedDescription)")
+            if request.kind == .rename {
+                renameErrorMessage = error.localizedDescription
                 showRenameError = true
+            } else {
+                moveCopyErrorMessage = error.localizedDescription
+                showMoveCopyError = true
             }
         }
     }
@@ -1123,16 +1124,7 @@ struct BucketBrowserView: View {
                     }
                 }
             case .image:
-                // Try cache first
-                var image = await ImageCacheActor.shared.getFullImage(for: object.key)
-
-                // If not in cache, download it
-                if image == nil {
-                    let data = try await s3Service.downloadObject(key: object.key)
-                    image = await ImageCacheActor.shared.cacheImage(from: data, for: object.key)
-                }
-
-                if let image = image {
+                if let image = await ImageCacheActor.shared.loadDisplayImage(for: object, using: s3Service) {
                     await MainActor.run {
                         // Set both image and PNG data for better compatibility
                         UIPasteboard.general.image = image
@@ -1143,7 +1135,7 @@ struct BucketBrowserView: View {
                 }
             case .video:
                 // Copy public URL for videos
-                if let url = s3Service.getPublicURL(for: object.key) {
+                if let url = s3Service.getPublicURL(for: object.key, bucket: object.bucket) {
                     await MainActor.run {
                         UIPasteboard.general.string = url.absoluteString
                     }
@@ -1197,7 +1189,7 @@ struct FileRow: View {
                     }
                 }
 
-                if starStore.isStarred(object.key) {
+                if starStore.isStarred(s3Service.annotationIdentity(for: object)) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.yellow)
@@ -1340,7 +1332,7 @@ struct BrowserGridItem: View {
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(8)
 
-                if case .file(let obj) = item, starStore.isStarred(obj.key) {
+                if case .file(let obj) = item, starStore.isStarred(s3Service.annotationIdentity(for: obj)) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.yellow)

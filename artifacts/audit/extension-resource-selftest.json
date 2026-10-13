@@ -1,0 +1,24 @@
+{
+  "assertions": [
+    "Actual current project, all three manifests and production activation plist pass",
+    "Rejected missing TestS3Browser resource membership",
+    "Rejected duplicate TestS3Browser manifest resource",
+    "Rejected missing DumpShareExtension resource membership",
+    "Rejected duplicate DumpShareExtension manifest resource",
+    "Rejected missing TestS3BrowserWidget resource membership",
+    "Rejected duplicate TestS3BrowserWidget manifest resource",
+    "Rejected invalid required reason for TestS3Browser",
+    "Rejected invalid required reason for DumpShareExtension",
+    "Rejected invalid required reason for TestS3BrowserWidget",
+    "Rejected unsupported capability NSExtensionActivationSupportsFileWithMaxCount",
+    "Rejected unsupported capability NSExtensionActivationSupportsText",
+    "Rejected unsupported capability NSExtensionActivationSupportsWebURLWithMaxCount",
+    "Rejected always-true activation predicate",
+    "Confirmed committed baseline generic-file capability reproduces N49",
+    "Unknown ID exits 2"
+  ],
+  "all_passed": true,
+  "tested_script_sha256": "70d866ad2d9ec278335d7e4580ef65009144d566079d139809cf48cc0444fb0b",
+  "temporary_fixtures_cleaned": true,
+  "limits": "Local packaging semantics only; E01 owns built resources and real SDK integration"
+}

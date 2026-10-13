@@ -1,0 +1,9 @@
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/AppleKeychainCredentialStore.swift:63:35: warning: 'kSecUseAuthenticationUIFail' was deprecated in iOS 14.0: Instead of kSecUseAuthenticationUI, use kSecUseAuthenticationContext and set LAContext.interactionNotAllowed property [#DeprecatedDeclaration]
+61 |          kSecAttrAccount: reference, kSecAttrAccessGroup: accessGroup,
+62 |          kSecAttrSynchronizable: false, kSecUseDataProtectionKeychain: true,
+63 |          kSecUseAuthenticationUI: kSecUseAuthenticationUIFail]
+   |                                   `- warning: 'kSecUseAuthenticationUIFail' was deprecated in iOS 14.0: Instead of kSecUseAuthenticationUI, use kSecUseAuthenticationContext and set LAContext.interactionNotAllowed property [#DeprecatedDeclaration]
+64 |     }
+65 | #endif
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>

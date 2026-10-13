@@ -1,0 +1,19 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.69 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N04 bucket-qualified Shortcuts identities" started.
+􀟈  Test "Legacy keys use their explicit bucket or the configured default" started.
+􀟈  Test "An old-account entity and conflicting explicit overrides fail before transport" started.
+􀟈  Test "Missing bucket/key and malformed persisted references are rejected" started.
+􀟈  Test "List/search identities round-trip into download/delete in the object's bucket" started.
+􀟈  Test "Canonically equivalent Unicode and delimiter-like fields remain distinct exact S3 identities" started.
+􁁛  Test "Canonically equivalent Unicode and delimiter-like fields remain distinct exact S3 identities" passed after 0.001 seconds.
+􁁛  Test "An old-account entity and conflicting explicit overrides fail before transport" passed after 0.001 seconds.
+􁁛  Test "Missing bucket/key and malformed persisted references are rejected" passed after 0.001 seconds.
+􁁛  Test "List/search identities round-trip into download/delete in the object's bucket" passed after 0.001 seconds.
+􁁛  Test "Legacy keys use their explicit bucket or the configured default" passed after 0.001 seconds.
+􁁛  Suite "N04 bucket-qualified Shortcuts identities" passed after 0.001 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.001 seconds.

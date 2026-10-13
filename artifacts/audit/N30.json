@@ -1,0 +1,43 @@
+{
+  "id": "N30",
+  "expected_behavior": "CopySource encodes exact bucket/key bytes once, and versionId is query-encoded separately; literal percent-encoded-looking names and repeated slashes select the original object.",
+  "passed": true,
+  "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:49:57.188688+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N30CopySourceEncodingTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 3,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N30CopySourceEncodingTests",
+      "name": "keyAndVersionAreEncodedExactlyOnce()",
+      "time": "0.000303417"
+    },
+    {
+      "classname": "AuditCoreTests.N30CopySourceEncodingTests",
+      "name": "literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects()",
+      "time": "0.000209459"
+    },
+    {
+      "classname": "AuditCoreTests.N30CopySourceEncodingTests",
+      "name": "unicodeNormalizationDoesNotChangeCopyHeader()",
+      "time": "0.000200958"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N30.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

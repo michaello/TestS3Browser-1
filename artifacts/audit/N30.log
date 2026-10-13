@@ -1,0 +1,15 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.56 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N30CopySourceEncodingTests started.
+􀟈  Test keyAndVersionAreEncodedExactlyOnce() started.
+􀟈  Test literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects() started.
+􀟈  Test unicodeNormalizationDoesNotChangeCopyHeader() started.
+􁁛  Test unicodeNormalizationDoesNotChangeCopyHeader() passed after 0.001 seconds.
+􁁛  Test literalEncodedLookingKeyAndRealSlashSelectDifferentFixtureObjects() passed after 0.001 seconds.
+􁁛  Test keyAndVersionAreEncodedExactlyOnce() passed after 0.001 seconds.
+􁁛  Suite N30CopySourceEncodingTests passed after 0.001 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.

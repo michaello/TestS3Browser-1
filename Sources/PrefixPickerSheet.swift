@@ -135,14 +135,8 @@ struct PrefixPickerSheet: View {
     }
 
     private var isSameDestination: Bool {
-        currentPrefix == (sourceObject.bucket.map { _ in "" } ?? "") &&
-        sourceBucket == (sourceObject.bucket ?? sourceBucket) &&
-        currentPrefix == sourcePrefix
-    }
-
-    private var sourcePrefix: String {
-        let parts = sourceObject.key.split(separator: "/").dropLast()
-        return parts.isEmpty ? "" : parts.joined(separator: "/") + "/"
+        S3TransferKeys.isSameDestination(sourceBucket: sourceObject.bucket ?? sourceBucket,
+            sourceKey: sourceObject.key, destinationBucket: sourceBucket, destinationPrefix: currentPrefix)
     }
 
     private func loadFolders() async {

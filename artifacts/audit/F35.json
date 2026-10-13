@@ -1,0 +1,53 @@
+{
+  "id": "F35",
+  "expected_behavior": "Existing app upload producers use the finished queue with captured destinations, file-backed payloads, retry/cancel behavior and successful/cancelled payload cleanup; the feature is retained.",
+  "passed": true,
+  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:45:44.941993+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F35FileUploadQueueTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "cancelledQueuedJobNeverStartsAndOtherJobsContinue()",
+      "time": "0.033273208"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "fileInputIsOwnedCopyAndProducerDisappearanceDoesNotStopQueue()",
+      "time": "0.03318075"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "successfulUploadReadsOwnedFileAndCleansPayload()",
+      "time": "0.029898792"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "cancellationOfActiveUploadCleansOwnedFile()",
+      "time": "0.031316667"
+    },
+    {
+      "classname": "AuditCoreTests.F35FileUploadQueueTests",
+      "name": "failedUploadRetainsFileAndRetryUsesSameDestination()",
+      "time": "0.032917458"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F35.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

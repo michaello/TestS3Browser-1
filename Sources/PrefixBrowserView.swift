@@ -16,10 +16,11 @@ struct PrefixBrowserView: View {
     private let logger = Logger(subsystem: "com.s3browser", category: "PrefixBrowserView")
 
     @State private var items: [S3Item] = []
-    @State private var isLoading = false
-    @State private var isLoadingMore = false
-    @State private var nextToken: String? = nil
-    @State private var errorMessage: String? = nil
+    @State private var listingState = PagedListingState()
+    private var isLoading: Bool { listingState.isLoading }
+    private var isLoadingMore: Bool { listingState.isLoadingMore }
+    private var nextToken: String? { listingState.page?.nextToken }
+    private var errorMessage: String? { listingState.error }
     @State private var searchText = ""
     @State private var sortOption: PrefixSortOption = .nameAZ
     @AppStorage("prefixBrowserViewStyle") private var viewStyleRaw: String = "standard"
@@ -50,6 +51,8 @@ struct PrefixBrowserView: View {
     @State private var moveCopyMode: PrefixPickerSheet.Mode = .copy
     @State private var showMoveCopyError = false
     @State private var moveCopyErrorMessage = ""
+    @State private var transferConflict: ObjectTransferConflict?
+    @State private var pendingMoveCopyRequest: ObjectTransferRequest?
 
     // New folder state
     @State private var showNewFolderAlert = false
@@ -62,6 +65,7 @@ struct PrefixBrowserView: View {
     @State private var showFilePicker = false
     @State private var showPhotoPicker = false
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var uploadInputTask: Task<Void, Never>?
     @State private var isUploading = false
     @State private var uploadProgress: Double = 0
     @State private var uploadResult: UploadResult? = nil
@@ -138,7 +142,7 @@ struct PrefixBrowserView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                .refreshable { await load() }
+                .refreshable { await load(force: true) }
             } else {
                 List {
                     ForEach(displayedItems) { item in
@@ -162,7 +166,7 @@ struct PrefixBrowserView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                .refreshable { await load() }
+                .refreshable { await load(force: true) }
             }
         }
         .navigationTitle(title)
@@ -232,18 +236,23 @@ struct PrefixBrowserView: View {
             allowedContentTypes: [.item],
             allowsMultipleSelection: false
         ) { result in
-            Task { await handleFileImport(result) }
+            let context = UploadContext(service: s3Service, bucket: bucket, prefix: prefix)
+            uploadInputTask?.cancel()
+            uploadInputTask = Task { await handleFileImport(result, context: context) }
         }
+        .onDisappear { uploadInputTask?.cancel() }
         .onChange(of: selectedPhoto) { _, item in
             guard let item else { return }
-            Task { await handlePhotoPickerItem(item) }
+            let context = UploadContext(service: s3Service, bucket: bucket, prefix: prefix)
+            uploadInputTask?.cancel()
+            uploadInputTask = Task { await handlePhotoPickerItem(item, context: context) }
         }
         .alert("Delete Failed", isPresented: $showDeleteError) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(deleteErrorMessage)
         }
-        .sheet(item: $moveCopyTarget) { object in
+        .sheet(item: $moveCopyTarget, onDismiss: performPendingMoveCopy) { object in
             PrefixPickerSheet(
                 s3Service: s3Service,
                 sourceBucket: bucket,
@@ -278,7 +287,7 @@ struct PrefixBrowserView: View {
                 Task {
                     do {
                         try await s3Service.createFolder(named: name, prefix: prefix, bucket: bucket)
-                        await load()
+                        await load(force: true)
                     } catch {
                         newFolderErrorMessage = error.localizedDescription
                         showNewFolderError = true
@@ -315,6 +324,9 @@ struct PrefixBrowserView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(renameErrorMessage)
+        }
+        .objectTransferConfirmation(conflict: $transferConflict) { request, approval in
+            await performTransfer(request, approval: approval)
         }
         .task { await load() }
     }
@@ -480,23 +492,16 @@ struct PrefixBrowserView: View {
 
     private func renameFile(_ file: S3Object, to newKey: String) async {
         renameTarget = nil
-        do {
-            try await s3Service.renameObject(key: file.key, to: newKey, bucket: bucket)
-            logger.info("Renamed \(file.key) -> \(newKey)")
-            await load()
-        } catch {
-            logger.error("Rename failed for \(file.key): \(error.localizedDescription)")
-            await MainActor.run {
-                renameErrorMessage = "Could not rename \(file.fileName): \(error.localizedDescription)"
-                showRenameError = true
-            }
-        }
+        let request = s3Service.makeObjectTransferRequest(kind: .rename,
+            key: file.key, to: newKey, sourceBucket: bucket)
+        await performTransfer(request)
     }
 
     private func deleteItem(_ item: S3Item) async {
         guard case .file(let object) = item else { return }
         do {
             try await s3Service.deleteObject(key: object.key, bucket: bucket)
+            listingState.remove(bucket: bucket, key: object.key)
             items.removeAll { $0.id == item.id }
         } catch {
             logger.error("Delete failed for \(object.key): \(error.localizedDescription)")
@@ -527,6 +532,7 @@ struct PrefixBrowserView: View {
                     logger.error("Bulk delete failed for \(key): \(error.localizedDescription)")
                     failedKeys.append(key)
                 } else {
+                    listingState.remove(bucket: bucket, key: key)
                     items.removeAll { item in
                         if case .file(let o) = item { return o.key == key }
                         return false
@@ -548,24 +554,32 @@ struct PrefixBrowserView: View {
     // MARK: - Move / Copy
 
     private func performMoveCopy(object: S3Object, destPrefix: String) async {
-        let filename = object.fileName
-        let destKey = destPrefix.isEmpty ? filename : "\(destPrefix)\(filename)"
+        let destination = destPrefix + S3TransferKeys.fileName(of: object.key)
+        let request = s3Service.makeObjectTransferRequest(kind: moveCopyMode == .move ? .move : .copy,
+            key: object.key, to: destination, sourceBucket: bucket, destBucket: bucket)
+        pendingMoveCopyRequest = request
+    }
+
+    @MainActor
+    private func performPendingMoveCopy() {
+        guard let request = pendingMoveCopyRequest else { return }
+        pendingMoveCopyRequest = nil
+        Task { await performTransfer(request) }
+    }
+
+    @MainActor
+    private func performTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async {
         do {
-            try await s3Service.copyObject(
-                key: object.key,
-                to: destKey,
-                sourceBucket: bucket,
-                destBucket: bucket
-            )
-            if moveCopyMode == .move {
-                try await s3Service.deleteObject(key: object.key, bucket: bucket)
-                items.removeAll { $0.id == S3Item.file(object).id }
-            }
-            logger.info("\(moveCopyMode == .move ? "Moved" : "Copied") \(object.key) -> \(destKey)")
-            if moveCopyMode == .copy { await load() }
+            try await s3Service.performObjectTransfer(request, approval: approval)
+            await load(force: true)
+        } catch ObjectTransferError.confirmationRequired(let conflict) {
+            transferConflict = conflict
         } catch {
-            logger.error("Move/copy failed for \(object.key): \(error.localizedDescription)")
-            await MainActor.run {
+            logger.error("Object transfer failed: \(error.localizedDescription)")
+            if request.kind == .rename {
+                renameErrorMessage = error.localizedDescription
+                showRenameError = true
+            } else {
                 moveCopyErrorMessage = error.localizedDescription
                 showMoveCopyError = true
             }
@@ -678,106 +692,84 @@ struct PrefixBrowserView: View {
 
     // MARK: - Handlers
 
-    private func handlePhotoPickerItem(_ item: PhotosPickerItem) async {
-        defer { Task { @MainActor in selectedPhoto = nil } }
-        do {
-            guard let data = try await item.loadTransferable(type: Data.self) else { return }
-            // Infer a filename from the item identifier; fall back to a timestamp.
-            let base = (item.itemIdentifier ?? "photo")
-                .components(separatedBy: "/").last ?? "photo"
-            let filename = base.hasSuffix(".jpg") || base.hasSuffix(".png") ? base : base + ".jpg"
-            let contentType = filename.hasSuffix(".png") ? "image/png" : "image/jpeg"
-            await upload(data: data, filename: filename, contentType: contentType)
-        } catch {
-            logger.error("Photo picker load failed: \(error.localizedDescription)")
-            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
+    private func handlePhotoPickerItem(_ item: PhotosPickerItem, context: UploadContext) async {
+        defer { selectedPhoto = nil }
+        await prepareUpload(context: context) {
+            try await item.loadTransferable(type: ImportedUploadFile.self)?.payload
         }
     }
 
-    private func handleFileImport(_ result: Result<[URL], Error>) async {
-        switch result {
-        case .failure(let error):
-            logger.error("File import failed: \(error.localizedDescription)")
-            await MainActor.run { uploadResult = .failure(error.localizedDescription) }
-        case .success(let urls):
-            guard let url = urls.first else { return }
-            do {
-                // Security-scoped access is required for URLs returned by UIDocumentPickerViewController.
-                let accessing = url.startAccessingSecurityScopedResource()
-                defer { if accessing { url.stopAccessingSecurityScopedResource() } }
-                let data = try Data(contentsOf: url)
-                let filename = url.lastPathComponent
-                let contentType = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType
-                    ?? "application/octet-stream"
-                await upload(data: data, filename: filename, contentType: contentType)
-            } catch {
-                logger.error("File read failed: \(error.localizedDescription)")
-                await MainActor.run { uploadResult = .failure(error.localizedDescription) }
-            }
+    private func handleFileImport(_ result: Result<[URL], Error>, context: UploadContext) async {
+        await prepareUpload(context: context) {
+            let urls = try result.get()
+            guard let url = urls.first else { return nil }
+            let accessing = url.startAccessingSecurityScopedResource()
+            defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+            return try await ImportedUploadFile.importFile(at: url).payload
         }
     }
 
-    private func upload(data: Data, filename: String, contentType: String) async {
-        let key = prefix.isEmpty ? filename : "\(prefix)\(filename)"
-        await MainActor.run {
-            isUploading = true
-            uploadProgress = 0
-            uploadResult = nil
-        }
+    private func prepareUpload(context: UploadContext,
+        load: () async throws -> PreparedUploadPayload?) async {
         do {
-            try await s3Service.uploadObject(
-                data: data,
-                key: key,
-                contentType: contentType,
-                onProgress: { fraction in
-                    self.uploadProgress = fraction
-                }
-            )
-            logger.info("Uploaded \(key) to \(bucket)")
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .success(key)
-            }
-            await load()
+            try await UploadPreparation.perform(destination: context.destination, load: load,
+                isCurrentAccount: { context.matches(s3Service) },
+                send: { payload, _ in try await upload(payload, context: context) })
+        } catch is CancellationError {
+            // Input task ownership ended before a new upload could start.
         } catch {
-            logger.error("Upload failed for \(key): \(error.localizedDescription)")
-            await MainActor.run {
-                isUploading = false
-                uploadResult = .failure(error.localizedDescription)
-            }
+            logger.error("Upload preparation failed: \(error.localizedDescription)")
+            uploadResult = .failure(error.localizedDescription)
         }
+    }
+
+    private func upload(_ payload: PreparedUploadPayload, context: UploadContext) async throws {
+        let key = context.destination.key(for: payload.filename)
+        isUploading = true
+        uploadProgress = 0
+        uploadResult = nil
+        defer { isUploading = false }
+        try await UploadQueueManager.shared.upload(payload, key: key, context: context, using: s3Service,
+            onProgress: { fraction in uploadProgress = fraction })
+        logger.info("Uploaded \(key) to \(context.destination.bucket)")
+        uploadResult = .success(key)
+        if context.matches(s3Service) { await load(force: true) }
     }
 
     // MARK: - Listing
 
-    private func load() async {
+    private func load(force: Bool = false) async {
         isSelecting = false
         selectedKeys.removeAll()
-        isLoading = true
-        errorMessage = nil
-        nextToken = nil
+        let generation = s3Service.session.generation
+        let query = ListingQuery(account: s3Service.session.configuration.account, bucket: bucket, prefix: prefix)
         do {
-            let page = try await s3Service.listPrefix(prefix, bucket: bucket, continuationToken: nil)
-            items = page.items
-            nextToken = page.nextToken
+            try await listingState.reload(query, force: force) { token in
+                try await s3Service.fetchPrefixMetadataPage(query, token: token)
+            }
+            guard s3Service.session.isCurrent(generation), let page = listingState.page else { return }
+            items = page.folders.map { .folder(S3Folder(prefix: $0)) } + page.files.map { .file($0.s3Object) }
+        } catch is CancellationError {
+            return
         } catch {
             logger.error("listPrefix(\(prefix)) failed: \(error.localizedDescription)")
-            errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 
     private func loadMore() async {
-        guard let token = nextToken, !isLoadingMore else { return }
-        isLoadingMore = true
+        let generation = s3Service.session.generation
+        let query = ListingQuery(account: s3Service.session.configuration.account, bucket: bucket, prefix: prefix)
         do {
-            let page = try await s3Service.listPrefix(prefix, bucket: bucket, continuationToken: token)
-            items.append(contentsOf: page.items)
-            nextToken = page.nextToken
+            try await listingState.loadMore { token in
+                try await s3Service.fetchPrefixMetadataPage(query, token: token)
+            }
+            guard s3Service.session.isCurrent(generation), let page = listingState.page else { return }
+            items = page.folders.map { .folder(S3Folder(prefix: $0)) } + page.files.map { .file($0.s3Object) }
+        } catch is CancellationError {
+            return
         } catch {
             logger.error("listPrefix(\(prefix)) page failed: \(error.localizedDescription)")
         }
-        isLoadingMore = false
     }
 }
 
@@ -798,7 +790,7 @@ enum PrefixSortOption: CaseIterable {
 
 // MARK: - PrefixGridItem
 
-private let prefixStarStore = StarStore.shared
+@MainActor private let prefixStarStore = StarStore.shared
 
 struct PrefixGridItem: View {
     let item: S3Item
@@ -854,7 +846,7 @@ struct PrefixGridItem: View {
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(8)
 
-                if case .file(let obj) = item, prefixStarStore.isStarred(obj.key) {
+                if case .file(let obj) = item, prefixStarStore.isStarred(s3Service.annotationIdentity(for: obj)) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.yellow)

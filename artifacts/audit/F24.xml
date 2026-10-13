@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.004330917">
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="invalidExpirationCannotProduceSignedURL()" time="0.000342208" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="unicodeByteSpellingsAndLiteralPercentNamesRemainDistinct()" time="0.000402125" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="reservedBytesAndRepeatedSlashesSurvivePublicAndPresignedURLs()" time="0.002663041" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="publishedAWSSigV4ExampleMatches()" time="0.004036583" />
+    <testcase classname="AuditCoreTests.F24ObjectAddressTests" name="fileNamesAndNavigationNeverInterpretURLSyntax()" time="0.000376916" />
+  </testsuite>
+</testsuites>

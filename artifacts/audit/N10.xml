@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.05334825">
+    <testcase classname="AuditCoreTests.N10MultiDropTests" name="everySupportedPayloadIsUploadedAndRejectedItemsAreReported()" time="0.05304575" />
+    <testcase classname="AuditCoreTests.N10MultiDropTests" name="oneUploadFailureDoesNotDiscardOtherPayloads()" time="0.052160959" />
+  </testsuite>
+</testsuites>

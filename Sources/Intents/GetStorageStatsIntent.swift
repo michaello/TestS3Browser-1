@@ -11,8 +11,9 @@ struct GetStorageStatsIntent: AppIntent {
         categoryName: "Browse"
     )
 
+    @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<[String]> & ProvidesDialog {
-        let config = SharedConfig.loadConfig() ?? S3Config.default
+        let config = try SharedConfig.requireConfig()
         let service = S3Service(config: config)
 
         // fetchBucketStats also fetches buckets when needed, but call fetchAvailableBuckets

@@ -1,0 +1,38 @@
+{
+  "id": "N10",
+  "expected_behavior": "A multi-payload drop processes every supported payload and reports rejected/failed items; accepting three supported items cannot silently upload only one.",
+  "passed": true,
+  "source_fingerprint": "0ec6e01a56e6d345604f44f9a05fb48150696ff8e63f1b2eb7b05b965c97fc5e",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:46:04.212399+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N10MultiDropTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N10.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N10MultiDropTests",
+      "name": "everySupportedPayloadIsUploadedAndRejectedItemsAreReported()",
+      "time": "0.05304575"
+    },
+    {
+      "classname": "AuditCoreTests.N10MultiDropTests",
+      "name": "oneUploadFailureDoesNotDiscardOtherPayloads()",
+      "time": "0.052160959"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N10.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N10.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

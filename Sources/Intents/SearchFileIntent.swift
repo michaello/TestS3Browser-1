@@ -1,13 +1,11 @@
 import AppIntents
 import Foundation
 
-/// App Intent that searches recent S3 files by key substring and returns matching keys.
-/// Appears in the Shortcuts app as "Search My S3 Files" and can be chained into any
-/// action that consumes a list of text values.
+/// Searches the full metadata catalog and retains each match's bucket identity.
 struct SearchFileIntent: AppIntent {
-    static var title: LocalizedStringResource = "Search My S3 Files"
-    static var description = IntentDescription(
-        "Searches your recent S3 files by name and returns the matching keys.",
+    static let title: LocalizedStringResource = "Search My S3 Files"
+    static let description = IntentDescription(
+        "Searches your S3 file catalog by name and returns the matching files with their buckets.",
         categoryName: "Browse"
     )
 
@@ -21,17 +19,14 @@ struct SearchFileIntent: AppIntent {
         Summary("Search S3 files for \(\.$query)")
     }
 
-    func perform() async throws -> some IntentResult & ReturnsValue<[String]> & ProvidesDialog {
-        let config = SharedConfig.loadConfig() ?? S3Config.default
+    @MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<[S3FileEntity]> & ProvidesDialog {
+        let config = try SharedConfig.requireConfig()
         let service = S3Service(config: config)
 
-        // Populate recentFiles from all buckets, then filter by query.
-        try await service.fetchRecentFilesFromAllBuckets(limit: 50)
-
-        let lower = query.lowercased()
-        let matches = service.recentFiles
-            .map(\.key)
-            .filter { $0.lowercased().contains(lower) }
+        let account = S3FileEntity.accountScope(for: config)
+        let matches = try await service.searchMetadata(query, limit: 50)
+            .map { try S3FileEntity(object: $0, account: account) }
 
         let dialog = IntentDialog("Found \(matches.count) file\(matches.count == 1 ? "" : "s") matching \"\(query)\"")
         return .result(value: matches, dialog: dialog)

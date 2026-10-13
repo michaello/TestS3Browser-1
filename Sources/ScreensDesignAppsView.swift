@@ -119,12 +119,13 @@ private struct ScreensDesignCoverView: View {
         .frame(width: 48, height: 70)
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 7))
-        .task {
+        .task(id: firstFrameKey.map {
+            MediaObjectIdentity(account: S3AccountScope.identifier(region: s3Service.config.region, accessKey: s3Service.config.accessKey),
+                                bucket: s3Service.currentBucket, key: $0).digest
+        }) {
             guard let key = firstFrameKey else { return }
-            if let cached = await ImageCacheActor.shared.getThumbnail(for: key) {
-                thumbnail = cached
-                return
-            }
+            thumbnail = nil
+            let generation = s3Service.session.generation
             guard let metadata = try? await s3Service.headObject(key: key) else { return }
             let object = S3Object(
                 key: key,
@@ -133,7 +134,9 @@ private struct ScreensDesignCoverView: View {
                 etag: metadata.etag,
                 bucket: s3Service.currentBucket
             )
-            thumbnail = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service)
+            let image = await ImageCacheActor.shared.loadThumbnail(for: object, using: s3Service)
+            guard !Task.isCancelled, s3Service.session.isCurrent(generation) else { return }
+            thumbnail = image
         }
     }
 }
@@ -180,20 +183,24 @@ private struct ScreensDesignFramesView: View {
     let s3Service: S3Service
 
     @State private var frames: [S3Object] = []
-    @State private var nextToken: String?
-    @State private var isLoading = false
-    @State private var errorMessage: String?
+    @State private var listing = PagedListingState()
 
     private var prefix: String { "\(screensDesignPrefix)\(app.slug)/\(video.key)/" }
+    private var query: ListingQuery {
+        ListingQuery(account: s3Service.session.configuration.account, bucket: s3Service.currentBucket, prefix: prefix)
+    }
 
     var body: some View {
         Group {
-            if isLoading && frames.isEmpty {
+            if listing.isLoading && frames.isEmpty {
                 ProgressView("Loading frames...")
-            } else if let errorMessage {
+            } else if let errorMessage = listing.error, frames.isEmpty {
                 ContentUnavailableView("Frames unavailable", systemImage: "exclamationmark.triangle", description: Text(errorMessage))
             } else {
                 ScrollView {
+                    if let error = listing.error {
+                        Text(error).font(.caption).foregroundStyle(.red).padding()
+                    }
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 105), spacing: 10)], spacing: 10) {
                         ForEach(Array(frames.enumerated()), id: \.element.id) { index, frame in
                             NavigationLink {
@@ -206,41 +213,45 @@ private struct ScreensDesignFramesView: View {
                     }
                     .padding(12)
 
-                    if nextToken != nil {
-                        Button(isLoading ? "Loading..." : "Load more") { Task { await loadNextPage() } }
-                            .disabled(isLoading)
+                    if listing.page?.nextToken != nil {
+                        Button(listing.isLoadingMore ? "Loading..." : "Load more") { Task { await loadNextPage() } }
+                            .disabled(listing.isLoading || listing.isLoadingMore)
                             .padding()
                     }
                 }
-                .refreshable { await reload() }
+                .refreshable { await reload(force: true) }
             }
         }
         .navigationTitle(video.label)
         .navigationBarTitleDisplayMode(.inline)
-        .task { await reload() }
+        .task(id: query) { await reload() }
     }
 
-    private func reload() async {
-        frames = []
-        nextToken = nil
-        await loadNextPage()
+    private func reload(force: Bool = false) async {
+        let captured = query, generation = s3Service.session.generation
+        if listing.query != captured { frames = [] }
+        do {
+            try await listing.reload(captured, force: force) { token in
+                try await s3Service.fetchPrefixMetadataPage(captured, token: token)
+            }
+            guard query == captured, s3Service.session.isCurrent(generation), !Task.isCancelled else { return }
+            publishFrames()
+        } catch { /* The owned listing publishes its current error and retains good frames. */ }
     }
 
     private func loadNextPage() async {
-        guard !isLoading else { return }
-        isLoading = true
-        errorMessage = nil
+        let captured = query, generation = s3Service.session.generation
         do {
-            let page = try await s3Service.listPrefix(prefix, continuationToken: nextToken)
-            frames += page.items.compactMap {
-                if case .file(let object) = $0, object.fileType == .image { return object }
-                return nil
+            try await listing.loadMore { token in
+                try await s3Service.fetchPrefixMetadataPage(captured, token: token)
             }
-            frames.sort { $0.key < $1.key }
-            nextToken = page.nextToken
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
+            guard query == captured, s3Service.session.isCurrent(generation), !Task.isCancelled else { return }
+            publishFrames()
+        } catch { /* Obsolete page failures cannot change the refreshed listing. */ }
+    }
+
+    private func publishFrames() {
+        frames = (listing.page?.files ?? []).map(\.s3Object)
+            .filter { $0.fileType == .image }.sorted { $0.key < $1.key }
     }
 }

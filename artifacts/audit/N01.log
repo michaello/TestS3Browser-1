@@ -1,0 +1,19 @@
+Building for debugging...
+[1 / 1]
+Build complete! (0.54 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite N01UploadPreparationTests started.
+􀟈  Test delayedRepresentationRetainsOriginalBucketAndPrefix() started.
+􀟈  Test cancelledInputCannotStartUpload() started.
+􀟈  Test changedAccountCancelsBeforeMutation() started.
+􀟈  Test accountScopeHasUnambiguousFieldsAndNoCredentialText() started.
+􀟈  Test providerFailureAndMissingRepresentationDoNotMutate() started.
+􁁛  Test delayedRepresentationRetainsOriginalBucketAndPrefix() passed after 0.001 seconds.
+􁁛  Test changedAccountCancelsBeforeMutation() passed after 0.001 seconds.
+􁁛  Test cancelledInputCannotStartUpload() passed after 0.007 seconds.
+􁁛  Test accountScopeHasUnambiguousFieldsAndNoCredentialText() passed after 0.007 seconds.
+􁁛  Test providerFailureAndMissingRepresentationDoNotMutate() passed after 0.007 seconds.
+􁁛  Suite N01UploadPreparationTests passed after 0.007 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.010 seconds.

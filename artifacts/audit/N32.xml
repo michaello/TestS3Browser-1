@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="5" failures="0" skipped="0" time="0.014342334">
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cancelledCopyAbortsOutsideCancelledTaskAndRetainsSource()" time="0.014048167" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="plansCoverEveryByteWithoutExceedingPartLimits()" time="0.008494333" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="failedPartOrCompletionAbortsAndRetainsMoveSource()" time="0.014052834" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="cleanupFailureIncludesUploadIDAndOriginalFailure()" time="0.013786916" />
+    <testcase classname="AuditCoreTests.N32MultipartCopyTests" name="moveDeletesOnlyAfterConfirmedCompletionAndPreservesProperties()" time="0.008476209" />
+  </testsuite>
+</testsuites>

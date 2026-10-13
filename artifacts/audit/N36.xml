@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.04147775">
+    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()" time="0.040845917" />
+    <testcase classname="AuditCoreTests.N36PartialBatchExportTests" name="completeFailureHasTerminalErrorSummaryAndNoShareFiles()" time="0.03665875" />
+  </testsuite>
+</testsuites>

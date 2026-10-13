@@ -1,0 +1,58 @@
+{
+  "id": "F09",
+  "expected_behavior": "Applying configuration changes atomically selects the applied bucket/prefix and namespace, invalidates obsolete work, and cannot reuse a previous account's buckets or publish its results.",
+  "passed": true,
+  "source_fingerprint": "6f39871a8b884e4beb7492395e2aa3bdf8a77f21e683d3a48da06c3d6693e0e9",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:27:36.403348+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F09ServiceSessionTests|F09MetadataNamespaceTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 6,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "staleAccountResponse()",
+      "time": "0.007793"
+    },
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "atomicConfiguration()",
+      "time": "0.007156791"
+    },
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "idempotentConfiguration()",
+      "time": "0.00083225"
+    },
+    {
+      "classname": "AuditCoreTests.F09ServiceSessionTests",
+      "name": "unicodeIdentity()",
+      "time": "0.00718575"
+    },
+    {
+      "classname": "AuditCoreTests.F09MetadataNamespaceTests",
+      "name": "migrationIsolation()",
+      "time": "0.007322375"
+    },
+    {
+      "classname": "AuditCoreTests.F09MetadataNamespaceTests",
+      "name": "previewOwnerIsolation()",
+      "time": "0.007062958"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F09.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

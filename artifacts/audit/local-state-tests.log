@@ -1,0 +1,67 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[6 / 17] AuditCoreTests-product
+[9 / 20] AuditCoreTests-product
+[15 / 19] AuditCoreTests-product
+Build complete! (3.06 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite AuditF29 started.
+􀟈  Suite AuditN23 started.
+􀟈  Suite AuditN20 started.
+􀟈  Suite AuditF26 started.
+􀟈  Suite AuditN22 started.
+􀟈  Test failedForcedRefreshRetainsGoodAdministrationData() started.
+􀟈  Test typingDraftDoesNotPublishOrPersistUntilApply() started.
+􀟈  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() started.
+􀟈  Test successfulRebuildPublishesOneReplacement() started.
+􀟈  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() started.
+􀟈  Test namespacesAndAccountsHaveIndependentSeenHistory() started.
+􀟈  Test explicitPruningClearsOnlyTheRequestedScope() started.
+􀟈  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() started.
+􀟈  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() started.
+􀟈  Test historyRoundTripPreservesExactBytesAndAdditivePages() started.
+􀟈  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() started.
+􀟈  Test renameAndMoveCarryAnnotationsToTheExactDestination() started.
+􀟈  Test priorInFlightRequestCannotUndoTheRebuild() started.
+􀟈  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() started.
+􀟈  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() started.
+􀟈  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() started.
+􀟈  Test removingLastSelectedTagResetsTagFilter() started.
+􀟈  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() started.
+􀟈  Test existingFiltersRemainUntilExplicitlyCleared() started.
+􀟈  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() started.
+􀟈  Test unavailableTagDoesNotClearAnAvailableStarFilter() started.
+􀟈  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() started.
+􀟈  Test removingLastStarResetsStarFilter() started.
+􁁛  Test explicitPruningClearsOnlyTheRequestedScope() passed after 0.001 seconds.
+􁁛  Test filteredOrLimitedPagesCannotForgetPreviouslySeenKeys() passed after 0.001 seconds.
+􁁛  Test namespacesAndAccountsHaveIndependentSeenHistory() passed after 0.001 seconds.
+􁁛  Test historyRoundTripPreservesExactBytesAndAdditivePages() passed after 0.001 seconds.
+􁁛  Suite AuditN23 passed after 0.001 seconds.
+􁁛  Test successfulRebuildPublishesOneReplacement() passed after 0.018 seconds.
+􁁛  Test collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache() passed after 0.018 seconds.
+􁁛  Test typingDraftDoesNotPublishOrPersistUntilApply() passed after 0.019 seconds.
+􁁛  Test ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket() passed after 0.018 seconds.
+􁁛  Test newFileMarkersDoNotCrossBucketOrAccountBoundaries() passed after 0.018 seconds.
+􁁛  Test renameAndMoveCarryAnnotationsToTheExactDestination() passed after 0.018 seconds.
+􁁛  Test equalKeysAcrossBucketsAndAccountsKeepIndependentLabels() passed after 0.019 seconds.
+􁁛  Test failedApplyKeepsTheAppliedConfigurationAndEditableDraft() passed after 0.019 seconds.
+􁁛  Test unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore() passed after 0.019 seconds.
+􁁛  Test removingLastSelectedTagResetsTagFilter() passed after 0.019 seconds.
+􁁛  Test existingFiltersRemainUntilExplicitlyCleared() passed after 0.019 seconds.
+􁁛  Test removingLastStarResetsStarFilter() passed after 0.019 seconds.
+􁁛  Test exactUnicodeAndRepeatedSlashKeysRemainDistinct() passed after 0.019 seconds.
+􁁛  Test unavailableTagDoesNotClearAnAvailableStarFilter() passed after 0.019 seconds.
+􁁛  Suite AuditF26 passed after 0.019 seconds.
+􁁛  Suite AuditN22 passed after 0.019 seconds.
+􁁛  Test failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest() passed after 0.022 seconds.
+􁁛  Test failedForcedRefreshRetainsGoodAdministrationData() passed after 0.022 seconds.
+􁁛  Test sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection() passed after 0.022 seconds.
+􁁛  Test obsoleteResponseCannotOverwriteTheCurrentAdministrationResults() passed after 0.022 seconds.
+􁁛  Suite AuditF29 passed after 0.022 seconds.
+􁁛  Test priorInFlightRequestCannotUndoTheRebuild() passed after 0.022 seconds.
+􁁛  Suite AuditN20 passed after 0.022 seconds.
+􁁛  Test run with 23 tests in 5 suites passed after 0.022 seconds.

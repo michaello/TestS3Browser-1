@@ -1,0 +1,58 @@
+{
+  "id": "F29",
+  "expected_behavior": "Editing Settings drafts sends no request per keystroke; Apply updates one configuration generation, and obsolete admin responses or same-bucket credential changes cannot leave stale results.",
+  "passed": true,
+  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:32:28.083873+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditF29",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 6,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "collapsedSectionsSendNoRequestsAndRevisitsReuseTheCache()",
+      "time": "0.000991084"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "typingDraftDoesNotPublishOrPersistUntilApply()",
+      "time": "0.000969666"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "sameBucketCredentialChangesAndExactFullConfigurationInvalidateSelection()",
+      "time": "0.005900875"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "failedForcedRefreshRetainsGoodAdministrationData()",
+      "time": "0.005852375"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "obsoleteResponseCannotOverwriteTheCurrentAdministrationResults()",
+      "time": "0.006044959"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF29",
+      "name": "failedApplyKeepsTheAppliedConfigurationAndEditableDraft()",
+      "time": "0.000944083"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F29.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

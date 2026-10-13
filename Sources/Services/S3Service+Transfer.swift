@@ -1,71 +1,123 @@
 import Foundation
 import AWSS3
+import CryptoKit
+import SmithyStreams
+
+/// Captures the SDK client and account guard for one operation. Only typed not-found is absence.
+@MainActor
+private struct S3ObjectTransferTransport: ObjectTransferTransport {
+    let client: S3Client
+    let contextGuard: @MainActor () throws -> Void
+
+    func validateContext() throws { try contextGuard() }
+
+    func head(_ location: TransferObjectLocation) async throws -> TransferObjectPresence {
+        do {
+            let output = try await client.headObject(input: HeadObjectInput(bucket: location.bucket, key: location.key))
+            return .present(TransferObjectRevision(etag: output.eTag, versionID: output.versionId,
+                lastModified: output.lastModified, size: output.contentLength))
+        } catch is AWSS3.NotFound {
+            return .absent
+        } catch is AWSS3.NoSuchKey {
+            return .absent
+        }
+    }
+
+    func copy(_ request: ObjectTransferRequest, sourceRevision: TransferObjectRevision) async throws {
+        try await performS3ObjectCopy(client: client, request: request,
+            revision: sourceRevision, contextGuard: contextGuard)
+    }
+
+    func delete(_ source: TransferObjectLocation, revision: TransferObjectRevision) async throws {
+        _ = try await client.deleteObject(input: DeleteObjectInput(bucket: source.bucket,
+            ifMatch: revision.etag, key: source.key))
+    }
+}
 
 /// Download, prefetch, and upload operations for S3Service. Split out of S3Service.swift to keep
 /// each file under 500 lines.
 extension S3Service {
-    /// Downloads an object, optionally from a specific bucket.
-    /// Returns prefetched data if available, otherwise downloads from S3.
-    func downloadObject(key: String, bucket: String? = nil) async throws -> Data {
-        // Check prefetch cache first
-        let cacheKey = "\(bucket ?? currentBucket)/\(key)"
-        if let cached = prefetchedData[cacheKey] {
-            prefetchedData.removeValue(forKey: cacheKey)
-            logger.debug("Serving prefetched data for \(key) (\(cached.count) bytes)")
-            return cached
-        }
-
-        if client == nil {
-            try await initializeClient()
-        }
-        guard let client = client else {
-            throw S3ServiceError.clientNotInitialized
-        }
-
-        let input = GetObjectInput(
-            bucket: bucket ?? currentBucket,
-            key: key
-        )
-
-        let output = try await client.getObject(input: input)
-
-        guard let body = output.body else {
-            throw S3ServiceError.noDataReturned
-        }
-
-        // An empty/closed body is a download failure, not a valid zero-byte file - surface it
-        // so callers (thumbnails, gallery) show an error instead of silently decoding nothing.
-        guard let data = try await body.readData() else {
-            throw S3ServiceError.noDataReturned
-        }
-        return data
+    func mediaIdentity(for object: S3Object, versionID: String? = nil) -> MediaObjectIdentity {
+        MediaObjectIdentity(account: S3AccountScope.identifier(region: config.region, accessKey: config.accessKey),
+                            bucket: object.bucket ?? currentBucket, key: object.key, etag: object.etag, version: versionID)
     }
 
-    /// Prefetches file data for a list of objects in the background.
-    /// Skips images that are already in the image cache.
+    /// A complete original is streamed into one reusable file, never decoded as a preview.
+    func downloadOriginalFile(for object: S3Object, versionID: String? = nil,
+                              purpose: MediaTransferPurpose = .visible,
+                              onProgress: @escaping @Sendable (Int64) -> Void = { _ in }) async throws -> OriginalFileLease {
+        let generation = session.generation
+        var identity = mediaIdentity(for: object, versionID: versionID)
+        try await initializeClient()
+        guard session.isCurrent(generation), let capturedClient = client else { throw CancellationError() }
+        var size: Int64? = object.size >= 0 ? object.size : nil
+        // Legacy key-only callers lack a revision. Resolve it before cache lookup so external
+        // overwrites cannot reuse an indefinitely stale key-only original.
+        if identity.etag == nil {
+            let metadata = try await capturedClient.headObject(input: HeadObjectInput(
+                bucket: identity.bucket, key: identity.key, versionId: identity.version))
+            guard session.isCurrent(generation) else { throw CancellationError() }
+            identity = MediaObjectIdentity(account: identity.account, bucket: identity.bucket, key: identity.key,
+                                           etag: metadata.eTag, version: identity.version)
+            size = metadata.contentLength.map(Int64.init)
+        }
+        let capturedIdentity = identity
+        return try await MediaOriginalStore.shared.file(for: identity, knownBytes: size, purpose: purpose,
+                                                        progress: onProgress) { @MainActor in
+            guard self.session.isCurrent(generation) else { throw CancellationError() }
+            let output = try await capturedClient.getObject(input: GetObjectInput(
+                bucket: capturedIdentity.bucket, ifMatch: capturedIdentity.etag,
+                key: capturedIdentity.key, versionId: capturedIdentity.version))
+            guard self.session.isCurrent(generation) else { throw CancellationError() }
+            if let expected = capturedIdentity.etag, let actual = output.eTag,
+               !expected.utf8.elementsEqual(actual.utf8) { throw MediaTransferError.revisionMismatch }
+            guard let body = output.body else { throw MediaTransferError.missingBody }
+            switch body {
+            case .data(let data):
+                guard let data else { throw MediaTransferError.missingBody }
+                let reader = MediaDataReader(data)
+                return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init), read: { await reader.read() })
+            case .stream(let stream):
+                return MediaDownloadBody(expectedBytes: output.contentLength.map(Int64.init),
+                    read: { try await stream.readAsync(upToCount: 65_536) }, close: { stream.close() })
+            case .noStream:
+                throw MediaTransferError.missingBody
+            }
+        }
+    }
+
+    /// Compatibility for text/small-data consumers. Media and export consumers use file leases.
+    func downloadObject(key: String, bucket: String? = nil) async throws -> Data {
+        let object = S3Object(key: key, size: -1, lastModified: .distantPast, etag: nil, bucket: bucket ?? currentBucket)
+        let lease = try await downloadOriginalFile(for: object)
+        do {
+            let data = try await MediaFileIO.shared.data(at: lease.url)
+            await MediaOriginalStore.shared.release(lease)
+            return data
+        } catch { await MediaOriginalStore.shared.release(lease); throw error }
+    }
+
+    func invalidateMedia(key: String, bucket: String? = nil, account: String? = nil) async {
+        let scope = account ?? S3AccountScope.identifier(region: config.region, accessKey: config.accessKey)
+        let targetBucket = bucket ?? currentBucket
+        DetailMetadataCache.shared.invalidate(account: scope, bucket: targetBucket, key: key)
+        await MediaOriginalStore.shared.invalidate(account: scope, bucket: targetBucket, key: key)
+        await ImageCacheActor.shared.invalidate(account: scope, bucket: targetBucket, key: key)
+    }
+
+    /// Speculate only on the immediate working window; eligible transfers share visible demand.
     func prefetchObjects(_ objects: [S3Object]) {
         prefetchTask?.cancel()
-        prefetchTask = Task {
-            for object in objects {
-                guard !Task.isCancelled else { break }
-                let cacheKey = "\(object.bucket ?? currentBucket)/\(object.key)"
-
-                // Skip if already prefetched
-                if prefetchedData[cacheKey] != nil { continue }
-
-                // Skip images that are already cached
-                if object.fileType == .image {
-                    if await ImageCacheActor.shared.getFullImage(for: object.key) != nil { continue }
-                }
-
+        let captured = Array(objects.prefix(3))
+        prefetchTask = Task { @MainActor in
+            for object in captured {
+                guard !Task.isCancelled else { return }
+                guard object.size > 0, object.size <= MediaLimits().speculativeObjectBytes else { continue }
                 do {
-                    let data = try await downloadObject(key: object.key, bucket: object.bucket)
-                    guard !Task.isCancelled else { break }
-                    prefetchedData[cacheKey] = data
-                    logger.debug("Prefetched \(object.key) (\(data.count) bytes)")
-                } catch {
-                    logger.debug("Prefetch failed for \(object.key): \(error.localizedDescription)")
-                }
+                    let lease = try await downloadOriginalFile(for: object, purpose: .speculative)
+                    await MediaOriginalStore.shared.release(lease)
+                } catch is CancellationError { return }
+                catch { logger.debug("Speculative original failed: \(error.localizedDescription)") }
             }
         }
     }
@@ -80,56 +132,88 @@ extension S3Service {
     ///     snaps to 1.0 when the SDK call returns. The AWS SDK does not expose a byte-level
     ///     progress hook for PutObject, so time-based estimation is the only option.
     /// - Returns: The key of the uploaded object
+    @MainActor
     @discardableResult
     func uploadObject(
         data: Data,
         key: String,
         contentType: String = "application/octet-stream",
+        bucket: String? = nil,
+        expectedConfig: S3Config? = nil,
+        expectedGeneration: UUID? = nil,
         onProgress: (@MainActor (Double) -> Void)? = nil
     ) async throws -> String {
+        let targetBucket = bucket ?? currentBucket
+        let capturedConfig = expectedConfig ?? config
+        let capturedGeneration = expectedGeneration ?? session.generation
+        guard session.generation == capturedGeneration else { throw UploadPreparationError.accountChanged }
+        guard config == capturedConfig else { throw UploadPreparationError.accountChanged }
+        try Task.checkCancellation()
         if client == nil {
             try await initializeClient()
         }
 
+        guard config == capturedConfig else { throw UploadPreparationError.accountChanged }
+        try Task.checkCancellation()
         guard let client = client else {
             throw S3ServiceError.clientNotInitialized
         }
 
-        logger.info("Uploading to \(self.currentBucket)/\(key) (\(data.count) bytes)")
-
-        // Estimate upload duration: assume ~500 KB/s on a slow connection, min 1 s.
-        let estimatedSeconds = max(1.0, Double(data.count) / 512_000.0)
-        let tickInterval: TimeInterval = 0.1
-        let maxFraction = 0.9
-
-        let progressTask: Task<Void, Never>? = onProgress.map { callback in
-            Task {
-                var elapsed = 0.0
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: UInt64(tickInterval * 1_000_000_000))
-                    elapsed += tickInterval
-                    // Ease toward maxFraction asymptotically so the bar never stalls at 1.0
-                    // before the upload actually finishes.
-                    let fraction = maxFraction * (1 - exp(-3 * elapsed / estimatedSeconds))
-                    await callback(min(fraction, maxFraction))
-                }
-            }
-        }
+        logger.info("Uploading to \(targetBucket)/\(key) (\(data.count) bytes)")
 
         let input = PutObjectInput(
             body: .data(data),
-            bucket: currentBucket,
+            bucket: targetBucket,
             contentType: contentType,
             key: key
         )
 
-        _ = try await client.putObject(input: input)
-
-        progressTask?.cancel()
-        if let onProgress { await onProgress(1.0) }
+        try await sendUpload(input: input, client: client, byteCount: data.count,
+            capturedConfig: capturedConfig, generation: capturedGeneration, onProgress: onProgress)
 
         logger.info("Upload complete: \(key)")
         return key
+    }
+
+    /// A queued payload stays on disk while the SDK streams its body.
+    @discardableResult
+    func uploadFileObject(file: URL, key: String, contentType: String, bucket: String,
+                          expectedConfig: S3Config, expectedGeneration: UUID,
+                          onProgress: (@MainActor (Double) -> Void)? = nil) async throws -> String {
+        guard config == expectedConfig, session.generation == expectedGeneration else { throw UploadPreparationError.accountChanged }
+        if client == nil { try await initializeClient() }
+        guard config == expectedConfig else { throw UploadPreparationError.accountChanged }
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        let count = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        let handle = try FileHandle(forReadingFrom: file)
+        defer { try? handle.close() }
+        let input = PutObjectInput(body: .stream(FileStream(fileHandle: handle)), bucket: bucket,
+            contentLength: count, contentType: contentType, key: key)
+        try await sendUpload(input: input, client: client, byteCount: count,
+            capturedConfig: expectedConfig, generation: expectedGeneration, onProgress: onProgress)
+        return key
+    }
+
+    private func sendUpload(input: PutObjectInput, client: S3Client, byteCount: Int,
+                            capturedConfig: S3Config, generation: UUID,
+                            onProgress: (@MainActor (Double) -> Void)?) async throws {
+        let permit = try await BodyTransferLimiter.shared.acquireLease()
+        do {
+            guard config == capturedConfig, session.generation == generation else { throw UploadPreparationError.accountChanged }
+            var etag: String?
+            try await EstimatedUploadProgress.perform(byteCount: byteCount, progress: onProgress) {
+                etag = try await client.putObject(input: input).eTag
+            }
+            await BodyTransferLimiter.shared.releaseLease(permit)
+            if session.generation == generation, let key = input.key, let bucket = input.bucket {
+                recordSuccessfulUpload(key: key, bucket: bucket, size: Int64(byteCount),
+                    contentType: input.contentType ?? "application/octet-stream", generation: generation, etag: etag)
+                await invalidateMedia(key: key, bucket: bucket)
+            }
+        } catch {
+            await BodyTransferLimiter.shared.releaseLease(permit)
+            throw error
+        }
     }
 
     /// Renames an S3 object by copying it to the new key then deleting the original.
@@ -139,67 +223,78 @@ extension S3Service {
     ///   - key: Existing object key
     ///   - newKey: Destination key (must be in the same bucket)
     ///   - bucket: Bucket containing the object (defaults to currentBucket)
-    func renameObject(key: String, to newKey: String, bucket: String? = nil) async throws {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
-
-        let targetBucket = bucket ?? currentBucket
-        let copySource = "\(targetBucket)/\(key)"
-
-        let copyInput = CopyObjectInput(
-            bucket: targetBucket,
-            copySource: copySource,
-            key: newKey
-        )
-        _ = try await client.copyObject(input: copyInput)
-
-        let deleteInput = DeleteObjectInput(bucket: targetBucket, key: key)
-        _ = try await client.deleteObject(input: deleteInput)
-
-        // Update the in-memory list so the UI reflects the new key without a reload.
-        await MainActor.run {
-            if let idx = recentFiles.firstIndex(where: { $0.key == key && ($0.bucket ?? currentBucket) == targetBucket }) {
-                var updated = recentFiles[idx]
-                updated = S3Object(
-                    key: newKey,
-                    size: updated.size,
-                    lastModified: updated.lastModified,
-                    etag: updated.etag,
-                    bucket: updated.bucket
-                )
-                recentFiles[idx] = updated
-                persistRecentFiles()
-            }
-        }
-
-        logger.info("Renamed \(key) -> \(newKey) in \(targetBucket)")
+    @MainActor
+    func renameObject(key: String, to newKey: String, bucket: String? = nil,
+                      approval: ObjectReplacementApproval? = nil) async throws {
+        let request = makeObjectTransferRequest(kind: .rename, key: key, to: newKey,
+                                                sourceBucket: bucket, destBucket: bucket)
+        try await performObjectTransfer(request, approval: approval)
     }
 
     /// Copies an object to a new key, optionally in a different bucket.
-    /// The source is not deleted; use this for Copy. For Move, call this then deleteObject.
+    /// The source is not deleted. Use a .move request for a guarded copy-then-delete.
     /// - Parameters:
     ///   - key: Source object key
     ///   - destKey: Destination key
     ///   - sourceBucket: Bucket containing the source object (defaults to currentBucket)
     ///   - destBucket: Bucket for the destination (defaults to sourceBucket)
+    @MainActor
     func copyObject(
         key: String,
         to destKey: String,
         sourceBucket: String? = nil,
-        destBucket: String? = nil
+        destBucket: String? = nil,
+        approval: ObjectReplacementApproval? = nil
     ) async throws {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let request = makeObjectTransferRequest(kind: .copy, key: key, to: destKey,
+                                                sourceBucket: sourceBucket, destBucket: destBucket)
+        try await performObjectTransfer(request, approval: approval)
+    }
 
-        let src = sourceBucket ?? currentBucket
-        let dst = destBucket ?? src
-        let copyInput = CopyObjectInput(
-            bucket: dst,
-            copySource: "\(src)/\(key)",
-            key: destKey
-        )
-        _ = try await client.copyObject(input: copyInput)
-        logger.info("Copied \(src)/\(key) -> \(dst)/\(destKey)")
+    /// Capture the operation before the first await and retain it through conflict prompts.
+    @MainActor
+    func makeObjectTransferRequest(kind: ObjectTransferRequest.Kind, key: String, to destKey: String,
+                                   sourceBucket: String? = nil, destBucket: String? = nil) -> ObjectTransferRequest {
+        let source = sourceBucket ?? currentBucket
+        let account = objectTransferAccountScope
+        return ObjectTransferRequest(kind: kind,
+            source: TransferObjectLocation(accountScope: account, bucket: source, key: key),
+            destination: TransferObjectLocation(accountScope: account, bucket: destBucket ?? source, key: destKey),
+            generation: session.generation)
+    }
+
+    @MainActor
+    private var objectTransferAccountScope: String {
+        // Bind approvals to the account without retaining or logging a plaintext credential.
+        SHA256.hash(data: Data((config.region + "\u{0}" + config.accessKey).utf8))
+            .map { String(format: "%02x", $0) }.joined()
+    }
+
+    @MainActor
+    func performObjectTransfer(_ request: ObjectTransferRequest, approval: ObjectReplacementApproval? = nil) async throws {
+        let capturedConfig = config
+        let capturedGeneration = session.generation
+        guard request.generation == nil || request.generation == capturedGeneration else { throw ObjectTransferError.contextChanged }
+        guard request.source.accountScope == objectTransferAccountScope,
+              request.destination.accountScope == objectTransferAccountScope else {
+            throw ObjectTransferError.contextChanged
+        }
+        if client == nil { try await initializeClient() }
+        guard config == capturedConfig else { throw ObjectTransferError.contextChanged }
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        let transport = S3ObjectTransferTransport(client: client) { [weak self] in
+            guard let self, self.config == capturedConfig, self.session.generation == capturedGeneration else {
+                throw ObjectTransferError.contextChanged
+            }
+        }
+        try await ObjectTransferCoordinator(transport: transport).execute(request, approval: approval)
+
+        recordObjectTransfer(request, generation: capturedGeneration)
+        if session.generation == capturedGeneration {
+            await invalidateMedia(key: request.source.key, bucket: request.source.bucket)
+            await invalidateMedia(key: request.destination.key, bucket: request.destination.bucket)
+        }
+        logger.info("Object transfer completed: \(request.source.bucket)/\(request.source.key) -> \(request.destination.bucket)/\(request.destination.key)")
     }
 
     /// Creates a virtual folder by PUTting a zero-byte object at `prefix + name + "/"`.
@@ -295,7 +390,8 @@ extension S3Service {
             contentEncoding: output.contentEncoding,
             versionId: output.versionId,
             expirationDate: parseExpirationDate(output.expiration),
-            userMetadata: output.metadata ?? [:]
+            userMetadata: output.metadata ?? [:],
+            replicationStatus: output.replicationStatus?.rawValue
         )
     }
 
@@ -324,78 +420,95 @@ extension S3Service {
     ///   - onProgress: Optional progress callback forwarded to uploadObject.
     /// - Returns: The full S3 key of the uploaded image
     func uploadToDump(
-        imageData: Data,
-        onProgress: (@MainActor (Double) -> Void)? = nil
+        imageData: Data, bucket: String? = nil, expectedConfig: S3Config? = nil,
+        expectedGeneration: UUID? = nil, onProgress: (@MainActor (Double) -> Void)? = nil
     ) async throws -> String {
-        let timestamp = ISO8601DateFormatter().string(from: Date())
-            .replacingOccurrences(of: ":", with: "-")
-        let filename = "dump/\(timestamp).jpg"
+        let captured = expectedConfig ?? config
+        let generation = expectedGeneration ?? session.generation
+        guard config == captured, session.generation == generation else { throw UploadPreparationError.accountChanged }
+        let image = try ImageUploadRepresentation.decode(imageData)
+        let key = UploadKeyFactory.image(extension: image.filenameExtension)
+        let context = UploadContext(configuration: captured, bucket: bucket ?? currentBucket,
+            prefix: "dump/", generation: generation)
+        return try await UploadQueueManager.shared.upload(data: image.data,
+            filename: S3TransferKeys.fileName(of: key), key: key, contentType: image.contentType,
+            context: context, using: self, onProgress: onProgress)
+    }
 
-        return try await uploadObject(
-            data: imageData,
-            key: filename,
-            contentType: "image/jpeg",
-            onProgress: onProgress
-        )
+    func uploadToDump(
+        imageFile: URL, bucket: String? = nil, expectedConfig: S3Config? = nil,
+        expectedGeneration: UUID? = nil, onProgress: (@MainActor (Double) -> Void)? = nil
+    ) async throws -> String {
+        let captured = expectedConfig ?? config
+        let generation = expectedGeneration ?? session.generation
+        guard config == captured, session.generation == generation else { throw UploadPreparationError.accountChanged }
+        let descriptor = try UploadFileDescriptor.image(at: imageFile)
+        let key = UploadKeyFactory.image(extension: descriptor.filenameExtension)
+        let context = UploadContext(configuration: captured, bucket: bucket ?? currentBucket,
+            prefix: "dump/", generation: generation)
+        return try await UploadQueueManager.shared.upload(file: imageFile,
+            filename: S3TransferKeys.fileName(of: key), key: key, contentType: descriptor.contentType,
+            context: context, using: self, onProgress: onProgress)
     }
 
     /// Returns all non-delete-marker versions of an object, newest first.
     /// Returns an empty array when versioning is not enabled on the bucket.
     func listObjectVersions(key: String, bucket: String? = nil) async throws -> [S3VersionEntry] {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
-
+        let generation = session.generation
         let target = bucket ?? currentBucket
-        let input = ListObjectVersionsInput(bucket: target, prefix: key)
-        let output = try await client.listObjectVersions(input: input)
-
-        return (output.versions ?? [])
-            .filter { $0.key == key }
-            .compactMap { v -> S3VersionEntry? in
-                guard let vid = v.versionId,
-                      let mod = v.lastModified,
-                      let size = v.size else { return nil }
-                return S3VersionEntry(
-                    versionId: vid,
-                    lastModified: mod,
-                    size: size,
-                    isLatest: v.isLatest ?? false
-                )
+        if client == nil { try await initializeClient() }
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        guard let client else { throw S3ServiceError.clientNotInitialized }
+        return try await ObjectVersionHistory.load(key: key, isCurrent: { self.session.isCurrent(generation) }) { cursor in
+            let output = try await client.listObjectVersions(input: ListObjectVersionsInput(bucket: target,
+                keyMarker: cursor.key, prefix: key, versionIdMarker: cursor.version))
+            let entries = (output.versions ?? []).compactMap { version -> ObjectVersionHistoryPage.Entry? in
+                guard let returnedKey = version.key, let id = version.versionId,
+                      let modified = version.lastModified, let size = version.size else { return nil }
+                return .init(key: returnedKey, record: S3VersionEntry(versionId: id,
+                    lastModified: modified, size: size, isLatest: version.isLatest ?? false))
             }
-            .sorted { $0.lastModified > $1.lastModified }
+            return ObjectVersionHistoryPage(entries: entries, isTruncated: output.isTruncated ?? false,
+                next: .init(key: output.nextKeyMarker, version: output.nextVersionIdMarker))
+        }
     }
 
     /// Restores a specific version of an object by copying it to the same key, making it the latest.
     func restoreVersion(key: String, versionId: String, bucket: String? = nil) async throws {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
-
+        let generation = session.generation
+        let account = session.configuration.account
         let target = bucket ?? currentBucket
-        // copySource format: bucket/key?versionId=<id>  (URL-encoded key)
-        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? key
-        let copySource = "\(target)/\(encodedKey)?versionId=\(versionId)"
-        let input = CopyObjectInput(bucket: target, copySource: copySource, key: key)
-        _ = try await client.copyObject(input: input)
+        if client == nil { try await initializeClient() }
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let location = TransferObjectLocation(accountScope: account, bucket: target, key: key)
+        try await performS3ObjectCopy(client: client,
+            request: .init(kind: .copy, source: location, destination: location, generation: generation),
+            revision: .init(etag: nil, versionID: versionId, lastModified: nil, size: nil),
+            contextGuard: { guard self.session.isCurrent(generation) else { throw CancellationError() } })
+        await invalidateMedia(key: key, bucket: target, account: account)
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        session.listings.invalidate(ListingQuery(account: account, bucket: target,
+                                                prefix: S3TransferKeys.parentPrefix(of: key)))
         logger.info("Restored version \(versionId) of \(target)/\(key)")
     }
 
     /// Changes the storage class of an object by copying it to itself with the new class.
     /// All existing metadata is preserved via metadataDirective: .copy.
     func changeStorageClass(key: String, storageClass: S3ClientTypes.StorageClass, bucket: String? = nil) async throws {
-        if client == nil { try await initializeClient() }
-        guard let client = client else { throw S3ServiceError.clientNotInitialized }
-
+        let generation = session.generation
+        let account = session.configuration.account
         let target = bucket ?? currentBucket
-        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? key
-        let copySource = "\(target)/\(encodedKey)"
-        let input = CopyObjectInput(
-            bucket: target,
-            copySource: copySource,
-            key: key,
-            metadataDirective: .copy,
-            storageClass: storageClass
-        )
-        _ = try await client.copyObject(input: input)
+        if client == nil { try await initializeClient() }
+        guard session.isCurrent(generation) else { throw CancellationError() }
+        guard let client = client else { throw S3ServiceError.clientNotInitialized }
+        let location = TransferObjectLocation(accountScope: account, bucket: target, key: key)
+        try await performS3ObjectCopy(client: client,
+            request: .init(kind: .copy, source: location, destination: location, generation: generation),
+            revision: .init(etag: nil, versionID: nil, lastModified: nil, size: nil), storageClass: storageClass,
+            contextGuard: { guard self.session.isCurrent(generation) else { throw CancellationError() } })
+        await invalidateMedia(key: key, bucket: target, account: account)
+        guard session.isCurrent(generation) else { throw CancellationError() }
         logger.info("Changed storage class of \(target)/\(key) to \(storageClass.rawValue)")
     }
 

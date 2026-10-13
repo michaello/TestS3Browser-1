@@ -1,0 +1,38 @@
+{
+  "id": "F10",
+  "expected_behavior": "Row/grid previews return downsampled images under the transfer budget; video posters do not require a whole-movie download merely to render a small preview.",
+  "passed": true,
+  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:33.622673+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F10MediaPreviewTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F10MediaPreviewTests",
+      "name": "actualDownsample()",
+      "time": "0.033730125"
+    },
+    {
+      "classname": "AuditCoreTests.F10MediaPreviewTests",
+      "name": "actualVideoPoster()",
+      "time": "0.270565125"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F10.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

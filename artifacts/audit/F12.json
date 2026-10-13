@@ -1,0 +1,38 @@
+{
+  "id": "F12",
+  "expected_behavior": "Equal keys in different accounts/buckets and different ETag/version identities never share an image/file result; gallery requests pass the object's bucket and mutations invalidate the affected identity.",
+  "passed": true,
+  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:36.946279+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F12MediaIdentityTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F12MediaIdentityTests",
+      "name": "accountReset()",
+      "time": "0.004088625"
+    },
+    {
+      "classname": "AuditCoreTests.F12MediaIdentityTests",
+      "name": "exactIdentity()",
+      "time": "0.018898292"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F12.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

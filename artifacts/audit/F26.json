@@ -1,0 +1,58 @@
+{
+  "id": "F26",
+  "expected_behavior": "Stars, tags and new-file markers use account/bucket-qualified identities; equal keys remain independent and legacy mappings are migrated or retained without silent reassignment/data loss.",
+  "passed": true,
+  "source_fingerprint": "a58f1840fe71fc9d7248051f1d6e1d5a0318b3820d3fcb3d19ec632396943e17",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:32:25.611345+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "AuditF26",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 6,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "unreadableArchiveIsRetainedRatherThanReplacedByAnEmptyStore()",
+      "time": "0.07556325"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "ambiguousLegacyLabelsAreRetainedWithoutAssigningAnAccountOrBucket()",
+      "time": "0.075421708"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "renameAndMoveCarryAnnotationsToTheExactDestination()",
+      "time": "0.075447542"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "exactUnicodeAndRepeatedSlashKeysRemainDistinct()",
+      "time": "0.0754525"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "newFileMarkersDoNotCrossBucketOrAccountBoundaries()",
+      "time": "0.075479"
+    },
+    {
+      "classname": "AuditCoreTests.AuditF26",
+      "name": "equalKeysAcrossBucketsAndAccountsKeepIndependentLabels()",
+      "time": "0.075444292"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F26.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

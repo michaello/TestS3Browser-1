@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "command": [
+        "swiftc",
+        "-emit-library",
+        "-emit-module",
+        "-module-name",
+        "AWSS3",
+        "/tmp/s3browser-lifecycle-projection/Models.swift",
+        "-o",
+        "/tmp/s3browser-lifecycle-projection/libAWSS3.dylib",
+        "-emit-module-path",
+        "/tmp/s3browser-lifecycle-projection/AWSS3.swiftmodule"
+      ],
+      "exit_code": 0,
+      "output": "/tmp/s3browser-lifecycle-projection/Models.swift:120:18: warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n118 |             self.noncurrentVersionExpiration = noncurrentVersionExpiration\n119 |             self.noncurrentVersionTransitions = noncurrentVersionTransitions\n120 |             self.`prefix` = `prefix`\n    |                  `- warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n121 |             self.status = status\n122 |             self.transitions = transitions\n\n[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>\n"
+    },
+    {
+      "command": [
+        "swiftc",
+        "-swift-version",
+        "6",
+        "-I",
+        "/tmp/s3browser-lifecycle-projection",
+        "-L",
+        "/tmp/s3browser-lifecycle-projection",
+        "-lAWSS3",
+        "-Xlinker",
+        "-rpath",
+        "-Xlinker",
+        "/tmp/s3browser-lifecycle-projection",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/ObjectTagEditor.swift",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/LifecyclePolicy.swift",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Lifecycle.swift",
+        "/tmp/s3browser-lifecycle-projection/Check.swift",
+        "-o",
+        "/tmp/s3browser-lifecycle-projection/projection-check"
+      ],
+      "exit_code": 0,
+      "output": "/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Lifecycle.swift:65:25: warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n63 |         guard let source = rule.filter else {\n64 |             // The legacy Prefix field remains supported, including an empty bucket-wide prefix.\n65 |             return rule.prefix.map { LifecycleFilter(prefix: $0) } ?? .unknown\n   |                         `- warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n66 |         }\n67 |         if rule.prefix != nil { return .unknown }\n\n/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Services/S3Service+Lifecycle.swift:67:17: warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n65 |             return rule.prefix.map { LifecycleFilter(prefix: $0) } ?? .unknown\n66 |         }\n67 |         if rule.prefix != nil { return .unknown }\n   |                 `- warning: 'prefix' is deprecated [#DeprecatedDeclaration]\n68 |         let variants = [source.and != nil, source.prefix != nil, source.tag != nil,\n69 |                         source.objectSizeGreaterThan != nil, source.objectSizeLessThan != nil]\n\n[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>\n"
+    },
+    {
+      "command": [
+        "/tmp/s3browser-lifecycle-projection/projection-check"
+      ],
+      "exit_code": 0,
+      "output": "Actual production lifecycle projection preserved date/AND/prefix/tag/size/default-minimum fields; invalid filter remains unknown\n"
+    }
+  ],
+  "sdk_revision": "37f1ef1c1c00a28b867dd761f20a2bd8a0f2a6b9",
+  "pinned_models_sha256": "17a6951a63857a52a9fd87a0f578d495303e751d38bdf2869c973df31f1d1239",
+  "model_boundary_sha256": "1d82c62397bbc7297712809b17862c5733c5995a231581c43ea481f5dacc08cf",
+  "limits": "Executed real changed production lifecycle adapter against exact pinned AWS value declarations only. SDK transport/runtime and app build are not exercised; E01 remains required.",
+  "source_hashes": {
+    "Sources/Core/ObjectTagEditor.swift": "22860cf8377ae1e3061f7f69ac2e535c6b04a66d3f0364726087472bedfa34d6",
+    "Sources/Core/LifecyclePolicy.swift": "13df824bfd035b4a87d1c3fae54366ce331a1ad96252132bba41e168f42047a6",
+    "Sources/Services/S3Service+Lifecycle.swift": "9e00719b598d1f4874e80a59574a3a651a402cf5c88d326ee4616f60655d893b"
+  }
+}

@@ -1,0 +1,37 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[8 / 32] AuditCore
+[10 / 34] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[20 / 31] AuditCoreTests-product
+[37 / 48] AuditCoreTests-product
+[41 / 47] AuditCoreTests-product
+[43 / 47] AuditCoreTests-product
+Build complete! (5.48 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F03TabRetentionTests started.
+􀟈  Suite F02BrowseStartupTests started.
+􀟈  Test "Initial selection creates only its own screen, including a restored non-Browse tab" started.
+􀟈  Test "An account configuration reset releases hidden account-specific screen state" started.
+􀟈  Test "Restoring root does not perform an intermediate root request" started.
+􀟈  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" started.
+􀟈  Test "Saved folder lists once while bucket discovery remains suspended" started.
+􁁛  Test "An account configuration reset releases hidden account-specific screen state" passed after 0.001 seconds.
+􁁛  Test "Restoring root does not perform an intermediate root request" passed after 0.001 seconds.
+􁁛  Test "Initial selection creates only its own screen, including a restored non-Browse tab" passed after 0.001 seconds.
+􁁛  Test "A revisit retains the same per-route cache and sends no listing within sixty seconds" passed after 0.001 seconds.
+􁁛  Suite F03TabRetentionTests passed after 0.001 seconds.
+􁁛  Test "Saved folder lists once while bucket discovery remains suspended" passed after 0.001 seconds.
+􁁛  Suite F02BrowseStartupTests passed after 0.001 seconds.
+􁁛  Test run with 5 tests in 2 suites passed after 0.001 seconds.

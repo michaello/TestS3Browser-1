@@ -1,25 +1,32 @@
 import SwiftUI
 import os.log
 
-@Observable
+@Observable @MainActor
 final class StatsViewModel {
     var stats: [BucketStats] = []
     var isLoading = false
     var error: String?
+    private var requestID: UUID?
 
     private let logger = Logger(subsystem: "com.s3browser", category: "StatsViewModel")
 
-    func load(s3Service: S3Service) async {
+    func load(s3Service: S3Service, force: Bool = false) async {
+        let id = UUID()
+        requestID = id
+        let generation = s3Service.session.generation
         isLoading = true
         error = nil
         do {
-            let fetched = try await s3Service.fetchBucketStats()
+            let fetched = try await s3Service.fetchBucketStats(force: force)
+            guard requestID == id, s3Service.session.isCurrent(generation) else { return }
             stats = fetched
+            error = s3Service.recentRefreshError
         } catch {
+            guard requestID == id, s3Service.session.isCurrent(generation) else { return }
             logger.error("fetchBucketStats failed: \(error.localizedDescription)")
             self.error = error.localizedDescription
         }
-        isLoading = false
+        if requestID == id { isLoading = false }
     }
 }
 
@@ -58,7 +65,7 @@ struct StatsView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        Task { await viewModel.load(s3Service: s3Service) }
+                        Task { await viewModel.load(s3Service: s3Service, force: true) }
                     } label: {
                         Image(systemName: "arrow.clockwise")
                     }
@@ -66,11 +73,21 @@ struct StatsView: View {
                 }
             }
         }
-        .task { await viewModel.load(s3Service: s3Service) }
+        .task(id: s3Service.session.generation) { await viewModel.load(s3Service: s3Service) }
     }
 
     private var statsList: some View {
         List {
+            if let message = viewModel.error ?? s3Service.recentRefreshError {
+                Section {
+                    Label(message, systemImage: "exclamationmark.triangle")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Text("Totals include last saved data for unavailable buckets.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
             Section {
                 summaryRow
             }
@@ -80,7 +97,7 @@ struct StatsView: View {
                 }
             }
         }
-        .refreshable { await viewModel.load(s3Service: s3Service) }
+        .refreshable { await viewModel.load(s3Service: s3Service, force: true) }
     }
 
     private var summaryRow: some View {
@@ -89,7 +106,7 @@ struct StatsView: View {
         let summary = BucketStats(bucket: "__summary__", objectCount: totalObjects, totalBytes: totalBytes)
         return HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Total Objects")
+                Text(s3Service.isCatalogComplete ? "Total Objects" : "Objects (incomplete)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(summary.formattedCount)
@@ -97,7 +114,7 @@ struct StatsView: View {
             }
             Divider().frame(height: 36)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Total Size")
+                Text(s3Service.isCatalogComplete ? "Total Size" : "Size (incomplete)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(summary.formattedSize)

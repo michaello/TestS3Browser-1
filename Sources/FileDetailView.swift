@@ -2,10 +2,18 @@ import SwiftUI
 import AVKit
 import WebKit
 import AWSS3
+import UniformTypeIdentifiers
 
 struct FileDetailView: View {
     let object: S3Object
     let service: S3Service
+    @Environment(\.dismiss) private var dismiss
+    @State private var presentationAccount: String
+
+    init(object: S3Object, service: S3Service) {
+        self.object = object; self.service = service
+        _presentationAccount = State(initialValue: service.session.configuration.account)
+    }
 
     @State private var fileContent: FileContent?
     @State private var isLoading = false
@@ -14,6 +22,11 @@ struct FileDetailView: View {
     @State private var showingDetails = false
     @State private var showingShareSheet = false
     @State private var objectMetadata: S3ObjectMetadata? = nil
+    @State private var metadataError: String?
+    @State private var versionsExpanded = false
+    @State private var tagsExpanded = false
+    @State private var permissionsExpanded = false
+    @State private var lifecycleExpanded = false
     @State private var exportURL: URL? = nil
     @State private var isExporting = false
     @State private var showExportError = false
@@ -22,15 +35,14 @@ struct FileDetailView: View {
     @State private var dataURLCopyDone = false
     @State private var isDownloadingToCache = false
     @State private var cachedFileURL: URL? = nil
+    @State private var originalLease: OriginalFileLease?
+    @State private var exportLease: ExportFileLease?
+    @State private var openLease: ExportFileLease?
+    @State private var fileLoadID = UUID()
     @State private var isChangingStorageClass = false
     @State private var storageClassError: String? = nil
     @State private var showStorageClassError = false
-    @State private var objectTags: [(key: String, value: String)] = []
-    @State private var isLoadingTags = false
-    @State private var isEditingTags = false
-    @State private var editableTags: [(key: String, value: String)] = []
-    @State private var isSavingTags = false
-    @State private var tagsError: String? = nil
+    @State private var tagEditor = ObjectTagEditor()
     @State private var showTagsError = false
     @State private var objectACL: S3ObjectACL? = nil
     @State private var isLoadingACL = false
@@ -38,12 +50,26 @@ struct FileDetailView: View {
     @State private var versions: [S3VersionEntry] = []
     @State private var isLoadingVersions = false
     @State private var versionsError: String? = nil
-    @State private var restoringVersionId: String? = nil
+    @State private var versionRestore = VersionRestoreFlow()
+    private var restoringVersionId: String? { versionRestore.activeVersion }
     @State private var showRestoreConfirm = false
     @State private var pendingRestoreVersionId: String? = nil
     @State private var lifecycleRules: [LifecycleRuleDisplay] = []
     @State private var isLoadingLifecycle = false
-    @State private var nextTransition: LifecycleTransition? = nil
+    private var lifecyclePrediction: LifecyclePrediction {
+        service.lifecyclePrediction(
+            objectKey: object.key, objectCreated: object.lastModified, rules: lifecycleRules,
+            objectSize: object.size,
+            objectTags: tagEditor.loadState == .loaded ? tagEditor.tags : nil,
+            currentStorageClass: objectMetadata.map { $0.storageClass ?? "STANDARD" },
+            replicationStatus: objectMetadata?.replicationStatus
+        )
+    }
+
+    private var nextTransition: LifecycleTransition? {
+        if case .next(let transition) = lifecyclePrediction { return transition }
+        return nil
+    }
 
     enum FileContent {
         case text(String)
@@ -68,17 +94,17 @@ struct FileDetailView: View {
         .sheet(isPresented: $showingShareSheet) {
             SharePresignedURLSheet(object: object, s3Service: service)
         }
-        .sheet(isPresented: Binding(get: { exportURL != nil }, set: { if !$0 { exportURL = nil } })) {
+        .sheet(isPresented: Binding(get: { exportURL != nil }, set: { if !$0 { releaseExport() } })) {
             if let url = exportURL {
                 ActivityView(url: url) {
-                    exportURL = nil
+                    releaseExport()
                 }
             }
         }
-        .sheet(isPresented: Binding(get: { cachedFileURL != nil }, set: { if !$0 { cachedFileURL = nil } })) {
+        .sheet(isPresented: Binding(get: { cachedFileURL != nil }, set: { if !$0 { releaseOpenFile() } })) {
             if let url = cachedFileURL {
                 ActivityView(url: url) {
-                    cachedFileURL = nil
+                    releaseOpenFile()
                 }
             }
         }
@@ -95,7 +121,23 @@ struct FileDetailView: View {
         .alert("Tag Save Failed", isPresented: $showTagsError) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(tagsError ?? "Unknown error")
+            Text(tagEditor.saveError ?? "Unknown error")
+        }
+        .alert("Restore Failed", isPresented: Binding(get: { versionRestore.errorMessage != nil }, set: { if !$0 { versionRestore.clearError() } })) {
+            Button("OK", role: .cancel) { versionRestore.clearError() }
+        } message: {
+            Text(versionRestore.errorMessage ?? "Unknown error")
+        }
+        .onDisappear {
+            fileLoadID = UUID()
+            releaseExport(); releaseOpenFile()
+            let original = originalLease
+            originalLease = nil
+            if let original { Task { await MediaOriginalStore.shared.release(original) } }
+        }
+        .onChange(of: service.session.configuration.account) { _, _ in
+            fileLoadID = UUID(); fileContent = nil
+            dismiss()
         }
     }
 
@@ -108,7 +150,7 @@ struct FileDetailView: View {
             } else if let error {
                 errorView(error)
             } else if case .html(let html) = fileContent {
-                HTMLWebView(html: html)
+                HTMLWebView(html: html, documentID: originalLease?.identity.digest ?? service.mediaIdentity(for: object).digest)
                     .ignoresSafeArea(edges: .bottom)
             } else {
                 downloadProgressView
@@ -155,6 +197,7 @@ struct FileDetailView: View {
         .sheet(isPresented: $showingDetails) {
             NavigationStack {
                 ScrollView { metadataCard.padding() }
+                    .task { await loadMetadata() }
                     .navigationTitle("File Details")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
@@ -166,12 +209,7 @@ struct FileDetailView: View {
             .presentationDetents([.medium])
         }
         .task {
-            async let fileLoad: Void = loadFile()
-            async let metaLoad: Void = loadMetadata()
-            async let versLoad: Void = loadVersions()
-            async let tagsLoad: Void = loadTags()
-            async let aclLoad: Void = loadACL()
-            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad)
+            await DetailLoadSchedule.initial(isHTML: true, content: { await loadFile() }, metadata: { await loadMetadata() })
         }
     }
 
@@ -217,6 +255,9 @@ struct FileDetailView: View {
                         MetadataRow(label: key, value: meta.userMetadata[key] ?? "")
                     }
                 }
+            } else if let metadataError {
+                Text(metadataError).font(.caption).foregroundStyle(.secondary)
+                Button("Retry Metadata") { Task { await loadMetadata(force: true) } }.font(.caption)
             } else {
                 HStack(spacing: 6) {
                     ProgressView()
@@ -271,16 +312,28 @@ struct FileDetailView: View {
                             copyAsDataURLButton(image: image)
                         }
                     case .video(let url):
-                        VideoContentView(url: url, fileName: object.fileName, fileSize: object.formattedSize)
+                        VideoContentView(url: url, fileName: object.fileName, fileSize: object.formattedSize, originalIdentity: originalLease?.identity)
                     case .html(let html):
-                        WebContentView(html: html)
+                        WebContentView(html: html, documentID: originalLease?.identity.digest ?? service.mediaIdentity(for: object).digest)
                     }
                 }
 
-                versionsSection
-                tagsSection
-                aclSection
-                lifecycleSection
+                DisclosureGroup("Versions", isExpanded: $versionsExpanded) {
+                    if versionsExpanded { versionsSection }
+                }
+                .task(id: versionsExpanded) { if versionsExpanded { await loadVersions() } }
+                DisclosureGroup("S3 Tags", isExpanded: $tagsExpanded) {
+                    if tagsExpanded { tagsSection }
+                }
+                .task(id: tagsExpanded) { if tagsExpanded { await loadTags() } }
+                DisclosureGroup("Permissions", isExpanded: $permissionsExpanded) {
+                    if permissionsExpanded { aclSection }
+                }
+                .task(id: permissionsExpanded) { if permissionsExpanded { await loadACL() } }
+                DisclosureGroup("Lifecycle", isExpanded: $lifecycleExpanded) {
+                    if lifecycleExpanded { lifecycleSection }
+                }
+                .task(id: lifecycleExpanded) { if lifecycleExpanded { await loadLifecycle() } }
             }
             .padding()
         }
@@ -319,13 +372,7 @@ struct FileDetailView: View {
             }
         }
         .task {
-            async let fileLoad: Void = loadFile()
-            async let metaLoad: Void = loadMetadata()
-            async let versLoad: Void = loadVersions()
-            async let tagsLoad: Void = loadTags()
-            async let aclLoad: Void = loadACL()
-            async let lifecycleLoad: Void = loadLifecycle()
-            _ = await (fileLoad, metaLoad, versLoad, tagsLoad, aclLoad, lifecycleLoad)
+            await DetailLoadSchedule.initial(isHTML: false, content: { await loadFile() }, metadata: { await loadMetadata() })
         }
         .confirmationDialog(
             "Restore this version?",
@@ -461,71 +508,75 @@ struct FileDetailView: View {
     }
 
     private func copyAsDataURL(image: UIImage) async {
+        let generation = service.session.generation
         isCopyingDataURL = true
         defer { isCopyingDataURL = false }
-
-        let ext = (object.key as NSString).pathExtension.lowercased()
-        let mimeType: String
-        switch ext {
-        case "jpg", "jpeg": mimeType = "image/jpeg"
-        case "png":         mimeType = "image/png"
-        case "gif":         mimeType = "image/gif"
-        case "webp":        mimeType = "image/webp"
-        default:            mimeType = "image/png"
+        do {
+            let lease = try await originalForExport()
+            do {
+                let mime = objectMetadata?.contentType ?? UTType(filenameExtension: lease.identity.fileExtension)?.preferredMIMEType ?? "application/octet-stream"
+                let url = try await MediaFileIO.shared.dataURL(at: lease.url, mimeType: mime)
+                await MediaOriginalStore.shared.release(lease)
+                try Task.checkCancellation()
+                guard service.session.isCurrent(generation) else { throw CancellationError() }
+                UIPasteboard.general.string = url
+                dataURLCopyDone = true
+            } catch { await MediaOriginalStore.shared.release(lease); throw error }
+        } catch {
+            exportErrorMessage = error.localizedDescription; showExportError = true
         }
+        try? await Task.sleep(for: .milliseconds(1_500))
+        dataURLCopyDone = false
+    }
 
-        let data: Data
-        if ext == "png" {
-            data = image.pngData() ?? Data()
-        } else {
-            data = image.jpegData(compressionQuality: 1.0) ?? Data()
-        }
+    private func stageOriginal() async throws -> ExportFileLease {
+        let generation = service.session.generation
+        let original = try await originalForExport()
+        do {
+            try Task.checkCancellation()
+            guard service.session.isCurrent(generation) else { throw CancellationError() }
+            let staged = try await MediaExportStore.shared.stage(original)
+            await MediaOriginalStore.shared.release(original)
+            if Task.isCancelled || !service.session.isCurrent(generation) {
+                await MediaExportStore.shared.release(staged)
+                throw CancellationError()
+            }
+            return staged
+        } catch { await MediaOriginalStore.shared.release(original); throw error }
+    }
 
-        let b64 = data.base64EncodedString()
-        let dataURL = "data:\(mimeType);base64,\(b64)"
-        await MainActor.run {
-            UIPasteboard.general.string = dataURL
-            dataURLCopyDone = true
-        }
-
-        try? await Task.sleep(nanoseconds: 1_500_000_000)
-        await MainActor.run { dataURLCopyDone = false }
+    private func originalForExport() async throws -> OriginalFileLease {
+        guard presentationAccount == service.session.configuration.account else { throw CancellationError() }
+        let current = service.mediaIdentity(for: object)
+        if let originalLease, originalLease.identity.matches(account: current.account, bucket: current.bucket, key: current.key),
+           let lease = try await MediaOriginalStore.shared.cachedFile(for: originalLease.identity) { return lease }
+        // Streaming previews and restored navigation values may not carry the latest ETag.
+        let requested = S3Object(key: object.key, size: -1, lastModified: object.lastModified, etag: nil, bucket: current.bucket)
+        return try await service.downloadOriginalFile(for: requested)
     }
 
     private func prepareExport() async {
         isExporting = true
         defer { isExporting = false }
-
         do {
-            let data: Data
-            switch fileContent {
-            case .text(let text):
-                data = Data(text.utf8)
-            case .image(let image):
-                data = image.pngData() ?? Data()
-            case .video(let url):
-                data = try Data(contentsOf: url)
-            case .html(let html):
-                data = Data(html.utf8)
-            case nil:
-                data = try await service.downloadObject(key: object.key, bucket: object.bucket)
-            }
-
-            let tempURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(UUID().uuidString)
-                .appendingPathComponent(object.fileName)
-            try FileManager.default.createDirectory(
-                at: tempURL.deletingLastPathComponent(),
-                withIntermediateDirectories: true
-            )
-            try data.write(to: tempURL)
-            await MainActor.run { exportURL = tempURL }
+            let staged = try await stageOriginal()
+            releaseExport()
+            exportLease = staged; exportURL = staged.url
         } catch {
-            await MainActor.run {
-                exportErrorMessage = error.localizedDescription
-                showExportError = true
-            }
+            exportErrorMessage = error.localizedDescription; showExportError = true
         }
+    }
+
+    private func releaseExport() {
+        let lease = exportLease
+        exportLease = nil; exportURL = nil
+        if let lease { Task { await MediaExportStore.shared.release(lease) } }
+    }
+
+    private func releaseOpenFile() {
+        let lease = openLease
+        openLease = nil; cachedFileURL = nil
+        if let lease { Task { await MediaExportStore.shared.release(lease) } }
     }
 
     @ViewBuilder
@@ -593,60 +644,37 @@ struct FileDetailView: View {
         }
     }
 
-    private var cacheFileURL: URL {
-        let sanitized = object.key.replacingOccurrences(of: "/", with: "_")
-        return FileManager.default.temporaryDirectory
-            .appendingPathComponent("s3cache")
-            .appendingPathComponent(sanitized)
-    }
-
     private func openFromCache() async {
         isDownloadingToCache = true
         defer { isDownloadingToCache = false }
-
-        let dest = cacheFileURL
-        if !FileManager.default.fileExists(atPath: dest.path) {
-            do {
-                try FileManager.default.createDirectory(
-                    at: dest.deletingLastPathComponent(),
-                    withIntermediateDirectories: true
-                )
-                let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
-                try data.write(to: dest)
-            } catch {
-                return
-            }
+        do {
+            let staged = try await stageOriginal()
+            releaseOpenFile()
+            openLease = staged; cachedFileURL = staged.url
+        } catch {
+            exportErrorMessage = error.localizedDescription; showExportError = true
         }
-        await MainActor.run { cachedFileURL = dest }
     }
 
-    private func loadTags() async {
-        isLoadingTags = true
-        defer { isLoadingTags = false }
-        do {
-            let result = try await service.getObjectTags(key: object.key, bucket: object.bucket)
-            await MainActor.run { objectTags = result }
-        } catch {
-            // Tag load failure is non-fatal; section stays empty.
+    private func loadTags(force: Bool = false) async {
+        await tagEditor.load {
+            if case .tags(let tags) = try await DetailMetadataCache.shared.load(.tags, object: object, service: service, force: force) {
+                return tags
+            }
+            throw CancellationError()
         }
     }
 
     private func saveTags() async {
-        isSavingTags = true
-        defer { isSavingTags = false }
-        let trimmed = editableTags.filter { !$0.key.trimmingCharacters(in: .whitespaces).isEmpty }
-        do {
-            try await service.setObjectTags(key: object.key, tags: trimmed, bucket: object.bucket)
-            await MainActor.run {
-                objectTags = trimmed
-                isEditingTags = false
-            }
-        } catch {
-            await MainActor.run {
-                tagsError = error.localizedDescription
-                showTagsError = true
-            }
+        let saved = await tagEditor.save { replacement in
+            try await service.setObjectTags(
+                key: object.key,
+                tags: replacement.map { (key: $0.key, value: $0.value) },
+                bucket: object.bucket
+            )
         }
+        if saved { DetailMetadataCache.shared.seed(.tags(tagEditor.tags), section: .tags, object: object, service: service) }
+        if !saved && tagEditor.saveError != nil { showTagsError = true }
     }
 
     @ViewBuilder
@@ -656,17 +684,18 @@ struct FileDetailView: View {
                 Text("S3 Tags")
                     .font(.headline)
                 Spacer()
-                if isLoadingTags {
+                if tagEditor.loadState == .loading {
                     ProgressView().scaleEffect(0.7)
-                } else if isEditingTags {
+                } else if tagEditor.isEditing {
                     Button("Cancel") {
-                        isEditingTags = false
+                        tagEditor.cancelEditing()
                     }
                     .font(.caption)
+                    .disabled(tagEditor.isSaving)
                     Button {
                         Task { await saveTags() }
                     } label: {
-                        if isSavingTags {
+                        if tagEditor.isSaving {
                             ProgressView().scaleEffect(0.7)
                         } else {
                             Text("Save")
@@ -674,23 +703,23 @@ struct FileDetailView: View {
                         }
                     }
                     .font(.caption)
-                    .disabled(isSavingTags)
+                    .disabled(!tagEditor.canSave)
                 } else {
                     Button("Edit") {
-                        editableTags = objectTags
-                        isEditingTags = true
+                        tagEditor.beginEditing()
                     }
                     .font(.caption)
+                    .disabled(!tagEditor.canEdit)
                 }
             }
             .padding(.top, 8)
 
-            if isEditingTags {
-                ForEach(editableTags.indices, id: \.self) { i in
+            if tagEditor.isEditing {
+                ForEach(tagEditor.draft.indices, id: \.self) { i in
                     HStack(spacing: 8) {
                         TextField("Key", text: Binding(
-                            get: { editableTags[i].key },
-                            set: { editableTags[i].key = $0 }
+                            get: { tagEditor.draft[i].key },
+                            set: { tagEditor.draft[i].key = $0 }
                         ))
                         .textFieldStyle(.roundedBorder)
                         .font(.caption)
@@ -701,36 +730,49 @@ struct FileDetailView: View {
                             .foregroundStyle(.secondary)
 
                         TextField("Value", text: Binding(
-                            get: { editableTags[i].value },
-                            set: { editableTags[i].value = $0 }
+                            get: { tagEditor.draft[i].value },
+                            set: { tagEditor.draft[i].value = $0 }
                         ))
                         .textFieldStyle(.roundedBorder)
                         .font(.caption)
                         .frame(maxWidth: .infinity)
 
                         Button {
-                            editableTags.remove(at: i)
+                            tagEditor.draft.remove(at: i)
                         } label: {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundStyle(.red)
                         }
                     }
                 }
+                .disabled(tagEditor.isSaving)
 
                 Button {
-                    editableTags.append((key: "", value: ""))
+                    tagEditor.draft.append(ObjectTag(key: "", value: ""))
                 } label: {
                     Label("Add Tag", systemImage: "plus.circle")
                         .font(.caption)
                 }
-            } else if objectTags.isEmpty {
+                .disabled(tagEditor.isSaving)
+                Text("Saving replaces the object's complete tag set.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if case .failed(let message) = tagEditor.loadState {
+                Text(message).font(.caption).foregroundStyle(.red)
+                Button("Retry Loading Tags") { Task { await loadTags(force: true) } }
+                    .font(.caption)
+            } else if tagEditor.loadState == .idle {
+                Button("Load Tags") { Task { await loadTags() } }.font(.caption)
+            } else if tagEditor.loadState == .loading {
+                Text("Loading tags…").font(.caption).foregroundStyle(.secondary)
+            } else if tagEditor.tags.isEmpty {
                 Text("No tags")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 4)
             } else {
-                ForEach(objectTags, id: \.key) { tag in
+                ForEach(tagEditor.tags, id: \.key) { tag in
                     HStack {
                         Text(tag.key)
                             .font(.caption)
@@ -758,9 +800,11 @@ struct FileDetailView: View {
         isLoadingACL = true
         defer { isLoadingACL = false }
         do {
-            let result = try await service.getObjectAcl(key: object.key, bucket: object.bucket)
-            await MainActor.run { objectACL = result }
+            if case .permissions(let result) = try await DetailMetadataCache.shared.load(.permissions, object: object, service: service) {
+                objectACL = result; aclError = nil
+            }
         } catch {
+            guard !(error is CancellationError) else { return }
             let msg = error.localizedDescription
             let display = msg.contains("AccessControlListNotSupported")
                 ? "ACLs disabled on this bucket"
@@ -772,14 +816,14 @@ struct FileDetailView: View {
     private func loadLifecycle() async {
         isLoadingLifecycle = true
         defer { isLoadingLifecycle = false }
-        guard let bucket = object.bucket else { return }
-        lifecycleRules = await service.fetchLifecycleRules(bucket: bucket)
-        if !lifecycleRules.isEmpty {
-            nextTransition = service.calculateNextTransition(
-                objectKey: object.key,
-                objectCreated: object.lastModified,
-                rules: lifecycleRules
-            )
+        guard case .lifecycle(let rules) = try? await DetailMetadataCache.shared.load(.lifecycle, object: object, service: service) else { return }
+        lifecycleRules = rules
+        if lifecycleRules.contains(where: {
+            $0.isEnabled && !$0.filter.tags.isEmpty &&
+            LifecyclePolicy.eligibility(filter: $0.filter, key: object.key, size: object.size, tags: nil) != .doesNotMatch
+        }),
+           tagEditor.loadState != .loaded {
+            await loadTags()
         }
     }
 
@@ -854,9 +898,16 @@ struct FileDetailView: View {
                     .padding(.vertical, 4)
             } else if let transition = nextTransition {
                 VStack(alignment: .leading, spacing: 8) {
-                    MetadataRow(label: "Next Transition", value: transition.transitionDate.relativeFormatted())
+                    MetadataRow(label: "Estimated Eligibility", value: transition.transitionDate.relativeFormatted())
                     MetadataRow(label: "Target Storage Class", value: transition.targetStorageClass)
+                    Text("S3 processes eligible objects asynchronously.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+            } else if lifecyclePrediction == .unknown {
+                Text("Transition eligibility is unknown until the applicable rules and object metadata are available.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             } else {
                 Text("No upcoming transitions")
                     .font(.caption)
@@ -874,101 +925,109 @@ struct FileDetailView: View {
         isLoadingVersions = true
         defer { isLoadingVersions = false }
         do {
-            let result = try await service.listObjectVersions(key: object.key, bucket: object.bucket)
-            await MainActor.run { versions = result }
+            if case .versions(let result) = try await DetailMetadataCache.shared.load(.versions, object: object, service: service) {
+                versions = result; versionsError = nil
+            }
         } catch {
+            guard !(error is CancellationError) else { return }
             await MainActor.run { versionsError = error.localizedDescription }
         }
     }
 
     private func restoreVersion(versionId: String) async {
-        restoringVersionId = versionId
-        defer { restoringVersionId = nil }
-        do {
+        let generation = service.session.generation
+        await versionRestore.restore(versionId, isCurrent: {
+            presentationAccount == service.session.configuration.account && service.session.isCurrent(generation)
+        }, write: {
             try await service.restoreVersion(key: object.key, versionId: versionId, bucket: object.bucket)
-            await loadVersions()
+        }, invalidate: {}, content: {
+            await loadFile(forceRevisionRefresh: true)
+            if let error { throw PreviewRefreshError(message: error) }
+        }, metadata: {
+            let metadata = try await service.headObject(key: object.key, bucket: object.bucket)
+            guard service.session.isCurrent(generation) else { throw CancellationError() }
+            objectMetadata = metadata
+            DetailMetadataCache.shared.seed(.metadata(metadata), section: .metadata, object: object, service: service)
+        }, versions: {
+            let result = try await service.listObjectVersions(key: object.key, bucket: object.bucket)
+            guard service.session.isCurrent(generation) else { throw CancellationError() }
+            versions = result; versionsError = nil
+            DetailMetadataCache.shared.seed(.versions(result), section: .versions, object: object, service: service)
+        })
+    }
+
+    private func loadMetadata(force: Bool = false) async {
+        do {
+            if case .metadata(let meta) = try await DetailMetadataCache.shared.load(.metadata, object: object, service: service, force: force) {
+                objectMetadata = meta; metadataError = nil
+            }
         } catch {
-            // Restore failure is silently swallowed; the list refresh will show the real state.
+            if !(error is CancellationError) { metadataError = error.localizedDescription }
         }
     }
 
-    private func loadMetadata() async {
+    private func loadFile(forceRevisionRefresh: Bool = false) async {
+        let request = UUID(), generation = service.session.generation
+        fileLoadID = request
+        isLoading = true; error = nil; downloadedBytes = 0
+        defer { if fileLoadID == request { isLoading = false } }
         do {
-            let meta = try await service.headObject(key: object.key, bucket: object.bucket)
-            await MainActor.run { objectMetadata = meta }
-        } catch {
-            // Metadata load failure is non-fatal; the card stays in loading state.
-        }
-    }
-
-    private func loadFile() async {
-        isLoading = true
-        error = nil
-        downloadedBytes = 0
-
-        do {
-            // Check cache first for images
-            if object.fileType == .image {
-                if let cachedImage = await ImageCacheActor.shared.getFullImage(for: object.key) {
-                    await MainActor.run {
-                        fileContent = .image(cachedImage)
-                        isLoading = false
+            guard presentationAccount == service.session.configuration.account else { throw CancellationError() }
+            let requestedObject = forceRevisionRefresh
+                ? S3Object(key: object.key, size: -1, lastModified: object.lastModified, etag: nil, bucket: object.bucket)
+                : object
+            if object.fileType == .video {
+                let identity = service.mediaIdentity(for: requestedObject)
+                if let cached = try await MediaOriginalStore.shared.cachedFile(for: identity) {
+                    guard fileLoadID == request, service.session.isCurrent(generation), !Task.isCancelled else {
+                        await MediaOriginalStore.shared.release(cached); throw CancellationError()
                     }
+                    if let old = originalLease { await MediaOriginalStore.shared.release(old) }
+                    originalLease = cached; fileContent = .video(cached.url)
+                    return
+                }
+                if let url = service.generatePresignedURL(for: object.key, bucket: identity.bucket).flatMap(URL.init(string:)) {
+                    guard fileLoadID == request, service.session.isCurrent(generation), !Task.isCancelled else { throw CancellationError() }
+                    fileContent = .video(url)
                     return
                 }
             }
-
-            let data = try await service.downloadObject(key: object.key, bucket: object.bucket)
-            await MainActor.run {
-                downloadedBytes = Int64(data.count)
+            let lease = try await service.downloadOriginalFile(for: requestedObject) { value in
+                Task { @MainActor in
+                    if fileLoadID == request, service.session.isCurrent(generation) { downloadedBytes = value }
+                }
             }
-
+            guard fileLoadID == request, service.session.isCurrent(generation), !Task.isCancelled else {
+                await MediaOriginalStore.shared.release(lease); throw CancellationError()
+            }
+            if let old = originalLease { await MediaOriginalStore.shared.release(old) }
+            originalLease = lease
             switch object.fileType {
-            case .log, .text:
-                if let text = String(data: data, encoding: .utf8) {
-                    fileContent = .text(text)
-                } else {
-                    error = "Unable to decode text content"
-                }
             case .image:
-                // Cache the image for future use (both full and thumbnail)
-                if let image = await ImageCacheActor.shared.cacheImage(from: data, for: object.key) {
-                    fileContent = .image(image)
-                } else {
-                    error = "Unable to decode image"
-                }
+                let resolved = S3Object(key: object.key, size: lease.bytes, lastModified: object.lastModified,
+                                        etag: lease.identity.etag, bucket: lease.identity.bucket)
+                guard let image = await ImageCacheActor.shared.loadDisplayImage(for: resolved, using: service) else { throw MediaTransferError.missingBody }
+                guard fileLoadID == request, service.session.isCurrent(generation) else { throw CancellationError() }
+                fileContent = .image(image)
             case .video:
-                // Write video data to temp file for AVPlayer
-                let tempDir = FileManager.default.temporaryDirectory
-                let tempURL = tempDir.appendingPathComponent(object.fileName)
-                try data.write(to: tempURL)
-                fileContent = .video(tempURL)
-            case .html:
-                // Reports from phone mode are self-contained (images inlined as
-                // base64), so the HTML renders in a web view with no extra fetches.
-                if let html = String(data: data, encoding: .utf8) {
-                    fileContent = .html(html)
-                } else {
-                    error = "Unable to decode HTML content"
-                }
-            case .unknown:
-                if let text = String(data: data, encoding: .utf8) {
-                    fileContent = .text(text)
-                } else {
-                    error = "Unsupported file type"
-                }
+                fileContent = .video(lease.url)
+            case .log, .text, .unknown, .html:
+                let data = try await MediaFileIO.shared.data(at: lease.url)
+                guard let text = String(data: data, encoding: .utf8) else { throw MediaTransferError.invalidResponse }
+                guard fileLoadID == request, service.session.isCurrent(generation) else { throw CancellationError() }
+                if object.fileType == .html { fileContent = .html(text) }
+                else { fileContent = .text(text) }
             }
         } catch {
-            self.error = error.localizedDescription
+            if fileLoadID == request, !(error is CancellationError) { self.error = error.localizedDescription }
         }
-
-        isLoading = false
     }
 }
 
 struct TextContentView: View {
     let text: String
     @State private var showLineNumbers = true
+    @State private var preview = NumberedTextPreview()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -984,15 +1043,15 @@ struct TextContentView: View {
 
             if showLineNumbers {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        ForEach(Array(text.split(separator: "\n").enumerated()), id: \.offset) { index, line in
+                    LazyVStack(alignment: .leading, spacing: 2) {
+                        ForEach(preview.lines) { line in
                             HStack(alignment: .top, spacing: 12) {
-                                Text("\(index + 1)")
+                                Text("\(line.number)")
                                     .font(.system(.caption, design: .monospaced))
                                     .foregroundStyle(.secondary)
                                     .frame(width: 40, alignment: .trailing)
 
-                                Text(String(line))
+                                Text(String(line.text))
                                     .font(.system(.caption, design: .monospaced))
                             }
                         }
@@ -1011,11 +1070,15 @@ struct TextContentView: View {
                     .cornerRadius(8)
             }
         }
+        .onChange(of: PreviewTextInput(text: text), initial: true) { _, input in
+            preview.update(input)
+        }
     }
 }
 
 struct WebContentView: View {
     let html: String
+    var documentID = "inline"
     @State private var isFullScreen = false
 
     var body: some View {
@@ -1035,24 +1098,25 @@ struct WebContentView: View {
                 .buttonStyle(.bordered)
             }
 
-            HTMLWebView(html: html)
+            HTMLWebView(html: html, documentID: documentID)
                 .frame(maxWidth: .infinity)
                 .frame(height: 500)
                 .cornerRadius(8)
         }
         .fullScreenCover(isPresented: $isFullScreen) {
-            FullScreenWebView(html: html, isPresented: $isFullScreen)
+            FullScreenWebView(html: html, documentID: documentID, isPresented: $isFullScreen)
         }
     }
 }
 
 struct FullScreenWebView: View {
     let html: String
+    var documentID = "inline"
     @Binding var isPresented: Bool
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            HTMLWebView(html: html)
+            HTMLWebView(html: html, documentID: documentID)
                 .ignoresSafeArea()
 
             Button {
@@ -1072,17 +1136,30 @@ struct FullScreenWebView: View {
 /// inline their images as base64 data URIs, so nothing is fetched from the network.
 struct HTMLWebView: UIViewRepresentable {
     let html: String
+    var documentID = "inline"
+
+    @MainActor
+    final class Coordinator {
+        var loadGate = HTMLDocumentLoadGate()
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.scrollView.backgroundColor = .clear
+        context.coordinator.loadGate.load(documentID: documentID, html: html) {
+            webView.loadHTMLString($0, baseURL: nil)
+        }
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        webView.loadHTMLString(html, baseURL: nil)
+        context.coordinator.loadGate.load(documentID: documentID, html: html) {
+            webView.loadHTMLString($0, baseURL: nil)
+        }
     }
 }
 
@@ -1275,6 +1352,11 @@ struct VideoContentView: View {
     let url: URL
     var fileName: String = ""
     var fileSize: String = ""
+    var originalIdentity: MediaObjectIdentity?
+    @State private var playbackResources = MediaPlaybackResources()
+    @State private var metadataTask: Task<Void, Never>?
+    @State private var playbackToken: UUID?
+    @State private var playerURL: URL?
     @State private var player: AVPlayer?
     @State private var isFullScreen = false
     @State private var duration: String?
@@ -1360,15 +1442,30 @@ struct VideoContentView: View {
             }
             .padding(.top, 8)
         }
-        .onAppear {
-            setupPlayer()
+        .task(id: url) {
+            if playerURL != url {
+                await playbackResources.release(ifGeneration: playbackToken)
+                metadataTask?.cancel(); player?.pause(); player = nil
+                duration = nil; videoResolution = nil
+            }
+            let token = UUID()
+            playbackToken = token
+            do {
+                try await playbackResources.acquire(url: url, identity: originalIdentity, requestID: token)
+                try Task.checkCancellation()
+                if player == nil { playerURL = url; setupPlayer() }
+            } catch { await playbackResources.release(ifGeneration: token) }
         }
         .onDisappear {
-            player?.pause()
-            player = nil
+            if !isFullScreen {
+                metadataTask?.cancel(); metadataTask = nil
+                player?.pause(); player = nil
+                let token = playbackToken
+                Task { await playbackResources.release(ifGeneration: token) }
+            }
         }
         .fullScreenCover(isPresented: $isFullScreen) {
-            FullScreenVideoView(url: url, isPresented: $isFullScreen)
+            if let player { FullScreenVideoView(player: player, resources: playbackResources, isPresented: $isFullScreen) }
         }
     }
 
@@ -1378,10 +1475,12 @@ struct VideoContentView: View {
         avPlayer.play()
 
         // Extract video metadata
-        Task {
+        metadataTask?.cancel()
+        metadataTask = Task {
             let asset = AVURLAsset(url: url)
             do {
                 let cmDuration = try await asset.load(.duration)
+                try Task.checkCancellation()
                 let seconds = CMTimeGetSeconds(cmDuration)
                 if seconds.isFinite && seconds > 0 {
                     let formatted = formatDuration(seconds)
@@ -1393,6 +1492,7 @@ struct VideoContentView: View {
                 if let track = tracks.first {
                     let size = try await track.load(.naturalSize)
                     let transform = try await track.load(.preferredTransform)
+                    try Task.checkCancellation()
                     let correctedSize = size.applying(transform)
                     let width = abs(Int(correctedSize.width))
                     let height = abs(Int(correctedSize.height))
@@ -1416,24 +1516,22 @@ struct VideoContentView: View {
 }
 
 struct FullScreenVideoView: View {
-    let url: URL
+    let player: AVPlayer
+    let resources: MediaPlaybackResources
     @Binding var isPresented: Bool
-    @State private var player: AVPlayer?
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            if let player {
-                VideoPlayer(player: player)
-                    .ignoresSafeArea()
-            }
+            VideoPlayer(player: player)
+                .ignoresSafeArea()
 
             VStack {
                 HStack {
                     Spacer()
                     Button {
-                        player?.pause()
+                        player.pause()
                         isPresented = false
                     } label: {
                         Image(systemName: "xmark.circle.fill")
@@ -1447,13 +1545,10 @@ struct FullScreenVideoView: View {
             }
         }
         .onAppear {
-            let avPlayer = AVPlayer(url: url)
-            player = avPlayer
-            avPlayer.play()
+            player.play()
         }
         .onDisappear {
-            player?.pause()
-            player = nil
+            player.pause()
         }
     }
 }

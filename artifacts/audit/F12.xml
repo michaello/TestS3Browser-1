@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.0192255">
+    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="accountReset()" time="0.004088625" />
+    <testcase classname="AuditCoreTests.F12MediaIdentityTests" name="exactIdentity()" time="0.018898292" />
+  </testsuite>
+</testsuites>

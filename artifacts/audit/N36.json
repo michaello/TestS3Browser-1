@@ -1,0 +1,38 @@
+{
+  "id": "N36",
+  "expected_behavior": "Partial batch download success visibly reports missing filenames/counts with retry information before/while sharing the successful subset.",
+  "passed": true,
+  "source_fingerprint": "be84d70b3f88dcd46e7b39e68b02e34600c3786f34f8f9527fd524f068ba3e77",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T06:20:30.141177+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N36PartialBatchExportTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N36PartialBatchExportTests",
+      "name": "missingFilesAreVisibleAndRetryDoesNotRedownloadSuccesses()",
+      "time": "0.040845917"
+    },
+    {
+      "classname": "AuditCoreTests.N36PartialBatchExportTests",
+      "name": "completeFailureHasTerminalErrorSummaryAndNoShareFiles()",
+      "time": "0.03665875"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N36.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

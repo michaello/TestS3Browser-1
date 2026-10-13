@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="3" failures="0" skipped="0" time="0.0014625">
+    <testcase classname="AuditCoreTests.AuditN20" name="failedRebuildRetainsSavedRowsAndRunsOneReplacementRequest()" time="0.000936958" />
+    <testcase classname="AuditCoreTests.AuditN20" name="priorInFlightRequestCannotUndoTheRebuild()" time="0.001206083" />
+    <testcase classname="AuditCoreTests.AuditN20" name="successfulRebuildPublishesOneReplacement()" time="0.000917834" />
+  </testsuite>
+</testsuites>

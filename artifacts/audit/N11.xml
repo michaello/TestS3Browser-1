@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="2.240158459">
+    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="imageBytesAndActualTypeArePreserved(_:)" time="2.239517417" />
+    <testcase classname="AuditCoreTests.N11InvalidImageUploadTests" name="nonImagesAreRejectedBeforeUpload()" time="0.280475458" />
+  </testsuite>
+</testsuites>

@@ -1,0 +1,38 @@
+{
+  "id": "F01",
+  "expected_behavior": "With a nonempty persisted snapshot and a delayed or failed transport, Recent exposes cached rows before any network response and retains them after failure.",
+  "passed": true,
+  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:27:28.424236+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "F01CachedRecentTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 2,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.F01CachedRecentTests",
+      "name": "emptyInitialLoading()",
+      "time": "0.002262833"
+    },
+    {
+      "classname": "AuditCoreTests.F01CachedRecentTests",
+      "name": "cachedRowsRemainVisible()",
+      "time": "0.003048583"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/F01.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

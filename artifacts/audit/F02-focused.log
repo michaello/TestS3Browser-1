@@ -1,0 +1,28 @@
+Building for debugging...
+[Planning deferred tasks]
+[1 / 1]
+[5 / 25] AuditCore
+[8 / 28] AuditCore
+/Users/mike/Developer/test-projects/TestS3Browser-1/Sources/Core/BatchFileExport.swift:36:50: warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 34 | 
+ 35 |     init(store: MediaExportStore = .shared, limit: Int = 4, load: @escaping Loader,
+ 36 |          releaseOriginal: @escaping Releaser = { await MediaOriginalStore.shared.release($0) }) {
+    |                                                  `- warning: no 'async' operations occur within 'await' expression [#UnnecessaryEffectMarker]
+ 37 |         self.store = store
+ 38 |         self.limit = max(1, min(4, limit))
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[18 / 29] AuditCoreTests-product
+[21 / 32] AuditCoreTests-product
+[27 / 31] AuditCoreTests-product
+Build complete! (4.10 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite F02BrowseStartupTests started.
+􀟈  Test "Saved folder lists once while bucket discovery remains suspended" started.
+􀟈  Test "Restoring root does not perform an intermediate root request" started.
+􁁛  Test "Restoring root does not perform an intermediate root request" passed after 0.001 seconds.
+􁁛  Test "Saved folder lists once while bucket discovery remains suspended" passed after 0.001 seconds.
+􁁛  Suite F02BrowseStartupTests passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.

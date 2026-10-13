@@ -1,0 +1,53 @@
+{
+  "id": "N04",
+  "expected_behavior": "List/search shortcut outputs retain bucket identity through download/delete; legacy key-only inputs remain supported for an explicit configured bucket without ambiguous cross-bucket routing.",
+  "passed": true,
+  "source_fingerprint": "d361c924750a50ff0c756a3948081d934890807dd179ef64d7da5908155896c9",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:50:01.156828+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N04ShortcutIdentityTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "chainedObjectsRetainBucket()",
+      "time": "0.000372583"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "exactUTF8Identity()",
+      "time": "0.000226166"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "rejectsAmbiguousRouting()",
+      "time": "0.000374125"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "invalidInputs()",
+      "time": "0.000388542"
+    },
+    {
+      "classname": "AuditCoreTests.N04ShortcutIdentityTests",
+      "name": "legacyInputs()",
+      "time": "0.000482916"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N04.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

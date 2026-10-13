@@ -1,0 +1,53 @@
+{
+  "id": "N15",
+  "expected_behavior": "Negative shortcut counts return a validation error before collection operations/network work; supported zero and boundary counts are tested and do not trap.",
+  "passed": true,
+  "source_fingerprint": "801fe31e45f93d16cbeefc046f5a453d3f948a08fab8425e085f11ddeb9d0878",
+  "source_unchanged_during_check": true,
+  "recorded_at": "2026-10-13T05:27:09.802785+00:00",
+  "command": [
+    "xcrun",
+    "swift",
+    "test",
+    "--package-path",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1",
+    "--disable-xctest",
+    "--enable-swift-testing",
+    "--filter",
+    "N15ShortcutCountTests",
+    "--xunit-output",
+    "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.xml"
+  ],
+  "exit_code": 0,
+  "test_count": 5,
+  "actual_assertions": [
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "cancelledFetch()",
+      "time": "0.004019"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "zeroDoesNotFetch()",
+      "time": "0.003023"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "shortResultAndFailure()",
+      "time": "0.003543375"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "positiveBoundaries(value:)",
+      "time": "0.003489584"
+    },
+    {
+      "classname": "AuditCoreTests.N15ShortcutCountTests",
+      "name": "invalidCounts(value:)",
+      "time": "0.003638125"
+    }
+  ],
+  "log_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.log",
+  "test_report_path": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N15.xml",
+  "scope": "Production core with fake boundaries; full app integration is E01."
+}

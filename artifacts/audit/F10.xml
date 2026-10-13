@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="TestResults" errors="0" tests="2" failures="0" skipped="0" time="0.270829375">
+    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualDownsample()" time="0.033730125" />
+    <testcase classname="AuditCoreTests.F10MediaPreviewTests" name="actualVideoPoster()" time="0.270565125" />
+  </testsuite>
+</testsuites>

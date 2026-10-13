@@ -1,0 +1,54 @@
+{
+  "id": "N27",
+  "checks": [
+    {
+      "timezone": "UTC",
+      "command": [
+        "swift",
+        "test",
+        "--skip-build",
+        "--package-path",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "--filter",
+        "AuditN27"
+      ],
+      "exit_code": 0,
+      "log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27-timezone-utc.log",
+      "assertions": "2 tests including 4 day-boundary fixtures passed"
+    },
+    {
+      "timezone": "Asia/Hong_Kong",
+      "command": [
+        "swift",
+        "test",
+        "--skip-build",
+        "--package-path",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "--filter",
+        "AuditN27"
+      ],
+      "exit_code": 0,
+      "log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27-timezone-hong-kong.log",
+      "assertions": "2 tests including 4 day-boundary fixtures passed"
+    },
+    {
+      "timezone": "America/Los_Angeles",
+      "command": [
+        "swift",
+        "test",
+        "--skip-build",
+        "--package-path",
+        "/Users/mike/Developer/test-projects/TestS3Browser-1",
+        "--filter",
+        "AuditN27"
+      ],
+      "exit_code": 0,
+      "log": "/Users/mike/Developer/test-projects/TestS3Browser-1/artifacts/audit/N27-timezone-los-angeles.log",
+      "assertions": "2 tests including 4 day-boundary fixtures passed"
+    }
+  ],
+  "source_hashes": {
+    "Sources/Core/LifecyclePolicy.swift": "13df824bfd035b4a87d1c3fae54366ce331a1ad96252132bba41e168f42047a6",
+    "Tests/AuditCoreTests/LifecyclePolicyTests.swift": "34327bf846b396268922270616f77f97179bb2e79b0c867273e867392bf202f9"
+  }
+}

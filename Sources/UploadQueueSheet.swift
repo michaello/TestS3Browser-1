@@ -24,7 +24,7 @@ struct UploadQueueSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Clear Done") {
-                        manager.removeCompleted()
+                        Task { await manager.removeCompleted() }
                     }
                     .disabled(!manager.items.contains(where: \.isDone))
                 }
@@ -62,6 +62,12 @@ private struct UploadQueueRow: View {
                 }
             }
             Spacer()
+            if item.isPending || item.isActive || item.isFailed {
+                Button(item.cancellationRequested ? "Cancelling…" : "Cancel") {
+                    Task { await manager.cancel(id: item.id) }
+                }
+                .disabled(item.cancellationRequested)
+            }
             if case .failed = item.state {
                 Button("Retry") {
                     manager.retry(id: item.id)
@@ -93,6 +99,10 @@ private struct UploadQueueRow: View {
         case .failed:
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.red)
+                .frame(width: 28)
+        case .cancelled:
+            Image(systemName: "stop.circle")
+                .foregroundStyle(.secondary)
                 .frame(width: 28)
         }
     }

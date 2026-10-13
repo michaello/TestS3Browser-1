@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Temporary local Git fixtures only",
+  "rejected": [
+    "modified blob",
+    "changed executable mode",
+    "extra path",
+    "path traversal",
+    "ZIP modified blob",
+    "ZIP changed executable mode",
+    "ZIP extra path",
+    "ZIP path traversal"
+  ]
+}

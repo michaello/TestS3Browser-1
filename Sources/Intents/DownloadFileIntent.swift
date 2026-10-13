@@ -5,9 +5,9 @@ import UniformTypeIdentifiers
 /// App Intent that downloads a single S3 object and returns it as a file the Shortcuts
 /// app can pipe into Save to Files, Quick Look, or any action that accepts a file.
 struct DownloadFileIntent: AppIntent {
-    static var title: LocalizedStringResource = "Download S3 File"
-    static var description = IntentDescription(
-        "Downloads a file from S3 by key and returns it so you can save it or share it.",
+    static let title: LocalizedStringResource = "Download S3 File"
+    static let description = IntentDescription(
+        "Downloads a listed S3 file, or an exact key in the specified/default bucket.",
         categoryName: "Browse"
     )
 
@@ -15,7 +15,10 @@ struct DownloadFileIntent: AppIntent {
         title: "Key",
         description: "The S3 object key to download (e.g. dump/2024-01-01T00-00-00Z-photo.jpg)"
     )
-    var key: String
+    var key: String?
+
+    @Parameter(title: "File", description: "A file returned by List Recent S3 Files or Search My S3 Files.")
+    var file: S3FileEntity?
 
     @Parameter(
         title: "Bucket",
@@ -24,16 +27,26 @@ struct DownloadFileIntent: AppIntent {
     var bucket: String?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Download \(\.$key) from S3")
+        Summary("Download \(\.$file) from S3") {
+            \.$key
+            \.$bucket
+        }
     }
 
+    @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<IntentFile> & ProvidesDialog {
-        let config = SharedConfig.loadConfig() ?? S3Config.default
+        let config = try SharedConfig.requireConfig()
+        let target = try ShortcutObjectRequest.resolve(
+            file: file?.reference, key: key, bucket: bucket,
+            defaultBucket: config.bucketName, account: S3FileEntity.accountScope(for: config)
+        )
         let service = S3Service(config: config)
 
-        let data = try await service.downloadObject(key: key, bucket: bucket)
+        let data = try await ShortcutObjectRequest.download(target) { key, bucket in
+            try await service.downloadObject(key: key, bucket: bucket)
+        }
 
-        let filename = URL(string: key)?.lastPathComponent ?? key
+        let filename = target.fileName
         let uti = UTType(filenameExtension: (filename as NSString).pathExtension) ?? .data
         let file = IntentFile(data: data, filename: filename, type: uti)
 

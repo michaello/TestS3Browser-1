@@ -1,0 +1,27 @@
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 1]
+Build complete! (0.97 sec)
+􀟈  Test run started.
+􀄵  Testing Library Version: 2078
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "N15 Shortcuts count validation before scanning" started.
+􀟈  Test "Negative counts fail before service or collection work" started.
+􀟈  Test "Zero produces an empty result without constructing or scanning a service" started.
+􀟈  Test "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test "A short valid result and transport failure retain their meaning" started.
+􀟈  Test "Cancellation after fetching prevents a successful stale result" started.
+􀟈  Test case passing 1 argument value → -9223372036854775808 to "Negative counts fail before service or collection work" started.
+􀟈  Test case passing 1 argument value → -1 to "Negative counts fail before service or collection work" started.
+􀟈  Test case passing 1 argument value → 1 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument value → 10 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument value → 9223372036854775807 to "Supported positive boundaries forward their exact limit and bound results" started.
+􀟈  Test case passing 1 argument value → 1000 to "Supported positive boundaries forward their exact limit and bound results" started.
+􁁛  Test "Zero produces an empty result without constructing or scanning a service" passed after 0.003 seconds.
+􁁛  Test "Supported positive boundaries forward their exact limit and bound results" with 4 test cases passed after 0.003 seconds.
+􁁛  Test "A short valid result and transport failure retain their meaning" passed after 0.003 seconds.
+􁁛  Test "Negative counts fail before service or collection work" with 2 test cases passed after 0.003 seconds.
+􁁛  Test "Cancellation after fetching prevents a successful stale result" passed after 0.004 seconds.
+􁁛  Suite "N15 Shortcuts count validation before scanning" passed after 0.004 seconds.
+􁁛  Test run with 5 tests in 1 suite passed after 0.004 seconds.
