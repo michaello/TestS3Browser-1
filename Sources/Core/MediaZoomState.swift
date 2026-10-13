@@ -24,6 +24,15 @@ struct MediaZoomState: Equatable {
         clamp(image: image, viewport: viewport)
     }
     mutating func endPan() { settledOffset = offset }
+    /// Store a completed native scroll interaction without publishing every display frame.
+    mutating func settle(scale: CGFloat, offset: CGSize, image: CGSize, viewport: CGSize) {
+        guard scale.isFinite, offset.width.isFinite, offset.height.isFinite else { return }
+        self.scale = min(5, max(1, scale))
+        settledScale = self.scale
+        self.offset = offset
+        settledOffset = offset
+        clamp(image: image, viewport: viewport)
+    }
     mutating func doubleTap(image: CGSize, viewport: CGSize) {
         if scale > 1 { reset() }
         else { scale = 2; settledScale = 2; clamp(image: image, viewport: viewport) }

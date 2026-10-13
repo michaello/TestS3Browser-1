@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import os.log
 
 /// Full-screen image gallery with swipe navigation between images
@@ -14,6 +15,7 @@ struct ImageGalleryView: View {
     @State private var projection = GalleryIdentityProjection<S3Object, MediaObjectIdentity>()
     @State private var dragOffset: CGFloat = 0
     @State private var isDraggingVertically = false
+    @State private var zoomedPage: Int?
     @Environment(\.dismiss) private var dismiss
 
     private let logger = Logger(subsystem: "com.s3browser", category: "ImageGalleryView")
@@ -41,7 +43,9 @@ struct ImageGalleryView: View {
                         s3Service: s3Service,
                         loadedImage: workingSet.values[identity],
                         isLoading: workingSet.loading.contains(identity),
-                        errorMessage: workingSet.errors[identity]
+                        errorMessage: workingSet.errors[identity],
+                        isActive: index == currentIndex,
+                        onZoomChanged: { updateZoomOwnership($0, for: index) }
                     )
                     .tag(index)
                 }
@@ -55,6 +59,7 @@ struct ImageGalleryView: View {
         .simultaneousGesture(
             DragGesture(minimumDistance: 50)
                 .onChanged { value in
+                    guard zoomedPage == nil else { return }
                     let verticalAmount = abs(value.translation.height)
                     let horizontalAmount = abs(value.translation.width)
 
@@ -70,6 +75,7 @@ struct ImageGalleryView: View {
                     }
                 }
                 .onEnded { value in
+                    guard zoomedPage == nil else { return }
                     if isDraggingVertically && dragOffset > 150 {
                         dismiss()
                     } else {
@@ -93,11 +99,21 @@ struct ImageGalleryView: View {
                 }
             }
         }
-        .onChange(of: currentIndex) { _, _ in updateWorkingSet() }
+        .onChange(of: currentIndex) { _, _ in zoomedPage = nil; updateWorkingSet() }
         .onChange(of: images) { _, _ in projection.update(images, identity: { s3Service.mediaIdentity(for: $0) });updateWorkingSet() }
         .task { projection.update(images, identity: { s3Service.mediaIdentity(for: $0) });updateWorkingSet() }
         .onDisappear { workingSet.clear() }
         .onChange(of: s3Service.session.configuration.account) { _, _ in workingSet.clear(); dismiss() }
+    }
+
+    private func updateZoomOwnership(_ isZoomed: Bool, for index: Int) {
+        if isZoomed, index == currentIndex {
+            zoomedPage = index
+            dragOffset = 0
+            isDraggingVertically = false
+        } else if zoomedPage == index {
+            zoomedPage = nil
+        }
     }
 
     private func updateWorkingSet() {
@@ -122,6 +138,8 @@ struct ImagePageView: View {
     let loadedImage: UIImage?
     let isLoading: Bool
     let errorMessage: String?
+    var isActive = true
+    var onZoomChanged: (Bool) -> Void = { _ in }
 
     @State private var thumbnail: UIImage?
     @State private var zoom = MediaZoomState()
@@ -136,7 +154,7 @@ struct ImagePageView: View {
                 Group {
                     if let fullImage = loadedImage {
                         // Full image loaded
-                        ZoomableMediaImage(image: fullImage, zoom: $zoom)
+                        ZoomableMediaImage(image: fullImage, zoom: $zoom, onZoomChanged: onZoomChanged)
                     } else if let thumb = thumbnail {
                         // Show thumbnail while loading full image
                         ZStack {
@@ -172,6 +190,7 @@ struct ImagePageView: View {
             guard !Task.isCancelled, s3Service.session.isCurrent(generation) else { return }
             thumbnail = cached
         }
+        .onChange(of: isActive) { _, active in if !active { resetZoom() } }
     }
 
     private func resetZoom() { zoom.reset() }
@@ -184,27 +203,212 @@ struct ImagePageView: View {
 struct ZoomableMediaImage: View {
     let image: UIImage
     @Binding var zoom: MediaZoomState
+    var onZoomChanged: (Bool) -> Void = { _ in }
+
     var body: some View {
-        GeometryReader { geometry in
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .scaleEffect(zoom.scale)
-                .offset(zoom.offset)
-                .gesture(MagnificationGesture()
-                    .onChanged { zoom.magnify($0, image: image.size, viewport: geometry.size) }
-                    .onEnded { _ in zoom.endMagnification(image: image.size, viewport: geometry.size) })
-                .highPriorityGesture(zoom.scale > 1 ? DragGesture()
-                    .onChanged { zoom.pan($0.translation, image: image.size, viewport: geometry.size) }
-                    .onEnded { _ in zoom.endPan() } : nil)
-                .onTapGesture(count: 2) {
-                    withAnimation { zoom.doubleTap(image: image.size, viewport: geometry.size) }
-                }
-                .onChange(of: geometry.size) { _, size in zoom.clamp(image: image.size, viewport: size) }
-                .onChange(of: ObjectIdentifier(image)) { _, _ in zoom.reset() }
+        NativeZoomableMediaImage(image: image, zoom: $zoom, onZoomChanged: onZoomChanged)
+            .onAppear { onZoomChanged(zoom.scale > 1.001) }
+            .onDisappear { onZoomChanged(false) }
+            .onChange(of: ObjectIdentifier(image)) { _, _ in zoom.reset(); onZoomChanged(false) }
+            .onChange(of: zoom.scale) { _, scale in onZoomChanged(scale > 1.001) }
+    }
+}
+
+private struct NativeZoomableMediaImage: UIViewRepresentable {
+    let image: UIImage
+    @Binding var zoom: MediaZoomState
+    let onZoomChanged: (Bool) -> Void
+
+    func makeUIView(context: Context) -> MediaImageScrollView { MediaImageScrollView() }
+
+    func updateUIView(_ view: MediaImageScrollView, context: Context) {
+        view.onZoomStateChange = { zoom = $0 }
+        view.onZoomChanged = onZoomChanged
+        view.update(image: image, state: zoom, animated: context.transaction.animation != nil)
+    }
+
+    static func dismantleUIView(_ view: MediaImageScrollView, coordinator: ()) {
+        view.onZoomStateChange = nil
+        view.onZoomChanged = nil
+    }
+}
+
+/// UIKit owns touch tracking and deceleration. SwiftUI receives only settled state,
+/// so a finger movement or momentum frame never rebuilds the image presentation.
+@MainActor
+final class MediaImageScrollView: UIScrollView, UIScrollViewDelegate {
+    let imageView = UIImageView()
+    var onZoomStateChange: ((MediaZoomState) -> Void)?
+    var onZoomChanged: ((Bool) -> Void)?
+
+    private var viewport = CGSize.zero
+    private var reportedState = MediaZoomState()
+    private var updatingLayout = false
+    private var capturesPan = false
+
+    init() {
+        super.init(frame: .zero)
+        delegate = self
+        minimumZoomScale = 1
+        maximumZoomScale = 5
+        decelerationRate = .normal
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        contentInsetAdjustmentBehavior = .never
+        scrollsToTop = false
+        delaysContentTouches = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityLabel = "Image"
+        accessibilityIdentifier = "media.zoom"
+        addSubview(imageView)
+
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(toggleZoom(_:)))
+        doubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTap)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        // At 1x our pan fails immediately, allowing gallery paging or parent scrolling.
+        // Above 1x the image owns the drag, including at its edges.
+        var ancestor = superview
+        while let view = ancestor {
+            if let scroll = view as? UIScrollView {
+                scroll.panGestureRecognizer.require(toFail: panGestureRecognizer)
+            }
+            ancestor = view.superview
         }
-        .clipped()
+    }
+
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer === panGestureRecognizer, zoomScale <= minimumZoomScale + 0.001, !isZooming {
+            return false
+        }
+        return super.gestureRecognizerShouldBegin(gestureRecognizer)
+    }
+
+    func update(image: UIImage, state: MediaZoomState, animated: Bool) {
+        if imageView.image !== image {
+            imageView.image = image
+            reportedState = state
+            capturesPan = state.scale > minimumZoomScale + 0.001
+            viewport = .zero
+            setNeedsLayout()
+        } else if state != reportedState {
+            reportedState = state
+            updatingLayout = true
+            setZoomScale(state.scale, animated: animated && !UIAccessibility.isReduceMotionEnabled)
+            if !animated || UIAccessibility.isReduceMotionEnabled {
+                centerImage()
+                restoreOffset(state.offset)
+            }
+            updatingLayout = false
+            capturesPan = state.scale > minimumZoomScale + 0.001
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let size = bounds.size
+        guard size != viewport, size.width > 0, size.height > 0,
+              let image = imageView.image, image.size.width > 0, image.size.height > 0 else { return }
+        // Keep the point at the center visible when the viewport rotates or resizes.
+        let firstLayout = viewport == .zero
+        let center = firstLayout ? CGPoint(x: 0.5, y: 0.5) : CGPoint(
+            x: (contentOffset.x + viewport.width / 2) / max(contentSize.width, 1),
+            y: (contentOffset.y + viewport.height / 2) / max(contentSize.height, 1)
+        )
+        let scale = firstLayout ? reportedState.scale : zoomScale
+        updatingLayout = true
+        viewport = size
+        setZoomScale(1, animated: false)
+        let fit = min(size.width / image.size.width, size.height / image.size.height)
+        imageView.frame = CGRect(origin: .zero, size: CGSize(width: image.size.width * fit, height: image.size.height * fit))
+        contentSize = imageView.bounds.size
+        setZoomScale(scale, animated: false)
+        centerImage()
+        if firstLayout {
+            restoreOffset(reportedState.offset)
+        } else {
+            setContentOffset(boundedOffset(CGPoint(x: center.x * contentSize.width - size.width / 2,
+                                                  y: center.y * contentSize.height - size.height / 2)), animated: false)
+        }
+        capturesPan = zoomScale > minimumZoomScale + 0.001
+        updatingLayout = false
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) { capturePan(true) }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) { centerImage() }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        guard !updatingLayout else { return }
+        publishSettledState()
+        capturePan(zoomScale > minimumZoomScale + 0.001)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { publishSettledState() }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { publishSettledState() }
+
+    @objc private func toggleZoom(_ tap: UITapGestureRecognizer) {
+        toggleZoom(at: tap.location(in: imageView), animated: !UIAccessibility.isReduceMotionEnabled)
+    }
+
+    func toggleZoom(at point: CGPoint, animated: Bool) {
+        capturePan(true)
+        if zoomScale > minimumZoomScale + 0.001 {
+            setZoomScale(minimumZoomScale, animated: animated)
+        } else {
+            let size = CGSize(width: bounds.width / 2, height: bounds.height / 2)
+            zoom(to: CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
+                            width: size.width, height: size.height), animated: animated)
+        }
+        if !animated {
+            publishSettledState()
+            capturePan(zoomScale > minimumZoomScale + 0.001)
+        }
+    }
+
+    private func centerImage() {
+        let horizontal = max(0, (bounds.width - contentSize.width) / 2)
+        let vertical = max(0, (bounds.height - contentSize.height) / 2)
+        let inset = UIEdgeInsets(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
+        if contentInset != inset { contentInset = inset }
+    }
+
+    private func boundedOffset(_ offset: CGPoint) -> CGPoint {
+        CGPoint(x: min(max(-contentInset.left, contentSize.width - bounds.width + contentInset.right), max(-contentInset.left, offset.x)),
+                y: min(max(-contentInset.top, contentSize.height - bounds.height + contentInset.bottom), max(-contentInset.top, offset.y)))
+    }
+
+    private func restoreOffset(_ offset: CGSize) {
+        let center = CGPoint(x: (contentSize.width - bounds.width) / 2, y: (contentSize.height - bounds.height) / 2)
+        setContentOffset(boundedOffset(CGPoint(x: center.x - offset.width, y: center.y - offset.height)), animated: false)
+    }
+
+    private func publishSettledState() {
+        guard !updatingLayout, let image = imageView.image else { return }
+        var state = MediaZoomState()
+        state.settle(scale: zoomScale, offset: CGSize(width: (contentSize.width - bounds.width) / 2 - contentOffset.x,
+                                                    height: (contentSize.height - bounds.height) / 2 - contentOffset.y),
+                     image: image.size, viewport: bounds.size)
+        reportedState = state
+        imageView.accessibilityValue = "\(Int(state.scale * 100))% zoom"
+        onZoomStateChange?(state)
+    }
+
+    private func capturePan(_ captured: Bool) {
+        guard !updatingLayout, capturesPan != captured else { return }
+        capturesPan = captured
+        onZoomChanged?(captured)
     }
 }
 

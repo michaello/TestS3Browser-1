@@ -62,4 +62,20 @@ struct N14MediaZoomTests {
         zoom.reset()
         #expect(zoom == MediaZoomState())
     }
+
+    @Test("Native settled pan carries into later pinch and resets without stale offsets")
+    func nativeSettlement() {
+        var zoom = MediaZoomState()
+        zoom.settle(scale: 3, offset: CGSize(width: 150, height: -90), image: image, viewport: viewport)
+        #expect(zoom.scale == 3)
+        #expect(zoom.offset == CGSize(width: 150, height: -90))
+        zoom.magnify(0.5, image: image, viewport: viewport)
+        zoom.endMagnification(image: image, viewport: viewport)
+        #expect(zoom.scale == 1.5)
+        #expect(zoom.offset == CGSize(width: 50, height: -50))
+        zoom.settle(scale: 1, offset: CGSize(width: 99, height: 99), image: image, viewport: viewport)
+        #expect(zoom == MediaZoomState())
+        zoom.settle(scale: .nan, offset: .zero, image: image, viewport: viewport)
+        #expect(zoom == MediaZoomState())
+    }
 }

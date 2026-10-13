@@ -147,3 +147,103 @@ struct AppServiceIntegrationTests {
         #expect(gallery.retainedBytes == 0)
     }
 }
+
+@MainActor
+struct NativeImagePanTests {
+    private func image(_ size: CGSize = CGSize(width: 600, height: 800)) -> UIImage {
+        UIGraphicsImageRenderer(size: size).image { context in
+            UIColor.red.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+
+    private func viewer(_ image: UIImage) -> MediaImageScrollView {
+        let view = MediaImageScrollView()
+        view.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+        view.update(image: image, state: MediaZoomState(), animated: false)
+        view.layoutIfNeeded()
+        return view
+    }
+
+    @Test func nativeMomentumDoesNotPublishPerFrameOrResetDuringUnrelatedUpdates() {
+        let image = image()
+        let view = viewer(image)
+        #expect(view.decelerationRate == .normal)
+        #expect(view.bounces)
+        #expect(!view.gestureRecognizerShouldBegin(view.panGestureRecognizer))
+        view.setZoomScale(3, animated: false)
+        #expect(view.contentSize == CGSize(width: 900, height: 1200))
+        var publications: [MediaZoomState] = []
+        view.onZoomStateChange = { publications.append($0) }
+        view.scrollViewDidEndZooming(view, with: view.imageView, atScale: 3)
+        let state = publications.last!
+        publications.removeAll()
+        view.contentOffset = CGPoint(x: 100, y: 80)
+        view.contentOffset = CGPoint(x: 200, y: 120)
+        view.scrollViewDidEndDragging(view, willDecelerate: true)
+        view.update(image: image, state: state, animated: false)
+        #expect(view.contentOffset == CGPoint(x: 200, y: 120))
+        #expect(publications.isEmpty)
+        view.contentOffset = CGPoint(x: 230, y: 140)
+        view.scrollViewDidEndDecelerating(view)
+        #expect(publications.count == 1)
+        #expect(publications.last?.offset == CGSize(width: 70, height: 260))
+        view.update(image: image, state: MediaZoomState(), animated: false)
+        #expect(view.zoomScale == 1)
+        #expect(view.contentOffset == .zero)
+    }
+
+    @Test func nativeDoubleTapUsesTouchLocationAndReturningToFitReleasesPan() {
+        let view = viewer(image())
+        var captured: [Bool] = []
+        view.onZoomChanged = { captured.append($0) }
+        view.toggleZoom(at: CGPoint(x: 210, y: 260), animated: false)
+        #expect(abs(view.zoomScale - 2) < 0.001)
+        #expect(abs(view.contentOffset.x - 270) < 0.001)
+        #expect(abs(view.contentOffset.y - 320) < 0.001)
+        #expect(captured.last == true)
+        view.toggleZoom(at: .zero, animated: false)
+        #expect(view.zoomScale == 1)
+        #expect(view.contentOffset == .zero)
+        #expect(captured.last == false)
+        #expect(!view.gestureRecognizerShouldBegin(view.panGestureRecognizer))
+    }
+
+    @Test func nativeImageBoundsRecenterOnReplacementAndRemainValidAfterRotation() {
+        let view = viewer(image())
+        var captured: [Bool] = []
+        view.onZoomChanged = { captured.append($0) }
+        view.scrollViewWillBeginZooming(view, with: view.imageView)
+        view.setZoomScale(3, animated: false)
+        view.contentOffset = CGPoint(x: 200, y: 300)
+        view.bounds.size = CGSize(width: 400, height: 300)
+        view.layoutIfNeeded()
+        #expect(view.zoomScale == 3)
+        #expect(view.contentSize == CGSize(width: 675, height: 900))
+        #expect(view.contentOffset.x >= 0 && view.contentOffset.x <= 275)
+        #expect(view.contentOffset.y >= 0 && view.contentOffset.y <= 600)
+        view.update(image: image(CGSize(width: 800, height: 200)), state: MediaZoomState(), animated: false)
+        view.layoutIfNeeded()
+        #expect(view.zoomScale == 1)
+        #expect(view.contentSize == CGSize(width: 400, height: 100))
+        #expect(view.contentInset.top == 100)
+        #expect(view.contentOffset == CGPoint(x: 0, y: -100))
+        captured.removeAll()
+        view.scrollViewWillBeginZooming(view, with: view.imageView)
+        #expect(captured == [true], "A new pinch must claim the image after replacement")
+    }
+
+    @Test func nativeViewerRestoresInitialZoomAndPanInsteadOfReportingAFalseFit() {
+        let image = image()
+        var state = MediaZoomState()
+        state.settle(scale: 3, offset: CGSize(width: 70, height: 90), image: image.size,
+                     viewport: CGSize(width: 300, height: 400))
+        let view = MediaImageScrollView()
+        view.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+        view.update(image: image, state: state, animated: false)
+        view.layoutIfNeeded()
+        view.update(image: image, state: state, animated: false)
+        #expect(view.zoomScale == 3)
+        #expect(view.contentOffset == CGPoint(x: 230, y: 310))
+    }
+}

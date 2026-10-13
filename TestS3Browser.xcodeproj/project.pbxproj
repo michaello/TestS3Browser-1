@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		SMITHY001 /* Smithy in Frameworks */ = {isa = PBXBuildFile; productRef = SMITHY101 /* Smithy */; };
+		SMITHY002 /* SmithyIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = SMITHY102 /* SmithyIdentity */; };
+		SMITHY003 /* SmithyStreams in Frameworks */ = {isa = PBXBuildFile; productRef = SMITHY103 /* SmithyStreams */; };
 		EA2A156F1F88C409EB2FEB42 /* ConfirmedMediaMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A08118BB0CE5A586A6AE71 /* ConfirmedMediaMutation.swift */; };
 		F2B46EC7D8F5FA522714E364 /* S3Service+MetadataSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192B6B6EB5A700451DEC7304 /* S3Service+MetadataSnapshots.swift */; };
 		1852428907F75FD442145AB0 /* S3MetadataTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B2D00184DE6A410F4F6EB2 /* S3MetadataTransport.swift */; };
@@ -331,6 +334,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AWS001 /* AWSS3 in Frameworks */,
+				SMITHY001 /* Smithy in Frameworks */,
+				SMITHY002 /* SmithyIdentity in Frameworks */,
+				SMITHY003 /* SmithyStreams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,6 +593,9 @@
 			name = TestS3Browser;
 			packageProductDependencies = (
 				AWS002 /* AWSS3 */,
+				SMITHY101 /* Smithy */,
+				SMITHY102 /* SmithyIdentity */,
+				SMITHY103 /* SmithyStreams */,
 			);
 			productName = TestS3Browser;
 			productReference = 6A338CE6F52C64E399BD44B7 /* TestS3Browser.app */;
@@ -660,6 +669,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+				SMITHYPKG001 /* XCRemoteSwiftPackageReference "smithy-swift" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -1207,6 +1217,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		SMITHYPKG001 /* XCRemoteSwiftPackageReference "smithy-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/smithy-lang/smithy-swift";
+			requirement = {kind = exactVersion; version = 0.165.0; };
+		};
 		AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
@@ -1218,6 +1233,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		SMITHY101 /* Smithy */ = {isa = XCSwiftPackageProductDependency; package = SMITHYPKG001; productName = Smithy; };
+		SMITHY102 /* SmithyIdentity */ = {isa = XCSwiftPackageProductDependency; package = SMITHYPKG001; productName = SmithyIdentity; };
+		SMITHY103 /* SmithyStreams */ = {isa = XCSwiftPackageProductDependency; package = SMITHYPKG001; productName = SmithyStreams; };
 		AWS002 /* AWSS3 */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AWSPKG001 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
