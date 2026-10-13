@@ -1,7 +1,7 @@
 {
   "id": "E02",
   "passed": true,
-  "recorded_at": "2026-10-13T08:15:39.986276+00:00",
+  "recorded_at": "2026-10-13T08:16:30.787826+00:00",
   "source_fingerprint": "98ed3c5202a636698f1261c8438fc689d95f0dfaa9ac43dc247c5a04a178ca11",
   "commands": [
     {
@@ -13,7 +13,7 @@
         "HEAD"
       ],
       "exit_code": 0,
-      "stdout": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+      "stdout": "9cc043e2e03452d356224b0e68dd632dafba3751",
       "stderr": ""
     },
     {
@@ -92,7 +92,7 @@
         "refs/heads/main"
       ],
       "exit_code": 0,
-      "stdout": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57\trefs/heads/main",
+      "stdout": "9cc043e2e03452d356224b0e68dd632dafba3751\trefs/heads/main",
       "stderr": ""
     },
     {
@@ -102,8 +102,8 @@
         "/Users/mike/Developer/test-projects/TestS3Browser-1",
         "merge-base",
         "--is-ancestor",
-        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
-        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57"
+        "9cc043e2e03452d356224b0e68dd632dafba3751",
+        "9cc043e2e03452d356224b0e68dd632dafba3751"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -143,7 +143,7 @@
         "merge-base",
         "--is-ancestor",
         "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
-        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57"
+        "9cc043e2e03452d356224b0e68dd632dafba3751"
       ],
       "exit_code": 0,
       "stdout": "",
@@ -158,7 +158,7 @@
         "HEAD:AUDIT_QUEUE.json"
       ],
       "exit_code": 0,
-      "stdout": "865326fba17369dcac6513dc45993b6bef49dcde",
+      "stdout": "37cfa13b73968deb393a996a2c59bd70e0ec22d4",
       "stderr": ""
     },
     {
@@ -167,10 +167,10 @@
         "-C",
         "/Users/mike/Developer/test-projects/TestS3Browser-1",
         "rev-parse",
-        "cb1292d3139b9d25fd7ec1beec3c15f91662bb57:AUDIT_QUEUE.json"
+        "9cc043e2e03452d356224b0e68dd632dafba3751:AUDIT_QUEUE.json"
       ],
       "exit_code": 0,
-      "stdout": "865326fba17369dcac6513dc45993b6bef49dcde",
+      "stdout": "37cfa13b73968deb393a996a2c59bd70e0ec22d4",
       "stderr": ""
     }
   ],
@@ -184,9 +184,9 @@
   "branch": "main",
   "remote": "origin",
   "remote_ref": "refs/heads/main",
-  "remote_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
+  "remote_commit": "9cc043e2e03452d356224b0e68dd632dafba3751",
   "delivered_source_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
-  "delivered_ledger_commit": "cb1292d3139b9d25fd7ec1beec3c15f91662bb57",
-  "ledger_blob": "865326fba17369dcac6513dc45993b6bef49dcde",
-  "ledger_sha256": "b16d77930bfad7644dabec8a3c0991c61d3250a434a54c3419dc2f90160d68ae"
+  "delivered_ledger_commit": "9cc043e2e03452d356224b0e68dd632dafba3751",
+  "ledger_blob": "37cfa13b73968deb393a996a2c59bd70e0ec22d4",
+  "ledger_sha256": "aa01d56e7e27de5e0cf9658d3473d0d03e277d55a9d7834da0df57e6b876fbbb"
 }
